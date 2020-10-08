@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,23 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package views
+@import viewmodels.AddRow
 
-import views.behaviours.ViewBehaviours
-import views.html.IndexView
+@(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
 
-class IndexViewSpec extends ViewBehaviours {
+@if(data.nonEmpty){
 
-  "Index view" must {
-
-    val application = applicationBuilder().build()
-
-    val view = application.injector.instanceOf[IndexView]
-
-    val applyView = view.apply()(fakeRequest, messages)
-
-    behave like normalPage(applyView, "index", "guidance")
+<div class="form-group">
+ <h2 id="data-list-heading--@id">@messages(s"site.$id")</h2>
+ <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
+  @for(item <- data) {
+  @components.data_list_row(item)
   }
+ </dl>
+</div>
 }

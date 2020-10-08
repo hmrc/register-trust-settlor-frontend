@@ -30,7 +30,7 @@ class LanguageSwitchController @Inject()(
                                           val controllerComponents: MessagesControllerComponents
                                         ) extends FrontendBaseController with I18nSupport {
 
-  private def fallbackURL: String = routes.IndexController.onPageLoad("FIXME").url //TODO: get draft ID or redirect elsewhere
+  private def fallbackURL: String = appConfig.registrationStartUrl
 
   private def languageMap: Map[String, Lang] = appConfig.languageMap
 

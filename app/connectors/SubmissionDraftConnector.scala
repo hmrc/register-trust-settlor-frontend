@@ -16,9 +16,11 @@
 
 package connectors
 
+import java.time.LocalDate
+
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.{SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData}
+import models.{AllStatus, SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -28,6 +30,8 @@ import scala.concurrent.{ExecutionContext, Future}
 class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
 
   val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
+  private val beneficiariesSection = "beneficiaries"
+  private val statusSection = "status"
 
   def setDraftMain(draftId : String, draftData: JsValue, inProgress: Boolean, reference: Option[String])
                      (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
@@ -52,5 +56,28 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
 
   def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
     http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
+  }
+
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier, ec : ExecutionContext) : Future[Option[LocalDate]] = {
+    http.GET[HttpResponse](s"$submissionsBaseUrl/$draftId/when-trust-setup").map {
+      response =>
+        (response.json \ "startDate").asOpt[LocalDate]
+    }.recover {
+      case _ => None
+    }
+  }
+
+  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] =
+    getDraftSection(draftId, beneficiariesSection)
+
+  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[AllStatus] =
+    getDraftSection(draftId, statusSection).map {
+      section => section.data.as[AllStatus]
+    }
+
+  def setStatus(draftId : String, status: AllStatus)
+               (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
+    val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
+    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
   }
 }

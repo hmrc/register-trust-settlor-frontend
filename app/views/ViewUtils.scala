@@ -24,4 +24,8 @@ object ViewUtils {
   def errorPrefix(form: Form[_])(implicit messages: Messages): String = {
     if (form.hasErrors || form.hasGlobalErrors) messages("error.browser.title.prefix") else ""
   }
+
+  def breadcrumbTitle(title: String)(implicit messages: Messages): String = {
+    s"$title - ${messages("entity.settlor")} - ${messages("site.service_name")} - GOV.UK"
+  }
 }

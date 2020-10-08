@@ -23,12 +23,10 @@ class SessionExpiredViewSpec extends ViewBehaviours {
 
   "Session Expired view" must {
 
-    val application = applicationBuilder().build()
-
-    val view = application.injector.instanceOf[SessionExpiredView]
+    val view = viewFor[SessionExpiredView](Some(emptyUserAnswers))
 
     val applyView = view.apply()(fakeRequest, messages)
 
-    behave like normalPage(applyView, "session_expired", "guidance")
+    behave like normalPage(applyView, None, "session_expired", "guidance")
   }
 }

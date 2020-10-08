@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,24 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this(
-    main_template: MainTemplate
-)
+package forms
 
-@()(implicit request: Request[_], messages: Messages)
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-@main_template(
-    title = messages("index.title")
-    ) {
+trait RemoveForm {
 
-    @components.heading("index.heading")
+  def apply(prefix : String) : Form[Boolean]
 
-    <p>@messages("index.guidance")</p>
+}
+
+class RemoveIndexFormProvider @Inject() extends Mappings with RemoveForm {
+
+  override def apply(prefix : String): Form[Boolean] =
+    Form(
+      "value" -> boolean(s"$prefix.error.required")
+    )
 }

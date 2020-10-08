@@ -17,7 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
+import config.annotations.{DeceasedSettlor, LivingSettlor}
 import controllers.actions._
+import navigation.{DeceasedSettlorNavigator, LivingSettlorNavigator, Navigator}
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {
@@ -27,5 +29,7 @@ class Module extends AbstractModule {
     bind(classOf[RegistrationDataRequiredAction]).to(classOf[RegistrationDataRequiredActionImpl]).asEagerSingleton()
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()
 
+    bind(classOf[Navigator]).annotatedWith(classOf[LivingSettlor]).to(classOf[LivingSettlorNavigator]).asEagerSingleton()
+    bind(classOf[Navigator]).annotatedWith(classOf[DeceasedSettlor]).to(classOf[DeceasedSettlorNavigator]).asEagerSingleton()
   }
 }

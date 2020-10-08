@@ -16,38 +16,72 @@
 
 package generators
 
-import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
 import pages._
-import play.api.libs.json.{JsPath, JsValue, Json}
+import pages.deceased_settlor._
+import pages.living_settlor._
+import pages.living_settlor.business.SettlorBusinessNamePage
+import pages.living_settlor.trust_type._
+import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
+  import models._
+
   val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
-    Nil
+    arbitrary[(KindOfTrustPage.type, JsValue)] ::
+      arbitrary[(HoldoverReliefYesNoPage.type, JsValue)] ::
+      arbitrary[(SettlorBusinessNamePage, JsValue)] ::
+      arbitrary[(RemoveSettlorPage, JsValue)] ::
+      arbitrary[(SettlorIndividualPassportYesNoPage, JsValue)] ::
+      arbitrary[(SettlorIndividualPassportPage, JsValue)] ::
+      arbitrary[(SettlorIndividualIDCardYesNoPage, JsValue)] ::
+      arbitrary[(SettlorIndividualIDCardPage, JsValue)] ::
+      arbitrary[(SettlorAddressUKYesNoPage, JsValue)] ::
+      arbitrary[(SettlorAddressUKPage, JsValue)] ::
+      arbitrary[(SettlorAddressInternationalPage, JsValue)] ::
+      arbitrary[(SettlorIndividualNINOYesNoPage, JsValue)] ::
+      arbitrary[(SettlorIndividualNINOPage, JsValue)] ::
+      arbitrary[(SettlorAddressYesNoPage, JsValue)] ::
+      arbitrary[(SettlorIndividualDateOfBirthPage, JsValue)] ::
+      arbitrary[(SettlorIndividualDateOfBirthYesNoPage, JsValue)] ::
+      arbitrary[(SettlorIndividualNamePage, JsValue)] ::
+      arbitrary[(SettlorIndividualOrBusinessPage, JsValue)] ::
+      arbitrary[(WasSettlorsAddressUKYesNoPage.type, JsValue)] ::
+      arbitrary[(SetUpAfterSettlorDiedYesNoPage.type, JsValue)] ::
+      arbitrary[(SettlorsUKAddressPage.type, JsValue)] ::
+      arbitrary[(SettlorsNationalInsuranceYesNoPage.type, JsValue)] ::
+      arbitrary[(SettlorsNamePage.type, JsValue)] ::
+      arbitrary[(SettlorsLastKnownAddressYesNoPage.type, JsValue)] ::
+      arbitrary[(SettlorsInternationalAddressPage.type, JsValue)] ::
+      arbitrary[(SettlorsDateOfBirthPage.type, JsValue)] ::
+      arbitrary[(SettlorNationalInsuranceNumberPage.type, JsValue)] ::
+      arbitrary[(SettlorDateOfDeathYesNoPage.type, JsValue)] ::
+      arbitrary[(SettlorDateOfDeathPage.type, JsValue)] ::
+      arbitrary[(SettlorDateOfBirthYesNoPage.type, JsValue)] ::
+      arbitrary[(AddASettlorPage.type, JsValue)] ::
+      Nil
 
   implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
 
-    import models._
-
     Arbitrary {
       for {
-        draftId <- nonEmptyString
+        id      <- nonEmptyString
         data    <- generators match {
           case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
           case _   => Gen.mapOf(oneOf(generators))
         }
-        internalAuthId   <- nonEmptyString
+        internalId <- nonEmptyString
       } yield UserAnswers (
-        draftId = draftId,
+        draftId = id,
         data = data.foldLeft(Json.obj()) {
           case (obj, (path, value)) =>
             obj.setObject(path.path, value).get
         },
-        internalAuthId = internalAuthId
+        internalAuthId = internalId
       )
     }
   }

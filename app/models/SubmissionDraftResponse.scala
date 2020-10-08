@@ -63,3 +63,16 @@ case class SubmissionDraftId(draftId: String, createdAt: LocalDateTime, referenc
 object SubmissionDraftId {
   implicit lazy val format: OFormat[SubmissionDraftId] = Json.format[SubmissionDraftId]
 }
+
+case class AllStatus(
+                      beneficiaries: Option[Status] = None,
+                      trustees: Option[Status] = None,
+                      taxLiability: Option[Status] = None,
+                      protectors: Option[Status] = None,
+                      otherIndividuals: Option[Status] = None,
+                      trustDetails: Option[Status] = None
+                    )
+
+object AllStatus {
+  implicit lazy val format: OFormat[AllStatus] = Json.format[AllStatus]
+}

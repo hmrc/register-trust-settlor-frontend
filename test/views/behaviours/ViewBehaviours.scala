@@ -22,6 +22,7 @@ import views.ViewSpecBase
 trait ViewBehaviours extends ViewSpecBase {
 
   def normalPage(view: HtmlFormat.Appendable,
+                 sectionKey: Option[String],
                  messageKeyPrefix: String,
                  expectedGuidanceKeys: String*): Unit = {
 
@@ -34,12 +35,13 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
+          span.text mustBe messages("site.service_name")
         }
 
         "display the correct browser title" in {
 
           val doc = asDocument(view)
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
+          assertEqualsMessage(doc, "title", sectionKey, s"$messageKeyPrefix.title")
         }
 
         "display the correct page title" in {
@@ -57,8 +59,151 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertNotRenderedById(doc, "cymraeg-switch")
         }
+
+      }
+    }
+  }
+
+  def dynamicTitlePage(view: HtmlFormat.Appendable,
+                       sectionKey: Option[String],
+                       messageKeyPrefix: String,
+                       messageKeyParam: String,
+                       expectedGuidanceKeys: String*): Unit = {
+
+    "behave like a dynamic title page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", sectionKey, s"$messageKeyPrefix.title", messageKeyParam)
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", messageKeyParam)
+        }
+
+        "display the correct guidance" in {
+
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
+      }
+    }
+  }
+
+  def dynamicTitlePage(view: HtmlFormat.Appendable,
+                       sectionKey: Option[String],
+                       messageKeyPrefix: String,
+                       args: Seq[String],
+                       expectedGuidanceKeys: String*): Unit = {
+
+    "behave like a dynamic title page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", sectionKey, s"$messageKeyPrefix.title", args: _*)
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading", args: _*)
+        }
+
+        "display the correct guidance" in {
+
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
+      }
+    }
+  }
+
+  def confirmationPage(view: HtmlFormat.Appendable,
+                       messageKeyPrefix: String,
+                       refNumber: String,
+                       leadTrusteeName: String,
+                       sectionKey: Option[String],
+                       expectedGuidanceKeys: String*): Unit = {
+
+    "behave like a confirmation page" when {
+
+      "rendered" must {
+
+        "have the correct banner title" in {
+
+          val doc = asDocument(view)
+          val nav = doc.getElementById("proposition-menu")
+          val span = nav.children.first
+          span.text mustBe messages("site.service_name")
+        }
+
+        "display the correct browser title" in {
+
+          val doc = asDocument(view)
+          assertEqualsMessage(doc, "title", sectionKey, "confirmation.title")
+        }
+
+        "display the correct page title" in {
+
+          val doc = asDocument(view)
+          assertContainsText(doc, messages("confirmation.heading1"))
+          assertContainsText(doc, messages("confirmation.heading2"))
+          assertContainsText(doc, refNumber)
+        }
+
+        "display the correct guidance" in {
+
+          val doc = asDocument(view)
+          for (key <- expectedGuidanceKeys) assertContainsText(doc, messages(s"$messageKeyPrefix.$key"))
+          assertContainsText(doc, messages(s"$messageKeyPrefix.p1", leadTrusteeName))
+        }
+
+        "display language toggles" in {
+
+          val doc = asDocument(view)
+          assertNotRenderedById(doc, "cymraeg-switch")
+        }
+
       }
     }
   }
@@ -74,4 +219,68 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithLink(view: HtmlFormat.Appendable, id: String, url : String): Unit = {
+
+    "behave like a page with a link" must {
+
+      "have a link" in {
+
+        val doc = asDocument(view)
+        val element = doc.getElementById(id)
+
+        assertRenderedById(doc, id)
+        assertAttributeValueForElement(element, "href", url)
+      }
+    }
+  }
+
+  def pageWithASubmitButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a submit button" must {
+      "have a submit button" in {
+        val doc = asDocument(view)
+        assertRenderedById(doc, "submit")
+      }
+    }
+  }
+
+  def pageWithContinueButton(view: HtmlFormat.Appendable, url : String): Unit = {
+
+    "behave like a page with a Continue button" must {
+      "have a continue button" in {
+        val doc = asDocument(view)
+        assertContainsTextForId(doc,"button", "Continue")
+        assertAttributeValueForElement(
+          doc.getElementById("button"),
+          "href",
+          url
+        )
+      }
+    }
+  }
+
+  def pageWithASignOutButton(view: HtmlFormat.Appendable): Unit = {
+
+    "behave like a page with a sign-out button" must {
+      "have a sign-out button" in {
+        val doc = asDocument(view)
+        assertRenderedById(doc, "sign-out")
+      }
+    }
+  }
+
+  def pageWithSubHeading(view: HtmlFormat.Appendable, text: String): Unit = {
+
+    "behave like a page with a sub-heading" must {
+
+      "have a sub-heading" in {
+
+        val doc = asDocument(view)
+        assertContainsText(doc, text)
+      }
+    }
+  }
 }
+
+

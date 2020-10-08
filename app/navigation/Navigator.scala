@@ -34,7 +34,6 @@ class Navigator @Inject()(
   }
 
   protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] =
-//    SettlorsRoutes.route(draftId, config) orElse
       defaultRoute(draftId)
 
   def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {

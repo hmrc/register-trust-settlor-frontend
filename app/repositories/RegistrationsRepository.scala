@@ -16,10 +16,12 @@
 
 package repositories
 
+import java.time.LocalDate
+
 import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
 import javax.inject.Inject
-import models.UserAnswers
+import models.{AllStatus, UserAnswers}
 import play.api.http
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
@@ -31,7 +33,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
                                                submissionSetFactory: SubmissionSetFactory
                                         )(implicit ec: ExecutionContext) extends RegistrationsRepository {
 
-  private val userAnswersSection = config.appName
+  private val userAnswersSection = config.repositoryKey
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
     submissionDraftConnector.setDraftSectionSet(
@@ -52,6 +54,19 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
         }
     }
   }
+
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier) : Future[Option[LocalDate]] =
+    submissionDraftConnector.getTrustSetupDate(draftId)
+
+  override def getAllStatus(draftId: String)(implicit hc: HeaderCarrier) : Future[AllStatus] = {
+    submissionDraftConnector.getStatus(draftId)
+  }
+
+  override def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier) : Future[Boolean] = {
+    submissionDraftConnector.setStatus(draftId, status).map {
+      response => response.status == http.Status.OK
+    }
+  }
 }
 
 trait RegistrationsRepository {
@@ -59,4 +74,10 @@ trait RegistrationsRepository {
   def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean]
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
+
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier) : Future[Option[LocalDate]]
+
+  def getAllStatus(draftId: String)(implicit hc: HeaderCarrier) : Future[AllStatus]
+
+  def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier) : Future[Boolean]
 }
