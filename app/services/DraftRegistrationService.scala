@@ -16,13 +16,10 @@
 
 package services
 
-import java.util.UUID
-
 import connectors.SubmissionDraftConnector
 import javax.inject.Inject
 import models.ReadOnlyUserAnswers
 import models.pages.Status.InProgress
-import models.requests.{IdentifierRequest, OptionalRegistrationDataRequest}
 import pages.beneficiaries.RoleInCompanyPage
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries

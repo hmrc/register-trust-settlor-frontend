@@ -36,10 +36,10 @@ POST       /:draftId/change-how-was-deed-of-variation-created                   
 
 GET        /:draftId/information-you-need                                                  controllers.SettlorInfoController.onPageLoad(draftId: String)
 
-GET        /:draftId/deceased/remove                                                       controllers.RemoveSettlorYesNoController.onPageLoadDeceased(draftId: String)
-POST       /:draftId/deceased/remove                                                       controllers.RemoveSettlorYesNoController.onSubmitDeceased(draftId: String)
-GET        /:draftId/:index/remove                                                         controllers.RemoveSettlorYesNoController.onPageLoadLiving(index: Int, draftId: String)
-POST       /:draftId/:index/remove                                                         controllers.RemoveSettlorYesNoController.onSubmitLiving(index: Int, draftId: String)
+GET        /:draftId/deceased/remove-yes-no                                                controllers.RemoveSettlorYesNoController.onPageLoadDeceased(draftId: String)
+POST       /:draftId/deceased/remove-yes-no                                                controllers.RemoveSettlorYesNoController.onSubmitDeceased(draftId: String)
+GET        /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onPageLoadLiving(index: Int, draftId: String)
+POST       /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onSubmitLiving(index: Int, draftId: String)
 
 ### Deceased Settlor
 

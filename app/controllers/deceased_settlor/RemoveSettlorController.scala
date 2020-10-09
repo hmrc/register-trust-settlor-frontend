@@ -24,7 +24,6 @@ import pages.deceased_settlor.SettlorsNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.twirl.api.HtmlFormat
 import queries.RemoveDeceasedSettlorQuery
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -45,11 +44,6 @@ class RemoveSettlorController @Inject()(
 
   lazy val form: Form[Boolean] = formProvider(messagesPrefix)
 
-  private def view(form: Form[_], draftId: String)
-          (implicit request: RegistrationDataRequest[AnyContent]): HtmlFormat.Appendable = {
-    removeView(messagesPrefix, form, draftId, content)
-  }
-
   private def content(implicit request: RegistrationDataRequest[AnyContent]) : String =
     request.userAnswers.get(SettlorsNamePage)
       .map(_.toString)
@@ -58,7 +52,7 @@ class RemoveSettlorController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
-      Ok(view(form, draftId))
+      Ok(removeView(messagesPrefix, form, draftId, content))
   }
 
   def onSubmit(draftId : String) = actions.authWithData(draftId).async {
@@ -66,7 +60,7 @@ class RemoveSettlorController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
+          Future.successful(BadRequest(removeView(messagesPrefix, formWithErrors, draftId, content))),
         value => {
           if (value) {
             for {

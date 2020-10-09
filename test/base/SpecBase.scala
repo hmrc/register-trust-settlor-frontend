@@ -16,6 +16,7 @@
 
 package base
 
+import config.annotations.{DeceasedSettlor, LivingSettlor}
 import controllers.actions._
 import models.UserAnswers
 import models.pages.Status
@@ -28,6 +29,7 @@ import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 import uk.gov.hmrc.auth.core.AffinityGroup.Organisation
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 
@@ -63,12 +65,15 @@ trait SpecBase extends PlaySpec
     new GuiceApplicationBuilder()
       .overrides(
         bind[Navigator].toInstance(navigator),
+        bind[Navigator].qualifiedWith(classOf[LivingSettlor]).toInstance(navigator),
+        bind[Navigator].qualifiedWith(classOf[DeceasedSettlor]).toInstance(navigator),
         bind[RegistrationDataRequiredAction].to[RegistrationDataRequiredActionImpl],
         bind[RegistrationIdentifierAction].toInstance(
           new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)
         ),
         bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
         bind[RegistrationsRepository].toInstance(registrationsRepository),
+        bind[DraftRegistrationService].toInstance(mockCreateDraftRegistrationService),
         bind[AffinityGroup].toInstance(Organisation)
       )
 }

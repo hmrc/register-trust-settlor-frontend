@@ -42,3 +42,9 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+removeSettlor.title = Are you sure you want to remove the settlor?
+removeSettlor.default = the settlor
+removeSettlor.heading = Are you sure you want to remove {0}?
+removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
+removeSettlor.error.required = Select yes if you want to remove the settlor

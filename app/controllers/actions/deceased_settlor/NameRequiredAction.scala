@@ -18,10 +18,8 @@ package controllers.actions.deceased_settlor
 
 import javax.inject.Inject
 import models.NormalMode
-import models.requests.{RegistrationDataRequest, SettlorBusinessNameRequest, SettlorIndividualNameRequest}
+import models.requests.{RegistrationDataRequest, SettlorIndividualNameRequest}
 import pages.deceased_settlor.SettlorsNamePage
-import pages.living_settlor.SettlorIndividualNamePage
-import pages.living_settlor.business.SettlorBusinessNamePage
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 

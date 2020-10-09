@@ -33,7 +33,6 @@ class RegistrationIdentifierActionSpec extends SpecBase {
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
   lazy override val trustsAuth = new TrustsAuthorisedFunctions(mockAuthConnector, appConfig)
 
   private def authRetrievals(affinityGroup: AffinityGroup, enrolment: Enrolments) =

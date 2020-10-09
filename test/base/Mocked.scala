@@ -16,10 +16,14 @@
 
 package base
 
+import java.time.LocalDate
+
+import models.AllStatus
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 
 import scala.concurrent.Future
 
@@ -29,4 +33,10 @@ trait Mocked extends MockitoSugar {
 
   when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
   when(registrationsRepository.set(any())(any())).thenReturn(Future.successful(true))
+  when(registrationsRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
+
+  val mockCreateDraftRegistrationService : DraftRegistrationService = mock[DraftRegistrationService]
+
+  val mockedTrustStartDate: LocalDate = LocalDate.parse("2019-02-03")
+  when(registrationsRepository.getTrustSetupDate(any())(any())).thenReturn(Future.successful(Some(mockedTrustStartDate)))
 }
