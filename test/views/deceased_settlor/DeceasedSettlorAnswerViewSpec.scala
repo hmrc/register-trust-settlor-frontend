@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,20 +12,23 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import viewmodels.Link
+package views.deceased_settlor
 
-@(
-        hint: Option[String] = None,
-        readerHint: Option[String] = None,
-        link: Option[Link] = None
-)(implicit messages: Messages)
+import views.behaviours.ViewBehaviours
+import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
-    @if(hint.nonEmpty) {
-        <span id="form-hint" class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
-            @link.map { l =>
-                <a id="link" href="@l.url" target="_blank">@l.text</a>
-            }
-        </span>
-    }
+class DeceasedSettlorAnswerViewSpec extends ViewBehaviours {
+
+  "DeceasedSettlorAnswer view" must {
+
+    val view = viewFor[DeceasedSettlorAnswerView](Some(emptyUserAnswers))
+
+    val applyView = view.apply(fakeDraftId, Nil)(fakeRequest, messages)
+
+    behave like normalPage(applyView, Some("taskList.settlors.label"), "deceasedSettlorAnswer")
+
+    behave like pageWithBackLink(applyView)
+  }
+}
