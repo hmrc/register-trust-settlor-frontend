@@ -26,6 +26,6 @@ class IndexController @Inject()(
                                ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = Action {
-    Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+    Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
   }
 }

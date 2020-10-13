@@ -20,7 +20,7 @@ import java.time.LocalDate
 
 import config.FrontendAppConfig
 import javax.inject.Inject
-import models.{AllStatus, SubmissionDraftData, SubmissionDraftResponse, SubmissionDraftSetData}
+import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
@@ -39,7 +39,7 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/MAIN", Json.toJson(submissionDraftData))
   }
 
-  def setDraftSectionSet(draftId: String, section: String, data: SubmissionDraftSetData)
+  def setDraftSectionSet(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                         (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
   }
