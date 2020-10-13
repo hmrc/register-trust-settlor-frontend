@@ -24,8 +24,8 @@ import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
 import javax.inject.Inject
-import models.requests.{RegistrationDataRequest, SettlorIndividualNameRequest}
-import models.{Mode, NormalMode}
+import models.Mode
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.data.Form

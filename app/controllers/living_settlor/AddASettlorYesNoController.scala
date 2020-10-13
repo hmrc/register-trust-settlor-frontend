@@ -18,7 +18,6 @@ package controllers.living_settlor
 
 import config.annotations.LivingSettlor
 import controllers.actions.Actions
-import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.AddASettlorFormProvider
 import javax.inject.Inject
 import models.NormalMode

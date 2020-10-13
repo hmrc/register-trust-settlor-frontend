@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.DateOfBirthFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.living_settlor.{SettlorIndividualDateOfBirthPage, SettlorIndividualNamePage}
 import play.api.data.Form
