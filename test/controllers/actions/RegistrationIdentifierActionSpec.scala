@@ -17,7 +17,6 @@
 package controllers.actions
 
 import base.SpecBase
-import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import org.mockito.Matchers.any
 import org.mockito.Mockito._

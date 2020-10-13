@@ -18,10 +18,9 @@ package navigation
 
 import config.FrontendAppConfig
 import javax.inject.{Inject, Singleton}
-import play.api.mvc.Call
-import controllers.routes
 import pages._
 import models._
+import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 @Singleton

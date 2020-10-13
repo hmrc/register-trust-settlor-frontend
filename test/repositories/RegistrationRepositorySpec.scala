@@ -76,9 +76,10 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         val mockConnector = mock[SubmissionDraftConnector]
 
-        val submissionSet = SubmissionDraftSetData(
+        val submissionSet = RegistrationSubmission.DataSet(
           Json.obj(),
-          Some(SubmissionDraftStatus("settlors", Some(InProgress))),
+          Some(InProgress),
+          List.empty,
           List.empty
         )
 
