@@ -29,7 +29,7 @@ import pages.living_settlor.business._
 import pages.living_settlor.trust_type._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.LivingSettlors
+import sections.{DeceasedSettlor, LivingSettlors}
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

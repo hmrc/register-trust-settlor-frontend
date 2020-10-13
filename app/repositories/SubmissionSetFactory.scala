@@ -20,34 +20,73 @@ import javax.inject.Inject
 import mapping.{DeceasedSettlorMapper, SettlorsMapper}
 import models.pages.Status._
 import models.pages.Status
-import models.{SubmissionDraftRegistrationPiece, SubmissionDraftSetData, SubmissionDraftStatus, UserAnswers}
+import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
+import play.api.i18n.Messages
 import play.api.libs.json.Json
+import utils.CheckYourAnswersHelper
+import utils.countryOptions.CountryOptions
+import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
                                      settlorsMapper: SettlorsMapper,
+                                     countryOptions: CountryOptions,
                                      deceasedSettlorMapper: DeceasedSettlorMapper) {
 
-  def createFrom(userAnswers: UserAnswers): SubmissionDraftSetData = {
+  def createFrom(userAnswers: UserAnswers): RegistrationSubmission.DataSet = {
     val status = registrationProgress.settlorsStatus(userAnswers)
     val registrationPieces = mappedDataIfCompleted(userAnswers, status)
 
-    SubmissionDraftSetData(
+    RegistrationSubmission.DataSet(
       Json.toJson(userAnswers),
-      Some(SubmissionDraftStatus("settlors", status)),
-      registrationPieces
+      status,
+      registrationPieces,
+List.empty
     )
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
     if (status.contains(Completed)) {
       (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
-        case (_, Some(deceasedSettlor)) => List(SubmissionDraftRegistrationPiece("trust/entities/deceased", Json.toJson(deceasedSettlor)))
-        case (Some(settlors), _)        => List(SubmissionDraftRegistrationPiece("trust/entities/settlors", Json.toJson(settlors)))
+        case (_, Some(deceasedSettlor)) => List(RegistrationSubmission.MappedPiece("trust/entities/deceased", Json.toJson(deceasedSettlor)))
+        case (Some(settlors), _)        => List(RegistrationSubmission.MappedPiece("trust/entities/settlors", Json.toJson(settlors)))
         case _                          => List.empty
       }
     } else {
       List.empty
     }
+  }
+
+  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
+                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+
+    if (status.contains(Status.Completed)) {
+      val entitySections = (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
+        case (_, Some(deceasedSettlor)) =>
+          List(
+            checkYourAnswersHelper.deceasedSettlor
+          ).flatten.flatten
+        case (Some(settlors), _) =>
+          List(
+            checkYourAnswersHelper.livingSettlors
+          ).flatten.flatten
+        case _ =>
+          List.empty
+      }
+      entitySections.map(convertForSubmission)
+
+    } else {
+      List.empty
+    }
+  }
+
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
+  }
+
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+    RegistrationSubmission.AnswerSection(section.headingKey, section.rows.map(convertForSubmission), section.sectionKey)
   }
 }
