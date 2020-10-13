@@ -37,7 +37,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
   private val userAnswersSection = config.repositoryKey
 
   override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
-    submissionDraftConnector.setDraftSectionSet(
+    submissionDraftConnector.setDraftSection(
       userAnswers.draftId,
       userAnswersSection,
       submissionSetFactory.createFrom(userAnswers)

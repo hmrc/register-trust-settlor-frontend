@@ -166,7 +166,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         reset(registrationsRepository)
 
-        when(registrationsRepository.set(any())(any())).thenReturn(Future.successful(true))
+        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
         val application = applicationBuilder(userAnswers = Some(deceasedUserAnswers)).build()
 
@@ -180,7 +180,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
         val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any())
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(SettlorsNamePage) mustNot be(defined)
         uaCaptor.getValue.get(SettlorDateOfDeathYesNoPage) mustNot be(defined)
         uaCaptor.getValue.get(SettlorDateOfBirthYesNoPage) mustNot be(defined)
@@ -196,7 +196,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
           reset(registrationsRepository)
 
-          when(registrationsRepository.set(any())(any())).thenReturn(Future.successful(true))
+          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
           val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
 
@@ -210,7 +210,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
           redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
           val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(registrationsRepository).set(uaCaptor.capture)(any())
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
           uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
           uaCaptor.getValue.get(SettlorIndividualNamePage(index)) mustNot be(defined)
           uaCaptor.getValue.get(SettlorIndividualDateOfBirthYesNoPage(index)) mustNot be(defined)
@@ -224,7 +224,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
           reset(registrationsRepository)
 
-          when(registrationsRepository.set(any())(any())).thenReturn(Future.successful(true))
+          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
           val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
 
@@ -238,7 +238,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
           redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
           val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(registrationsRepository).set(uaCaptor.capture)(any())
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
           uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
           uaCaptor.getValue.get(SettlorBusinessNamePage(index)) mustNot be(defined)
           uaCaptor.getValue.get(SettlorBusinessUtrYesNoPage(index)) mustNot be(defined)

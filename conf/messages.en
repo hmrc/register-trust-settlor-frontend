@@ -45,6 +45,8 @@ site.onlyContinue = Continue
 site.service_name = Register and Maintain a Trust
 site.service_section = Settlors
 site.textarea.char_limit = (Limit is {0} characters)
+site.inprogress = In Progress
+site.complete = Completed
 site.error = Error:
 site.date.hint = For example, 31 3 1980.
 
