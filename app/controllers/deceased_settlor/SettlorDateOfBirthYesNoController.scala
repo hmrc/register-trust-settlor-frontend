@@ -18,10 +18,10 @@ package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
 import controllers.actions._
-import controllers.actions.deceased_settlor.{NameRequiredAction, NameRequiredActionProvider}
+import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorDateOfBirthYesNoPage, SettlorsNamePage}
 import play.api.data.Form

@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions.{Actions, DraftIdRetrievalActionProvider, RegistrationDataRequiredAction, RegistrationIdentifierAction}
+import controllers.actions.Actions
 import forms.AddASettlorFormProvider
 import javax.inject.Inject
 import models.NormalMode

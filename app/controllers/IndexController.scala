@@ -16,16 +16,37 @@
 
 package controllers
 
+import controllers.actions.RegistrationIdentifierAction
 import javax.inject.Inject
+import models.UserAnswers
 import play.api.i18n.I18nSupport
+import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
-class IndexController @Inject()(
-                                 val controllerComponents: MessagesControllerComponents
-                               ) extends FrontendBaseController with I18nSupport {
+import scala.concurrent.{ExecutionContext, Future}
 
-  def onPageLoad(draftId: String): Action[AnyContent] = Action {
+class IndexController @Inject()(
+                                 val controllerComponents: MessagesControllerComponents,
+                                 repository: RegistrationsRepository,
+                                 identify: RegistrationIdentifierAction
+                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+
+  def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
+
+    repository.get(draftId) flatMap {
+      case Some(userAnswers) =>
+        Future.successful(redirect(userAnswers, draftId))
+      case _ =>
+        val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier)
+        repository.set(userAnswers) map {
+          _ => redirect(userAnswers, draftId)
+        }
+    }
+  }
+
+  private def redirect(userAnswers: UserAnswers, draftId: String) = {
     Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
   }
 }

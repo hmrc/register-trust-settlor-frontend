@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.UKAddressFormProvider
 import javax.inject.Inject
-import models.{Mode, NormalMode}
+import models.Mode
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsUKAddressPage}
 import play.api.data.Form
