@@ -33,7 +33,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
                                      countryOptions: CountryOptions,
                                      deceasedSettlorMapper: DeceasedSettlorMapper) {
 
-  def createFrom(userAnswers: UserAnswers): RegistrationSubmission.DataSet = {
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.settlorsStatus(userAnswers)
     val registrationPieces = mappedDataIfCompleted(userAnswers, status)
 
@@ -41,7 +41,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
       Json.toJson(userAnswers),
       status,
       registrationPieces,
-List.empty
+      answerSectionsIfCompleted(userAnswers, status)
     )
   }
 

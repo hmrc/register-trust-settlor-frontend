@@ -76,23 +76,24 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         val mockConnector = mock[SubmissionDraftConnector]
 
-        val submissionSet = SubmissionDraftSetData(
+        val submissionSet = RegistrationSubmission.DataSet(
           Json.obj(),
-          Some(SubmissionDraftStatus("settlors", Some(InProgress))),
+          Some(InProgress),
+          List.empty,
           List.empty
         )
 
         val mockSubmissionSetFactory = mock[SubmissionSetFactory]
-        when(mockSubmissionSetFactory.createFrom(any())).thenReturn(submissionSet)
+        when(mockSubmissionSetFactory.createFrom(any())(any())).thenReturn(submissionSet)
 
         val repository = createRepository(mockConnector, mockSubmissionSetFactory)
 
-        when(mockConnector.setDraftSectionSet(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(http.Status.OK, None)))
+        when(mockConnector.setDraftSection(any(), any(), any())(any(), any())).thenReturn(Future.successful(HttpResponse(http.Status.OK, None)))
 
         val result = Await.result(repository.set(userAnswers), Duration.Inf)
 
         result mustBe true
-        verify(mockConnector).setDraftSectionSet(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)
+        verify(mockConnector).setDraftSection(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)
       }
     }
   }

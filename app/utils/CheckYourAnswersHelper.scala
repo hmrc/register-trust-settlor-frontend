@@ -19,9 +19,7 @@ package utils
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.living_settlor.routes
 import javax.inject.Inject
-import mapping.reads._
-import models.NormalMode
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.deceased_settlor._
 import pages.living_settlor._
@@ -29,7 +27,7 @@ import pages.living_settlor.business._
 import pages.living_settlor.trust_type._
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
-import sections.{DeceasedSettlor, LivingSettlors}
+import sections.LivingSettlors
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

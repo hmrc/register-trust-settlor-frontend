@@ -20,17 +20,14 @@ import config.FrontendAppConfig
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.living_settlor.routes
 import javax.inject.{Inject, Singleton}
-import models.NormalMode
-import models.UserAnswers
-import models.pages.IndividualOrBusiness._
+import models.{NormalMode, UserAnswers}
 import models.pages.AddASettlor
+import models.pages.IndividualOrBusiness._
 import models.pages.KindOfTrust._
-import navigation.Navigator
-import pages._
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.living_settlor.trust_type._
-import pages.{AddASettlorPage, AddASettlorYesNoPage, AddAnotherSettlorYesNoPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.{AddASettlorPage, AddASettlorYesNoPage, AddAnotherSettlorYesNoPage, SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.mvc.Call
 import sections.LivingSettlors
 import uk.gov.hmrc.auth.core.AffinityGroup

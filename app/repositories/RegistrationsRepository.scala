@@ -23,6 +23,7 @@ import connectors.SubmissionDraftConnector
 import javax.inject.Inject
 import models.{AllStatus, UserAnswers}
 import play.api.http
+import play.api.i18n.Messages
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -35,8 +36,8 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
   private val userAnswersSection = config.repositoryKey
 
-  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    submissionDraftConnector.setDraftSectionSet(
+  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
+    submissionDraftConnector.setDraftSection(
       userAnswers.draftId,
       userAnswersSection,
       submissionSetFactory.createFrom(userAnswers)
@@ -71,7 +72,7 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
 trait RegistrationsRepository {
 
-  def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Boolean]
+  def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean]
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
 

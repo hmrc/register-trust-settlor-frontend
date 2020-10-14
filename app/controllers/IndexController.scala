@@ -23,6 +23,7 @@ import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import sections.{DeceasedSettlor, LivingSettlors}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -47,6 +48,15 @@ class IndexController @Inject()(
   }
 
   private def redirect(userAnswers: UserAnswers, draftId: String) = {
-    Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
+    val livingSettlors = userAnswers.get(LivingSettlors).getOrElse(List.empty)
+    val deceasedSettlor = userAnswers.get(DeceasedSettlor)
+
+    if (livingSettlors.nonEmpty) {
+      Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+    } else if (deceasedSettlor.isDefined) {
+      Redirect(controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
+    } else {
+      Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
+    }
   }
 }

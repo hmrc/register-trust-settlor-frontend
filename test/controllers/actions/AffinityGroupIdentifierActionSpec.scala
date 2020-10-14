@@ -17,7 +17,6 @@
 package controllers.actions
 
 import base.SpecBase
-import config.FrontendAppConfig
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
 import play.api.mvc.{Action, AnyContent, DefaultActionBuilder, Results}
