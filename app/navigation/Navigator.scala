@@ -38,7 +38,7 @@ class Navigator @Inject()(
   def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {
     case NormalMode =>
       route(draftId)(page)(af)
-    case CheckMode =>
+    case _ =>
       route(draftId)(page)(af)
   }
 }
