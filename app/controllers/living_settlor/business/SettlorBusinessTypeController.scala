@@ -41,7 +41,7 @@ class SettlorBusinessTypeController @Inject()(
                                               requireName: NameRequiredActionProvider,
                                               formProvider: SettlorBusinessTypeFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
-                                              view: SettlorBusinessTypeView,
+                                              view: SettlorBusinessTypeView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
