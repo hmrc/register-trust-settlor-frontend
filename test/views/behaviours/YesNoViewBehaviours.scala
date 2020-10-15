@@ -1,14 +1,33 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package views.behaviours
 
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
+import views.ViewUtils
 
 trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
   def yesNoPage(form: Form[Boolean],
                 createView: Form[Boolean] => HtmlFormat.Appendable,
+                sectionKey: Option[String],
                 messageKeyPrefix: String,
-                expectedFormAction: String): Unit = {
+                hintTextPrefix : Option[String] = None,
+                args : Seq[String] = Nil) : Unit = {
 
     "behave like a page with a Yes/No question" when {
 
@@ -19,7 +38,12 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           val doc = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
           legends.size mustBe 1
-          legends.first.text mustBe messages(s"$messageKeyPrefix.heading")
+          legends.first.text must include(messages(s"$messageKeyPrefix.heading", args: _*))
+
+          hintTextPrefix.map {
+            pref =>
+              doc.getElementsByClass("form-hint").first.text must include(messages(s"$pref.hint"))
+          }
         }
 
         "contain an input for the value" in {
@@ -45,12 +69,12 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
       "rendered with a value of true" must {
 
-        behave like answeredYesNoPage(createView, true)
+        behave like answeredYesNoPage(createView, answer = true)
       }
 
       "rendered with a value of false" must {
 
-        behave like answeredYesNoPage(createView, false)
+        behave like answeredYesNoPage(createView, answer = false)
       }
 
       "rendered with an error" must {
@@ -61,18 +85,17 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
           assertRenderedById(doc, "error-summary-heading")
         }
 
-        "show an error associated with the value field" in {
+        "show an error in the value field's label" in {
 
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe (messages("error.browser.title.prefix") + " " + messages(errorMessage))
-          doc.getElementsByTag("fieldset").first.attr("aria-describedby") contains errorSpan.attr("id")
+          errorSpan.text mustBe (s"""${messages(errorPrefix)} ${messages(errorMessage)}""")
         }
 
         "show an error prefix in the browser title" in {
 
           val doc = asDocument(createView(form.withError(error)))
-          assertEqualsValue(doc, "title", s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title")}""")
+          assertEqualsValue(doc, "title", ViewUtils.breadcrumbTitle(s"""${messages("error.browser.title.prefix")} ${messages(s"$messageKeyPrefix.title", args: _*)}"""))
         }
       }
     }

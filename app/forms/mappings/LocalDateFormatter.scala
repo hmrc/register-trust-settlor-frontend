@@ -1,3 +1,19 @@
+/*
+ * Copyright 2020 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package forms.mappings
 
 import java.time.LocalDate
@@ -11,8 +27,7 @@ private[mappings] class LocalDateFormatter(
                                             invalidKey: String,
                                             allRequiredKey: String,
                                             twoRequiredKey: String,
-                                            requiredKey: String,
-                                            args: Seq[String] = Seq.empty
+                                            requiredKey: String
                                           ) extends Formatter[LocalDate] with Formatters {
 
   private val fieldKeys: List[String] = List("day", "month", "year")
@@ -22,7 +37,7 @@ private[mappings] class LocalDateFormatter(
       case Success(date) =>
         Right(date)
       case Failure(_) =>
-        Left(Seq(FormError(key, invalidKey, args)))
+        Left(Seq(FormError(key, invalidKey, fieldKeys)))
     }
 
   private def formatDate(key: String, data: Map[String, String]): Either[Seq[FormError], LocalDate] = {
@@ -30,8 +45,7 @@ private[mappings] class LocalDateFormatter(
     val int = intFormatter(
       requiredKey = invalidKey,
       wholeNumberKey = invalidKey,
-      nonNumericKey = invalidKey,
-      args
+      nonNumericKey = invalidKey
     )
 
     for {
@@ -57,14 +71,14 @@ private[mappings] class LocalDateFormatter(
     fields.count(_._2.isDefined) match {
       case 3 =>
         formatDate(key, data).left.map {
-          _.map(_.copy(key = key, args = args))
+          _.map(_.copy(key = key, args = fieldKeys))
         }
       case 2 =>
-        Left(List(FormError(key, requiredKey, missingFields ++ args)))
+        Left(List(FormError(key, requiredKey, missingFields)))
       case 1 =>
-        Left(List(FormError(key, twoRequiredKey, missingFields ++ args)))
+        Left(List(FormError(key, twoRequiredKey, missingFields)))
       case _ =>
-        Left(List(FormError(key, allRequiredKey, args)))
+        Left(List(FormError(key, allRequiredKey, missingFields)))
     }
   }
 
