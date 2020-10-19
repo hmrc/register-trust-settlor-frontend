@@ -29,7 +29,7 @@
 
     @components.back_link()
 
-    @components.heading_with_caption("settlorInfo")
+    @components.heading("settlorInfo.heading")
 
     <h2>@messages("settlorInfo.subheading1")</h2>
 
@@ -38,12 +38,19 @@
     @components.bullet_list("settlorInfo",
         List(
             "bulletpoint1",
-            "bulletpoint2",
-            "bulletpoint3"
+            "bulletpoint2"
         )
     )
 
     <p>@messages("settlorInfo.paragraph2")</p>
+
+    @components.bullet_list("settlorInfo",
+        List(
+            "bulletpoint2",
+        )
+    )
+
+    <p>@messages("settlorInfo.paragraph3")</p>
 
     @components.bullet_list("settlorInfo",
         List(
@@ -56,13 +63,13 @@
 
     <h2>@messages("settlorInfo.subheading2")</h2>
 
-    <p>@messages("settlorInfo.paragraph3")</p>
+    <p>@messages("settlorInfo.paragraph4")</p>
 
     <h2>@messages("settlorInfo.subheading3")</h2>
 
-    <p>@messages("settlorInfo.paragraph4")</p>
-
     <p>@messages("settlorInfo.paragraph5")</p>
+
+    <p>@messages("settlorInfo.paragraph6")</p>
 
     @components.bullet_list("settlorInfo",
         List(

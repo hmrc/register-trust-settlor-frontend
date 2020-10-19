@@ -6,9 +6,13 @@ date.day = Day
 date.month = Month
 date.year = Year
 
+#timeout dialog
+timeout.title=Your application will time out soon
+timeout.message=We will reset your application if you do not respond in
+timeout.keep-alive-button=Continue application
+
 error.browser.title.prefix = Error:
 error.boolean = Please give an answer
-error.invalid_date = Give a correct date
 error.date.day_blank = Enter a day
 error.date.day_invalid = Give a correct day using numbers 1 to 31
 error.date.month_blank = Enter a month
@@ -20,6 +24,7 @@ error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
 error.summary.title = There is a problem
+error.postcodeInvalid = Enter a real postcode
 
 index.title = register-trust-settlor-frontend
 index.heading = register-trust-settlor-frontend
@@ -474,8 +479,8 @@ removeSettlor.heading = Are you sure you want to remove {0}?
 removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
-settlorInfo.title = Information you’ll need to provide
-settlorInfo.heading = Information you’ll need to provide
+settlorInfo.title = Information you need to register a settlor
+settlorInfo.heading = Information you need to register a settlor
 settlorInfo.caption = Settlors
 settlorInfo.caption.hidden = This section is
 settlorInfo.subheading1 = Individual settlor
@@ -483,16 +488,17 @@ settlorInfo.paragraph1 = If the trust was created after the settlor died, tell u
 settlorInfo.bulletpoint1 = date of death
 settlorInfo.bulletpoint2 = date of birth
 settlorInfo.bulletpoint3 = National Insurance number or last known address
-settlorInfo.paragraph2 = If the settlor created a different kind of trust, tell us their name. If you know more details, tell us one of the following:
+settlorInfo.paragraph2 = If the settlor created a different kind of trust, tell us their name. If you know more details, tell us their:
+settlorInfo.paragraph3 = Also, if you have these details, tell us one of them:
 settlorInfo.bulletpoint4 = National Insurance number
 settlorInfo.bulletpoint5 = address
 settlorInfo.bulletpoint6 = passport details and address
 settlorInfo.bulletpoint7 = ID card details and address
 settlorInfo.subheading2 = Business settlor
-settlorInfo.paragraph3 = If the settlor is a business, tell us the business’s name. If you know more details, tell us the Unique Taxpayer Reference (UTR) or business address.
+settlorInfo.paragraph4 = If the settlor is a business, tell us the business’s name. If you know more details, tell us their Unique Taxpayer Reference or business address.
 settlorInfo.subheading3 = Set up of the trust
-settlorInfo.paragraph4 = If the settlor created the trust during their lifetime to gift or transfer assets, you need to tell us if holdover relief has been claimed.
-settlorInfo.paragraph5 = For trusts set up for employees of a company, tell us:
+settlorInfo.paragraph5 = If the settlor created the trust during their lifetime to gift or transfer assets, you need to tell us if holdover relief has been claimed.
+settlorInfo.paragraph6 = For trusts set up for employees of a company, tell us:
 settlorInfo.bulletpoint8 = if it’s an employer-financed retirement scheme, and if so what date it started
 settlorInfo.bulletpoint9 = the business type (trading or investment) if the scheme’s settlor is a business
 settlorInfo.bulletpoint10 = if the business had existed for at least 2 years when any asset was added to the trust
