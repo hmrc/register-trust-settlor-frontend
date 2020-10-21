@@ -27,7 +27,8 @@ trait ReadableUserAnswers {
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
-      case JsError(_) =>
+      case JsError(errors) =>
+        Logger.info(s"[UserAnswers] tried to read path ${page.path} errors: $errors")
         None
     }
   }
@@ -39,20 +40,18 @@ object ReadOnlyUserAnswers {
   implicit lazy val formats: OFormat[ReadOnlyUserAnswers] = Json.format[ReadOnlyUserAnswers]
 }
 
+final case class UserAnswersCore(
+                                  draftId: String,
+                                  data: JsObject = Json.obj(),
+                                  internalAuthId :String
+                                )
+
 final case class UserAnswers(
                               draftId: String,
                               data: JsObject = Json.obj(),
-                              internalAuthId :String
-                            ) {
-
-  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
-    Reads.at(page.path).reads(data) match {
-      case JsSuccess(value, _) => Some(value)
-      case JsError(errors) =>
-        Logger.info(s"[UserAnswers] tried to read path ${page.path} errors: $errors")
-        None
-    }
-  }
+                              internalAuthId :String,
+                              nonTaxable: Option[Boolean] = None
+                            ) extends ReadableUserAnswers {
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 
@@ -94,11 +93,13 @@ final case class UserAnswers(
       result => Success(result)
     )
   }
+
+  def getCore: UserAnswersCore = UserAnswersCore(draftId, data, internalAuthId)
 }
 
-object UserAnswers {
+object UserAnswersCore {
 
-  implicit lazy val reads: Reads[UserAnswers] = {
+  implicit lazy val reads: Reads[UserAnswersCore] = {
 
     import play.api.libs.functional.syntax._
 
@@ -106,10 +107,10 @@ object UserAnswers {
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
         (__ \ "internalId").read[String]
-      ) (UserAnswers.apply _)
+      ) (UserAnswersCore.apply _)
   }
 
-  implicit lazy val writes: OWrites[UserAnswers] = {
+  implicit lazy val writes: OWrites[UserAnswersCore] = {
 
     import play.api.libs.functional.syntax._
 
@@ -117,6 +118,6 @@ object UserAnswers {
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
         (__ \ "internalId").write[String]
-      ) (unlift(UserAnswers.unapply))
+      ) (unlift(UserAnswersCore.unapply))
   }
 }

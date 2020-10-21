@@ -18,8 +18,8 @@ package repositories
 
 import javax.inject.Inject
 import mapping.{DeceasedSettlorMapper, SettlorsMapper}
-import models.pages.Status._
 import models.pages.Status
+import models.pages.Status._
 import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
 import play.api.i18n.Messages
@@ -38,7 +38,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
     val registrationPieces = mappedDataIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
-      Json.toJson(userAnswers),
+      Json.toJson(userAnswers.getCore),
       status,
       registrationPieces,
       answerSectionsIfCompleted(userAnswers, status)
@@ -64,11 +64,11 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
 
     if (status.contains(Status.Completed)) {
       val entitySections = (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
-        case (_, Some(deceasedSettlor)) =>
+        case (_, Some(_)) =>
           List(
             checkYourAnswersHelper.deceasedSettlor
           ).flatten.flatten
-        case (Some(settlors), _) =>
+        case (Some(_), _) =>
           List(
             checkYourAnswersHelper.livingSettlors
           ).flatten.flatten

@@ -35,7 +35,7 @@ import scala.concurrent.{Await, Future}
 
 class RegistrationRepositorySpec extends SpecBase with MustMatchers with MockitoSugar {
 
-  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory];
+  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
   private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) = {
     new DefaultRegistrationsRepository(connector, frontendAppConfig, submissionSetFactory)
@@ -48,19 +48,19 @@ class RegistrationRepositorySpec extends SpecBase with MustMatchers with Mockito
 
         val draftId = "DraftId"
 
-        val userAnswers = UserAnswers(draftId = draftId, internalAuthId = "internalAuthId")
+        val userAnswersCore = UserAnswersCore(draftId = draftId, internalAuthId = "internalAuthId")
 
         val mockConnector = mock[SubmissionDraftConnector]
 
         val repository = createRepository(mockConnector, unusedSubmissionSetFactory)
 
-        val response = SubmissionDraftResponse(LocalDateTime.now, Json.toJson(userAnswers), None)
+        val response = SubmissionDraftResponse(LocalDateTime.now, Json.toJson(userAnswersCore), None, None)
 
         when(mockConnector.getDraftSection(any(), any())(any(), any())).thenReturn(Future.successful(response))
 
         val result = Await.result(repository.get(draftId), Duration.Inf)
 
-        result mustBe Some(userAnswers)
+        result mustBe Some(UserAnswers(draftId = draftId, internalAuthId = "internalAuthId"))
         verify(mockConnector).getDraftSection(draftId, frontendAppConfig.repositoryKey)(hc, executionContext)
       }
 
