@@ -63,7 +63,11 @@ object RegistrationSubmission {
 }
 
 // Responses
-case class SubmissionDraftResponse(createdAt: LocalDateTime, data: JsValue, reference: Option[String])
+case class SubmissionDraftResponse(
+                                    createdAt: LocalDateTime,
+                                    data: JsValue,
+                                    reference: Option[String],
+                                    nonTaxable: Option[Boolean])
 
 object SubmissionDraftResponse {
   implicit lazy val format: OFormat[SubmissionDraftResponse] = Json.format[SubmissionDraftResponse]

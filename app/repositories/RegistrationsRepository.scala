@@ -21,7 +21,7 @@ import java.time.LocalDate
 import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
 import javax.inject.Inject
-import models.{AllStatus, UserAnswers}
+import models.{AllStatus, SubmissionDraftResponse, UserAnswers, UserAnswersCore}
 import play.api.http
 import play.api.i18n.Messages
 import play.api.libs.json._
@@ -48,9 +48,10 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
   override def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
     submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map {
-      response =>
-        response.data.validate[UserAnswers] match {
-          case JsSuccess(userAnswers, _) => Some(userAnswers)
+      response: SubmissionDraftResponse =>
+        response.data.validate[UserAnswersCore] match {
+          case JsSuccess(UserAnswersCore(draftId, data, internalAuthId), _) =>
+            Some(UserAnswers(draftId, data, internalAuthId, nonTaxable = response.nonTaxable))
           case _ => None
         }
     }

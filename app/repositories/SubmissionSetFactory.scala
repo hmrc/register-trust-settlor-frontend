@@ -40,7 +40,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
     val registrationPieces = mappedDataIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
-      Json.toJson(userAnswers),
+      Json.toJson(userAnswers.getCore),
       status,
       registrationPieces,
       answerSectionsIfCompleted(userAnswers, status)
