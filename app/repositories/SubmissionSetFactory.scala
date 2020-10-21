@@ -17,9 +17,9 @@
 package repositories
 
 import javax.inject.Inject
-import mapping.{DeceasedSettlorMapper, SettlorsMapper}
-import models.pages.Status
+import mapping.{DeceasedSettlorMapper, SettlorsMapper, TrustDetailsMapper}
 import models.pages.Status._
+import models.pages.Status
 import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
 import play.api.i18n.Messages
@@ -31,7 +31,9 @@ import viewmodels.{AnswerRow, AnswerSection}
 class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
                                      settlorsMapper: SettlorsMapper,
                                      countryOptions: CountryOptions,
-                                     deceasedSettlorMapper: DeceasedSettlorMapper) {
+                                     deceasedSettlorMapper: DeceasedSettlorMapper,
+                                     trustDetailsMapper: TrustDetailsMapper
+                                    ) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.settlorsStatus(userAnswers)
@@ -46,15 +48,28 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
   }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
+
     if (status.contains(Completed)) {
-      (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
+
+
+
+      val trustDetailsMappedPiece = trustDetailsMapper.build(userAnswers) match {
+        case Some(trustDetails) => List(RegistrationSubmission.MappedPiece("trust/details/", Json.toJson(trustDetails)))
+        case _ => List.empty
+      }
+
+      val settlorsMappedPiece = (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
         case (_, Some(deceasedSettlor)) => List(RegistrationSubmission.MappedPiece("trust/entities/deceased", Json.toJson(deceasedSettlor)))
         case (Some(settlors), _)        => List(RegistrationSubmission.MappedPiece("trust/entities/settlors", Json.toJson(settlors)))
         case _                          => List.empty
       }
+
+      trustDetailsMappedPiece ++ settlorsMappedPiece
+
     } else {
       List.empty
     }
+
   }
 
   def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
@@ -63,7 +78,8 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
     val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
 
     if (status.contains(Status.Completed)) {
-      val entitySections = (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
+
+      ((settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
         case (_, Some(_)) =>
           List(
             checkYourAnswersHelper.deceasedSettlor
@@ -74,8 +90,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
           ).flatten.flatten
         case _ =>
           List.empty
-      }
-      entitySections.map(convertForSubmission)
+      }) map convertForSubmission
 
     } else {
       List.empty
