@@ -49,7 +49,7 @@ class AddASettlorController @Inject()(
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val addAnotherForm = addAnotherFormProvider()
-  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addAnSettlorYesNo")
+  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
 
   private def actions(draftId: String) =
     standardActions.authWithData(draftId) andThen requiredAnswer(RequiredAnswer(KindOfTrustPage))
