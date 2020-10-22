@@ -18,7 +18,6 @@ package connectors
 
 import java.time.LocalDateTime
 
-import base.SpecBase
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.pages.Status.InProgress
 import models.{RegistrationSubmission, SubmissionDraftResponse}
@@ -33,8 +32,8 @@ import uk.gov.hmrc.http.HeaderCarrier
 import utils.WireMockHelper
 
 import scala.concurrent.Await
-import scala.concurrent.duration.Duration
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
 
 class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with OptionValues with WireMockHelper {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
