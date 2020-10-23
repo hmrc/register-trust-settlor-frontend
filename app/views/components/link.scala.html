@@ -14,23 +14,6 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
-@import views.html._
+@(href : String, id : String = "", key : String, openInNewWindow: Boolean = false)(implicit messages: Messages)
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
-
-@if(answerSection.sectionKey.isDefined){
-<h2 class="heading-large">@messages(answerSection.sectionKey.get)</h2>
-}
-
-@if(answerSection.headingKey.isDefined){
-<h3 class="heading-medium">@messages(answerSection.headingKey.get)</h3>
-}
-
-@if(answerSection.rows) {
-<ul role="list" class="govuk-check-your-answers cya-questions-long section">
-    @for(row <- answerSection.rows){
-    @components.answer_row(row)
-    }
-</ul>
-}
+<a id="@id" href="@href" @if(openInNewWindow) {target="_blank"}>@messages(key)</a>

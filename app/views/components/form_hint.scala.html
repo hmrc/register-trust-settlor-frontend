@@ -17,15 +17,15 @@
 @import viewmodels.Link
 
 @(
-        hint: Option[String] = None,
-        readerHint: Option[String] = None,
-        link: Option[Link] = None
+    hint: Option[String] = None,
+    readerHint: Option[String] = None,
+    link: Option[Link] = None
 )(implicit messages: Messages)
 
-    @if(hint.nonEmpty) {
-        <span id="form-hint" class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
-            @link.map { l =>
-                <a id="link" href="@l.url" target="_blank">@l.text</a>
-            }
-        </span>
-    }
+@if(hint.nonEmpty) {
+  <span id="form-hint" class="form-hint form-field" @if(readerHint.nonEmpty){aria-label="@readerHint"}>@hint
+  @link.map { l =>
+    <a id="link" href="@l.url" target="_blank">@l.text</a>
+  }
+  </span>
+}
