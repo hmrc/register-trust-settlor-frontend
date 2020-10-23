@@ -38,11 +38,11 @@ class SettlorIndividualOrBusinessViewSpec extends OptionsViewBehaviours {
 
   "SettlorIndividualOrBusinessView" must {
 
-    behave like normalPage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix)
+    behave like normalPage(applyView(form),  messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithOptions(form, applyView, IndividualOrBusiness.options)
+    behave like pageWithOptions(form, applyView, IndividualOrBusiness.options.toList)
 
     behave like pageWithASubmitButton(applyView(form))
   }

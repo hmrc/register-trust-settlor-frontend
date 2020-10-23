@@ -16,27 +16,28 @@
 
 package views.behaviours
 
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
 import views.ViewUtils
 
-trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
+trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
-  val number = 123
+  val answer = "ES"
 
-  def intPage(form: Form[Int],
-              createView: Form[Int] => HtmlFormat.Appendable,
-              messageKeyPrefix: String,
-              expectedFormAction: String): Unit = {
+  def selectCountryPage(form: Form[String],
+                 createView: Form[String] => HtmlFormat.Appendable,
+                 messageKeyPrefix: String,
+                 expectedHintKey: Option[String] = None) = {
 
-    "behave like a page with an integer value field" when {
+    "behave like a page with a string value field" when {
 
       "rendered" must {
 
         "contain a label for the value" in {
 
           val doc = asDocument(createView(form))
-          assertContainsLabel(doc, "value", messages(s"$messageKeyPrefix.title"))
+          val expectedHintText = expectedHintKey map (k => messages(k))
+          assertContainsLabel(doc, "value", messages(s"$messageKeyPrefix.heading"), expectedHintText)
         }
 
         "contain an input for the value" in {
@@ -48,10 +49,10 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
 
       "rendered with a valid form" must {
 
-        "include the form's value in the value input" in {
+        "have the correct selection option value 'selected' for the form country input value" in {
 
-          val doc = asDocument(createView(form.fill(number)))
-          doc.getElementById("value").attr("value") mustBe number.toString
+          val doc = asDocument(createView(form.fill(answer)))
+          doc.getElementsByAttribute("selected").attr("value") mustBe answer
         }
       }
 
@@ -63,11 +64,15 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
           assertRenderedById(doc, "error-summary-heading")
         }
 
-        "show an error associated with the value field" in {
+        "show an error in the value field's label" in {
+
+          val errorKey = "value"
+          val errorMessage = "error.number"
+          val error = FormError(errorKey, errorMessage)
 
           val doc = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("error-message").first
-          errorSpan.text mustBe (messages("error.browser.title.prefix") + " " + messages(errorMessage))
+          errorSpan.text mustBe s"""${messages(errorPrefix)} ${messages(errorMessage)}"""
         }
 
         "show an error prefix in the browser title" in {
