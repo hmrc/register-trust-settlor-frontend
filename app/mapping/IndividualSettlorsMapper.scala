@@ -44,7 +44,13 @@ class IndividualSettlorsMapper @Inject()(nameMapper: NameMapper, addressMapper: 
     val identificationType = IdentificationType(
       settlor.nino,
       passportOrIdMap(settlor.passportOrId),
-      addressMapper.build(settlor.address)
+      {
+        (settlor.ukAddress, settlor.internationalAddress) match {
+          case (None, None) => None
+          case (Some(address), _) => Some(addressMapper.build(address))
+          case (_, Some(address)) => Some(addressMapper.build(address))
+        }
+      }
     )
 
     identificationType match {

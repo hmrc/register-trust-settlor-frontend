@@ -18,15 +18,15 @@ package mapping.reads
 
 import java.time.LocalDate
 
-import models.pages.{Address, FullName}
-import models.pages.PassportOrIdCardDetails
+import models.pages.{Address, FullName, InternationalAddress, PassportOrIdCardDetails}
 import play.api.libs.json.{Format, Json}
 
 
 final case class IndividualSettlor(name: FullName,
                                    dateOfBirth: Option[LocalDate],
                                    nino: Option[String],
-                                   address : Option[Address],
+                                   ukAddress : Option[Address],
+                                   internationalAddress : Option[InternationalAddress],
                                    passport: Option[PassportOrIdCardDetails],
                                    idCard: Option[PassportOrIdCardDetails]) extends Settlor {
 
