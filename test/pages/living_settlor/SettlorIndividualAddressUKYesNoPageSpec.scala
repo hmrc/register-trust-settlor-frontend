@@ -59,6 +59,30 @@ class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
       }
     }
 
+    "not implement cleanup logic" when {
+
+      "previous selection YES selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressUKPage(0), ukAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), true).success.value
+
+            result.get(SettlorAddressUKPage(0)).get mustBe ukAddress
+        }
+      }
+
+      "previous selection NO selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressInternationalPage(0), internationalAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), false).success.value
+
+            result.get(SettlorAddressInternationalPage(0)).get mustBe internationalAddress
+        }
+      }
+    }
   }
 
 }
