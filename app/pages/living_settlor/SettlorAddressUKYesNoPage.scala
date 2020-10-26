@@ -16,14 +16,27 @@
 
 package pages.living_settlor
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
+
+import scala.util.Try
 
 final case class SettlorAddressUKYesNoPage(index : Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 
   override def toString: String = "ukAddressYesNo"
+
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    value match {
+      case Some(true) =>
+        userAnswers.remove(SettlorAddressInternationalPage(index))
+      case Some(false) =>
+        userAnswers.remove(SettlorAddressUKPage(index))
+      case _ => super.cleanup(value, userAnswers)
+    }
+  }
 
 }
