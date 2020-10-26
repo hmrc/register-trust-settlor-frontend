@@ -34,4 +34,5 @@ final case class SettlorIndividualNINOYesNoPage(index : Int) extends QuestionPag
       case Some(false) => userAnswers.remove(SettlorIndividualNINOPage(index))
       case _ => super.cleanup(value, userAnswers)
     }
+
 }

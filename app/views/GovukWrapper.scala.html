@@ -24,6 +24,7 @@
     footer: Footer,
     serviceInfo: ServiceInfo,
     main_content_header: MainContentHeader,
+    betaBanner: BetaBanner,
     footer_links: FooterLinks,
     main_content: MainContent,
     reportAProblemLink: ReportAProblemLink,
@@ -49,8 +50,13 @@
     <link rel="stylesheet" href='@routes.Assets.versioned("stylesheets/registertrustsettlorfrontend-app.css")' />
 }
 
-@headerNavLinks = {}
-
+@headerNavLinks = {
+    <li>
+        <a id="logOut" href="@controllers.routes.LogoutController.logout" data-target="link - click:@title:@Messages("site.sign_out")">
+        @Messages("site.sign_out")
+        </a>
+    </li>
+}
 @insideHeader = {
     @header_nav(
       navTitle = Some(messages("site.service_name")),
@@ -71,12 +77,36 @@
       <script src='@routes.Assets.versioned("javascripts/registertrustsettlorfrontend-app.min.js")'> </script>
 }
 
+@additionalLinksHtml = {
+    <li>
+        <a href="@appConfig.accessibilityLinkUrl"
+           data-sso="false"
+           data-journey-click="footer:Click:Accessibility">
+            @Messages("footer.links.accessibility.text")
+        </a>
+    </li>
+}
+
 @footerTop = {}
-@footerLinks = {}
+@footerLinks = {
+    @footer_links(
+        additionalLinks = Some(additionalLinksHtml),
+        euExitLinks = None
+    )
+}
+
+@banner = {
+    @betaBanner(
+        userLoggedIn = true,
+        betaFeedbackUrl = appConfig.betaFeedbackUrl,
+        betaFeedbackUnauthenticatedUrl = appConfig.betaFeedbackUnauthenticatedUrl,
+        showFeedbackLinkInBetaBanner = true
+    )
+}
 
 @serviceInfoBlock = {
     @serviceInfo(
-      betaBanner = HtmlFormat.empty,
+      betaBanner = banner,
       includeHMRCBranding = false,
       includeGridWrapper = false,
       serviceInfoContent = Some(serviceInfoContent))
