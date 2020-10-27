@@ -37,34 +37,43 @@ class SettlorIndividualNINOYesNoPageSpec extends PageBehaviours {
 
       val page = SettlorIndividualNINOYesNoPage(0)
 
+      "set to true" in {
+        forAll(arbitrary[UserAnswers]) {
+          initial =>
+            val answers: UserAnswers = initial.set(page, false).success.value
+              .set(SettlorAddressYesNoPage(0), true).success.value
+              .set(SettlorAddressUKYesNoPage(0), true).success.value
+              .set(SettlorAddressUKPage(0), UKAddress("", "", None, None, "")).success.value
+              .set(SettlorAddressInternationalPage(0), InternationalAddress("", "", None, "")).success.value
+              .set(SettlorIndividualPassportYesNoPage(0), true).success.value
+              .set(SettlorIndividualPassportPage(0), PassportOrIdCardDetails("", "", LocalDate.now())).success.value
+              .set(SettlorIndividualIDCardYesNoPage(0), true).success.value
+              .set(SettlorIndividualIDCardPage(0), PassportOrIdCardDetails("", "", LocalDate.now())).success.value
+
+            val result = answers.set(page, true).success.value
+
+            result.get(SettlorAddressYesNoPage(0)) must not be defined
+            result.get(SettlorAddressUKYesNoPage(0)) must not be defined
+            result.get(SettlorAddressUKPage(0)) must not be defined
+            result.get(SettlorAddressInternationalPage(0)) must not be defined
+            result.get(SettlorIndividualPassportYesNoPage(0)) must not be defined
+            result.get(SettlorIndividualPassportPage(0)) must not be defined
+            result.get(SettlorIndividualIDCardYesNoPage(0)) must not be defined
+            result.get(SettlorIndividualIDCardPage(0)) must not be defined
+        }
+      }
+
       "set to false" in {
         forAll(arbitrary[UserAnswers]) {
           initial =>
             val answers: UserAnswers = initial.set(page, true).success.value
               .set(SettlorIndividualNINOPage(0), "QQ123456C").success.value
-              .set(SettlorAddressInternationalPage(0), InternationalAddress("", "", None, "")).success.value
-              .set(SettlorAddressUKPage(0), UKAddress("", "", None, None, "")).success.value
-              .set(SettlorAddressUKYesNoPage(0), true).success.value
-              .set(SettlorAddressYesNoPage(0), true).success.value
-              .set(SettlorIndividualIDCardPage(0), PassportOrIdCardDetails("", "", LocalDate.now())).success.value
-              .set(SettlorIndividualIDCardYesNoPage(0), true).success.value
-              .set(SettlorIndividualPassportPage(0), PassportOrIdCardDetails("", "", LocalDate.now())).success.value
-              .set(SettlorIndividualPassportYesNoPage(0), true).success.value
 
             val result = answers.set(page, false).success.value
 
             result.get(SettlorIndividualNINOPage(0)) must not be defined
-            result.get(SettlorAddressInternationalPage(0)) must not be defined
-            result.get(SettlorAddressUKPage(0)) must not be defined
-            result.get(SettlorAddressUKYesNoPage(0)) must not be defined
-            result.get(SettlorAddressYesNoPage(0)) must not be defined
-            result.get(SettlorIndividualIDCardPage(0)) must not be defined
-            result.get(SettlorIndividualIDCardYesNoPage(0)) must not be defined
-            result.get(SettlorIndividualPassportPage(0)) must not be defined
-            result.get(SettlorIndividualPassportYesNoPage(0)) must not be defined
         }
       }
-
     }
   }
 }
