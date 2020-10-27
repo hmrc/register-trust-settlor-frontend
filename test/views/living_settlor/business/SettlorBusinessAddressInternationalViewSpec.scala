@@ -43,7 +43,7 @@ class SettlorBusinessAddressInternationalViewSpec extends InternationalAddressVi
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, NormalMode, index, fakeDraftId, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix, name)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 
     behave like pageWithBackLink(applyView(form))
 

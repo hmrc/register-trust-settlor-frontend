@@ -16,9 +16,15 @@
 
 package pages.living_settlor
 
+import models.UserAnswers
+import models.pages.{InternationalAddress, UKAddress}
+import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 
 class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
+
+  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "SettlorIndividualAddressUKYesNoPage" must {
 
@@ -28,5 +34,55 @@ class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](SettlorAddressUKYesNoPage(0))
 
+    "implement cleanup logic" when {
+
+      "YES selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressInternationalPage(0), internationalAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), true).success.value
+
+            result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
+        }
+      }
+
+      "NO selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressUKPage(0), ukAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), false).success.value
+
+            result.get(SettlorAddressUKPage(0)) mustNot be(defined)
+        }
+      }
+    }
+
+    "not implement cleanup logic" when {
+
+      "previous selection YES selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressUKPage(0), ukAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), true).success.value
+
+            result.get(SettlorAddressUKPage(0)).get mustBe ukAddress
+        }
+      }
+
+      "previous selection NO selected" in {
+        forAll(arbitrary[UserAnswers]) {
+          userAnswers =>
+            val result: UserAnswers = userAnswers
+              .set(SettlorAddressInternationalPage(0), internationalAddress).success.value
+              .set(SettlorAddressUKYesNoPage(0), false).success.value
+
+            result.get(SettlorAddressInternationalPage(0)).get mustBe internationalAddress
+        }
+      }
+    }
   }
+
 }

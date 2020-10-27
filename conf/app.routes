@@ -10,6 +10,8 @@ GET        /this-service-has-been-reset                                         
 
 GET        /unauthorised                                                                            controllers.UnauthorisedController.onPageLoad
 
+GET        /logout                                                                                  controllers.LogoutController.logout()
+
 GET        /keep-alive                                                                              controllers.SessionTimeoutController.keepAlive
 GET        /timeout                                                                                 controllers.SessionTimeoutController.timeout
 

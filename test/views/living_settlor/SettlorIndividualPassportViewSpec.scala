@@ -45,14 +45,13 @@ class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportO
 
     val applyViewF = (form : Form[_]) => applyView(form)
 
-    behave like dynamicTitlePage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix, name.toString)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 
     behave like pageWithBackLink(applyView(form))
 
     "date fields" must {
 
       behave like pageWithDateFields(form, applyViewF,
-        Some("taskList.settlors.label"),
         messageKeyPrefix,
         "expiryDate",
         name.toString
@@ -64,7 +63,6 @@ class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportO
       behave like pageWithTextFields(
         form,
         applyView,
-        Some("taskList.settlors.label"),
         messageKeyPrefix,
         Seq(("number", None)),
         name.toString

@@ -55,26 +55,26 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
   "AddASettlorView" when {
 
     "there are no settlors" must {
-      behave like normalPage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix)
+      behave like normalPage(applyView(form), messageKeyPrefix)
 
       behave like pageWithNoTabularData(applyView(form))
 
       behave like pageWithBackLink(applyView(form))
 
-      behave like pageWithOptions(form, applyView, AddASettlor.options.toSet)
+      behave like pageWithOptions(form, applyView, AddASettlor.options)
     }
 
     "there is data in progress" must {
 
       val viewWithData = applyView(form, inProgressSettlors, Nil, 1)
 
-      behave like dynamicTitlePage(viewWithData, Some("taskList.settlors.label"), "addASettlor.singular", "1")
+      behave like dynamicTitlePage(viewWithData, "addASettlor.singular", "1")
 
       behave like pageWithBackLink(viewWithData)
 
       behave like pageWithInProgressTabularData(viewWithData, inProgressSettlors)
 
-      behave like pageWithOptions(form, applyView, AddASettlor.options.toSet)
+      behave like pageWithOptions(form, applyView, AddASettlor.options)
 
     }
 
@@ -82,13 +82,13 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       val viewWithData = applyView(form, Nil, completeSettlors, 2)
 
-      behave like dynamicTitlePage(viewWithData, Some("taskList.settlors.label"), "addASettlor.count", "2")
+      behave like dynamicTitlePage(viewWithData, "addASettlor.count", "2")
 
       behave like pageWithBackLink(viewWithData)
 
       behave like pageWithCompleteTabularData(viewWithData, completeSettlors)
 
-      behave like pageWithOptions(form, applyView, AddASettlor.options.toSet)
+      behave like pageWithOptions(form, applyView, AddASettlor.options)
     }
 
   }

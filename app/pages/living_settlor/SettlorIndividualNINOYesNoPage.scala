@@ -31,7 +31,21 @@ final case class SettlorIndividualNINOYesNoPage(index : Int) extends QuestionPag
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(SettlorIndividualNINOPage(index))
+
+      case Some(true) =>
+        userAnswers.remove(SettlorAddressYesNoPage(index))
+          .flatMap(_.remove(SettlorAddressUKYesNoPage(index)))
+          .flatMap(_.remove(SettlorAddressUKPage(index)))
+          .flatMap(_.remove(SettlorAddressInternationalPage(index)))
+          .flatMap(_.remove(SettlorIndividualPassportYesNoPage(index)))
+          .flatMap(_.remove(SettlorIndividualPassportPage(index)))
+          .flatMap(_.remove(SettlorIndividualIDCardYesNoPage(index)))
+          .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
+
+      case Some(false) =>
+        userAnswers.remove(SettlorIndividualNINOPage(index))
+
       case _ => super.cleanup(value, userAnswers)
     }
+
 }

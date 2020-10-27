@@ -10,8 +10,17 @@
 
 .autocomplete__wrapper {
 
-  input {
-    width: 100%;
-  }
+    input {
+       width: 100%;
+    }
 
+}
+
+.js-enabled {
+    select[data-all-countries] {
+        display: none;
+    }
+    select[data-non-uk-countries] {
+        display: none;
+    }
 }

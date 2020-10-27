@@ -16,34 +16,38 @@
 
 package config
 
+import java.net.{URI, URLEncoder}
 import java.time.LocalDate
 
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
-import play.api.mvc.Call
+import play.api.mvc.{Call, Request}
 
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "play26frontend"
+  private val contactFormServiceIdentifier = "trusts"
 
   val repositoryKey: String = "settlors"
 
   val appName: String = configuration.get[String]("appName")
   val analyticsToken: String = configuration.get[String](s"google-analytics.token")
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")
+
   val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
   val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback"
-  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated"
+  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
+  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
 
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
   lazy val loginUrl: String = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String = configuration.get[String]("urls.loginContinue")
+  lazy val logoutUrl: String = configuration.get[String]("urls.logout")
+
   lazy val registrationProgressUrlTemplate: String = configuration.get[String]("urls.registrationProgress")
   def registrationProgressUrl(draftId: String): String = registrationProgressUrlTemplate.replace(":draftId", draftId)
 
@@ -62,6 +66,13 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   private val month: Int = configuration.get[Int]("minimumDate.month")
   private val year: Int = configuration.get[Int]("minimumDate.year")
   lazy val minDate: LocalDate = LocalDate.of(year, month, day)
+
+  private lazy val accessibilityBaseLinkUrl: String = configuration.get[String]("urls.accessibility")
+
+  def accessibilityLinkUrl(implicit request: Request[_]): String = {
+    val userAction = URLEncoder.encode(new URI(request.uri).getPath, "UTF-8")
+    s"$accessibilityBaseLinkUrl?userAction=$userAction"
+  }
 
   lazy val languageTranslationEnabled: Boolean =
     configuration.get[Boolean]("microservice.services.features.welsh-translation")
