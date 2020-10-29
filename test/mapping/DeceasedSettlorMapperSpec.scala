@@ -25,8 +25,7 @@ import pages.deceased_settlor._
 
 class DeceasedSettlorMapperSpec extends SpecBase {
 
-  private val firstName: String = "Joe"
-  private val lastName: String = "Bloggs"
+  private val name: FullName = FullName("Joe", None, "Bloggs")
   private val dob: LocalDate = LocalDate.parse("1996-02-03")
   private val dod: LocalDate = LocalDate.parse("2019-02-03")
   private val nino: String = "AA000000A"
@@ -48,7 +47,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
       "NINO" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, FullName(firstName, None, lastName)).success.value
+          .set(SettlorsNamePage, name).success.value
           .set(SettlorDateOfDeathYesNoPage, false).success.value
           .set(SettlorDateOfBirthYesNoPage, false).success.value
           .set(SettlorsNationalInsuranceYesNoPage, true).success.value
@@ -57,7 +56,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe WillType(
-          name = NameType(firstName, None, lastName),
+          name = name,
           dateOfBirth = None,
           dateOfDeath = None,
           identification = Some(Identification(
@@ -71,7 +70,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
       "UK address" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, FullName(firstName, None, lastName)).success.value
+          .set(SettlorsNamePage, name).success.value
           .set(SettlorDateOfDeathYesNoPage, false).success.value
           .set(SettlorDateOfBirthYesNoPage, false).success.value
           .set(SettlorsNationalInsuranceYesNoPage, false).success.value
@@ -82,7 +81,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe WillType(
-          name = NameType(firstName, None, lastName),
+          name = name,
           dateOfBirth = None,
           dateOfDeath = None,
           identification = Some(Identification(
@@ -95,7 +94,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
       "non-UK address" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, FullName(firstName, None, lastName)).success.value
+          .set(SettlorsNamePage, name).success.value
           .set(SettlorDateOfDeathYesNoPage, false).success.value
           .set(SettlorDateOfBirthYesNoPage, false).success.value
           .set(SettlorsNationalInsuranceYesNoPage, false).success.value
@@ -106,7 +105,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe WillType(
-          name = NameType(firstName, None, lastName),
+          name = name,
           dateOfBirth = None,
           dateOfDeath = None,
           identification = Some(Identification(
@@ -119,7 +118,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
       "no identification" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, FullName(firstName, None, lastName)).success.value
+          .set(SettlorsNamePage, name).success.value
           .set(SettlorDateOfDeathYesNoPage, true).success.value
           .set(SettlorDateOfDeathPage, dod).success.value
           .set(SettlorDateOfBirthYesNoPage, true).success.value
@@ -130,7 +129,7 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe WillType(
-          name = NameType(firstName, None, lastName),
+          name = name,
           dateOfBirth = Some(dob),
           dateOfDeath = Some(dod),
           identification = None

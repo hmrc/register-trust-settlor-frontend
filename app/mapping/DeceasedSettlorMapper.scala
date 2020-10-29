@@ -20,11 +20,11 @@ import javax.inject.Inject
 import models.UserAnswers
 import pages.deceased_settlor._
 
-class DeceasedSettlorMapper @Inject()(nameMapper: NameMapper, addressMapper: AddressMapper) extends Mapping[WillType] {
+class DeceasedSettlorMapper @Inject()(addressMapper: AddressMapper) extends Mapping[WillType] {
 
   override def build(userAnswers: UserAnswers): Option[WillType] = {
     for {
-      settlorsName <- nameMapper.build(SettlorsNamePage, userAnswers)
+      settlorsName <- userAnswers.get(SettlorsNamePage)
       settlorsDateOfBirth = userAnswers.get(SettlorsDateOfBirthPage)
       settlorDateOfDeath = userAnswers.get(SettlorDateOfDeathPage)
       settlorIdentification = identificationStatus(userAnswers)
@@ -52,16 +52,12 @@ class DeceasedSettlorMapper @Inject()(nameMapper: NameMapper, addressMapper: Add
   }
 
   private def ninoMap(userAnswers: UserAnswers): Option[Identification] = {
-    val settlorNino = userAnswers.get(SettlorNationalInsuranceNumberPage)
-
-    settlorNino.map {
-      nino =>
-        Identification(
-          nino = settlorNino,
-          address = None
-        )
+    userAnswers.get(SettlorNationalInsuranceNumberPage) map { nino =>
+      Identification(
+        nino = Some(nino),
+        address = None
+      )
     }
   }
-
 
 }

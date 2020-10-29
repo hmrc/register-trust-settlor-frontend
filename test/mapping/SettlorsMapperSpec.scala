@@ -18,26 +18,23 @@ package mapping
 
 import base.SpecBase
 import models.UserAnswers
+import models.pages.FullName
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 
 class SettlorsMapperSpec extends SpecBase {
 
-  private val firstName: String = "Joe"
-  private val lastName: String = "Bloggs"
-  private val name: String = "Name"
-
   private val mockIndividualMapper: IndividualSettlorsMapper = mock[IndividualSettlorsMapper]
   private val mockBusinessMapper: BusinessSettlorsMapper = mock[BusinessSettlorsMapper]
 
   private val individualSettlor: Settlor = Settlor(
-    name = NameType(firstName, None, lastName),
+    name = FullName("Joe", None, "Bloggs"),
     dateOfBirth = None,
     identification = None
   )
 
   private val businessSettlor: SettlorCompany = SettlorCompany(
-    name = name,
+    name = "Name",
     companyType = None,
     companyTime = None,
     identification = None

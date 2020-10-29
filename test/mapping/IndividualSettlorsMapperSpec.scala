@@ -25,8 +25,7 @@ import pages.living_settlor._
 
 class IndividualSettlorsMapperSpec extends SpecBase {
 
-  private val firstName: String = "Joe"
-  private val lastName: String = "Bloggs"
+  private val name: FullName = FullName("Joe", None, "Bloggs")
   private val date: LocalDate = LocalDate.parse("1996-02-03")
   private val nino: String = "AA000000A"
 
@@ -62,7 +61,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "NINO" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), FullName(firstName, None, lastName)).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), true).success.value
             .set(SettlorIndividualNINOPage(index), nino).success.value
@@ -70,7 +69,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
-            name = NameType(firstName, None, lastName),
+            name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
               nino = Some(nino),
@@ -83,7 +82,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "UK address and passport" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), FullName(firstName, None, lastName)).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), true).success.value
@@ -95,7 +94,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
-            name = NameType(firstName, None, lastName),
+            name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
               nino = None,
@@ -108,7 +107,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "non-UK address and ID card" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), FullName(firstName, None, lastName)).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), true).success.value
@@ -121,7 +120,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
-            name = NameType(firstName, None, lastName),
+            name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
               nino = None,
@@ -134,7 +133,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "UK address and no passport/ID card" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), FullName(firstName, None, lastName)).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), true).success.value
@@ -146,7 +145,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
-            name = NameType(firstName, None, lastName),
+            name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
               nino = None,
@@ -159,7 +158,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "no identification" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), FullName(firstName, None, lastName)).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
             .set(SettlorIndividualDateOfBirthPage(index), date).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -168,7 +167,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
-            name = NameType(firstName, None, lastName),
+            name = name,
             dateOfBirth = Some(date),
             identification = None
           ))
@@ -177,16 +176,15 @@ class IndividualSettlorsMapperSpec extends SpecBase {
 
       "more than one settlor" in {
 
-        def firstName(index: Int) = s"firstName $index"
-        def lastName(index: Int) = s"lastName $index"
+        def name(index: Int): FullName = FullName("Name", None, s"$index")
 
         val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorIndividualNamePage(0), FullName(firstName(0), None, lastName(0))).success.value
+          .set(SettlorIndividualNamePage(0), name(0)).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
           .set(SettlorIndividualNINOYesNoPage(0), false).success.value
           .set(SettlorAddressYesNoPage(0), false).success.value
 
-          .set(SettlorIndividualNamePage(1), FullName(firstName(1), None, lastName(1))).success.value
+          .set(SettlorIndividualNamePage(1), name(1)).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(1), false).success.value
           .set(SettlorIndividualNINOYesNoPage(1), false).success.value
           .set(SettlorAddressYesNoPage(1), false).success.value
@@ -195,12 +193,12 @@ class IndividualSettlorsMapperSpec extends SpecBase {
 
         result mustBe List(
           Settlor(
-            name = NameType(firstName(0), None, lastName(0)),
+            name = name(0),
             dateOfBirth = None,
             identification = None
           ),
           Settlor(
-            name = NameType(firstName(1), None, lastName(1)),
+            name = name(1),
             dateOfBirth = None,
             identification = None
           )
