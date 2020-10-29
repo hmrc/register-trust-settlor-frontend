@@ -16,26 +16,15 @@
 
 package mapping.reads
 
-import play.api.libs.json.Reads
+import models.pages.Address
+import play.api.libs.json.{JsSuccess, Reads, __}
 
-import scala.language.implicitConversions
+trait SettlorReads {
 
-trait Settlor
-
-object Settlor {
-
-  implicit class ReadsWithContravariantOr[A](a: Reads[A]) {
-
-    def or[B >: A](b: Reads[B]): Reads[B] =
-      a.map[B](identity).orElse(b)
-  }
-
-  implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
-    a.map(identity)
-
-  implicit lazy val reads : Reads[Settlor] = {
-    IndividualSettlor.reads or
-      BusinessSettlor.reads
+  def readAddress(): Reads[Option[Address]] = {
+    (__ \ "ukAddress").read[Address].map(Some(_): Option[Address]) orElse
+      (__ \ "internationalAddress").read[Address].map(Some(_): Option[Address]) orElse
+      Reads(_ => JsSuccess(None: Option[Address]))
   }
 
 }
