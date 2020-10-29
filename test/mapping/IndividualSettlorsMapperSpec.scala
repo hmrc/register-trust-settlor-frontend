@@ -47,6 +47,13 @@ class IndividualSettlorsMapperSpec extends SpecBase {
     val mapper: IndividualSettlorsMapper = injector.instanceOf[IndividualSettlorsMapper]
 
     "map user answers to individual settlor model" when {
+
+      "no settlors" in {
+
+        val result = mapper.build(emptyUserAnswers)
+
+        result mustBe None
+      }
       
       "one settlor" when {
 

@@ -40,6 +40,13 @@ class BusinessSettlorsMapperSpec extends SpecBase {
     val mapper: BusinessSettlorsMapper = injector.instanceOf[BusinessSettlorsMapper]
 
     "map user answers to business settlor model" when {
+
+      "no settlors" in {
+
+        val result = mapper.build(emptyUserAnswers)
+
+        result mustBe None
+      }
       
       "one settlor" when {
 
