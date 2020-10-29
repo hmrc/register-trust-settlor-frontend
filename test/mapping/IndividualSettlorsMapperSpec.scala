@@ -23,9 +23,7 @@ import models.UserAnswers
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor._
 
-class IndividualSettlorMapperSpec extends SpecBase {
-
-  private val index: Int = 0
+class IndividualSettlorsMapperSpec extends SpecBase {
 
   private val firstName: String = "Joe"
   private val lastName: String = "Bloggs"
@@ -44,13 +42,15 @@ class IndividualSettlorMapperSpec extends SpecBase {
   private val passportOrIdCard: PassportOrIdCardDetails = PassportOrIdCardDetails(country, number, date)
   private val passportOrIdCardType: PassportType = PassportType(number, date, country)
 
-  "IndividualSettlor mapper" must {
+  "IndividualSettlors mapper" must {
 
     val mapper: IndividualSettlorsMapper = injector.instanceOf[IndividualSettlorsMapper]
 
     "map user answers to individual settlor model" when {
       
       "one settlor" when {
+
+        val index: Int = 0
 
         "NINO" in {
 
