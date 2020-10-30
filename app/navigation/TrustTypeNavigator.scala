@@ -55,9 +55,7 @@ class TrustTypeNavigator extends Navigator {
         controllers.trust_type.routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId)
       case Some(Intervivos) =>
         controllers.trust_type.routes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId)
-      case Some(FlatManagement) =>
-        routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
-      case Some(HeritageMaintenanceFund) =>
+      case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
         routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
       case Some(Employees) =>
         controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId)
