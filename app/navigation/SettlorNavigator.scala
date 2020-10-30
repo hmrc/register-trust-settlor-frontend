@@ -19,12 +19,12 @@ package navigation
 import config.FrontendAppConfig
 import controllers.living_settlor.routes
 import javax.inject.{Inject, Singleton}
-import models.pages.AddASettlor
+import models.pages.AddASettlor._
 import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.KindOfTrust._
 import models.{NormalMode, UserAnswers}
 import pages.living_settlor._
-import pages.{AddASettlorPage, AddASettlorYesNoPage, AddAnotherSettlorYesNoPage, _}
+import pages.{AddASettlorPage, AddASettlorYesNoPage, _}
 import play.api.mvc.Call
 import sections.LivingSettlors
 import uk.gov.hmrc.auth.core.AffinityGroup
@@ -33,7 +33,6 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case AddAnotherSettlorYesNoPage => _ => _ => controllers.living_settlor.individual.routes.SettlorIndividualAnswerController.onPageLoad(0, draftId)
     case AddASettlorPage => _ => addSettlorRoute(draftId)
     case AddASettlorYesNoPage  => _ => yesNoNav(AddASettlorYesNoPage,
       yesCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId),
@@ -50,11 +49,9 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
     }
 
     answers.get(AddASettlorPage) match {
-      case Some(AddASettlor.YesNow) =>
+      case Some(YesNow) =>
         routeToSettlorIndex
-      case Some(AddASettlor.YesLater) =>
-        Call("GET", config.registrationProgressUrl(draftId))
-      case Some(AddASettlor.NoComplete) =>
+      case Some(YesLater) | Some(NoComplete) =>
         Call("GET", config.registrationProgressUrl(draftId))
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }

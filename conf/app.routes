@@ -122,9 +122,6 @@ POST       /:draftId/deceased/was-settlors-address-uk                           
 GET        /:draftId/deceased/change-was-settlors-address-uk                               controllers.deceased_settlor.WasSettlorsAddressUKYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
 POST       /:draftId/deceased/change-was-settlors-address-uk                               controllers.deceased_settlor.WasSettlorsAddressUKYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/deceased/add-another                                                  controllers.deceased_settlor.AddASettlorYesNoController.onPageLoad(draftId: String)
-POST       /:draftId/deceased/add-another                                                  controllers.deceased_settlor.AddASettlorYesNoController.onSubmit(draftId: String)
-
 GET        /:draftId/deceased/check-answers                                                controllers.deceased_settlor.DeceasedSettlorAnswerController.onPageLoad(draftId: String)
 POST       /:draftId/deceased/check-answers                                                controllers.deceased_settlor.DeceasedSettlorAnswerController.onSubmit(draftId: String)
 
@@ -134,9 +131,6 @@ GET        /:draftId/living/:index/individual-or-business                       
 POST       /:draftId/living/:index/individual-or-business                                  controllers.living_settlor.SettlorIndividualOrBusinessController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/living/:index/change-individual-or-business                           controllers.living_settlor.SettlorIndividualOrBusinessController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/change-individual-or-business                           controllers.living_settlor.SettlorIndividualOrBusinessController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
-
-GET        /:draftId/living/add-another                                                    controllers.living_settlor.AddASettlorYesNoController.onPageLoad(draftId: String)
-POST       /:draftId/living/add-another                                                    controllers.living_settlor.AddASettlorYesNoController.onSubmit(draftId: String)
 
 ## Individual
 

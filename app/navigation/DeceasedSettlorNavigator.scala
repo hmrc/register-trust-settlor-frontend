@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import controllers.routes
 import javax.inject.{Inject, Singleton}
 import models.{NormalMode, UserAnswers}
-import pages.{AddAnotherSettlorYesNoPage, Page}
+import pages.Page
 import pages.deceased_settlor._
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
@@ -29,7 +29,6 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case AddAnotherSettlorYesNoPage => _ => _ => controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
     case SettlorsNamePage => _ => _ => controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId)
     case SettlorDateOfDeathYesNoPage => _ => deceasedSettlorDateOfDeathRoute(draftId)
     case SettlorDateOfBirthYesNoPage => _ => deceasedSettlorDateOfBirthRoute(draftId)

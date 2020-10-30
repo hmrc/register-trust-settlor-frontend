@@ -17,27 +17,104 @@
 package navigation
 
 import base.SpecBase
-import controllers.routes
-import generators.Generators
-import pages._
-import models._
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import models.{Mode, NormalMode}
+import models.pages.AddASettlor._
+import models.pages.FullName
+import models.pages.IndividualOrBusiness._
+import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.{AddASettlorPage, AddASettlorYesNoPage}
+import play.api.mvc.Call
 
-class SettlorNavigatorSpec extends SpecBase with ScalaCheckPropertyChecks with Generators {
+class SettlorNavigatorSpec extends SpecBase {
 
-  val navigator: SettlorNavigator = injector.instanceOf[SettlorNavigator]
-  val index = 0
+  private val navigator: SettlorNavigator = injector.instanceOf[SettlorNavigator]
+  private val mode: Mode = NormalMode
 
-  "Settlor Navigator" must {
+  "Settlor Navigator" when {
 
-    "go to WhatTypeOfBeneficiaryPage from AddABeneficiaryYesNoPage when selected yes" in {
-      forAll(arbitrary[UserAnswers]) {
-        userAnswers =>
+    "AddASettlorPage" when {
+      "YesNow" must {
+        "redirect to Individual or Business" when {
 
-          val answers = userAnswers.set(AddABeneficiaryYesNoPage, true).success.value
+          "no living settlors" in {
+            val userAnswers = emptyUserAnswers.set(AddASettlorPage, YesNow).success.value
 
-          navigator.nextPage(AddABeneficiaryYesNoPage, fakeDraftId, answers)
-            .mustBe(controllers.register.beneficiaries.routes.WhatTypeOfBeneficiaryController.onPageLoad(fakeDraftId))
+            navigator.nextPage(AddASettlorPage, mode, fakeDraftId)(userAnswers)
+              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(mode, 0, fakeDraftId))
+          }
+
+          "living settlors" in {
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+              .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
+              .set(AddASettlorPage, YesNow).success.value
+
+            navigator.nextPage(AddASettlorPage, mode, fakeDraftId)(userAnswers)
+              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(mode, 1, fakeDraftId))
+          }
+        }
+      }
+
+      "YesLater" must {
+        "redirect to task list" in {
+          val userAnswers = emptyUserAnswers.set(AddASettlorPage, YesLater).success.value
+
+          navigator.nextPage(AddASettlorPage, mode, fakeDraftId)(userAnswers)
+            .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(draftId)))
+        }
+      }
+
+      "NoComplete" must {
+        "redirect to task list" in {
+          val userAnswers = emptyUserAnswers.set(AddASettlorPage, NoComplete).success.value
+
+          navigator.nextPage(AddASettlorPage, mode, fakeDraftId)(userAnswers)
+            .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(draftId)))
+        }
+      }
+    }
+
+    "AddASettlorYesNoPage" when {
+      "yes" must {
+        "redirect to Individual or Business" in {
+          val userAnswers = emptyUserAnswers.set(AddASettlorYesNoPage, true).success.value
+
+          navigator.nextPage(AddASettlorYesNoPage, mode, fakeDraftId)(userAnswers)
+            .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(mode, 0, fakeDraftId))
+        }
+      }
+
+      "no" must {
+        "redirect to task list" in {
+          val userAnswers = emptyUserAnswers.set(AddASettlorYesNoPage, false).success.value
+
+          navigator.nextPage(AddASettlorYesNoPage, mode, fakeDraftId)(userAnswers)
+            .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(draftId)))
+        }
+      }
+    }
+
+    "SettlorIndividualOrBusinessPage" when {
+
+      val index: Int = 0
+
+      "Individual" must {
+        "redirect to Individual Name" in {
+          val userAnswers = emptyUserAnswers.set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+
+          navigator.nextPage(SettlorIndividualOrBusinessPage(index), mode, fakeDraftId)(userAnswers)
+            .mustBe(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId))
+        }
+      }
+
+      "Business" must {
+        "redirect to Business Name" in {
+          val userAnswers = emptyUserAnswers.set(SettlorIndividualOrBusinessPage(index), Business).success.value
+
+          navigator.nextPage(SettlorIndividualOrBusinessPage(index), mode, fakeDraftId)(userAnswers)
+            .mustBe(controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId))
+        }
       }
     }
   }
