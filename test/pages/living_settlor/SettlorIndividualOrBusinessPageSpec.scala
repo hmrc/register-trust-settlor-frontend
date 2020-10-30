@@ -17,16 +17,15 @@
 package pages.living_settlor
 
 import models.UserAnswers
-import models.pages.{FullName, IndividualOrBusiness, UKAddress}
 import models.pages.KindOfBusiness.Trading
-import models.pages.KindOfTrust
 import models.pages.Status.InProgress
+import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.behaviours.PageBehaviours
 import pages.LivingSettlorStatus
-import pages.SetUpAfterSettlorDiedYesNoPage
-import pages.living_settlor.business.{SettlorBusinessAddressUKPage, SettlorBusinessAddressUKYesNoPage, SettlorBusinessAddressYesNoPage, SettlorBusinessNamePage, SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage, SettlorBusinessUtrPage, SettlorBusinessUtrYesNoPage}
-import pages.living_settlor.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage}
+import pages.behaviours.PageBehaviours
+import pages.living_settlor.business._
+import pages.living_settlor.individual._
+import pages.trust_type._
 
 class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
 

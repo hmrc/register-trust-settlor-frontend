@@ -54,6 +54,8 @@ class SettlorViewModelSpec extends FreeSpec with MustMatchers with ScalaCheckPro
 
       }
 
+      // TODO - business settlor and deceased settlor
+
       "to default view model when no data provided" in {
         val json = Json.parse(
           """

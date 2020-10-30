@@ -28,10 +28,12 @@ class NavigatorSpec extends SpecBase {
 
   "Navigator" must {
 
-      "go to Index from a page that doesn't exist in the route map" in {
+    // TODO - tidy up navigation plus add unit tests
 
-        case object UnknownPage extends Page
-        navigator.nextPage(UnknownPage, NormalMode, draftId)(emptyUserAnswers) mustBe routes.IndexController.onPageLoad(draftId)
-      }
+    "go to Index from a page that doesn't exist in the route map" in {
+
+      case object UnknownPage extends Page
+      navigator.nextPage(UnknownPage, NormalMode, draftId)(emptyUserAnswers) mustBe routes.IndexController.onPageLoad(draftId)
     }
+  }
 }

@@ -34,7 +34,7 @@ object Settlor {
     a.map(identity)
 
   implicit lazy val reads : Reads[Settlor] = {
-    IndividualSettlor.classFormat or
+    IndividualSettlor.reads or
       BusinessSettlor.reads
   }
 

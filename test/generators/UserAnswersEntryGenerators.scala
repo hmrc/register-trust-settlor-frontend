@@ -22,8 +22,9 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage}
-import pages.{AddASettlorPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.AddASettlorPage
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
@@ -40,14 +41,6 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
     Arbitrary {
       for {
         page  <- arbitrary[HoldoverReliefYesNoPage.type]
-        value <- arbitrary[Boolean].map(Json.toJson(_))
-      } yield (page, value)
-    }
-
-  implicit lazy val arbitraryRemoveSettlorUserAnswersEntry: Arbitrary[(RemoveSettlorPage, JsValue)] =
-    Arbitrary {
-      for {
-        page  <- arbitrary[RemoveSettlorPage]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

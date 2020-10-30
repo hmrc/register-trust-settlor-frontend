@@ -22,7 +22,7 @@ import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import models.NormalMode
 import models.pages.AddASettlor
 import models.pages.KindOfTrust.Intervivos
-import pages.living_settlor.trust_type.KindOfTrustPage
+import pages.trust_type.KindOfTrustPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.{AddASettlorView, AddASettlorYesNoView}

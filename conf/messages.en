@@ -358,8 +358,8 @@ settlorIndividualPassportYesNo.heading = Do you know {0}’s passport details?
 settlorIndividualPassportYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?
 settlorIndividualPassportYesNo.error.required = Select yes if you know the settlor’s passport details
 
-settlorIndividualAnswers.title = Check settlor details
-settlorIndividualAnswers.heading = Check settlor details
+settlorAnswers.title = Check settlor details
+settlorAnswers.heading = Check settlor details
 
 settlorBusinessName.title = What is the business’s name?
 settlorBusinessName.heading = What is the business’s name?

@@ -23,7 +23,7 @@ import models.NormalMode
 import models.pages.KindOfBusiness
 import models.pages.KindOfTrust.Employees
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessTypePage}
-import pages.living_settlor.trust_type.KindOfTrustPage
+import pages.trust_type.KindOfTrustPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.living_settlor.business.SettlorBusinessTypeView
