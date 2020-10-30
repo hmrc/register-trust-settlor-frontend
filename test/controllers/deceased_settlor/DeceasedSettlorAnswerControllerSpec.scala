@@ -22,8 +22,8 @@ import base.SpecBase
 import controllers.routes._
 import models.{NormalMode, UserAnswers}
 import models.pages.{FullName, InternationalAddress, UKAddress}
-import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.deceased_settlor._
+import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
 import play.api.Application
 import play.api.mvc.Result
 import play.api.test.FakeRequest

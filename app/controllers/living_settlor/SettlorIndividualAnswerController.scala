@@ -25,7 +25,7 @@ import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
 import navigation.Navigator
 import pages.LivingSettlorStatus
-import pages.living_settlor.trust_type.KindOfTrustPage
+import pages.trust_type.KindOfTrustPage
 import pages.living_settlor.{SettlorIndividualAnswerPage, SettlorIndividualOrBusinessPage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

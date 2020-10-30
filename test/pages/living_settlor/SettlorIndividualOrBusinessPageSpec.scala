@@ -24,9 +24,8 @@ import models.pages.Status.InProgress
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.LivingSettlorStatus
-import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.living_settlor.business.{SettlorBusinessAddressUKPage, SettlorBusinessAddressUKYesNoPage, SettlorBusinessAddressYesNoPage, SettlorBusinessNamePage, SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage, SettlorBusinessUtrPage, SettlorBusinessUtrYesNoPage}
-import pages.living_settlor.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
 
 class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
 

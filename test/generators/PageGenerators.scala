@@ -17,10 +17,10 @@
 package generators
 
 import org.scalacheck.Arbitrary
-import pages.{AddASettlorPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.AddASettlorPage
 import pages.deceased_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
 import pages.living_settlor.{RemoveSettlorPage => RemoveLivingSettlorPage, _}
 
 trait PageGenerators {

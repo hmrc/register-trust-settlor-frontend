@@ -16,7 +16,7 @@
 
 package views
 
-import controllers.routes
+import controllers.trust_type.routes
 import models.NormalMode
 import views.behaviours.ViewBehaviours
 import views.html.SettlorInfoView
@@ -53,6 +53,6 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    behave like pageWithContinueButton(applyView,routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url )
+    behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url )
   }
 }

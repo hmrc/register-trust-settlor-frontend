@@ -22,8 +22,8 @@ import org.scalacheck.Arbitrary.arbitrary
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage}
-import pages.{AddASettlorPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.AddASettlorPage
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

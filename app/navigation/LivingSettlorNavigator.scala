@@ -26,8 +26,8 @@ import models.pages.IndividualOrBusiness._
 import models.pages.KindOfTrust._
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.living_settlor.trust_type._
-import pages.{AddASettlorPage, AddASettlorYesNoPage, AddAnotherSettlorYesNoPage, SetUpAfterSettlorDiedYesNoPage, _}
+import pages.trust_type._
+import pages.{AddASettlorPage, AddASettlorYesNoPage, AddAnotherSettlorYesNoPage, _}
 import play.api.mvc.Call
 import sections.LivingSettlors
 import uk.gov.hmrc.auth.core.AffinityGroup
@@ -38,16 +38,16 @@ class LivingSettlorNavigator @Inject()(config: FrontendAppConfig) extends Naviga
   override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SetUpAfterSettlorDiedYesNoPage  => _ => yesNoNav(SetUpAfterSettlorDiedYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
-      noCall = controllers.living_settlor.routes.KindOfTrustController.onPageLoad(NormalMode, draftId))
+      noCall = controllers.trust_type.routes.KindOfTrustController.onPageLoad(NormalMode, draftId))
     case KindOfTrustPage => _ => kindOfTrustPage(draftId)
     case EfrbsYesNoPage  => _ => yesNoNav(EfrbsYesNoPage,
-      yesCall = routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId),
-      noCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId))
-    case EfrbsStartDatePage => _ => _ => routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
+      yesCall = controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId),
+      noCall = controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId))
+    case EfrbsStartDatePage => _ => _ =>  controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
     case AddAnotherSettlorYesNoPage => _ => _ => controllers.living_settlor.routes.SettlorIndividualAnswerController.onPageLoad(0, draftId)
     case SetUpInAdditionToWillTrustYesNoPage  => _ => yesNoNav(SetUpInAdditionToWillTrustYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
-      noCall = controllers.routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId))
+      noCall = controllers.trust_type.routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId))
     case HowDeedOfVariationCreatedPage => _ => _ => controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
     case HoldoverReliefYesNoPage => _ => _ => routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
     case SettlorIndividualNamePage(index) => _ => _ => routes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
@@ -126,15 +126,15 @@ class LivingSettlorNavigator @Inject()(config: FrontendAppConfig) extends Naviga
   private def kindOfTrustPage(draftId: String)(answers: UserAnswers) = {
     answers.get(KindOfTrustPage) match {
       case Some(Deed) =>
-        controllers.routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId)
+        controllers.trust_type.routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId)
       case Some(Intervivos) =>
-        routes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId)
+        controllers.trust_type.routes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId)
       case Some(FlatManagement) =>
         routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
       case Some(HeritageMaintenanceFund) =>
         routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
       case Some(Employees) =>
-        routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId)
+        controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId)
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

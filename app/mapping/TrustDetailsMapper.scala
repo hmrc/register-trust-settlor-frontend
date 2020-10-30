@@ -21,7 +21,7 @@ import models.UserAnswers
 import models.pages.KindOfTrust._
 import models.pages.{DeedOfVariation, KindOfTrust}
 import pages.DeceasedSettlorStatus
-import pages.living_settlor.trust_type._
+import pages.trust_type._
 import play.api.Logger
 import sections.LivingSettlors
 

@@ -24,9 +24,8 @@ import models.{NormalMode, UserAnswers}
 import models.pages._
 import org.mockito.Matchers._
 import org.mockito.Mockito._
-import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.living_settlor._
-import pages.living_settlor.trust_type._
+import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.Application
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest

@@ -17,14 +17,14 @@
 package utils
 
 import controllers.living_settlor.business.{routes => businessRoutes}
+import controllers.trust_type.{routes => trustTypeRoutes}
 import controllers.living_settlor.routes
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
-import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.living_settlor.trust_type._
+import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
 import sections.LivingSettlors
@@ -140,7 +140,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "kindOfTrust.checkYourAnswersLabel",
         HtmlFormat.escape(messages(s"kindOfTrust.$x")),
-        Some(routes.KindOfTrustController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.KindOfTrustController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -150,7 +150,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "employerFinancedRbsYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -160,7 +160,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "employerFinancedRbsStartDate.checkYourAnswersLabel",
         HtmlFormat.escape(x.format(dateFormatter)),
-        Some(routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -170,7 +170,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "howDeedOfVariationCreated.checkYourAnswersLabel",
         HtmlFormat.escape(messages(s"howDeedOfVariationCreated.$x")),
-        Some(controllers.routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -180,7 +180,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "holdoverReliefYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(routes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -430,7 +430,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "setUpAfterSettlorDied.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }
@@ -440,7 +440,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       AnswerRow(
         "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel",
         yesOrNo(x),
-        Some(controllers.routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url),
+        Some(trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )
   }

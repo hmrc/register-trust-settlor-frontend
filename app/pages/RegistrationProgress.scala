@@ -20,7 +20,7 @@ import javax.inject.Inject
 import models.pages.Status.{Completed, InProgress}
 import models.UserAnswers
 import models.pages.{AddASettlor, Status}
-import pages.living_settlor.trust_type.SetUpInAdditionToWillTrustYesNoPage
+import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import sections.LivingSettlors
 
 class RegistrationProgress @Inject()() {

@@ -24,7 +24,7 @@ import models.requests.RegistrationDataRequest
 import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.{AddASettlorPage, AddASettlorYesNoPage}
-import pages.living_settlor.trust_type.KindOfTrustPage
+import pages.trust_type.KindOfTrustPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

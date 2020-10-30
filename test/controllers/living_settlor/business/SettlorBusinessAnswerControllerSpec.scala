@@ -23,10 +23,9 @@ import controllers.routes._
 import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import models.{NormalMode, UserAnswers}
 import models.pages.{DeedOfVariation, IndividualOrBusiness, InternationalAddress, KindOfTrust, PassportOrIdCardDetails, UKAddress}
-import pages.SetUpAfterSettlorDiedYesNoPage
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.living_settlor.trust_type._
+import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.Application
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
