@@ -22,13 +22,12 @@ import models.UserAnswers
 import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.{FullName, KindOfTrust, Status, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
-import pages.deceased_settlor._
-import pages.living_settlor._
 import pages.behaviours.PageBehaviours
-import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.{SettlorsNamePage, _}
+import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.individual.{SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportYesNoPage}
+import pages.living_settlor.individual._
+import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
 
 class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
 
