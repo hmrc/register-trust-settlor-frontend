@@ -87,7 +87,7 @@ class SettlorsMapperSpec extends SpecBase {
         }
       }
 
-      "settlors of both type" in {
+      "settlors of both types" in {
 
         when(mockIndividualMapper.build(any())).thenReturn(Some(List(individualSettlor)))
         when(mockBusinessMapper.build(any())).thenReturn(Some(List(businessSettlor)))

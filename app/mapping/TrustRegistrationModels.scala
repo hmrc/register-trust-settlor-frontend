@@ -89,10 +89,7 @@ case class AddressType(line1: String,
                        line3: Option[String],
                        line4: Option[String],
                        postCode: Option[String],
-                       country: String) {
-
-  def isInUk: Boolean = country == "GB"
-}
+                       country: String)
 
 object AddressType {
   implicit val addressTypeFormat: Format[AddressType] = Json.format[AddressType]
