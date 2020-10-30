@@ -16,7 +16,7 @@
 
 package controllers.trust_type
 
-import config.annotations.LivingSettlor
+import config.annotations.TrustType
 import controllers.actions._
 import forms.YesNoFormProvider
 import javax.inject.Inject
@@ -33,14 +33,14 @@ import views.html.trust_type.HoldoverReliefYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class HoldoverReliefYesNoController @Inject()(
-                                                      override val messagesApi: MessagesApi,
-                                                      registrationsRepository: RegistrationsRepository,
-                                                      @LivingSettlor navigator: Navigator,
-                                                      standardActions: Actions,
-                                                      requiredAnswer: RequiredAnswerActionProvider,
-                                                      yesNoFormProvider: YesNoFormProvider,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      view: HoldoverReliefYesNoView
+                                               override val messagesApi: MessagesApi,
+                                               registrationsRepository: RegistrationsRepository,
+                                               @TrustType navigator: Navigator,
+                                               standardActions: Actions,
+                                               requiredAnswer: RequiredAnswerActionProvider,
+                                               yesNoFormProvider: YesNoFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: HoldoverReliefYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")

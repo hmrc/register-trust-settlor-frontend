@@ -16,7 +16,7 @@
 
 package controllers.trust_type
 
-import config.annotations.LivingSettlor
+import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.YesNoFormProvider
 import javax.inject.Inject
@@ -33,13 +33,13 @@ import views.html.trust_type.AdditionToWillTrustYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionToWillTrustYesNoController @Inject()(
-                                                      override val messagesApi: MessagesApi,
-                                                      registrationsRepository: RegistrationsRepository,
-                                                      @LivingSettlor navigator: Navigator,
-                                                      actions: Actions,
-                                                      yesNoFormProvider: YesNoFormProvider,
-                                                      val controllerComponents: MessagesControllerComponents,
-                                                      view: AdditionToWillTrustYesNoView
+                                                    override val messagesApi: MessagesApi,
+                                                    registrationsRepository: RegistrationsRepository,
+                                                    @TrustType navigator: Navigator,
+                                                    actions: Actions,
+                                                    yesNoFormProvider: YesNoFormProvider,
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    view: AdditionToWillTrustYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")

@@ -16,29 +16,21 @@
 
 package navigation
 
-import config.FrontendAppConfig
-import javax.inject.{Inject, Singleton}
 import pages._
 import models._
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
 
-@Singleton
-class Navigator @Inject()(
-                           config: FrontendAppConfig
-                         ) {
+trait Navigator {
 
-  private def defaultRoute(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case _ => _ => _ => controllers.routes.IndexController.onPageLoad(draftId)
-  }
+  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call]
 
-  protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] =
-      defaultRoute(draftId)
+  def nextPage(page: Page, mode: Mode, draftId: String, af: AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call =
+    route(draftId)(page)(af)
 
-  def nextPage(page: Page, mode: Mode, draftId: String, af :AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call = mode match {
-    case NormalMode =>
-      route(draftId)(page)(af)
-    case _ =>
-      route(draftId)(page)(af)
+  def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
+    answers.get(fromPage)
+      .map(if (_) yesCall else noCall)
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
   }
 }

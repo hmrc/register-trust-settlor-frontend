@@ -14,26 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package config.annotations;
 
-import base.SpecBase
-import controllers.routes
-import pages._
-import models._
+import com.google.inject.BindingAnnotation;
 
-class NavigatorSpec extends SpecBase {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-  val navigator: Navigator = injector.instanceOf[Navigator]
-  val index = 0
-
-  "Navigator" must {
-
-    // TODO - tidy up navigation plus add unit tests
-
-    "go to Index from a page that doesn't exist in the route map" in {
-
-      case object UnknownPage extends Page
-      navigator.nextPage(UnknownPage, NormalMode, draftId)(emptyUserAnswers) mustBe routes.IndexController.onPageLoad(draftId)
-    }
-  }
-}
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface TrustType {}

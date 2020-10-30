@@ -19,16 +19,14 @@ package navigation
 import config.FrontendAppConfig
 import controllers.routes
 import javax.inject.{Inject, Singleton}
-import models.NormalMode
-import models.UserAnswers
-import pages.Page
-import pages.AddAnotherSettlorYesNoPage
+import models.{NormalMode, UserAnswers}
+import pages.{AddAnotherSettlorYesNoPage, Page}
 import pages.deceased_settlor._
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 @Singleton
-class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator(config) {
+class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case AddAnotherSettlorYesNoPage => _ => _ => controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
@@ -46,19 +44,19 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     case DeceasedSettlorAnswerPage => _ => _ => Call("GET", config.registrationProgressUrl(draftId))
   }
 
-  private def deceasedSettlorAddressRoute(draftId: String)(userAnswers: UserAnswers) : Call = userAnswers.get(WasSettlorsAddressUKYesNoPage) match {
+  private def deceasedSettlorAddressRoute(draftId: String)(userAnswers: UserAnswers): Call = userAnswers.get(WasSettlorsAddressUKYesNoPage) match {
     case Some(false) => controllers.deceased_settlor.routes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId)
     case Some(true) => controllers.deceased_settlor.routes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId)
     case _ => routes.SessionExpiredController.onPageLoad()
   }
 
-  private def deceasedSettlorLastKnownAddressRoute(draftId: String)(userAnswers: UserAnswers) : Call = userAnswers.get(SettlorsLastKnownAddressYesNoPage) match {
+  private def deceasedSettlorLastKnownAddressRoute(draftId: String)(userAnswers: UserAnswers): Call = userAnswers.get(SettlorsLastKnownAddressYesNoPage) match {
     case Some(false) => controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
     case Some(true) => controllers.deceased_settlor.routes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId)
     case _ => routes.SessionExpiredController.onPageLoad()
   }
 
-  private def deceasedSettlorNinoRoute(draftId: String)(userAnswers: UserAnswers) : Call = userAnswers.get(SettlorsNationalInsuranceYesNoPage) match {
+  private def deceasedSettlorNinoRoute(draftId: String)(userAnswers: UserAnswers): Call = userAnswers.get(SettlorsNationalInsuranceYesNoPage) match {
     case Some(false) => controllers.deceased_settlor.routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
     case Some(true) => controllers.deceased_settlor.routes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId)
     case _ => routes.SessionExpiredController.onPageLoad()
@@ -70,7 +68,7 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     case _ => routes.SessionExpiredController.onPageLoad()
   }
 
-  private def deceasedSettlorDateOfDeathRoute(draftId: String)(userAnswers: UserAnswers) : Call = userAnswers.get(SettlorDateOfDeathYesNoPage) match {
+  private def deceasedSettlorDateOfDeathRoute(draftId: String)(userAnswers: UserAnswers): Call = userAnswers.get(SettlorDateOfDeathYesNoPage) match {
     case Some(false) => controllers.deceased_settlor.routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
     case Some(true) => controllers.deceased_settlor.routes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId)
     case _ => routes.SessionExpiredController.onPageLoad()

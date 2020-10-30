@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
@@ -34,14 +34,14 @@ import views.html.living_settlor.business.SettlorBusinessTimeYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessTimeYesNoController @Inject()(
-                                                         override val messagesApi: MessagesApi,
-                                                         registrationsRepository: RegistrationsRepository,
-                                                         @LivingSettlor navigator: Navigator,
-                                                         actions: Actions,
-                                                         requireName: NameRequiredActionProvider,
-                                                         yesNoFormProvider: YesNoFormProvider,
-                                                         val controllerComponents: MessagesControllerComponents,
-                                                         view: SettlorBusinessTimeYesNoView
+                                                    override val messagesApi: MessagesApi,
+                                                    registrationsRepository: RegistrationsRepository,
+                                                    @BusinessSettlor navigator: Navigator,
+                                                    actions: Actions,
+                                                    requireName: NameRequiredActionProvider,
+                                                    yesNoFormProvider: YesNoFormProvider,
+                                                    val controllerComponents: MessagesControllerComponents,
+                                                    view: SettlorBusinessTimeYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessTimeYesNo")

@@ -16,7 +16,7 @@
 
 package controllers.trust_type
 
-import config.annotations.LivingSettlor
+import config.annotations.TrustType
 import controllers.actions._
 import forms.KindOfTrustFormProvider
 import javax.inject.Inject
@@ -33,14 +33,14 @@ import views.html.trust_type.KindOfTrustView
 import scala.concurrent.{ExecutionContext, Future}
 
 class KindOfTrustController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @LivingSettlor navigator: Navigator,
-                                              standardActions: Actions,
-                                              formProvider: KindOfTrustFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: KindOfTrustView,
-                                              requiredAnswer: RequiredAnswerActionProvider
+                                       override val messagesApi: MessagesApi,
+                                       registrationsRepository: RegistrationsRepository,
+                                       @TrustType navigator: Navigator,
+                                       standardActions: Actions,
+                                       formProvider: KindOfTrustFormProvider,
+                                       val controllerComponents: MessagesControllerComponents,
+                                       view: KindOfTrustView,
+                                       requiredAnswer: RequiredAnswerActionProvider
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   def actions(draftId: String) =

@@ -16,7 +16,6 @@
 
 package controllers.living_settlor
 
-import config.annotations.LivingSettlor
 import controllers.actions.Actions
 import forms.AddASettlorFormProvider
 import javax.inject.Inject
@@ -36,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddASettlorYesNoController @Inject()(
                                             override val messagesApi: MessagesApi,
                                             registrationsRepository: RegistrationsRepository,
-                                            @LivingSettlor navigator: Navigator,
+                                            navigator: Navigator,
                                             actions: Actions,
                                             formProvider: AddASettlorFormProvider,
                                             val controllerComponents: MessagesControllerComponents,

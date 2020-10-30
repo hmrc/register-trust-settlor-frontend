@@ -16,7 +16,7 @@
 
 package controllers.trust_type
 
-import config.annotations.LivingSettlor
+import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.DeedOfVariationFormProvider
 import javax.inject.Inject
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class HowDeedOfVariationCreatedController @Inject()(
                                                      override val messagesApi: MessagesApi,
                                                      registrationsRepository: RegistrationsRepository,
-                                                     @LivingSettlor navigator: Navigator,
+                                                     @TrustType navigator: Navigator,
                                                      actions: Actions,
                                                      deedOfVariationFormProvider: DeedOfVariationFormProvider,
                                                      val controllerComponents: MessagesControllerComponents,

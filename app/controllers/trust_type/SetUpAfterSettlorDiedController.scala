@@ -16,7 +16,7 @@
 
 package controllers.trust_type
 
-import config.annotations.LivingSettlor
+import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.YesNoFormProvider
 import javax.inject.Inject
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SetUpAfterSettlorDiedController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  registrationsRepository: RegistrationsRepository,
-                                                 @LivingSettlor navigator: Navigator,
+                                                 @TrustType navigator: Navigator,
                                                  actions: Actions,
                                                  yesNoFormProvider: YesNoFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,

@@ -14,8 +14,16 @@
  * limitations under the License.
  */
 
-package pages.living_settlor
+package config.annotations;
 
-import pages.Page
+import com.google.inject.BindingAnnotation;
 
-case object SettlorIndividualAnswerPage extends Page
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target({ElementType.PARAMETER, ElementType.METHOD, ElementType.FIELD})
+@BindingAnnotation
+public @interface IndividualSettlor {}

@@ -16,15 +16,14 @@
 
 package controllers
 
-import config.annotations.LivingSettlor
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import models.{Enumerable, Mode}
 import navigation.Navigator
-import pages.{AddASettlorPage, AddASettlorYesNoPage}
 import pages.trust_type.KindOfTrustPage
+import pages.{AddASettlorPage, AddASettlorYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -38,7 +37,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddASettlorController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        registrationsRepository: RegistrationsRepository,
-                                       @LivingSettlor navigator: Navigator,
+                                       navigator: Navigator,
                                        standardActions: Actions,
                                        yesNoFormProvider: YesNoFormProvider,
                                        addAnotherFormProvider: AddASettlorFormProvider,

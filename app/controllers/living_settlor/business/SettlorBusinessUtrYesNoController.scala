@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
@@ -34,14 +34,14 @@ import views.html.living_settlor.business.SettlorBusinessUtrYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessUtrYesNoController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @LivingSettlor navigator: Navigator,
-                                              actions: Actions,
-                                              requireName: NameRequiredActionProvider,
-                                              formProvider: YesNoFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: SettlorBusinessUtrYesNoView
+                                                   override val messagesApi: MessagesApi,
+                                                   registrationsRepository: RegistrationsRepository,
+                                                   @BusinessSettlor navigator: Navigator,
+                                                   actions: Actions,
+                                                   requireName: NameRequiredActionProvider,
+                                                   formProvider: YesNoFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: SettlorBusinessUtrYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {

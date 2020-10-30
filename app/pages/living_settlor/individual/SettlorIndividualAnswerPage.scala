@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.living_settlor.individual
 
-import models.{Mode, UserAnswers}
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import pages.Page
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
-
-  override def nextPage(page: Page, mode: Mode, fakeDraftId: String, affinityGroup: AffinityGroup): UserAnswers => Call = _ => desiredRoute
-
-}
+case object SettlorIndividualAnswerPage extends Page

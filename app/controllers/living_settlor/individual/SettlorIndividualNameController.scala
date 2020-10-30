@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.individual
 
-import config.annotations.LivingSettlor
+import config.annotations.IndividualSettlor
 import controllers.actions.Actions
 import forms.living_settlor.SettlorIndividualNameFormProvider
 import javax.inject.Inject
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SettlorIndividualNameController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  registrationsRepository: RegistrationsRepository,
-                                                 @LivingSettlor navigator: Navigator,
+                                                 @IndividualSettlor navigator: Navigator,
                                                  actions: Actions,
                                                  formProvider: SettlorIndividualNameFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,

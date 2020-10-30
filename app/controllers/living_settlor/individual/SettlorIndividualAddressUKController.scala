@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.individual
 
-import config.annotations.LivingSettlor
+import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.UKAddressFormProvider
@@ -36,7 +36,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SettlorIndividualAddressUKController @Inject()(
                                                       override val messagesApi: MessagesApi,
                                                       registrationsRepository: RegistrationsRepository,
-                                                      @LivingSettlor navigator: Navigator,
+                                                      @IndividualSettlor navigator: Navigator,
                                                       actions: Actions,
                                                       requireName: NameRequiredActionProvider,
                                                       formProvider: UKAddressFormProvider,
