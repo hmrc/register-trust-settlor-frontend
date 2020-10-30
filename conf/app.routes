@@ -43,27 +43,25 @@ POST       /:draftId/how-was-deed-of-variation-created                          
 GET        /:draftId/change-how-was-deed-of-variation-created                              controllers.trust_type.HowDeedOfVariationCreatedController.onPageLoad(mode: Mode = CheckMode, draftId: String)
 POST       /:draftId/change-how-was-deed-of-variation-created                              controllers.trust_type.HowDeedOfVariationCreatedController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-## TODO - change following routes (requires changing performance tests as well)
+GET        /:draftId/type                                                                  controllers.trust_type.KindOfTrustController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/type                                                                  controllers.trust_type.KindOfTrustController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/change-type                                                           controllers.trust_type.KindOfTrustController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/change-type                                                           controllers.trust_type.KindOfTrustController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/living/type                                                           controllers.trust_type.KindOfTrustController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/living/type                                                           controllers.trust_type.KindOfTrustController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/living/change-type                                                    controllers.trust_type.KindOfTrustController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/living/change-type                                                    controllers.trust_type.KindOfTrustController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/holdover-relief                                                       controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/holdover-relief                                                       controllers.trust_type.HoldoverReliefYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/change-holdover-relief                                                controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/change-holdover-relief                                                controllers.trust_type.HoldoverReliefYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/living/holdover-relief                                                controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/living/holdover-relief                                                controllers.trust_type.HoldoverReliefYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/living/change-holdover-relief                                         controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/living/change-holdover-relief                                         controllers.trust_type.HoldoverReliefYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/employer-financed-rbs                                                 controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/employer-financed-rbs                                                 controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/change-employer-financed-rbs                                          controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/change-employer-financed-rbs                                          controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/living/employer-financed-rbs                                          controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/living/employer-financed-rbs                                          controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/living/change-employer-financed-rbs                                   controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/living/change-employer-financed-rbs                                   controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
-
-GET        /:draftId/living/employer-financed-rbs-start                                    controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/living/employer-financed-rbs-start                                    controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/living/change-employer-financed-rbs-start                             controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/living/change-employer-financed-rbs-start                             controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/employer-financed-rbs-start                                           controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/employer-financed-rbs-start                                           controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/change-employer-financed-rbs-start                                    controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/change-employer-financed-rbs-start                                    controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
 # Deceased Settlor
 

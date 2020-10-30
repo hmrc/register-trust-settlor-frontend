@@ -151,7 +151,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
       }
       
       "individual and business settlors" in {
-        
+
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
           .set(ind.SettlorIndividualNamePage(0), individualName).success.value
