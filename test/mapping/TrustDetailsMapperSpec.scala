@@ -24,6 +24,7 @@ import models.pages.KindOfTrust._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
 import pages.DeceasedSettlorStatus
 import pages.living_settlor._
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type._
 
 class TrustDetailsMapperSpec extends SpecBase {

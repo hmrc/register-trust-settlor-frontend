@@ -23,8 +23,8 @@ import models.pages.{Address, FullName, InternationalAddress, UKAddress}
 import models.pages.KindOfTrust._
 import models.pages.{KindOfTrust, PassportOrIdCardDetails}
 import pages.deceased_settlor.SettlorsNamePage
-import pages.living_settlor.SettlorIndividualNamePage
 import pages.living_settlor.business.SettlorBusinessNamePage
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.i18n.Messages
 import play.twirl.api.{Html, HtmlFormat}
 import uk.gov.hmrc.domain.Nino

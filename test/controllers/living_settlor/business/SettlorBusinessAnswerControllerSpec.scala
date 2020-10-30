@@ -19,10 +19,10 @@ package controllers.living_settlor.business
 import java.time.{LocalDate, ZoneOffset}
 
 import base.SpecBase
-import controllers.routes._
 import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
+import controllers.routes._
+import models.pages._
 import models.{NormalMode, UserAnswers}
-import models.pages.{DeedOfVariation, IndividualOrBusiness, InternationalAddress, KindOfTrust, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
@@ -33,7 +33,7 @@ import play.api.test.Helpers._
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
-import views.html.living_settlor.SettlorIndividualAnswersView
+import views.html.living_settlor.SettlorAnswersView
 
 import scala.concurrent.Future
 
@@ -94,7 +94,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val result: Future[Result] = route(application, request).value
 
-        val view: SettlorIndividualAnswersView = application.injector.instanceOf[SettlorIndividualAnswersView]
+        val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
 
         status(result) mustEqual OK
 
@@ -148,7 +148,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SettlorIndividualAnswersView]
+        val view = application.injector.instanceOf[SettlorAnswersView]
 
         status(result) mustEqual OK
 
@@ -204,7 +204,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SettlorIndividualAnswersView]
+        val view = application.injector.instanceOf[SettlorAnswersView]
 
         status(result) mustEqual OK
 
@@ -260,7 +260,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val result = route(application, request).value
 
-        val view = application.injector.instanceOf[SettlorIndividualAnswersView]
+        val view = application.injector.instanceOf[SettlorAnswersView]
 
         status(result) mustEqual OK
 

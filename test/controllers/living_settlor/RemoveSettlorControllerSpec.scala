@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes._
 import forms.RemoveIndexFormProvider
 import models.pages.FullName
-import pages.living_settlor.SettlorIndividualNamePage
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.living_settlor.RemoveSettlorView

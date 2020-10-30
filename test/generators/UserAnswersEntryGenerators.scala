@@ -24,6 +24,7 @@ import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
 import pages.AddASettlorPage
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

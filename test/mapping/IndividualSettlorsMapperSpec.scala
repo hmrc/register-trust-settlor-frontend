@@ -22,6 +22,7 @@ import base.SpecBase
 import models.UserAnswers
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor._
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 
 class IndividualSettlorsMapperSpec extends SpecBase {
 

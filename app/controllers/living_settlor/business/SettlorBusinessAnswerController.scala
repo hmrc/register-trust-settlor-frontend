@@ -34,7 +34,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
-import views.html.living_settlor.SettlorIndividualAnswersView
+import views.html.living_settlor.SettlorAnswersView
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -44,7 +44,7 @@ class SettlorBusinessAnswerController @Inject()(
                                                    @LivingSettlor navigator: Navigator,
                                                    standardActions: Actions,
                                                    requiredAnswer: RequiredAnswerActionProvider,
-                                                   view: SettlorIndividualAnswersView,
+                                                   view: SettlorAnswersView,
                                                    countryOptions: CountryOptions,
                                                    val controllerComponents: MessagesControllerComponents
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {

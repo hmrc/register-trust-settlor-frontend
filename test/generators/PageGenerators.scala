@@ -20,6 +20,7 @@ import org.scalacheck.Arbitrary
 import pages.AddASettlorPage
 import pages.deceased_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
 import pages.living_settlor.{RemoveSettlorPage => RemoveLivingSettlorPage, _}
 

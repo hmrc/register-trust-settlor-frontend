@@ -18,15 +18,13 @@ package utils
 
 import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.living_settlor.{routes => individualRoutes}
+import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.routes
-import models.NormalMode
-import models.UserAnswers
+import models.{NormalMode, UserAnswers}
 import models.pages.Status._
 import play.api.i18n.Messages
 import sections.{DeceasedSettlor, LivingSettlors}
-import viewmodels.{SettlorViewModel, _}
-import viewmodels.{AddRow, AddToRows}
+import viewmodels.{AddRow, AddToRows, SettlorViewModel, _}
 
 class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages) {
 

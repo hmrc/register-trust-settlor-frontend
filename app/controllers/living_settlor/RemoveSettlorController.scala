@@ -20,7 +20,7 @@ import controllers.actions.Actions
 import forms.RemoveIndexFormProvider
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
-import pages.living_settlor.SettlorIndividualNamePage
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}

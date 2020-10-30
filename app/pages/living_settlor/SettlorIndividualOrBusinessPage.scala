@@ -22,6 +22,7 @@ import models.pages.IndividualOrBusiness.{Business, Individual}
 import pages.QuestionPage
 import pages.LivingSettlorStatus
 import pages.living_settlor.business._
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 

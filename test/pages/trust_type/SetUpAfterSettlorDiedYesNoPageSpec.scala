@@ -28,6 +28,7 @@ import pages.living_settlor._
 import pages.behaviours.PageBehaviours
 import pages.deceased_settlor.SettlorsNamePage
 import pages.living_settlor.business.SettlorBusinessNamePage
+import pages.living_settlor.individual.{SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportYesNoPage}
 
 class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
 
