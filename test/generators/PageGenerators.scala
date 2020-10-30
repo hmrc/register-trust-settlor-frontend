@@ -19,10 +19,10 @@ package generators
 import org.scalacheck.Arbitrary
 import pages.AddASettlorPage
 import pages.deceased_settlor._
+import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
+import pages.living_settlor.individual._
 import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
-import pages.living_settlor.{RemoveSettlorPage => RemoveLivingSettlorPage, _}
 
 trait PageGenerators {
 
@@ -34,9 +34,6 @@ trait PageGenerators {
 
   implicit lazy val arbitraryHoldoverReliefYesNoPage: Arbitrary[HoldoverReliefYesNoPage.type] =
     Arbitrary(HoldoverReliefYesNoPage)
-
-  implicit lazy val arbitraryRemoveSettlorPage: Arbitrary[RemoveLivingSettlorPage] =
-    Arbitrary(RemoveLivingSettlorPage(0))
 
   implicit lazy val arbitraryAddASettlorPage: Arbitrary[AddASettlorPage.type] =
     Arbitrary(AddASettlorPage)

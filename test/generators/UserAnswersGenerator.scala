@@ -36,7 +36,6 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(KindOfTrustPage.type, JsValue)] ::
       arbitrary[(HoldoverReliefYesNoPage.type, JsValue)] ::
       arbitrary[(SettlorBusinessNamePage, JsValue)] ::
-      arbitrary[(RemoveSettlorPage, JsValue)] ::
       arbitrary[(SettlorIndividualPassportYesNoPage, JsValue)] ::
       arbitrary[(SettlorIndividualPassportPage, JsValue)] ::
       arbitrary[(SettlorIndividualIDCardYesNoPage, JsValue)] ::

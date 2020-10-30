@@ -122,9 +122,6 @@ POST       /:draftId/deceased/was-settlors-address-uk                           
 GET        /:draftId/deceased/change-was-settlors-address-uk                               controllers.deceased_settlor.WasSettlorsAddressUKYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
 POST       /:draftId/deceased/change-was-settlors-address-uk                               controllers.deceased_settlor.WasSettlorsAddressUKYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/deceased/remove                                                       controllers.deceased_settlor.RemoveSettlorController.onPageLoad(draftId: String)
-POST       /:draftId/deceased/remove                                                       controllers.deceased_settlor.RemoveSettlorController.onSubmit(draftId: String)
-
 GET        /:draftId/deceased/add-another                                                  controllers.deceased_settlor.AddASettlorYesNoController.onPageLoad(draftId: String)
 POST       /:draftId/deceased/add-another                                                  controllers.deceased_settlor.AddASettlorYesNoController.onSubmit(draftId: String)
 
@@ -210,9 +207,6 @@ POST       /:draftId/living/:index/individual/change-passport-yes-no            
 
 GET        /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onPageLoad(index : Int, draftId : String)
 POST       /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onSubmit(index : Int, draftId : String)
-
-GET        /:draftId/living/:index/individual/remove                                       controllers.living_settlor.RemoveSettlorController.onPageLoad(index : Int, draftId: String)
-POST       /:draftId/living/:index/individual/remove                                       controllers.living_settlor.RemoveSettlorController.onSubmit(index : Int, draftId: String)
 
 ## Business
 
