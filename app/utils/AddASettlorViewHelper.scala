@@ -58,7 +58,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         } else {
           individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
         },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, draftId).url
+        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
       ))
 
       case SettlorBusinessTypeViewModel(_, name, status) => Some(AddRow(
@@ -69,7 +69,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         } else {
           businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId).url
         },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, draftId).url
+        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
       ))
 
       case _ =>

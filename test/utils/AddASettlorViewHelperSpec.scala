@@ -69,7 +69,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
                 name = individualName.toString,
                 typeLabel = individualLabel,
                 changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(mode, 0, fakeDraftId).url,
-                removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(0, fakeDraftId).url
+                removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             ),
             complete = Nil
@@ -95,7 +95,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
                 name = individualName.toString,
                 typeLabel = individualLabel,
                 changeUrl = indRoutes.SettlorIndividualAnswerController.onPageLoad(0, fakeDraftId).url,
-                removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(0, fakeDraftId).url
+                removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             )
           )
@@ -118,7 +118,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
                 name = businessName,
                 typeLabel = businessLabel,
                 changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(mode, 0, fakeDraftId).url,
-                removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(0, fakeDraftId).url
+                removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             ),
             complete = Nil
@@ -143,7 +143,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
                 name = businessName,
                 typeLabel = businessLabel,
                 changeUrl = busRoutes.SettlorBusinessAnswerController.onPageLoad(0, fakeDraftId).url,
-                removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(0, fakeDraftId).url
+                removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             )
           )
@@ -180,13 +180,13 @@ class AddASettlorViewHelperSpec extends SpecBase {
               name = individualName.toString,
               typeLabel = individualLabel,
               changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(mode, 0, fakeDraftId).url,
-              removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(0, fakeDraftId).url
+              removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
             ),
             AddRow(
               name = businessName,
               typeLabel = businessLabel,
               changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(mode, 2, fakeDraftId).url,
-              removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(2, fakeDraftId).url
+              removeUrl = RemoveSettlorYesNoController.onPageLoad(2, fakeDraftId).url
             )
           ),
           complete = List(
@@ -194,13 +194,13 @@ class AddASettlorViewHelperSpec extends SpecBase {
               name = individualName.toString,
               typeLabel = individualLabel,
               changeUrl = indRoutes.SettlorIndividualAnswerController.onPageLoad(1, fakeDraftId).url,
-              removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(1, fakeDraftId).url
+              removeUrl = RemoveSettlorYesNoController.onPageLoad(1, fakeDraftId).url
             ),
             AddRow(
               name = businessName,
               typeLabel = businessLabel,
               changeUrl = busRoutes.SettlorBusinessAnswerController.onPageLoad(3, fakeDraftId).url,
-              removeUrl = RemoveSettlorYesNoController.onPageLoadLiving(3, fakeDraftId).url
+              removeUrl = RemoveSettlorYesNoController.onPageLoad(3, fakeDraftId).url
             )
           )
         )

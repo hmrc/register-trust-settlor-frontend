@@ -21,10 +21,8 @@ GET        /:draftId/add                                                        
 POST       /:draftId/add                                                                   controllers.AddASettlorController.submitOne(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add-another                                                           controllers.AddASettlorController.submitAnother(mode: Mode = NormalMode, draftId: String)
 
-GET        /:draftId/deceased/remove-yes-no                                                controllers.RemoveSettlorYesNoController.onPageLoadDeceased(draftId: String)
-POST       /:draftId/deceased/remove-yes-no                                                controllers.RemoveSettlorYesNoController.onSubmitDeceased(draftId: String)
-GET        /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onPageLoadLiving(index: Int, draftId: String)
-POST       /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onSubmitLiving(index: Int, draftId: String)
+GET        /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onSubmit(index: Int, draftId: String)
 
 # Trust type
 
