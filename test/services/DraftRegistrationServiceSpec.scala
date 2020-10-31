@@ -43,13 +43,46 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
     ".setBeneficiaryStatus" when {
 
-      "there are no beneficiaries" must {
+      "response data not validated as ReadOnlyUserAnswers" must {
         "do nothing" in {
 
           reset(mockRepository)
           reset(mockConnector)
 
           val response = SubmissionDraftResponse(LocalDateTime.now(), Json.obj(), None)
+
+          when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(response))
+
+          Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+
+          verify(mockRepository, times(0)).getAllStatus(any())(any())
+          verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
+        }
+      }
+
+      "there are no individual beneficiaries" must {
+        "do nothing" in {
+
+          reset(mockRepository)
+          reset(mockConnector)
+
+          val data = Json.parse(
+            """
+              |{
+              |  "data": {
+              |    "beneficiaries": {
+              |      "classOfBeneficiaries": [
+              |        {
+              |          "description": "Future grandchildren"
+              |        }
+              |      ]
+              |    }
+              |  }
+              |}
+            """.stripMargin)
+
+          val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
 
           when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
             .thenReturn(Future.successful(response))

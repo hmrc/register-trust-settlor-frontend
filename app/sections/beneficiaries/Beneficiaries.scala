@@ -17,9 +17,9 @@
 package sections.beneficiaries
 
 import pages.QuestionPage
-import play.api.libs.json.{JsArray, JsPath}
+import play.api.libs.json.JsPath
 
-case object Beneficiaries extends QuestionPage[List[JsArray]]{
+case object Beneficiaries extends QuestionPage[List[Nothing]]{
 
   override def path: JsPath = JsPath \ toString
 
