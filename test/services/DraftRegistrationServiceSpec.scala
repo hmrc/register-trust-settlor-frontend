@@ -16,7 +16,181 @@
 
 package services
 
-class DraftRegistrationServiceSpec {
+import java.time.LocalDateTime
 
-  // TODO
+import base.SpecBase
+import connectors.SubmissionDraftConnector
+import models.{AllStatus, SubmissionDraftResponse}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, times, verify, when}
+import play.api.libs.json.Json
+import repositories.RegistrationsRepository
+import uk.gov.hmrc.http.HeaderCarrier
+
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
+
+class DraftRegistrationServiceSpec extends SpecBase {
+
+  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+
+  private val mockRepository: RegistrationsRepository = mock[RegistrationsRepository]
+  private val mockConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
+
+  private val service = new DraftRegistrationService(mockRepository, mockConnector)
+
+  "Draft registration service" when {
+
+    ".setBeneficiaryStatus" when {
+
+      "there are no beneficiaries" must {
+        "do nothing" in {
+
+          reset(mockRepository)
+          reset(mockConnector)
+
+          val response = SubmissionDraftResponse(LocalDateTime.now(), Json.obj(), None)
+
+          when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
+            .thenReturn(Future.successful(response))
+
+          Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+
+          verify(mockRepository, times(0)).getAllStatus(any())(any())
+          verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
+        }
+      }
+
+      "there are beneficiaries" when {
+        "individual beneficiary has role in company defined" must {
+          "do nothing" in {
+
+            reset(mockRepository)
+            reset(mockConnector)
+
+            val data = Json.parse(
+              """
+                |{
+                |  "data": {
+                |    "beneficiaries": {
+                |      "individualBeneficiaries": [
+                |        {
+                |          "name": {
+                |            "firstName": "Joe",
+                |            "lastName": "Bloggs"
+                |          },
+                |          "roleInCompany": "Director"
+                |        }
+                |      ]
+                |    }
+                |  }
+                |}
+            """.stripMargin)
+
+            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+
+            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
+              .thenReturn(Future.successful(response))
+
+            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+
+            verify(mockRepository, times(0)).getAllStatus(any())(any())
+            verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
+          }
+        }
+
+        "individual beneficiary does not have role in company defined" must {
+          "set beneficiaries section to In Progress as role in company needs answering" in {
+
+            reset(mockRepository)
+            reset(mockConnector)
+
+            val data = Json.parse(
+              """
+                |{
+                |  "data": {
+                |    "beneficiaries": {
+                |      "individualBeneficiaries": [
+                |        {
+                |          "name": {
+                |            "firstName": "Joe",
+                |            "lastName": "Bloggs"
+                |          }
+                |        }
+                |      ]
+                |    }
+                |  }
+                |}
+            """.stripMargin)
+
+            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+
+            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
+              .thenReturn(Future.successful(response))
+
+            when(mockRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
+            when(mockRepository.setAllStatus(any(), any())(any())).thenReturn(Future.successful(true))
+
+            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+
+            verify(mockRepository, times(1)).getAllStatus(any())(any())
+            verify(mockRepository, times(1)).setAllStatus(any(), any())(any())
+          }
+        }
+
+        "any individual beneficiary doesn't have role in company defined" must {
+          "set beneficiaries section to In Progress as role in company needs answering" in {
+
+            reset(mockRepository)
+            reset(mockConnector)
+
+            val data = Json.parse(
+              """
+                |{
+                |  "data": {
+                |    "beneficiaries": {
+                |      "individualBeneficiaries": [
+                |        {
+                |          "name": {
+                |            "firstName": "Joe",
+                |            "lastName": "Bloggs"
+                |          },
+                |          "roleInCompany": "Director"
+                |        },
+                |        {
+                |          "name": {
+                |            "firstName": "John",
+                |            "lastName": "Doe"
+                |          }
+                |        },
+                |        {
+                |          "name": {
+                |            "firstName": "Jane",
+                |            "lastName": "Doe"
+                |          },
+                |          "roleInCompany": "Employee"
+                |        }
+                |      ]
+                |    }
+                |  }
+                |}
+            """.stripMargin)
+
+            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+
+            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
+              .thenReturn(Future.successful(response))
+
+            when(mockRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
+            when(mockRepository.setAllStatus(any(), any())(any())).thenReturn(Future.successful(true))
+
+            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+
+            verify(mockRepository, times(1)).getAllStatus(any())(any())
+            verify(mockRepository, times(1)).setAllStatus(any(), any())(any())
+          }
+        }
+      }
+    }
+  }
 }

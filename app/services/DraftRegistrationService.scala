@@ -35,18 +35,22 @@ class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsR
     submissionDraftConnector.getDraftBeneficiaries(draftId: String) flatMap { response =>
       val answers = response.data.asOpt[ReadOnlyUserAnswers]
 
-      val requiredPagesAnswered: Boolean =
-        answers
-          .forall { beneficiaries =>
-            beneficiaries.get(IndividualBeneficiaries)
-              .forall {
-                _.zipWithIndex.exists { x =>
-                  beneficiaries.get(RoleInCompanyPage(x._2)).isDefined
+      val roleInCompanyQuestionRequiresAnswering: Boolean =
+        answers match {
+          case Some(userAnswers) =>
+            userAnswers.get(IndividualBeneficiaries) match {
+              case Some(individualBeneficiaries) =>
+                individualBeneficiaries.zipWithIndex.exists { x =>
+                  userAnswers.get(RoleInCompanyPage(x._2)).isEmpty
                 }
-              }
-          }
+              case _ =>
+                false
+            }
+          case _ =>
+            false
+        }
 
-      if (!requiredPagesAnswered) {
+      if (roleInCompanyQuestionRequiresAnswering) {
         registrationsRepository.getAllStatus(draftId) flatMap {
           allStatus =>
             registrationsRepository.setAllStatus(draftId, allStatus.copy(beneficiaries = Some(InProgress)))
@@ -54,8 +58,6 @@ class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsR
       } else {
         Future.successful(true)
       }
-
     }
-
+    
 }
-
