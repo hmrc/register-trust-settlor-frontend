@@ -32,7 +32,7 @@ import play.twirl.api.HtmlFormat
 import sections.LivingSettlors
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection}
+import viewmodels.{AnswerRow, AnswerSection, DefaultSettlorViewModel, SettlorBusinessViewModel, SettlorLivingViewModel}
 
 class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
                                       (userAnswers: UserAnswers,
@@ -323,7 +323,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "settlorIndividualName.checkYourAnswersLabel",
-        HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
+        HtmlFormat.escape(x.displayFullName),
         Some(individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url),
         canEdit = canEdit
       )
@@ -343,8 +343,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
 
     val questions = Seq(
       setUpAfterSettlorDied,
+      kindOfTrust,
       setUpInAddition,
-      deedOfVariation,
+
       deceasedSettlorsName,
       deceasedSettlorDateOfDeathYesNo,
       deceasedSettlorDateOfDeath,
@@ -373,38 +374,53 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       livingSettlors <- userAnswers.get(LivingSettlors)
       indexed = livingSettlors.zipWithIndex
     } yield indexed.map {
-      case (_, index) =>
+      case (settlor, index) =>
 
-        val questions = Seq(
+        val trustTypeQuestions: Seq[AnswerRow] = Seq(
           setUpAfterSettlorDied,
           kindOfTrust,
-          deedOfVariation,
           setUpInAddition,
+          deedOfVariation,
           holdoverReliefYesNo,
-          settlorIndividualOrBusiness(index),
-          settlorIndividualName(index),
-          settlorIndividualDateOfBirthYesNo(index),
-          settlorIndividualDateOfBirth(index),
-          settlorIndividualNINOYesNo(index),
-          settlorIndividualNINO(index),
-          settlorIndividualAddressYesNo(index),
-          settlorIndividualAddressUKYesNo(index),
-          settlorIndividualAddressUK(index),
-          settlorIndividualAddressInternational(index),
-          settlorIndividualPassportYesNo(index),
-          settlorIndividualPassport(index),
-          settlorIndividualIDCardYesNo(index),
-          settlorIndividualIDCard(index),
-          settlorBusinessName(index),
-          settlorBusinessUtrYesNo(index),
-          settlorBusinessUtr(index),
-          settlorBusinessAddressYesNo(index),
-          settlorBusinessAddressUkYesNo(index),
-          settlorBusinessAddressUk(index),
-          settlorBusinessAddressInternational(index),
-          settlorBusinessType(index),
-          settlorBusinessTimeYesNo(index)
+          efrbsYesNo,
+          efrbsStartDate,
+          settlorIndividualOrBusiness(index)
         ).flatten
+
+        val settlorQuestions: Seq[AnswerRow] = (settlor match {
+          case _: SettlorLivingViewModel =>
+            Seq(
+              settlorIndividualName(index),
+              settlorIndividualDateOfBirthYesNo(index),
+              settlorIndividualDateOfBirth(index),
+              settlorIndividualNINOYesNo(index),
+              settlorIndividualNINO(index),
+              settlorIndividualAddressYesNo(index),
+              settlorIndividualAddressUKYesNo(index),
+              settlorIndividualAddressUK(index),
+              settlorIndividualAddressInternational(index),
+              settlorIndividualPassportYesNo(index),
+              settlorIndividualPassport(index),
+              settlorIndividualIDCardYesNo(index),
+              settlorIndividualIDCard(index)
+            )
+          case _: SettlorBusinessViewModel =>
+            Seq(
+              settlorBusinessName(index),
+              settlorBusinessUtrYesNo(index),
+              settlorBusinessUtr(index),
+              settlorBusinessAddressYesNo(index),
+              settlorBusinessAddressUkYesNo(index),
+              settlorBusinessAddressUk(index),
+              settlorBusinessAddressInternational(index),
+              settlorBusinessType(index),
+              settlorBusinessTimeYesNo(index)
+            )
+          case _ =>
+            Nil
+        }).flatten
+
+        val questions = trustTypeQuestions ++ settlorQuestions
 
         val sectionKey = if (index == 0) Some(messages("answerPage.section.settlors.heading")) else None
 
@@ -473,7 +489,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     x =>
       AnswerRow(
         "settlorsName.checkYourAnswersLabel",
-        HtmlFormat.escape(s"${x.firstName} ${x.middleName.getOrElse("")} ${x.lastName}"),
+        HtmlFormat.escape(x.displayFullName),
         Some(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId).url),
         canEdit = canEdit
       )

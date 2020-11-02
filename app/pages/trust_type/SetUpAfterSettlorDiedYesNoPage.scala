@@ -35,7 +35,11 @@ case object SetUpAfterSettlorDiedYesNoPage extends QuestionPage[Boolean] {
         userAnswers.remove(DeceasedSettlor)
       case Some(true) =>
         userAnswers.remove(KindOfTrustPage)
+          .flatMap(_.remove(SetUpInAdditionToWillTrustYesNoPage))
+          .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(HoldoverReliefYesNoPage))
+          .flatMap(_.remove(EfrbsYesNoPage))
+          .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(_.remove(LivingSettlors))
       case _ => super.cleanup(value, userAnswers)
     }

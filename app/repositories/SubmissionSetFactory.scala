@@ -51,8 +51,6 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
 
     if (status.contains(Completed)) {
 
-
-
       val trustDetailsMappedPiece = trustDetailsMapper.build(userAnswers) match {
         case Some(trustDetails) => List(RegistrationSubmission.MappedPiece("trust/details/", Json.toJson(trustDetails)))
         case _ => List.empty

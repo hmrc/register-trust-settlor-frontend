@@ -14,23 +14,11 @@
  * limitations under the License.
  */
 
-package models.pages
+package pages
 
-import play.api.libs.json._
+import base.SpecBase
 
-case class FullName(firstName: String, middleName: Option[String], lastName: String) {
+class RegistrationProgressSpec extends SpecBase {
 
-  override def toString = s"$firstName $lastName"
-
-  def displayFullName: String = middleName match {
-    case Some(middleName) => s"$firstName $middleName $lastName"
-    case None => this.toString
-  }
-
-}
-
-object FullName {
-
-  implicit lazy val formats: OFormat[FullName] = Json.format[FullName]
-
+  // TODO
 }
