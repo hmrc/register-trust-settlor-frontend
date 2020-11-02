@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.UtrFormProvider
@@ -34,14 +34,14 @@ import views.html.living_settlor.business.SettlorBusinessUtrView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessUtrController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @LivingSettlor navigator: Navigator,
-                                        actions: Actions,
-                                        requireName: NameRequiredActionProvider,
-                                        formProvider: UtrFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: SettlorBusinessUtrView
+                                              override val messagesApi: MessagesApi,
+                                              registrationsRepository: RegistrationsRepository,
+                                              @BusinessSettlor navigator: Navigator,
+                                              actions: Actions,
+                                              requireName: NameRequiredActionProvider,
+                                              formProvider: UtrFormProvider,
+                                              val controllerComponents: MessagesControllerComponents,
+                                              view: SettlorBusinessUtrView
                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   val form = formProvider("settlorBusinessUtr")

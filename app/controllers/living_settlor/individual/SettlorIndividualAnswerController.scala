@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.individual
 
-import config.annotations.LivingSettlor
+import config.annotations.IndividualSettlor
 import controllers.actions._
 import javax.inject.Inject
 import models.NormalMode
@@ -24,7 +24,8 @@ import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
 import navigation.Navigator
 import pages.LivingSettlorStatus
-import pages.living_settlor.{SettlorIndividualAnswerPage, SettlorIndividualOrBusinessPage}
+import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.individual.SettlorIndividualAnswerPage
 import pages.trust_type.KindOfTrustPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -42,7 +43,7 @@ class SettlorIndividualAnswerController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
                                                    draftRegistrationService: DraftRegistrationService,
-                                                   @LivingSettlor navigator: Navigator,
+                                                   @IndividualSettlor navigator: Navigator,
                                                    standardActions: Actions,
                                                    requiredAnswer: RequiredAnswerActionProvider,
                                                    view: SettlorAnswersView,

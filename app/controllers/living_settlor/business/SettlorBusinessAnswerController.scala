@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions._
 import controllers.living_settlor.business.routes.SettlorBusinessAnswerController
 import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
@@ -39,14 +39,14 @@ import views.html.living_settlor.SettlorAnswersView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessAnswerController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   registrationsRepository: RegistrationsRepository,
-                                                   @LivingSettlor navigator: Navigator,
-                                                   standardActions: Actions,
-                                                   requiredAnswer: RequiredAnswerActionProvider,
-                                                   view: SettlorAnswersView,
-                                                   countryOptions: CountryOptions,
-                                                   val controllerComponents: MessagesControllerComponents
+                                                 override val messagesApi: MessagesApi,
+                                                 registrationsRepository: RegistrationsRepository,
+                                                 @BusinessSettlor navigator: Navigator,
+                                                 standardActions: Actions,
+                                                 requiredAnswer: RequiredAnswerActionProvider,
+                                                 view: SettlorAnswersView,
+                                                 countryOptions: CountryOptions,
+                                                 val controllerComponents: MessagesControllerComponents
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String) =

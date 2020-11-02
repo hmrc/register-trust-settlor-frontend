@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.living_settlor.SettlorBusinessTypeFormProvider
@@ -34,14 +34,14 @@ import views.html.living_settlor.business.SettlorBusinessTypeView
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessTypeController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @LivingSettlor navigator: Navigator,
-                                              actions: Actions,
-                                              requireName: NameRequiredActionProvider,
-                                              formProvider: SettlorBusinessTypeFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: SettlorBusinessTypeView
+                                               override val messagesApi: MessagesApi,
+                                               registrationsRepository: RegistrationsRepository,
+                                               @BusinessSettlor navigator: Navigator,
+                                               actions: Actions,
+                                               requireName: NameRequiredActionProvider,
+                                               formProvider: SettlorBusinessTypeFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: SettlorBusinessTypeView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()

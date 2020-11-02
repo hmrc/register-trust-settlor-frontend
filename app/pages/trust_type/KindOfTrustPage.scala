@@ -18,13 +18,13 @@ package pages.trust_type
 
 import models.UserAnswers
 import models.pages.KindOfTrust
-import models.pages.KindOfTrust.{Employees, Intervivos}
+import models.pages.KindOfTrust._
 import pages.QuestionPage
 import pages.living_settlor.business.{SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage}
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsArray, JsPath, JsSuccess, __}
 import sections.Settlors
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
 case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
 
@@ -34,19 +34,47 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
 
   override def cleanup(value: Option[KindOfTrust], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
-      case Some(Intervivos) =>
-        userAnswers.remove(EfrbsYesNoPage)
-          .flatMap(_.remove(EfrbsStartDatePage))
-          .flatMap(_.remove(SettlorBusinessTypePage(0)))
-          .flatMap(_.remove(SettlorBusinessTimeYesNoPage(0)))
-      case Some(Employees) =>
-        userAnswers.remove(HoldoverReliefYesNoPage)
-      case _ =>
+      case Some(Deed) =>
         userAnswers.remove(HoldoverReliefYesNoPage)
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
-          .flatMap(_.remove(SettlorBusinessTypePage(0)))
-          .flatMap(_.remove(SettlorBusinessTimeYesNoPage(0)))
+          .flatMap(removeCompanyTypeAndTimeAnswers)
+      case Some(Intervivos) =>
+        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+          .flatMap(_.remove(HowDeedOfVariationCreatedPage))
+          .flatMap(_.remove(EfrbsYesNoPage))
+          .flatMap(_.remove(EfrbsStartDatePage))
+          .flatMap(removeCompanyTypeAndTimeAnswers)
+      case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
+        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+          .flatMap(_.remove(HowDeedOfVariationCreatedPage))
+          .flatMap(_.remove(HoldoverReliefYesNoPage))
+          .flatMap(_.remove(EfrbsYesNoPage))
+          .flatMap(_.remove(EfrbsStartDatePage))
+          .flatMap(removeCompanyTypeAndTimeAnswers)
+      case Some(Employees) =>
+        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+          .flatMap(_.remove(HowDeedOfVariationCreatedPage))
+          .flatMap(_.remove(HoldoverReliefYesNoPage))
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
+  }
+
+  private def removeCompanyTypeAndTimeAnswers(userAnswers: UserAnswers): Try[UserAnswers] = {
+
+    val numberOfLivingSettlorsCompleteOrInProgress = userAnswers.data.transform((__ \ 'settlors \ 'living).json.pick) match {
+      case JsSuccess(value, _) => value match {
+        case JsArray(value) => value.size
+        case _ => 0
+      }
+      case _ => 0
+    }
+
+    (0 until numberOfLivingSettlorsCompleteOrInProgress).foldLeft[Try[UserAnswers]](Success(userAnswers))((ua, index) => {
+      ua
+        .flatMap(_.remove(SettlorBusinessTypePage(index)))
+        .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
+    })
   }
 }

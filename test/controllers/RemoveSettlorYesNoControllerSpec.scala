@@ -24,10 +24,9 @@ import models.pages.IndividualOrBusiness._
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito._
-import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.living_settlor.individual.{SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual._
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,18 +41,10 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
   val form: Form[Boolean] = formProvider.withPrefix(prefix)
   val index: Int = 0
 
-  lazy val removeLivingSettlorYesNoRoute: String = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, fakeDraftId).url
-  lazy val removeDeceasedSettlorYesNoRoute: String = routes.RemoveSettlorYesNoController.onPageLoadDeceased(fakeDraftId).url
+  lazy val removeLivingSettlorYesNoRoute: String = routes.RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
 
   val name: FullName = FullName("John", None, "Doe")
   val businessName: String = "Google Ltd"
-
-  val deceasedUserAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorsNamePage, name).success.value
-    .set(SettlorDateOfDeathYesNoPage, false).success.value
-    .set(SettlorDateOfBirthYesNoPage, false).success.value
-    .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-    .set(SettlorNationalInsuranceNumberPage, "nino").success.value
 
   val individualUserAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
@@ -72,11 +63,11 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" when {
 
-      "Deceased settlor" in {
+      "individual" in {
 
-        val application = applicationBuilder(userAnswers = Some(deceasedUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
 
-        val request = FakeRequest(GET, removeDeceasedSettlorYesNoRoute)
+        val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
 
         val result = route(application, request).value
 
@@ -87,61 +78,35 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
         contentAsString(result) mustEqual
           view(
             form,
+            index,
             fakeDraftId,
-            routes.RemoveSettlorYesNoController.onSubmitDeceased(fakeDraftId),
             name.toString
           )(request, messages).toString
 
         application.stop()
       }
 
-      "Living settlor" when {
+      "business" in {
 
-        "Individual" in {
+        val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
 
-          val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
+        val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
 
-          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
+        val result = route(application, request).value
 
-          val result = route(application, request).value
+        val view = application.injector.instanceOf[RemoveSettlorYesNoView]
 
-          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
+        status(result) mustEqual OK
 
-          status(result) mustEqual OK
+        contentAsString(result) mustEqual
+          view(
+            form,
+            index,
+            fakeDraftId,
+            businessName
+          )(request, messages).toString
 
-          contentAsString(result) mustEqual
-            view(
-              form,
-              fakeDraftId,
-              routes.RemoveSettlorYesNoController.onSubmitLiving(index, fakeDraftId),
-              name.toString
-            )(request, messages).toString
-
-          application.stop()
-        }
-
-        "Business" in {
-
-          val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
-
-          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(
-              form,
-              fakeDraftId,
-              routes.RemoveSettlorYesNoController.onSubmitLiving(index, fakeDraftId),
-              businessName
-            )(request, messages).toString
-
-          application.stop()
-        }
+        application.stop()
       }
     }
 
@@ -163,15 +128,15 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
     "remove settlor and redirect to add settlors page when YES is submitted" when {
 
-      "deceased settlor" in {
+      "individual" in {
 
         reset(registrationsRepository)
 
         when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
-        val application = applicationBuilder(userAnswers = Some(deceasedUserAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
 
-        val request = FakeRequest(POST, removeDeceasedSettlorYesNoRoute)
+        val request = FakeRequest(POST, removeLivingSettlorYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
@@ -182,71 +147,40 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-        uaCaptor.getValue.get(SettlorsNamePage) mustNot be(defined)
-        uaCaptor.getValue.get(SettlorDateOfDeathYesNoPage) mustNot be(defined)
-        uaCaptor.getValue.get(SettlorDateOfBirthYesNoPage) mustNot be(defined)
-        uaCaptor.getValue.get(SettlorsNationalInsuranceYesNoPage) mustNot be(defined)
-        uaCaptor.getValue.get(SettlorNationalInsuranceNumberPage) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorIndividualNamePage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorIndividualDateOfBirthYesNoPage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorIndividualNINOYesNoPage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorIndividualNINOPage(index)) mustNot be(defined)
 
         application.stop()
       }
 
-      "living settlor" when {
+      "business" in {
 
-        "individual" in {
+        reset(registrationsRepository)
 
-          reset(registrationsRepository)
+        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
 
-          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+        val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
 
-          val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
+        val request = FakeRequest(POST, removeLivingSettlorYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
-          val request = FakeRequest(POST, removeLivingSettlorYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val result = route(application, request).value
 
-          val result = route(application, request).value
+        status(result) mustEqual SEE_OTHER
 
-          status(result) mustEqual SEE_OTHER
+        redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
-          redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
+        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorBusinessNamePage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorBusinessUtrYesNoPage(index)) mustNot be(defined)
+        uaCaptor.getValue.get(SettlorBusinessUtrPage(index)) mustNot be(defined)
 
-          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-          uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorIndividualNamePage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorIndividualDateOfBirthYesNoPage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorIndividualNINOYesNoPage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorIndividualNINOPage(index)) mustNot be(defined)
-
-          application.stop()
-        }
-
-        "business" in {
-
-          reset(registrationsRepository)
-
-          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-
-          val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
-
-          val request = FakeRequest(POST, removeLivingSettlorYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
-
-          val result = route(application, request).value
-
-          status(result) mustEqual SEE_OTHER
-
-          redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
-
-          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
-          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
-          uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorBusinessNamePage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorBusinessUtrYesNoPage(index)) mustNot be(defined)
-          uaCaptor.getValue.get(SettlorBusinessUtrPage(index)) mustNot be(defined)
-
-          application.stop()
-        }
+        application.stop()
       }
     }
 
@@ -268,8 +202,8 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
       contentAsString(result) mustEqual
         view(
           boundForm,
+          index,
           fakeDraftId,
-          routes.RemoveSettlorYesNoController.onSubmitLiving(index, fakeDraftId),
           "the settlor"
         )(request, messages).toString
 

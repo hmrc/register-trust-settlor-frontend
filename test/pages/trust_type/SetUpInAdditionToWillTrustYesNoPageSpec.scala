@@ -17,13 +17,16 @@
 package pages.trust_type
 
 import models.UserAnswers
-import models.pages.DeedOfVariation.ReplacedWill
-import models.pages.KindOfTrust.Deed
+import models.pages.{DeedOfVariation, FullName}
+import models.pages.Status.Completed
 import org.scalacheck.Arbitrary.arbitrary
+import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
 import pages.behaviours.PageBehaviours
 import sections.{DeceasedSettlor, LivingSettlors}
 
 class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
+
+  private val name: FullName = FullName("Joe", None, "Bloggs")
 
   "SetUpInAdditionToWillTrustYesNoPage" must {
 
@@ -41,12 +44,12 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
         forAll(arbitrary[UserAnswers]) {
           initial =>
             val answers: UserAnswers = initial.set(page, true).success.value
-              .set(HowDeedOfVariationCreatedPage, ReplacedWill).success.value
+              .set(pages.deceased_settlor.SettlorsNamePage, name).success.value
+              .set(DeceasedSettlorStatus, Completed).success.value
 
             val result = answers.set(page, false).success.value
 
             result.get(DeceasedSettlor) must not be defined
-            result.get(HowDeedOfVariationCreatedPage) must not be defined
         }
       }
 
@@ -54,10 +57,15 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[UserAnswers]) {
             initial =>
               val answers: UserAnswers = initial.set(page, false).success.value
-                .set(KindOfTrustPage, Deed).success.value
+                .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
+                .set(pages.living_settlor.individual.SettlorIndividualNamePage(0), name).success.value
+                .set(LivingSettlorStatus(0), Completed).success.value
+                .set(pages.living_settlor.business.SettlorBusinessNamePage(1), name.toString).success.value
+                .set(LivingSettlorStatus(1), Completed).success.value
 
               val result = answers.set(page, true).success.value
 
+              result.get(HowDeedOfVariationCreatedPage) must not be defined
               result.get(LivingSettlors) must not be defined
           }
         }

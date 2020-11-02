@@ -16,7 +16,7 @@
 
 package base
 
-import config.annotations.{DeceasedSettlor, LivingSettlor}
+import config.annotations.{BusinessSettlor, DeceasedSettlor, IndividualSettlor, TrustType}
 import controllers.actions._
 import models.UserAnswers
 import models.pages.Status
@@ -47,7 +47,7 @@ trait SpecBase extends PlaySpec
 
   def emptyUserAnswers: UserAnswers = UserAnswers(draftId, Json.obj(), internalAuthId = userInternalId)
 
-  lazy val fakeNavigator: FakeNavigator = new FakeNavigator(frontendAppConfig)
+  lazy val fakeNavigator: FakeNavigator = new FakeNavigator()
 
   private def fakeDraftIdAction(userAnswers: Option[UserAnswers]): FakeDraftIdRetrievalActionProvider =
     new FakeDraftIdRetrievalActionProvider(
@@ -65,8 +65,10 @@ trait SpecBase extends PlaySpec
     new GuiceApplicationBuilder()
       .overrides(
         bind[Navigator].toInstance(navigator),
-        bind[Navigator].qualifiedWith(classOf[LivingSettlor]).toInstance(navigator),
+        bind[Navigator].qualifiedWith(classOf[IndividualSettlor]).toInstance(navigator),
+        bind[Navigator].qualifiedWith(classOf[BusinessSettlor]).toInstance(navigator),
         bind[Navigator].qualifiedWith(classOf[DeceasedSettlor]).toInstance(navigator),
+        bind[Navigator].qualifiedWith(classOf[TrustType]).toInstance(navigator),
         bind[RegistrationDataRequiredAction].to[RegistrationDataRequiredActionImpl],
         bind[RegistrationIdentifierAction].toInstance(
           new FakeIdentifyForRegistration(affinityGroup, frontendAppConfig)(injectedParsers, trustsAuth, enrolments)

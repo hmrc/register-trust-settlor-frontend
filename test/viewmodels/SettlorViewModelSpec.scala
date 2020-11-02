@@ -16,60 +16,98 @@
 
 package viewmodels
 
-import generators.{Generators, ModelGenerators}
-import models.pages.IndividualOrBusiness.Individual
-import models.pages.Status.{Completed, InProgress}
-import org.scalatest.{FreeSpec, MustMatchers}
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import base.SpecBase
+import models.pages.IndividualOrBusiness._
+import models.pages.Status._
 import play.api.libs.json.{JsSuccess, Json}
 
-class SettlorViewModelSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with ModelGenerators {
+class SettlorViewModelSpec extends SpecBase {
 
-  "Settlor" - {
+  "SettlorViewModel" must {
 
-    "must deserialise" - {
+    "validate JSON" when {
 
-      "living settlor individual with name" - {
+      "living settlor" when {
 
-        "to a view model that is complete" in {
-          val json = Json.parse(
-            """
-              |{
-              |"individualOrBusiness" : "individual",
-              |"name": {
-              | "firstName": "Richy",
-              | "lastName": "Jassal"
-              |},
-              |"dateOfBirthYesNo" : false,
-              |"ninoYesNo" : true,
-              |"nino" : "NH111111A",
-              |"status": "completed"
-              |}
+        "individual" when {
+
+          "in progress" in {
+
+            val json = Json.parse(
+              """
+                |{
+                | "individualOrBusiness": "individual",
+                | "name": {
+                |   "firstName": "Joe",
+                |   "lastName": "Bloggs"
+                | }
+                |}
             """.stripMargin)
 
-          json.validate[SettlorViewModel] mustEqual JsSuccess(
-            SettlorLivingIndividualViewModel(`type` = Individual, name = "Richy Jassal", status = Completed)
-          )
+            json.validate[SettlorViewModel] mustEqual JsSuccess(
+              SettlorLivingIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = InProgress)
+            )
+          }
+
+          "completed" in {
+
+            val json = Json.parse(
+              """
+                |{
+                | "individualOrBusiness": "individual",
+                | "name": {
+                |   "firstName": "Joe",
+                |   "lastName": "Bloggs"
+                | },
+                | "dateOfBirthYesNo": false,
+                | "ninoYesNo": true,
+                | "nino": "NH111111A",
+                | "status": "completed"
+                |}
+            """.stripMargin)
+
+            json.validate[SettlorViewModel] mustEqual JsSuccess(
+              SettlorLivingIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = Completed)
+            )
+          }
         }
 
+        "business" when {
+
+          "in progress" in {
+
+            val json = Json.parse(
+              """
+                |{
+                | "individualOrBusiness": "business",
+                | "businessName": "Business Ltd."
+                |}
+            """.stripMargin)
+
+            json.validate[SettlorViewModel] mustEqual JsSuccess(
+              SettlorBusinessTypeViewModel(`type` = Business, name = "Business Ltd.", status = InProgress)
+            )
+          }
+
+          "completed" in {
+
+            val json = Json.parse(
+              """
+                |{
+                | "individualOrBusiness": "business",
+                | "businessName": "Business Ltd.",
+                | "utrYesNo": true,
+                | "utr": "1234567890",
+                | "status": "completed"
+                |}
+            """.stripMargin)
+
+            json.validate[SettlorViewModel] mustEqual JsSuccess(
+              SettlorBusinessTypeViewModel(`type` = Business, name = "Business Ltd.", status = Completed)
+            )
+          }
+        }
       }
-
-      // TODO - business settlor and deceased settlor
-
-      "to default view model when no data provided" in {
-        val json = Json.parse(
-          """
-            |{
-            |"individualOrBusiness" : "individual"
-            |}
-          """.stripMargin)
-
-        json.validate[SettlorViewModel] mustEqual JsSuccess(
-          DefaultSettlorViewModel(`type` = Individual, status = InProgress)
-        )
-      }
-
     }
   }
-
 }
