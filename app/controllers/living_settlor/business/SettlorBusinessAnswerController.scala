@@ -23,12 +23,13 @@ import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import javax.inject.Inject
 import models.NormalMode
 import models.pages.Status.Completed
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.LivingSettlorStatus
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business.SettlorBusinessAnswerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
@@ -47,9 +48,9 @@ class SettlorBusinessAnswerController @Inject()(
                                                  view: SettlorAnswersView,
                                                  countryOptions: CountryOptions,
                                                  val controllerComponents: MessagesControllerComponents
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
       standardActions.authWithData(draftId) andThen
       requiredAnswer(RequiredAnswer(SettlorIndividualOrBusinessPage(index), SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId)))
 
@@ -61,24 +62,7 @@ class SettlorBusinessAnswerController @Inject()(
       val sections = Seq(
         AnswerSection(
           None,
-          Seq(
-            answers.setUpAfterSettlorDied,
-            answers.kindOfTrust,
-            answers.efrbsYesNo,
-            answers.efrbsStartDate,
-            answers.deedOfVariation,
-            answers.holdoverReliefYesNo,
-            answers.settlorIndividualOrBusiness(index),
-            answers.settlorBusinessName(index),
-            answers.settlorBusinessUtrYesNo(index),
-            answers.settlorBusinessUtr(index),
-            answers.settlorBusinessAddressYesNo(index),
-            answers.settlorBusinessAddressUkYesNo(index),
-            answers.settlorBusinessAddressInternational(index),
-            answers.settlorBusinessAddressUk(index),
-            answers.settlorBusinessType(index),
-            answers.settlorBusinessTimeYesNo(index)
-          ).flatten
+          answers.settlorBusinessQuestions(index)
         )
       )
 

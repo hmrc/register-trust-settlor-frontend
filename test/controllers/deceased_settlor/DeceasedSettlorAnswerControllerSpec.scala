@@ -64,18 +64,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
       val expectedSections = Seq(
         AnswerSection(
           None,
-          Seq(checkYourAnswersHelper.setUpAfterSettlorDied.value,
-            checkYourAnswersHelper.deceasedSettlorsName.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeathYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeath.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfBirthYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorsDateOfBirth.value,
-            checkYourAnswersHelper.deceasedSettlorsNINoYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorNationalInsuranceNumber.value,
-            checkYourAnswersHelper.deceasedSettlorsLastKnownAddressYesNo.value,
-            checkYourAnswersHelper.wasSettlorsAddressUKYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorsUKAddress.value
-          )
+          checkYourAnswersHelper.deceasedSettlorQuestions
         )
       )
 
@@ -119,18 +108,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
       val expectedSections = Seq(
         AnswerSection(
           None,
-          Seq(checkYourAnswersHelper.setUpAfterSettlorDied.value,
-            checkYourAnswersHelper.deceasedSettlorsName.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeathYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeath.value,
-            checkYourAnswersHelper.deceasedSettlorDateOfBirthYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorsDateOfBirth.value,
-            checkYourAnswersHelper.deceasedSettlorsNINoYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorNationalInsuranceNumber.value,
-            checkYourAnswersHelper.deceasedSettlorsLastKnownAddressYesNo.value,
-            checkYourAnswersHelper.wasSettlorsAddressUKYesNo.value,
-            checkYourAnswersHelper.deceasedSettlorsInternationalAddress.value
-          )
+          checkYourAnswersHelper.deceasedSettlorQuestions
         )
       )
 

@@ -64,28 +64,7 @@ class SettlorIndividualAnswerController @Inject()(
       val sections = Seq(
         AnswerSection(
           None,
-          Seq(
-            answers.setUpAfterSettlorDied,
-            answers.kindOfTrust,
-            answers.efrbsYesNo,
-            answers.efrbsStartDate,
-            answers.deedOfVariation,
-            answers.holdoverReliefYesNo,
-            answers.settlorIndividualOrBusiness(index),
-            answers.settlorIndividualName(index),
-            answers.settlorIndividualDateOfBirthYesNo(index),
-            answers.settlorIndividualDateOfBirth(index),
-            answers.settlorIndividualNINOYesNo(index),
-            answers.settlorIndividualNINO(index),
-            answers.settlorIndividualAddressYesNo(index),
-            answers.settlorIndividualAddressUKYesNo(index),
-            answers.settlorIndividualAddressUK(index),
-            answers.settlorIndividualAddressInternational(index),
-            answers.settlorIndividualPassportYesNo(index),
-            answers.settlorIndividualPassport(index),
-            answers.settlorIndividualIDCardYesNo(index),
-            answers.settlorIndividualIDCard(index)
-          ).flatten
+          answers.settlorIndividualQuestions(index)
         )
       )
 

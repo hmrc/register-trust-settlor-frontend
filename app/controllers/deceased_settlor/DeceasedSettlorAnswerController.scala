@@ -45,7 +45,7 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeceasedSettlorAnswerView,
                                                  countryOptions : CountryOptions
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -55,28 +55,14 @@ class DeceasedSettlorAnswerController @Inject()(
       val sections = Seq(
         AnswerSection(
           None,
-          Seq(checkYourAnswersHelper.setUpAfterSettlorDied,
-            checkYourAnswersHelper.deedOfVariation,
-            checkYourAnswersHelper.setUpInAddition,
-            checkYourAnswersHelper.deceasedSettlorsName,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeathYesNo,
-            checkYourAnswersHelper.deceasedSettlorDateOfDeath,
-            checkYourAnswersHelper.deceasedSettlorDateOfBirthYesNo,
-            checkYourAnswersHelper.deceasedSettlorsDateOfBirth,
-            checkYourAnswersHelper.deceasedSettlorsNINoYesNo,
-            checkYourAnswersHelper.deceasedSettlorNationalInsuranceNumber,
-            checkYourAnswersHelper.deceasedSettlorsLastKnownAddressYesNo,
-            checkYourAnswersHelper.wasSettlorsAddressUKYesNo,
-            checkYourAnswersHelper.deceasedSettlorsUKAddress,
-            checkYourAnswersHelper.deceasedSettlorsInternationalAddress
-          ).flatten
+          checkYourAnswersHelper.deceasedSettlorQuestions
         )
       )
 
       Ok(view(draftId, sections))
   }
 
-  def onSubmit(draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       for {

@@ -79,17 +79,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
           val expectedSections = Seq(
             AnswerSection(
               None,
-              Seq(
-                checkYourAnswersHelper.setUpAfterSettlorDied.value,
-                checkYourAnswersHelper.kindOfTrust.value,
-                checkYourAnswersHelper.deedOfVariation.value,
-                checkYourAnswersHelper.holdoverReliefYesNo.value,
-                checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-                checkYourAnswersHelper.settlorIndividualName(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirthYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualNINOYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressYesNo(index).value
-              )
+              checkYourAnswersHelper.settlorIndividualQuestions(index)
             )
           )
 
@@ -135,19 +125,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
           val expectedSections = Seq(
             AnswerSection(
               None,
-              Seq(
-                checkYourAnswersHelper.setUpAfterSettlorDied.value,
-                checkYourAnswersHelper.kindOfTrust.value,
-                checkYourAnswersHelper.deedOfVariation.value,
-                checkYourAnswersHelper.holdoverReliefYesNo.value,
-                checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-                checkYourAnswersHelper.settlorIndividualName(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirthYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirth(index).value,
-                checkYourAnswersHelper.settlorIndividualNINOYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualNINO(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressYesNo(index).value
-              )
+              checkYourAnswersHelper.settlorIndividualQuestions(index)
             )
           )
 
@@ -195,21 +173,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
           val expectedSections = Seq(
             AnswerSection(
               None,
-              Seq(
-                checkYourAnswersHelper.setUpAfterSettlorDied.value,
-                checkYourAnswersHelper.kindOfTrust.value,
-                checkYourAnswersHelper.deedOfVariation.value,
-                checkYourAnswersHelper.holdoverReliefYesNo.value,
-                checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-                checkYourAnswersHelper.settlorIndividualName(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirthYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualNINOYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressUKYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressUK(index).value,
-                checkYourAnswersHelper.settlorIndividualPassportYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualIDCardYesNo(index).value
-              )
+              checkYourAnswersHelper.settlorIndividualQuestions(index)
             )
           )
 
@@ -257,21 +221,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
           val expectedSections = Seq(
             AnswerSection(
               None,
-              Seq(
-                checkYourAnswersHelper.setUpAfterSettlorDied.value,
-                checkYourAnswersHelper.kindOfTrust.value,
-                checkYourAnswersHelper.deedOfVariation.value,
-                checkYourAnswersHelper.holdoverReliefYesNo.value,
-                checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-                checkYourAnswersHelper.settlorIndividualName(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirthYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualNINOYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressUKYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressInternational(index).value,
-                checkYourAnswersHelper.settlorIndividualPassportYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualIDCardYesNo(index).value
-              )
+              checkYourAnswersHelper.settlorIndividualQuestions(index)
             )
           )
 
@@ -321,23 +271,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
           val expectedSections = Seq(
             AnswerSection(
               None,
-              Seq(
-                checkYourAnswersHelper.setUpAfterSettlorDied.value,
-                checkYourAnswersHelper.kindOfTrust.value,
-                checkYourAnswersHelper.deedOfVariation.value,
-                checkYourAnswersHelper.holdoverReliefYesNo.value,
-                checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-                checkYourAnswersHelper.settlorIndividualName(index).value,
-                checkYourAnswersHelper.settlorIndividualDateOfBirthYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualNINOYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressUKYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualAddressUK(index).value,
-                checkYourAnswersHelper.settlorIndividualPassportYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualPassport(index).value,
-                checkYourAnswersHelper.settlorIndividualIDCardYesNo(index).value,
-                checkYourAnswersHelper.settlorIndividualIDCard(index).value
-              )
+              checkYourAnswersHelper.settlorIndividualQuestions(index)
             )
           )
 
