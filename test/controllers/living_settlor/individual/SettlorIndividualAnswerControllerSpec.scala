@@ -40,18 +40,16 @@ import scala.concurrent.Future
 
 class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val settlorName: FullName = FullName("first name", Some("middle name"), "last name")
+  private val validDate: LocalDate = LocalDate.now(ZoneOffset.UTC)
+  private val nino: String = "CC123456A"
+  private val AddressUK: UKAddress = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
+  private val AddressInternational: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
+  private val passportOrIDCardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("Field 1", "Field 2", LocalDate.now(ZoneOffset.UTC))
+  private val index: Int = 0
 
-  val settlorName = FullName("first name", Some("middle name"), "last name")
-  val validDate: LocalDate = LocalDate.now(ZoneOffset.UTC)
-  val nino: String = "CC123456A"
-  val AddressUK = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
-  val AddressInternational = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
-  val passportOrIDCardDetails = PassportOrIdCardDetails("Field 1", "Field 2", LocalDate.now(ZoneOffset.UTC))
-  val index: Int = 0
-
-  lazy val settlorIndividualAnswerRoute: String = routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
-  lazy val onSubmit: Call = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
+  private lazy val settlorIndividualAnswerRoute: String = routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
+  private lazy val onSubmit: Call = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
 
   "SettlorIndividualAnswer Controller" must {
 
@@ -296,6 +294,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
     }
 
     "redirect to SettlorIndividualOrBusinessPage on a GET if no answer for 'Is the settlor an individual or business?' at index" in {
+
       val answers =
         emptyUserAnswers
           .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
@@ -315,7 +314,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual
+        controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, fakeDraftId).url
 
       application.stop()
     }
@@ -336,10 +336,9 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
     "update beneficiary status when kindOfTrustPage is set to Employees" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
+        .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
       when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
         .thenReturn(Future.successful(true))
@@ -361,10 +360,9 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
     "not update beneficiary status when kindOfTrustPage is not set to Employees" in {
 
-      val userAnswers =
-        emptyUserAnswers
-          .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-          .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
+        .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
