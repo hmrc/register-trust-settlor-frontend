@@ -18,17 +18,19 @@ package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
 import controllers.actions._
+import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import javax.inject.Inject
 import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.LivingSettlorStatus
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.individual.SettlorIndividualAnswerPage
 import pages.trust_type.KindOfTrustPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -49,12 +51,11 @@ class SettlorIndividualAnswerController @Inject()(
                                                    view: SettlorAnswersView,
                                                    countryOptions: CountryOptions,
                                                    val controllerComponents: MessagesControllerComponents
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String) =
+  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SettlorIndividualOrBusinessPage(index), controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId)))
-
+      requiredAnswer(RequiredAnswer(SettlorIndividualOrBusinessPage(index), SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId)))
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
@@ -78,18 +79,18 @@ class SettlorIndividualAnswerController @Inject()(
 
       Future.fromTry(answers) flatMap { updatedAnswers =>
 
-        if(updatedAnswers.get(KindOfTrustPage).contains(Employees)){
+        lazy val redirect: Result = Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(updatedAnswers))
+
+        if (updatedAnswers.get(KindOfTrustPage).contains(Employees)){
           for {
             _ <- draftRegistrationService.setBeneficiaryStatus(draftId)
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(request.userAnswers))
+          } yield redirect
         } else {
           registrationsRepository.set(updatedAnswers) map { _ =>
-            Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(request.userAnswers))
+            redirect
           }
         }
-
       }
   }
-
 }

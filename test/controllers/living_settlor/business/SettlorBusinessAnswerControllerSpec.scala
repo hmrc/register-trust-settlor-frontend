@@ -16,13 +16,13 @@
 
 package controllers.living_settlor.business
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import controllers.routes._
 import models.pages._
 import models.{NormalMode, UserAnswers}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
@@ -39,22 +39,18 @@ import scala.concurrent.Future
 
 class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val settlorName: String = "Settlor Org"
+  private val utr: String = "0987654321"
+  private val addressUK: UKAddress = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
+  private val addressInternational: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
+  private val index: Int = 0
 
-  val settlorName = "Settlor Org"
-  val validDate: LocalDate = LocalDate.now(ZoneOffset.UTC)
-  val utr: String = "0987654321"
-  val addressUK = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
-  val addressInternational = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
-  val passportOrIDCardDetails = PassportOrIdCardDetails("Field 1", "Field 2", LocalDate.now(ZoneOffset.UTC))
-  val index: Int = 0
-
-  lazy val settlorIndividualAnswerRoute: String = routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
-  lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
+  private lazy val settlorBusinessAnswerRoute: String = routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
+  private lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
 
   "SettlorBusinessAnswer Controller" must {
 
-    "settlor business -  no utr, no address" must {
+    "settlor business - no utr, no address" must {
 
       "return OK and the correct view for a GET" in {
 
@@ -81,7 +77,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
         val result: Future[Result] = route(application, request).value
 
@@ -97,7 +93,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
     }
 
-    "settlor business -  with utr, and no address" must {
+    "settlor business - with utr, and no address" must {
 
       "return OK and the correct view for a GET" in {
 
@@ -125,7 +121,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
         val result = route(application, request).value
 
@@ -141,7 +137,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
     }
 
-    "settlor business -  no utr, UK address" must {
+    "settlor business - no utr, UK address" must {
 
       "return OK and the correct view for a GET" in {
 
@@ -170,7 +166,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
         val result = route(application, request).value
 
@@ -186,7 +182,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
     }
 
-    "settlor business -  no utr, International address" must {
+    "settlor business - no utr, International address" must {
 
       "return OK and the correct view for a GET" in {
 
@@ -215,7 +211,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-        val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
         val result = route(application, request).value
 
@@ -232,6 +228,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
     }
 
     "redirect to SettlorIndividualOrBusinessPage on a GET if no answer for 'Is the settlor an individual or business?' at index" in {
+
       val answers =
         emptyUserAnswers
           .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
@@ -244,7 +241,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-      val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+      val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
       val result = route(application, request).value
 
@@ -259,7 +256,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+      val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
       val result = route(application, request).value
 
@@ -269,5 +266,47 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "update beneficiary status when kindOfTrustPage is set to Employees" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+        .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+
+      when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
+        .thenReturn(Future.successful(true))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(POST, settlorBusinessAnswerRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
+
+      verify(mockCreateDraftRegistrationService).setBeneficiaryStatus(any())(any())
+
+      application.stop()
+    }
+
+    "not update beneficiary status when kindOfTrustPage is not set to Employees" in {
+
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
+        .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(POST, settlorBusinessAnswerRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
+
+      verifyZeroInteractions(mockCreateDraftRegistrationService)
+
+      application.stop()
+    }
   }
 }
