@@ -23,7 +23,7 @@ import models.pages.Status.InProgress
 import pages.beneficiaries.RoleInCompanyPage
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -59,5 +59,8 @@ class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsR
         Future.successful(true)
       }
     }
+
+  def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    submissionDraftConnector.removeRoleInCompanyAnswers(draftId)
     
 }

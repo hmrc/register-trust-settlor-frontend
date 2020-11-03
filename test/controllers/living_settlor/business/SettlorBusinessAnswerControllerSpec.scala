@@ -22,7 +22,7 @@ import controllers.routes._
 import models.pages._
 import models.{NormalMode, UserAnswers}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, verifyZeroInteractions, when}
+import org.mockito.Mockito.{verify, when}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
@@ -30,6 +30,7 @@ import play.api.Application
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
@@ -289,11 +290,14 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "not update beneficiary status when kindOfTrustPage is not set to Employees" in {
+    "remove role in company answers when kindOfTrustPage is not set to Employees" in {
 
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+
+      when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -304,7 +308,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verifyZeroInteractions(mockCreateDraftRegistrationService)
+      verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
 
       application.stop()
     }
