@@ -75,16 +75,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         val expectedSections = Seq(
           AnswerSection(
             None,
-            Seq(
-              checkYourAnswersHelper.setUpAfterSettlorDied.value,
-              checkYourAnswersHelper.kindOfTrust.value,
-              checkYourAnswersHelper.deedOfVariation.value,
-              checkYourAnswersHelper.holdoverReliefYesNo.value,
-              checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-              checkYourAnswersHelper.settlorBusinessName(index).value,
-              checkYourAnswersHelper.settlorBusinessUtrYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressYesNo(index).value
-            )
+            checkYourAnswersHelper.settlorBusinessQuestions(index)
           )
         )
 
@@ -128,17 +119,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         val expectedSections = Seq(
           AnswerSection(
             None,
-            Seq(
-              checkYourAnswersHelper.setUpAfterSettlorDied.value,
-              checkYourAnswersHelper.kindOfTrust.value,
-              checkYourAnswersHelper.deedOfVariation.value,
-              checkYourAnswersHelper.holdoverReliefYesNo.value,
-              checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-              checkYourAnswersHelper.settlorBusinessName(index).value,
-              checkYourAnswersHelper.settlorBusinessUtrYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessUtr(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressYesNo(index).value
-            )
+            checkYourAnswersHelper.settlorBusinessQuestions(index)
           )
         )
 
@@ -183,18 +164,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         val expectedSections = Seq(
           AnswerSection(
             None,
-            Seq(
-              checkYourAnswersHelper.setUpAfterSettlorDied.value,
-              checkYourAnswersHelper.kindOfTrust.value,
-              checkYourAnswersHelper.deedOfVariation.value,
-              checkYourAnswersHelper.holdoverReliefYesNo.value,
-              checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-              checkYourAnswersHelper.settlorBusinessName(index).value,
-              checkYourAnswersHelper.settlorBusinessUtrYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressUkYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressUk(index).value
-            )
+            checkYourAnswersHelper.settlorBusinessQuestions(index)
           )
         )
 
@@ -239,18 +209,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         val expectedSections = Seq(
           AnswerSection(
             None,
-            Seq(
-              checkYourAnswersHelper.setUpAfterSettlorDied.value,
-              checkYourAnswersHelper.kindOfTrust.value,
-              checkYourAnswersHelper.deedOfVariation.value,
-              checkYourAnswersHelper.holdoverReliefYesNo.value,
-              checkYourAnswersHelper.settlorIndividualOrBusiness(index).value,
-              checkYourAnswersHelper.settlorBusinessName(index).value,
-              checkYourAnswersHelper.settlorBusinessUtrYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressUkYesNo(index).value,
-              checkYourAnswersHelper.settlorBusinessAddressInternational(index).value
-            )
+            checkYourAnswersHelper.settlorBusinessQuestions(index)
           )
         )
 

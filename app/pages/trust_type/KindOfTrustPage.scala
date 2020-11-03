@@ -22,7 +22,7 @@ import models.pages.KindOfTrust._
 import pages.QuestionPage
 import pages.living_settlor.business.{SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage}
 import play.api.libs.json.{JsArray, JsPath, JsSuccess, __}
-import sections.Settlors
+import sections.{DeceasedSettlor, Settlors}
 
 import scala.util.{Success, Try}
 
@@ -45,6 +45,7 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(removeCompanyTypeAndTimeAnswers)
+          .flatMap(_.remove(DeceasedSettlor))
       case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
         userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
@@ -52,10 +53,12 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(removeCompanyTypeAndTimeAnswers)
+          .flatMap(_.remove(DeceasedSettlor))
       case Some(Employees) =>
         userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(HoldoverReliefYesNoPage))
+          .flatMap(_.remove(DeceasedSettlor))
       case _ =>
         super.cleanup(value, userAnswers)
     }

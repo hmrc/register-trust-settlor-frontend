@@ -21,7 +21,7 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.{DeceasedSettlor, LivingSettlors, Settlors}
 
-import scala.util.Try
+import scala.util.{Success, Try}
 
 case object SetUpAfterSettlorDiedYesNoPage extends QuestionPage[Boolean] {
 
@@ -32,7 +32,12 @@ case object SetUpAfterSettlorDiedYesNoPage extends QuestionPage[Boolean] {
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
       case Some(false) =>
-        userAnswers.remove(DeceasedSettlor)
+        userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
+          case Some(true) =>
+            Success(userAnswers)
+          case _ =>
+            userAnswers.remove(DeceasedSettlor)
+        }
       case Some(true) =>
         userAnswers.remove(KindOfTrustPage)
           .flatMap(_.remove(SetUpInAdditionToWillTrustYesNoPage))

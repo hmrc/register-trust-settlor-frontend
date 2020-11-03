@@ -41,18 +41,42 @@ class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
 
   "implement cleanup" when {
 
-    "no selected" in {
+    "no selected" when {
 
-      forAll(arbitrary[UserAnswers], arbitrary[String]) {
-        (initial, str) =>
-          val answers: UserAnswers = initial
-            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-            .set(SettlorsNamePage, FullName(str, None, str)).success.value
-            .set(DeceasedSettlorStatus, Status.Completed).success.value
+      "SetUpInAdditionToWillTrustYesNoPage is Some(true)" must {
+        "not implement cleanup" in {
 
-          val result = answers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          forAll(arbitrary[UserAnswers], arbitrary[String]) {
+            (initial, str) =>
+              val answers: UserAnswers = initial
+                .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+                .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+                .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
+                .set(SettlorsNamePage, FullName(str, None, str)).success.value
+                .set(DeceasedSettlorStatus, Status.Completed).success.value
 
-          result.get(DeceasedSettlor) mustNot be(defined)
+              val result = answers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+
+              result.get(DeceasedSettlor) mustBe defined
+          }
+        }
+      }
+
+      "SetUpInAdditionToWillTrustYesNoPage is not Some(true)" must {
+        "implement cleanup" in {
+
+          forAll(arbitrary[UserAnswers], arbitrary[String]) {
+            (initial, str) =>
+              val answers: UserAnswers = initial
+                .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+                .set(SettlorsNamePage, FullName(str, None, str)).success.value
+                .set(DeceasedSettlorStatus, Status.Completed).success.value
+
+              val result = answers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+
+              result.get(DeceasedSettlor) mustNot be(defined)
+          }
+        }
       }
     }
 

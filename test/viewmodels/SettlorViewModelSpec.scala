@@ -108,6 +108,48 @@ class SettlorViewModelSpec extends SpecBase {
           }
         }
       }
+
+      "deceased settlor" when {
+
+        "in progress" in {
+
+          val json = Json.parse(
+            """
+              |{
+              | "name": {
+              |   "firstName": "Joe",
+              |   "lastName": "Bloggs"
+              | }
+              |}
+            """.stripMargin)
+
+          json.validate[SettlorViewModel] mustEqual JsSuccess(
+            SettlorDeceasedIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = InProgress)
+          )
+        }
+
+        "completed" in {
+
+          val json = Json.parse(
+            """
+              |{
+              | "name": {
+              |   "firstName": "Joe",
+              |   "lastName": "Bloggs"
+              | },
+              | "dateOfDeathYesNo": false,
+              | "dateOfBirthYesNo": false,
+              | "ninoYesNo": true,
+              | "nationalInsuranceNumber": "NH111111A",
+              | "status": "completed"
+              |}
+            """.stripMargin)
+
+          json.validate[SettlorViewModel] mustEqual JsSuccess(
+            SettlorDeceasedIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = Completed)
+          )
+        }
+      }
     }
   }
 }

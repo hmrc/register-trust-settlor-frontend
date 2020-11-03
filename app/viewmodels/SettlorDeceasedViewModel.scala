@@ -16,24 +16,30 @@
 
 package viewmodels
 
-import models.pages.IndividualOrBusiness
+import models.pages.IndividualOrBusiness.Individual
+import models.pages.{FullName, IndividualOrBusiness}
 import models.pages.Status
-import models.pages.Status._
+import models.pages.Status.InProgress
 
-final case class DefaultSettlorViewModel(`type` : IndividualOrBusiness,
-                                         override val status : Status
-                                        ) extends SettlorViewModel
+sealed trait SettlorDeceasedViewModel extends SettlorViewModel
 
-
-object DefaultSettlorViewModel {
+final case class SettlorDeceasedIndividualViewModel(`type` : IndividualOrBusiness,
+                                                    name : String,
+                                                    override val status : Status) extends SettlorDeceasedViewModel
+object SettlorDeceasedViewModel {
 
   import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
-  implicit lazy val reads: Reads[DefaultSettlorViewModel] =
-    ((__ \ "individualOrBusiness").read[IndividualOrBusiness] and
+  implicit lazy val reads: Reads[SettlorDeceasedViewModel] = {
+    ((__ \ "name").read[FullName].map(_.toString) and
       (__ \ "status").readWithDefault[Status](InProgress)
-      )((kind, status) =>
-      DefaultSettlorViewModel(kind, status)
-    )
+      ) ((name, status) => {
+      SettlorDeceasedIndividualViewModel(
+        Individual,
+        name,
+        status)
+    })
+  }
+
 }
