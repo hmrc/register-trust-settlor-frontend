@@ -21,14 +21,14 @@ import mapping.reads.{BusinessSettlor, IndividualSettlor}
 import models.UserAnswers
 import models.pages.PassportOrIdCardDetails
 
-class IndividualSettlorsMapper @Inject()(nameMapper: NameMapper, addressMapper: AddressMapper) extends Mapping[List[Settlor]] {
+class IndividualSettlorsMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[Settlor]] {
 
    def build(userAnswers: UserAnswers): Option[List[Settlor]] = {
      val settlors = userAnswers.get(mapping.reads.LivingSettlors).getOrElse(List.empty[IndividualSettlor])
 
      val mappedSettlors = settlors.flatMap {
        case ls: IndividualSettlor =>
-       Some(Settlor(nameMapper.build(ls.name), ls.dateOfBirth, identificationMap(ls)))
+       Some(Settlor(ls.name, ls.dateOfBirth, identificationMap(ls)))
        case _: BusinessSettlor =>
          None
      }

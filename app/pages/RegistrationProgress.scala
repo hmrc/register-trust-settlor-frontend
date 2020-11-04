@@ -20,10 +20,40 @@ import javax.inject.Inject
 import models.pages.Status.{Completed, InProgress}
 import models.UserAnswers
 import models.pages.{AddASettlor, Status}
-import pages.living_settlor.trust_type.SetUpInAdditionToWillTrustYesNoPage
+import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import sections.LivingSettlors
 
 class RegistrationProgress @Inject()() {
+
+  def settlorsStatus(userAnswers: UserAnswers): Option[Status] = {
+
+    val isDeceasedSettlorComplete: Boolean = userAnswers.get(DeceasedSettlorStatus).contains(Completed)
+
+    userAnswers.get(SetUpAfterSettlorDiedYesNoPage) match {
+      case Some(setUpAfterSettlorDied) =>
+        if (setUpAfterSettlorDied) {
+          determineStatus(isDeceasedSettlorComplete)
+        }
+        else {
+          userAnswers.get(LivingSettlors).getOrElse(Nil) match {
+            case Nil =>
+              val inAdditionToWillTrust = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage).getOrElse(false)
+              if (!inAdditionToWillTrust) {
+                Some(Status.InProgress)
+              }
+              else {
+                determineStatus(isDeceasedSettlorComplete)
+              }
+            case living =>
+              val noMoreToAdd = userAnswers.get(AddASettlorPage).contains(AddASettlor.NoComplete)
+              val isComplete = !living.exists(_.status == InProgress)
+              determineStatus(isComplete && noMoreToAdd)
+          }
+        }
+      case _ =>
+        None
+    }
+  }
 
   private def determineStatus(complete: Boolean): Option[Status] = {
     if (complete) {
@@ -31,38 +61,6 @@ class RegistrationProgress @Inject()() {
     } else {
       Some(InProgress)
     }
-  }
-
-  def settlorsStatus(userAnswers: UserAnswers): Option[Status] = {
-    val setUpAfterSettlorDied = userAnswers.get(SetUpAfterSettlorDiedYesNoPage)
-    val inAdditionToWillTrust = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage).getOrElse(false)
-
-    def isDeceasedSettlorComplete: Option[Status] = {
-      val deceasedCompleted = userAnswers.get(DeceasedSettlorStatus)
-      val isComplete = deceasedCompleted.contains(Completed)
-      determineStatus(isComplete)
-    }
-
-    setUpAfterSettlorDied match {
-      case None => None
-      case Some(setupAfterDeceased) =>
-        if (setupAfterDeceased) {isDeceasedSettlorComplete}
-        else {
-          userAnswers.get(LivingSettlors).getOrElse(Nil) match {
-            case Nil =>
-              if (!setupAfterDeceased && !inAdditionToWillTrust) {Some(Status.InProgress)}
-              else { determineStatus(true) }
-            case living =>
-              val noMoreToAdd = userAnswers.get(AddASettlorPage).contains(AddASettlor.NoComplete)
-              val isComplete = !living.exists(_.status == InProgress)
-              determineStatus(isComplete && noMoreToAdd)
-          }
-        }
-    }
-  }
-
-  def isSettlorsComplete(userAnswers: UserAnswers): Boolean = {
-      settlorsStatus(userAnswers).contains(Completed)
   }
 
 }

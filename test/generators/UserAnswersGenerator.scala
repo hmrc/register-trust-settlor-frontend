@@ -23,7 +23,8 @@ import pages._
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.trust_type._
+import pages.living_settlor.individual._
+import pages.trust_type._
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
@@ -35,7 +36,6 @@ trait UserAnswersGenerator extends TryValues {
     arbitrary[(KindOfTrustPage.type, JsValue)] ::
       arbitrary[(HoldoverReliefYesNoPage.type, JsValue)] ::
       arbitrary[(SettlorBusinessNamePage, JsValue)] ::
-      arbitrary[(RemoveSettlorPage, JsValue)] ::
       arbitrary[(SettlorIndividualPassportYesNoPage, JsValue)] ::
       arbitrary[(SettlorIndividualPassportPage, JsValue)] ::
       arbitrary[(SettlorIndividualIDCardYesNoPage, JsValue)] ::

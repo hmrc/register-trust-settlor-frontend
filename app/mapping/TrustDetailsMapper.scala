@@ -21,11 +21,13 @@ import models.UserAnswers
 import models.pages.KindOfTrust._
 import models.pages.{DeedOfVariation, KindOfTrust}
 import pages.DeceasedSettlorStatus
-import pages.living_settlor.trust_type._
+import pages.trust_type._
 import play.api.Logger
 import sections.LivingSettlors
 
 class TrustDetailsMapper extends Mapping[TrustDetailsType] {
+
+  private val logger: Logger = Logger(getClass)
 
   private def trustType(userAnswers: UserAnswers): Option[TypeOfTrust] = {
 
@@ -36,14 +38,14 @@ class TrustDetailsMapper extends Mapping[TrustDetailsType] {
 
     settlors match {
       case (Some(_), Some(_)) =>
-        Logger.info("[TrustDetailsMapper] - Cannot build trust type for Deed of variation yet")
+        logger.info("[trustType] - Cannot build trust type for Deed of variation yet")
         None
       case (Some(_), None) =>
         userAnswers.get(KindOfTrustPage).map(mapTrustTypeToDes)
       case (None, Some(_)) =>
         Some(WillTrustOrIntestacyTrust)
       case (None, None) =>
-        Logger.info("[TrustDetailsMapper] - Cannot build trust type due to no settlors")
+        logger.info("[trustType] - Cannot build trust type due to no settlors")
         None
     }
 

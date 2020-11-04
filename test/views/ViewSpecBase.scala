@@ -36,7 +36,7 @@ trait ViewSpecBase extends SpecBase {
     assert(answer == answerText, "\n\nquestion: " + questionText + " answer: " + answerText + " was not rendered on the page.\n")
   }
 
-  def assertEqualsMessage(doc: Document, cssSelector: String, sectionKey: Option[String], expectedMessageKey: String, args: Any*): Assertion =
+  def assertEqualsMessage(doc: Document, cssSelector: String, expectedMessageKey: String, args: Any*): Assertion =
     assertEqualsValue(doc, cssSelector, ViewUtils.breadcrumbTitle(messages(expectedMessageKey, args: _*)))
 
   def assertEqualsValue(doc: Document, cssSelector: String, expectedValue: String): Assertion = {
@@ -95,6 +95,10 @@ trait ViewSpecBase extends SpecBase {
 
     assert(label.text().contains(expectedText), s"\n\nLabel for $forElement was not $expectedText")
 
+    assertContainsHint(doc, forElement, expectedHintText)
+  }
+
+  def assertContainsHint(doc: Document, forElement: String, expectedHintText: Option[String]): Any = {
     if (expectedHintText.isDefined) {
       assert(doc.getElementsByClass("form-hint").first.text == expectedHintText.get,
         s"\n\nLabel for $forElement did not contain hint text $expectedHintText")
@@ -110,9 +114,10 @@ trait ViewSpecBase extends SpecBase {
     val radio = doc.getElementById(id)
     assert(radio.attr("name") == name, s"\n\nElement $id does not have name $name")
     assert(radio.attr("value") == value, s"\n\nElement $id does not have value $value")
-    isChecked match {
-      case true => assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
-      case _ => assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
+    if (isChecked) {
+      assert(radio.attr("checked") == "checked", s"\n\nElement $id is not checked")
+    } else {
+      assert(!radio.hasAttr("checked") && radio.attr("checked") != "checked", s"\n\nElement $id is checked")
     }
   }
 

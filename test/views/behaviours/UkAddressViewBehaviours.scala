@@ -32,7 +32,6 @@ trait UkAddressViewBehaviours extends ViewBehaviours {
   val form: Form[UKAddress]
 
   def ukAddressPage(createView: Form[UKAddress] => HtmlFormat.Appendable,
-                    sectionKey: Option[String],
                     messageKeyPrefix: Option[String],
                          args : String*) = {
 

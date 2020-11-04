@@ -16,7 +16,7 @@
 
 package controllers.living_settlor.business
 
-import config.annotations.LivingSettlor
+import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import forms.living_settlor.SettlorBusinessNameFormProvider
 import javax.inject.Inject
@@ -35,7 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SettlorBusinessNameController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                registrationsRepository: RegistrationsRepository,
-                                               @LivingSettlor navigator: Navigator,
+                                               @BusinessSettlor navigator: Navigator,
                                                actions: Actions,
                                                formProvider: SettlorBusinessNameFormProvider,
                                                val controllerComponents: MessagesControllerComponents,

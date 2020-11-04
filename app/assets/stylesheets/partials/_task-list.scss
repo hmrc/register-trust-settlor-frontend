@@ -51,8 +51,10 @@
 }
 
 .app-task-list__task-name {
+  display: block;
   @include media(450px) {
     float: left;
+    width: 75%;
   }
 }
 
@@ -75,15 +77,5 @@
     float: right;
     margin-top: 0;
     margin-bottom: 0;
-  }
-}
-
-.app-task-link {
-  display: block;
-}
-
-@media(min-width: 621px) {
-  .app-task-list__items {
-    padding-left: 0;
   }
 }

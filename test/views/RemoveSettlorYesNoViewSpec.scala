@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.routes
 import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -31,50 +30,26 @@ class RemoveSettlorYesNoViewSpec extends YesNoViewBehaviours {
 
   val settlorLabel = "Label"
 
-  "RemoveSettlorYesNoView" when {
+  "RemoveSettlorYesNoView" must {
 
-    "deceased settlor" must {
+    val index: Int = 0
 
-      val view = viewFor[RemoveSettlorYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[RemoveSettlorYesNoView](Some(emptyUserAnswers))
 
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(
-          form,
-          fakeDraftId,
-          routes.RemoveSettlorYesNoController.onSubmitDeceased(fakeDraftId),
-          settlorLabel
-        )(fakeRequest, messages)
+    def applyView(form: Form[_]): HtmlFormat.Appendable =
+      view.apply(
+        form,
+        index,
+        fakeDraftId,
+        settlorLabel
+      )(fakeRequest, messages)
 
-      behave like dynamicTitlePage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix, settlorLabel)
+    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, settlorLabel)
 
-      behave like pageWithBackLink(applyView(form))
+    behave like pageWithBackLink(applyView(form))
 
-      behave like yesNoPage(form, applyView, Some("taskList.settlors.label"), messageKeyPrefix, None, Seq(settlorLabel))
+    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(settlorLabel))
 
-      behave like pageWithASubmitButton(applyView(form))
-    }
-
-    "living settlor" must {
-
-      val index: Int = 0
-
-      val view = viewFor[RemoveSettlorYesNoView](Some(emptyUserAnswers))
-
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(
-          form,
-          fakeDraftId,
-          routes.RemoveSettlorYesNoController.onSubmitLiving(index, fakeDraftId),
-          settlorLabel
-        )(fakeRequest, messages)
-
-      behave like dynamicTitlePage(applyView(form), Some("taskList.settlors.label"), messageKeyPrefix, settlorLabel)
-
-      behave like pageWithBackLink(applyView(form))
-
-      behave like yesNoPage(form, applyView, Some("taskList.settlors.label"), messageKeyPrefix, None, Seq(settlorLabel))
-
-      behave like pageWithASubmitButton(applyView(form))
-    }
+    behave like pageWithASubmitButton(applyView(form))
   }
 }

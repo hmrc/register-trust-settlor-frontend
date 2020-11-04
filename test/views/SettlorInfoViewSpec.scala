@@ -16,7 +16,7 @@
 
 package views
 
-import controllers.routes
+import controllers.trust_type.routes
 import models.NormalMode
 import views.behaviours.ViewBehaviours
 import views.html.SettlorInfoView
@@ -29,7 +29,7 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, Some("taskList.settlors.label"), "settlorInfo",
+    behave like normalPage(applyView, "settlorInfo",
       "caption",
       "subheading1",
       "paragraph1",
@@ -53,6 +53,6 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
 
-    behave like pageWithContinueButton(applyView,routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url )
+    behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url )
   }
 }

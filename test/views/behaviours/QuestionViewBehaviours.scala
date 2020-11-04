@@ -31,7 +31,6 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
   def pageWithTextFields(form: Form[A],
                          createView: Form[A] => HtmlFormat.Appendable,
-                         sectionKey: Option[String],
                          messageKeyPrefix: String,
                          fields: Seq[(String, Option[String])],
                          args: String*) = {
@@ -89,9 +88,15 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
           assertContainsLabel(doc, fieldName, messages(s"$messageKeyPrefix.$fieldName"), fieldHint)
         }
 
-        s"show an error associated with the field '$field'" in {
+        s"show an error associated with the field '${field._1}'" in {
 
-          val doc = asDocument(createView(form.withError(FormError(field._1, "error"))))
+          val fieldId = if(field._1.contains("_")) {
+            field._1.replace("_", ".")
+          } else {
+            field._1
+          }
+
+          val doc = asDocument(createView(form.withError(FormError(fieldId, "error"))))
 
           val errorSpan = doc.getElementsByClass("error-message").first
 
@@ -113,7 +118,6 @@ trait QuestionViewBehaviours[A] extends ViewBehaviours {
 
   def pageWithDateFields(form: Form[A],
                          createView: Form[A] => HtmlFormat.Appendable,
-                         sectionKey: Option[String],
                          messageKeyPrefix: String,
                          key: String,
                          args: String*) = {

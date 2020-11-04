@@ -25,9 +25,9 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsPath, JsValue}
 import play.api.mvc._
 import repositories.RegistrationsRepository
-import sections.{DeceasedSettlor, LivingSettlors}
+import sections.LivingSettlors
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import viewmodels.{SettlorBusinessTypeViewModel, SettlorDeceasedIndividualViewModel, SettlorLivingIndividualViewModel, SettlorViewModel}
+import viewmodels.{SettlorBusinessTypeViewModel, SettlorLivingIndividualViewModel, SettlorViewModel}
 import views.html.RemoveSettlorYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,75 +43,46 @@ class RemoveSettlorYesNoController @Inject()(
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlors.removeYesNo")
 
-  private val deceasedPath: JsPath = DeceasedSettlor.path
+  private def path(index: Int): JsPath = LivingSettlors.path \ index
 
-  private def livingPath(index: Int): JsPath = LivingSettlors.path \ index
-
-  def onPageLoadLiving(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
-      onPageLoad(draftId, routes.RemoveSettlorYesNoController.onSubmitLiving(index, draftId), livingPath(index))
-  }
-
-  def onPageLoadDeceased(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
-
-      onPageLoad(draftId, routes.RemoveSettlorYesNoController.onSubmitDeceased(draftId), deceasedPath)
-  }
-
-  private def onPageLoad(draftId: String, route: Call, path: JsPath)
-                        (implicit request: RegistrationDataRequest[AnyContent]): Result = {
-
-    Ok(view(form, draftId, route, label(request.userAnswers.data, path)))
-  }
-
-  def onSubmitLiving(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      onSubmit(
+      Ok(view(
+        form,
+        index,
         draftId,
-        routes.RemoveSettlorYesNoController.onSubmitLiving(index, draftId),
-        livingPath(index)
-      )
+        label(request.userAnswers.data, path(index))
+      ))
   }
 
-  def onSubmitDeceased(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
-      onSubmit(
-        draftId,
-        routes.RemoveSettlorYesNoController.onSubmitDeceased(draftId),
-        deceasedPath
-      )
-  }
+      form.bindFromRequest().fold(
+        (formWithErrors: Form[_]) =>
+          Future.successful(BadRequest(view(
+            formWithErrors,
+            index,
+            draftId,
+            label(request.userAnswers.data, path(index))
+          ))),
 
-  private def onSubmit(draftId: String, route: Call, path: JsPath)
-                      (implicit request: RegistrationDataRequest[AnyContent]): Future[Result] = {
-
-    form.bindFromRequest().fold(
-      (formWithErrors: Form[_]) =>
-        Future.successful(BadRequest(view(
-          formWithErrors,
-          draftId,
-          route,
-          label(request.userAnswers.data, path)
-        ))),
-
-      remove => {
-        if (remove) {
-          for {
-            updatedAnswers <- Future.fromTry(
-              request.userAnswers.deleteAtPath(path)
-            )
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield {
-            Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+        remove => {
+          if (remove) {
+            for {
+              updatedAnswers <- Future.fromTry(
+                request.userAnswers.deleteAtPath(path(index))
+              )
+              _ <- registrationsRepository.set(updatedAnswers)
+            } yield {
+              Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+            }
+          } else {
+            Future.successful(Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId)))
           }
-        } else {
-          Future.successful(Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId)))
         }
-      }
-    )
+      )
   }
 
   private def label(json: JsValue, path: JsPath)
@@ -124,7 +95,6 @@ class RemoveSettlorYesNoController @Inject()(
       settlor <- pick.validate[SettlorViewModel]
     } yield {
       settlor match {
-        case deceased: SettlorDeceasedIndividualViewModel => deceased.name
         case individual: SettlorLivingIndividualViewModel => individual.name
         case business: SettlorBusinessTypeViewModel => business.name
         case _ => default

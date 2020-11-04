@@ -24,31 +24,26 @@ import models.pages.Status.InProgress
 sealed trait SettlorBusinessViewModel extends SettlorViewModel
 
 final case class SettlorBusinessTypeViewModel(`type` : IndividualOrBusiness,
-                                                  name : String,
-                                                  override val status : Status) extends SettlorBusinessViewModel
+                                              name : String,
+                                              override val status : Status) extends SettlorBusinessViewModel
+
 object SettlorBusinessViewModel {
 
   import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
   implicit lazy val reads: Reads[SettlorBusinessViewModel] = {
-
-    val businessNameReads: Reads[SettlorBusinessViewModel] =
-    {
-      (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Business).flatMap { _ =>
-        ((__ \ "businessName").read[String] and
-          (__ \ "status").readWithDefault[Status](InProgress)
-          ) ((name, status) => {
-          SettlorBusinessTypeViewModel(
-            Business,
-            name,
-            status)
-        })
-      }
+    (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Business).flatMap { _ =>
+      ((__ \ "businessName").read[String] and
+        (__ \ "status").readWithDefault[Status](InProgress)
+        ) ((name, status) => {
+        SettlorBusinessTypeViewModel(
+          Business,
+          name,
+          status
+        )
+      })
     }
-
-    businessNameReads
-
   }
 
 }

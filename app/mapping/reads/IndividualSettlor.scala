@@ -18,10 +18,9 @@ package mapping.reads
 
 import java.time.LocalDate
 
-import models.pages.{Address, FullName}
-import models.pages.PassportOrIdCardDetails
-import play.api.libs.json.{Format, Json}
-
+import models.pages.{Address, FullName, PassportOrIdCardDetails}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{Reads, __}
 
 final case class IndividualSettlor(name: FullName,
                                    dateOfBirth: Option[LocalDate],
@@ -33,7 +32,15 @@ final case class IndividualSettlor(name: FullName,
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 }
 
-object IndividualSettlor {
-  implicit val classFormat: Format[IndividualSettlor] = Json.format[IndividualSettlor]
+object IndividualSettlor extends SettlorReads {
+
+  implicit lazy val reads: Reads[IndividualSettlor] = {
+    ((__ \ "name").read[FullName] and
+      (__ \ "dateOfBirth").readNullable[LocalDate] and
+      (__ \ "nino").readNullable[String] and
+      readAddress() and
+      (__ \ "passport").readNullable[PassportOrIdCardDetails] and
+      (__ \ "idCard").readNullable[PassportOrIdCardDetails])(IndividualSettlor.apply _)
+  }
 }
 

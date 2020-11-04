@@ -22,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], draftId: String, onSubmit: Call, settlor: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String, settlor: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlors.removeYesNo.title")}"
 ) {
 
-    @formHelper(action = onSubmit, 'autoComplete -> "off") {
+    @formHelper(action = RemoveSettlorYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

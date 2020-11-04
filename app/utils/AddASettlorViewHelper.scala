@@ -16,61 +16,41 @@
 
 package utils
 
-import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.living_settlor.{routes => individualRoutes}
+import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.routes
-import models.NormalMode
-import models.UserAnswers
 import models.pages.Status._
+import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
-import sections.{DeceasedSettlor, LivingSettlors}
-import viewmodels.{SettlorViewModel, _}
-import viewmodels.{AddRow, AddToRows}
+import sections.LivingSettlors
+import viewmodels.{AddRow, AddToRows, SettlorViewModel, _}
 
 class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages) {
 
-  def rows: AddToRows =
-    deceasedSettlors match {
-      case Some(s: SettlorViewModel) if s.status equals Completed =>
-        AddToRows(
-          inProgress = livingSettlors._2.flatMap(parseSettlor),
-          complete = livingSettlors._1.flatMap(parseSettlor) :+ parseToRows(s, 0)
-        )
-      case Some(s: SettlorViewModel) if s.status equals InProgress =>
-        AddToRows(
-          inProgress = livingSettlors._2.flatMap(parseSettlor) :+ parseToRows(s, 0),
-          complete = livingSettlors._1.flatMap(parseSettlor)
-        )
-      case _ =>
-        AddToRows(
-          inProgress = livingSettlors._2.flatMap(parseSettlor),
-          complete = livingSettlors._1.flatMap(parseSettlor)
-        )
-    }
+  def rows: AddToRows = AddToRows(
+    inProgress = livingSettlors._2.flatMap(parseSettlor),
+    complete = livingSettlors._1.flatMap(parseSettlor)
+  )
 
-  val livingSettlors =
+  private val livingSettlors: (List[(SettlorViewModel, Int)], List[(SettlorViewModel, Int)]) =
     userAnswers.get(LivingSettlors)
       .toList
       .flatten
       .zipWithIndex
       .partition(_._1.status == Completed)
 
-  val deceasedSettlors =
-    userAnswers.get(DeceasedSettlor)
-
   private def parseSettlor(settlor: (SettlorViewModel, Int)): Option[AddRow] = {
     val vm = settlor._1
     val index = settlor._2
 
-    Some(parseToRows(vm, index))
+    parseToRow(vm, index)
   }
 
-  private def parseToRows(vm: SettlorViewModel, index: Int): AddRow = {
+  private def parseToRow(vm: SettlorViewModel, index: Int): Option[AddRow] = {
 
     vm match {
 
-      case SettlorLivingIndividualViewModel(_, name, status) => AddRow(
+      case SettlorLivingIndividualViewModel(_, name, status) => Some(AddRow(
         name = name,
         typeLabel = messages("entity.settlor.individual"),
         changeUrl = if (status == InProgress) {
@@ -78,10 +58,10 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         } else {
           individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
         },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, draftId).url
-      )
+        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
+      ))
 
-      case SettlorBusinessTypeViewModel(_, name, status) => AddRow(
+      case SettlorBusinessTypeViewModel(_, name, status) => Some(AddRow(
         name = name,
         typeLabel = messages("entity.settlor.business"),
         changeUrl = if (status == InProgress) {
@@ -89,33 +69,11 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         } else {
           businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId).url
         },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, draftId).url
-      )
+        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
+      ))
 
-      case SettlorDeceasedIndividualViewModel(_, name, status) => AddRow(
-        name = name,
-        typeLabel = messages("entity.settlor.deceased"),
-        changeUrl = if (status == InProgress) {
-          deceasedRoutes.SettlorsNameController.onPageLoad(NormalMode, draftId).url
-        } else {
-          deceasedRoutes.DeceasedSettlorAnswerController.onPageLoad(draftId).url
-        },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadDeceased(draftId).url
-      )
-
-      case DefaultSettlorViewModel(_, status) => AddRow(
-        name = messages("entities.no.name.added"),
-        typeLabel = messages("entity.settlor.individual"),
-        changeUrl = if (status == InProgress) {
-          individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url
-        } else {
-          individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
-        },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoadLiving(index, draftId).url
-      )
-
+      case _ =>
+        None
     }
-
   }
-
 }
