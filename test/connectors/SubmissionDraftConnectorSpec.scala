@@ -28,7 +28,7 @@ import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
 import play.api.test.Helpers.CONTENT_TYPE
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import utils.WireMockHelper
 
 import scala.concurrent.Await
@@ -119,6 +119,26 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
         val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection), Duration.Inf)
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
         result.data mustBe draftData
+      }
+    }
+
+    ".removeRoleInCompanyAnswers" must {
+
+      val removeRoleInCompanyAnswersUrl = s"$submissionsUrl/$testDraftId/set/beneficiaries/remove-role-in-company"
+
+      "return HttpResponse" in {
+
+        server.stubFor(
+          post(urlEqualTo(removeRoleInCompanyAnswersUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+            )
+        )
+
+        val result: HttpResponse = Await.result(connector.removeRoleInCompanyAnswers(testDraftId), Duration.Inf)
+
+        result.status mustBe Status.OK
       }
     }
   }

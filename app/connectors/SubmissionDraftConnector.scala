@@ -64,4 +64,9 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
     val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
   }
+
+  def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val url: String = s"$submissionsBaseUrl/$draftId/set/$beneficiariesSection/remove-role-in-company"
+    http.POSTEmpty[HttpResponse](url)
+  }
 }

@@ -31,7 +31,7 @@ import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business.SettlorBusinessAnswerPage
 import pages.trust_type.KindOfTrustPage
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents, Result}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -80,18 +80,16 @@ class SettlorBusinessAnswerController @Inject()(
 
       Future.fromTry(answers) flatMap { updatedAnswers =>
 
-        lazy val redirect: Result = Redirect(navigator.nextPage(SettlorBusinessAnswerPage, NormalMode, draftId)(updatedAnswers))
-
-        if (updatedAnswers.get(KindOfTrustPage).contains(Employees)){
-          for {
-            _ <- draftRegistrationService.setBeneficiaryStatus(draftId)
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield redirect
-        } else {
-          registrationsRepository.set(updatedAnswers) map { _ =>
-            redirect
+        for {
+          _ <- {
+            if (updatedAnswers.get(KindOfTrustPage).contains(Employees)) {
+              draftRegistrationService.setBeneficiaryStatus(draftId)
+            } else {
+              draftRegistrationService.removeRoleInCompanyAnswers(draftId)
+            }
           }
-        }
+          _ <- registrationsRepository.set(updatedAnswers)
+        } yield Redirect(navigator.nextPage(SettlorBusinessAnswerPage, NormalMode, draftId)(updatedAnswers))
       }
   }
 }

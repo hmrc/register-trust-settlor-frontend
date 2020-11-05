@@ -31,6 +31,7 @@ import play.api.Application
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
@@ -358,11 +359,14 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "not update beneficiary status when kindOfTrustPage is not set to Employees" in {
+    "remove role in company answers when kindOfTrustPage is not set to Employees" in {
 
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+
+      when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -373,7 +377,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verifyZeroInteractions(mockCreateDraftRegistrationService)
+      verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
 
       application.stop()
     }

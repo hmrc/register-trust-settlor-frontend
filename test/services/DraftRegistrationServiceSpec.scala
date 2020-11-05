@@ -25,7 +25,7 @@ import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
 import play.api.libs.json.Json
 import repositories.RegistrationsRepository
-import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
@@ -223,6 +223,20 @@ class DraftRegistrationServiceSpec extends SpecBase {
             verify(mockRepository, times(1)).setAllStatus(any(), any())(any())
           }
         }
+      }
+    }
+
+    ".removeRoleInCompanyAnswers" must {
+      "return Http response" in {
+
+        val status: Int = 200
+
+        when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(status)))
+
+        val result = Await.result(service.removeRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
+
+        result.status mustBe status
       }
     }
   }
