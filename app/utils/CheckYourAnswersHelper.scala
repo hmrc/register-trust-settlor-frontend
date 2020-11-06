@@ -32,7 +32,7 @@ import play.twirl.api.HtmlFormat
 import sections.LivingSettlors
 import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorDeceasedViewModel, SettlorLivingViewModel}
+import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorLivingViewModel}
 
 class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
                                       (userAnswers: UserAnswers,
@@ -42,37 +42,21 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
 
   def deceasedSettlor: Option[Seq[AnswerSection]] = {
 
-    val questions = Seq(
-      setUpAfterSettlorDied,
-      kindOfTrust,
-      setUpInAddition,
-
-      deceasedSettlorsName,
-      deceasedSettlorDateOfDeathYesNo,
-      deceasedSettlorDateOfDeath,
-      deceasedSettlorDateOfBirthYesNo,
-      deceasedSettlorsDateOfBirth,
-      deceasedSettlorsNINoYesNo,
-      deceasedSettlorNationalInsuranceNumber,
-      deceasedSettlorsLastKnownAddressYesNo,
-      wasSettlorsAddressUKYesNo,
-      deceasedSettlorsUKAddress,
-      deceasedSettlorsInternationalAddress
-    ).flatten
-
-    if (deceasedSettlorsName.nonEmpty)
+    if (deceasedSettlorsName.nonEmpty) {
       Some(Seq(AnswerSection(
         headingKey = None,
-        questions,
+        deceasedSettlorQuestions,
         sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
       )))
-    else None
+    } else {
+      None
+    }
   }
 
   val deceasedSettlorQuestions: Seq[AnswerRow] = Seq(
-    setUpAfterSettlorDied,
+    wasSetUpAfterSettlorDied,
     kindOfTrust,
-    setUpInAddition,
+    wasSetUpInAdditionToWillTrust,
 
     deceasedSettlorsName,
     deceasedSettlorDateOfDeathYesNo,
@@ -96,8 +80,8 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       case (settlor, index) =>
 
         val questions: Seq[AnswerRow] = settlor match {
-          case model: SettlorLivingViewModel => settlorIndividualQuestions(index)
-          case model: SettlorBusinessViewModel => settlorBusinessQuestions(index)
+          case _: SettlorLivingViewModel => settlorIndividualQuestions(index)
+          case _: SettlorBusinessViewModel => settlorBusinessQuestions(index)
           case _ => Nil
         }
 
@@ -112,9 +96,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
   }
 
   def trustTypeQuestions(index: Int): Seq[AnswerRow] = Seq(
-    setUpAfterSettlorDied,
+    wasSetUpAfterSettlorDied,
     kindOfTrust,
-    setUpInAddition,
+    wasSetUpInAdditionToWillTrust,
     deedOfVariation,
     holdoverReliefYesNo,
     efrbsYesNo,
@@ -449,8 +433,6 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  
-
   private def wasSettlorsAddressUKYesNo: Option[AnswerRow] = userAnswers.get(WasSettlorsAddressUKYesNoPage) map {
     x =>
       AnswerRow(
@@ -462,7 +444,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  private def setUpAfterSettlorDied: Option[AnswerRow] = userAnswers.get(SetUpAfterSettlorDiedYesNoPage) map {
+  private def wasSetUpAfterSettlorDied: Option[AnswerRow] = userAnswers.get(SetUpAfterSettlorDiedYesNoPage) map {
     x =>
       AnswerRow(
         "setUpAfterSettlorDied.checkYourAnswersLabel",
@@ -472,7 +454,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       )
   }
 
-  private def setUpInAddition: Option[AnswerRow] = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) map {
+  private def wasSetUpInAdditionToWillTrust: Option[AnswerRow] = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) map {
     x =>
       AnswerRow(
         "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel",
