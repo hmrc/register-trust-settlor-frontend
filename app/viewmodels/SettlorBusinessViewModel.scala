@@ -23,9 +23,9 @@ import models.pages.Status.InProgress
 
 sealed trait SettlorBusinessViewModel extends SettlorViewModel
 
-final case class SettlorBusinessTypeViewModel(`type` : IndividualOrBusiness,
-                                              name : String,
-                                              override val status : Status) extends SettlorBusinessViewModel
+final case class SettlorBusinessTypeViewModel(`type`: IndividualOrBusiness,
+                                              name: Option[String],
+                                              override val status: Status) extends SettlorBusinessViewModel
 
 object SettlorBusinessViewModel {
 
@@ -34,7 +34,7 @@ object SettlorBusinessViewModel {
 
   implicit lazy val reads: Reads[SettlorBusinessViewModel] = {
     (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Business).flatMap { _ =>
-      ((__ \ "businessName").read[String] and
+      ((__ \ "businessName").readNullable[String] and
         (__ \ "status").readWithDefault[Status](InProgress)
         ) ((name, status) => {
         SettlorBusinessTypeViewModel(

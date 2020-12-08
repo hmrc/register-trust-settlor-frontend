@@ -23,9 +23,9 @@ import models.pages.Status.InProgress
 
 sealed trait SettlorLivingViewModel extends SettlorViewModel
 
-final case class SettlorLivingIndividualViewModel(`type` : IndividualOrBusiness,
-                                                  name : String,
-                                                  override val status : Status) extends SettlorLivingViewModel
+final case class SettlorLivingIndividualViewModel(`type`: IndividualOrBusiness,
+                                                  name: Option[String],
+                                                  override val status: Status) extends SettlorLivingViewModel
 
 object SettlorLivingViewModel {
 
@@ -34,7 +34,7 @@ object SettlorLivingViewModel {
 
   implicit lazy val reads: Reads[SettlorLivingViewModel] = {
     (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Individual).flatMap { _ =>
-      ((__ \ "name").read[FullName].map(_.toString) and
+      ((__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
         (__ \ "status").readWithDefault[Status](InProgress)
         ) ((name, status) => {
         SettlorLivingIndividualViewModel(

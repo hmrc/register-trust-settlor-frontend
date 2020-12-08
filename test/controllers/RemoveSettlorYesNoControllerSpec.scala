@@ -43,18 +43,23 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
   lazy val removeLivingSettlorYesNoRoute: String = routes.RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
 
+  val defaultName: String = "the settlor"
   val name: FullName = FullName("John", None, "Doe")
   val businessName: String = "Google Ltd"
 
-  val individualUserAnswers: UserAnswers = emptyUserAnswers
+  val baseIndividualUserAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+
+  val individualUserAnswers: UserAnswers = baseIndividualUserAnswers
     .set(SettlorIndividualNamePage(index), name).success.value
     .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
     .set(SettlorIndividualNINOYesNoPage(index), true).success.value
     .set(SettlorIndividualNINOPage(index), "nino").success.value
 
-  val businessUserAnswers: UserAnswers = emptyUserAnswers
+  val baseBusinessUserAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorIndividualOrBusinessPage(index), Business).success.value
+
+  val businessUserAnswers: UserAnswers = baseBusinessUserAnswers
     .set(SettlorBusinessNamePage(index), businessName).success.value
     .set(SettlorBusinessUtrYesNoPage(index), true).success.value
     .set(SettlorBusinessUtrPage(index), "utr").success.value
@@ -63,50 +68,102 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" when {
 
-      "individual" in {
+      "individual" when {
 
-        val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
+        "complete" in {
 
-        val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
+          val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
 
-        val result = route(application, request).value
+          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
 
-        val view = application.injector.instanceOf[RemoveSettlorYesNoView]
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
+          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
 
-        contentAsString(result) mustEqual
-          view(
-            form,
-            index,
-            fakeDraftId,
-            name.toString
-          )(request, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(
+              form,
+              index,
+              fakeDraftId,
+              name.toString
+            )(request, messages).toString
+
+          application.stop()
+        }
+
+        "in progress" in {
+
+          val application = applicationBuilder(userAnswers = Some(baseIndividualUserAnswers)).build()
+
+          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              form,
+              index,
+              fakeDraftId,
+              defaultName
+            )(request, messages).toString
+
+          application.stop()
+        }
       }
 
-      "business" in {
+      "business" when {
 
-        val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
+        "complete" in {
 
-        val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
+          val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
 
-        val result = route(application, request).value
+          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
 
-        val view = application.injector.instanceOf[RemoveSettlorYesNoView]
+          val result = route(application, request).value
 
-        status(result) mustEqual OK
+          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
 
-        contentAsString(result) mustEqual
-          view(
-            form,
-            index,
-            fakeDraftId,
-            businessName
-          )(request, messages).toString
+          status(result) mustEqual OK
 
-        application.stop()
+          contentAsString(result) mustEqual
+            view(
+              form,
+              index,
+              fakeDraftId,
+              businessName
+            )(request, messages).toString
+
+          application.stop()
+        }
+
+        "in progress" in {
+
+          val application = applicationBuilder(userAnswers = Some(baseBusinessUserAnswers)).build()
+
+          val request = FakeRequest(GET, removeLivingSettlorYesNoRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[RemoveSettlorYesNoView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(
+              form,
+              index,
+              fakeDraftId,
+              defaultName
+            )(request, messages).toString
+
+          application.stop()
+        }
       }
     }
 

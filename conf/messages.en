@@ -26,6 +26,8 @@ error.required = Please enter a value
 error.summary.title = There is a problem
 error.postcodeInvalid = Enter a real postcode
 
+entities.no.name.added = No name added
+
 index.title = register-trust-settlor-frontend
 index.heading = register-trust-settlor-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.

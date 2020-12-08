@@ -36,16 +36,12 @@ class SettlorViewModelSpec extends SpecBase {
             val json = Json.parse(
               """
                 |{
-                | "individualOrBusiness": "individual",
-                | "name": {
-                |   "firstName": "Joe",
-                |   "lastName": "Bloggs"
-                | }
+                | "individualOrBusiness": "individual"
                 |}
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorLivingIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = InProgress)
+              SettlorLivingIndividualViewModel(`type` = Individual, name = None, status = InProgress)
             )
           }
 
@@ -67,7 +63,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorLivingIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = Completed)
+              SettlorLivingIndividualViewModel(`type` = Individual, name = Some("Joe Bloggs"), status = Completed)
             )
           }
         }
@@ -79,13 +75,12 @@ class SettlorViewModelSpec extends SpecBase {
             val json = Json.parse(
               """
                 |{
-                | "individualOrBusiness": "business",
-                | "businessName": "Business Ltd."
+                | "individualOrBusiness": "business"
                 |}
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorBusinessTypeViewModel(`type` = Business, name = "Business Ltd.", status = InProgress)
+              SettlorBusinessTypeViewModel(`type` = Business, name = None, status = InProgress)
             )
           }
 
@@ -103,7 +98,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorBusinessTypeViewModel(`type` = Business, name = "Business Ltd.", status = Completed)
+              SettlorBusinessTypeViewModel(`type` = Business, name = Some("Business Ltd."), status = Completed)
             )
           }
         }
