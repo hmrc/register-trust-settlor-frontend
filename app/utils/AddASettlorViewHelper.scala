@@ -46,12 +46,14 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
     parseToRow(vm, index)
   }
 
+  private val defaultName = messages("entities.no.name.added")
+
   private def parseToRow(vm: SettlorViewModel, index: Int): Option[AddRow] = {
 
     vm match {
 
       case SettlorLivingIndividualViewModel(_, name, status) => Some(AddRow(
-        name = name,
+        name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.individual"),
         changeUrl = if (status == InProgress) {
           individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url
@@ -62,7 +64,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
       ))
 
       case SettlorBusinessTypeViewModel(_, name, status) => Some(AddRow(
-        name = name,
+        name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.business"),
         changeUrl = if (status == InProgress) {
           businessRoutes.SettlorBusinessNameController.onPageLoad(NormalMode, index, draftId).url

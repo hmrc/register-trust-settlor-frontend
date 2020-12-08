@@ -95,8 +95,8 @@ class RemoveSettlorYesNoController @Inject()(
       settlor <- pick.validate[SettlorViewModel]
     } yield {
       settlor match {
-        case individual: SettlorLivingIndividualViewModel => individual.name
-        case business: SettlorBusinessTypeViewModel => business.name
+        case individual: SettlorLivingIndividualViewModel => individual.name.getOrElse(default)
+        case business: SettlorBusinessTypeViewModel => business.name.getOrElse(default)
         case _ => default
       }
     }).getOrElse(default)

@@ -21,9 +21,7 @@ import models.pages.Status
 import scala.language.implicitConversions
 
 trait SettlorViewModel {
-
-  val status : Status
-
+  val status: Status
 }
 
 object SettlorViewModel {
