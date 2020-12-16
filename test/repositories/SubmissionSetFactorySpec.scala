@@ -98,7 +98,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             result mustBe List(
               AnswerSection(
-                Some(messages("answerPage.section.settlor.subheading")),
+                Some(messages("answerPage.section.settlor.subheading", 1)),
                 Seq(
                   AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", ""),
                   AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", ""),
@@ -125,7 +125,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             result mustBe List(
               AnswerSection(
-                Some(messages("answerPage.section.settlor.subheading")),
+                Some(messages("answerPage.section.settlor.subheading", 1)),
                 Seq(
                   AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", ""),
                   AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", ""),
