@@ -109,6 +109,10 @@ entity.settlor.individual = Individual Settlor
 entity.settlor.business = Business Settlor
 entity.settlor.deceased = Will Trust
 
+answerPage.section.deceasedSettlor.heading = Settlor
+answerPage.section.settlors.heading = Settlors
+answerPage.section.settlor.subheading = Settlor {0}
+
 entities.no.name.added = No name added
 entities.no.value.added = No value added
 entities.no.address.added = No address added
