@@ -22,7 +22,7 @@ import controllers.routes._
 import models.pages._
 import models.{NormalMode, UserAnswers}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, when}
+import org.mockito.Mockito.{reset, verify, when}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
@@ -269,12 +269,17 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
     "update beneficiary status when kindOfTrustPage is set to Employees" in {
 
+      reset(mockCreateDraftRegistrationService)
+
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
       when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
         .thenReturn(Future.successful(true))
+
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -286,17 +291,23 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
       verify(mockCreateDraftRegistrationService).setBeneficiaryStatus(any())(any())
+      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }
 
     "remove role in company answers when kindOfTrustPage is not set to Employees" in {
 
+      reset(mockCreateDraftRegistrationService)
+
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
       when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -309,6 +320,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
       verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
+      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }

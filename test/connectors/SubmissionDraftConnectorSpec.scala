@@ -16,8 +16,6 @@
 
 package connectors
 
-import java.time.LocalDateTime
-
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.pages.Status.InProgress
 import models.{RegistrationSubmission, SubmissionDraftResponse}
@@ -31,6 +29,7 @@ import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import utils.WireMockHelper
 
+import java.time.LocalDateTime
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
@@ -137,6 +136,46 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
         )
 
         val result: HttpResponse = Await.result(connector.removeRoleInCompanyAnswers(testDraftId), Duration.Inf)
+
+        result.status mustBe Status.OK
+      }
+    }
+
+    ".removeDeceasedSettlorMappedPiece" must {
+
+      val removeDeceasedSettlorMappedPieceUrl = s"$submissionsUrl/$testDraftId/remove-mapped-piece/deceased-settlor"
+
+      "return HttpResponse" in {
+
+        server.stubFor(
+          post(urlEqualTo(removeDeceasedSettlorMappedPieceUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+            )
+        )
+
+        val result: HttpResponse = Await.result(connector.removeDeceasedSettlorMappedPiece(testDraftId), Duration.Inf)
+
+        result.status mustBe Status.OK
+      }
+    }
+
+    ".removeLivingSettlorsSettlorMappedPiece" must {
+
+      val removeLivingSettlorsMappedPieceUrl = s"$submissionsUrl/$testDraftId/remove-mapped-piece/living-settlors"
+
+      "return HttpResponse" in {
+
+        server.stubFor(
+          post(urlEqualTo(removeLivingSettlorsMappedPieceUrl))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+            )
+        )
+
+        val result: HttpResponse = Await.result(connector.removeLivingSettlorsMappedPiece(testDraftId), Duration.Inf)
 
         result.status mustBe Status.OK
       }

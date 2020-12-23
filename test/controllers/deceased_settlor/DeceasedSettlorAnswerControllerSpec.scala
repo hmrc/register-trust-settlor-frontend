@@ -16,23 +16,25 @@
 
 package controllers.deceased_settlor
 
-import java.time.LocalDate
-
 import base.SpecBase
 import controllers.routes._
-import models.{NormalMode, UserAnswers}
 import models.pages.{FullName, InternationalAddress, UKAddress}
+import models.{NormalMode, UserAnswers}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.{reset, verify, when}
 import pages.deceased_settlor._
 import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
 import play.api.Application
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.HttpResponse
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class DeceasedSettlorAnswerControllerSpec extends SpecBase {
@@ -100,7 +102,6 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
           .set(WasSettlorsAddressUKYesNoPage, false).success.value
           .set(SettlorsInternationalAddressPage, InternationalAddress("Line1", "Line2", None, "Country")).success.value
 
-
       val countryOptions = injector.instanceOf[CountryOptions]
 
       val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
@@ -149,7 +150,6 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, deceasedSettlorsAnswerRoute)
 
-
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
@@ -161,7 +161,6 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
 
     "redirect to SettlorNamePage when settlor name is not answered" in {
 
-
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request = FakeRequest(GET, deceasedSettlorsAnswerRoute)
@@ -171,6 +170,30 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode, fakeDraftId).url
+
+      application.stop()
+    }
+
+    "remove living settlors mapped piece for a POST" in {
+
+      reset(mockCreateDraftRegistrationService)
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
+
+      when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(POST, deceasedSettlorsAnswerRoute)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+      redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
+
+      verify(mockCreateDraftRegistrationService).removeLivingSettlorsMappedPiece(any())(any())
 
       application.stop()
     }

@@ -19,7 +19,6 @@ package controllers.deceased_settlor
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
-import javax.inject.Inject
 import models.NormalMode
 import models.pages.Status.Completed
 import navigation.Navigator
@@ -28,12 +27,14 @@ import pages.deceased_settlor.DeceasedSettlorAnswerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.CheckYourAnswersHelper
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DeceasedSettlorAnswerController @Inject()(
@@ -44,7 +45,8 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  requireName: NameRequiredActionProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeceasedSettlorAnswerView,
-                                                 countryOptions : CountryOptions
+                                                 countryOptions : CountryOptions,
+                                                 draftRegistrationService: DraftRegistrationService
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
@@ -67,7 +69,8 @@ class DeceasedSettlorAnswerController @Inject()(
 
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(DeceasedSettlorStatus, Completed))
-        _              <- registrationsRepository.set(updatedAnswers)
+        _ <- registrationsRepository.set(updatedAnswers)
+        _ <- draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
       } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, NormalMode, draftId)(request.userAnswers))
   }
 }

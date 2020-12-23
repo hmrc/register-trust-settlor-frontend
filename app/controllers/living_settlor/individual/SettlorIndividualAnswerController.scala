@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
-import javax.inject.Inject
 import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
@@ -39,6 +38,7 @@ import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorIndividualAnswerController @Inject()(
@@ -75,20 +75,18 @@ class SettlorIndividualAnswerController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
 
-      val answers = request.userAnswers.set(LivingSettlorStatus(index), Completed)
-
-      Future.fromTry(answers) flatMap { updatedAnswers =>
-
-        for {
-          _ <- {
-            if (updatedAnswers.get(KindOfTrustPage).contains(Employees)) {
-              draftRegistrationService.setBeneficiaryStatus(draftId)
-            } else {
-              draftRegistrationService.removeRoleInCompanyAnswers(draftId)
-            }
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(LivingSettlorStatus(index), Completed))
+        _ <- registrationsRepository.set(updatedAnswers)
+        _ <- {
+          if (updatedAnswers.get(KindOfTrustPage).contains(Employees)) {
+            draftRegistrationService.setBeneficiaryStatus(draftId)
+          } else {
+            draftRegistrationService.removeRoleInCompanyAnswers(draftId)
           }
-          _ <- registrationsRepository.set(updatedAnswers)
-        } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(updatedAnswers))
-      }
+        }
+        _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
+      } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(updatedAnswers))
   }
+
 }

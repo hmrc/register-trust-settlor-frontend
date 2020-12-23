@@ -337,12 +337,17 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
     "update beneficiary status when kindOfTrustPage is set to Employees" in {
 
+      reset(mockCreateDraftRegistrationService)
+
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
         .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
       when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
         .thenReturn(Future.successful(true))
+
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -353,19 +358,24 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService)
-        .setBeneficiaryStatus(any())(any())
+      verify(mockCreateDraftRegistrationService).setBeneficiaryStatus(any())(any())
+      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }
 
     "remove role in company answers when kindOfTrustPage is not set to Employees" in {
 
+      reset(mockCreateDraftRegistrationService)
+
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
       when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
+        .thenReturn(Future.successful(HttpResponse(OK)))
+
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK)))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -378,6 +388,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
       verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
+      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }
