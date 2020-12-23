@@ -46,7 +46,7 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeceasedSettlorAnswerView,
                                                  countryOptions : CountryOptions,
-                                                 draftRegistrationService: DraftRegistrationService,
+                                                 draftRegistrationService: DraftRegistrationService
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
