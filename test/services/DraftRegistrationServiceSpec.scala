@@ -16,8 +16,6 @@
 
 package services
 
-import java.time.LocalDateTime
-
 import base.SpecBase
 import connectors.SubmissionDraftConnector
 import models.{AllStatus, SubmissionDraftResponse}
@@ -27,6 +25,7 @@ import play.api.libs.json.Json
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
@@ -235,6 +234,34 @@ class DraftRegistrationServiceSpec extends SpecBase {
           .thenReturn(Future.successful(HttpResponse(status)))
 
         val result = Await.result(service.removeRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
+
+        result.status mustBe status
+      }
+    }
+
+    ".removeDeceasedSettlorMappedPiece" must {
+      "return Http response" in {
+
+        val status: Int = 200
+
+        when(mockConnector.removeDeceasedSettlorMappedPiece(any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(status)))
+
+        val result = Await.result(service.removeDeceasedSettlorMappedPiece(fakeDraftId), Duration.Inf)
+
+        result.status mustBe status
+      }
+    }
+
+    ".removeLivingSettlorsMappedPiece" must {
+      "return Http response" in {
+
+        val status: Int = 200
+
+        when(mockConnector.removeLivingSettlorsMappedPiece(any())(any(), any()))
+          .thenReturn(Future.successful(HttpResponse(status)))
+
+        val result = Await.result(service.removeLivingSettlorsMappedPiece(fakeDraftId), Duration.Inf)
 
         result.status mustBe status
       }

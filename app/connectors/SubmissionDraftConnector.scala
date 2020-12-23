@@ -16,15 +16,14 @@
 
 package connectors
 
-import java.time.LocalDate
-
 import config.FrontendAppConfig
-import javax.inject.Inject
 import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
@@ -67,6 +66,16 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
 
   def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/set/$beneficiariesSection/remove-role-in-company"
+    http.POSTEmpty[HttpResponse](url)
+  }
+
+  def removeDeceasedSettlorMappedPiece(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/deceased-settlor"
+    http.POSTEmpty[HttpResponse](url)
+  }
+
+  def removeLivingSettlorsMappedPiece(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/living-settlors"
     http.POSTEmpty[HttpResponse](url)
   }
 }

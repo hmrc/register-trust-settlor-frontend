@@ -17,7 +17,6 @@
 package services
 
 import connectors.SubmissionDraftConnector
-import javax.inject.Inject
 import models.ReadOnlyUserAnswers
 import models.pages.Status.InProgress
 import pages.beneficiaries.RoleInCompanyPage
@@ -25,6 +24,7 @@ import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsRepository,
@@ -62,5 +62,11 @@ class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsR
 
   def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeRoleInCompanyAnswers(draftId)
+
+  def removeDeceasedSettlorMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    submissionDraftConnector.removeDeceasedSettlorMappedPiece(draftId)
+
+  def removeLivingSettlorsMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    submissionDraftConnector.removeLivingSettlorsMappedPiece(draftId)
     
 }
