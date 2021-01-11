@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
   def registrationProgressUrl(draftId: String): String = registrationProgressUrlTemplate.replace(":draftId", draftId)
 
   lazy val trustsUrl: String = configuration.get[Service]("microservice.services.trusts").baseUrl
+
+  lazy val trustsStoreUrl: String = configuration.get[Service]("microservice.services.trusts-store").baseUrl
 
   lazy val maintainATrustFrontendUrl : String = configuration.get[String]("urls.maintainATrust")
   lazy val createAgentServicesAccountUrl : String = configuration.get[String]("urls.createAgentServicesAccount")

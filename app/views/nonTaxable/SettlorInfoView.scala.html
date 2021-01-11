@@ -1,0 +1,104 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import models.Mode
+@import controllers.trust_type.routes._
+
+@this(
+    main_template: MainTemplate
+)
+
+@(draftId: String)(implicit request: Request[_], messages: Messages)
+
+@main_template(
+    title = s"${messages("settlorInfo.nonTaxable.title")}"
+    ) {
+
+    @components.back_link()
+
+    @components.heading_with_caption("settlorInfo.nonTaxable")
+
+    <h2>@messages("settlorInfo.nonTaxable.subheading1")</h2>
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph1")</p>
+
+    @components.bullet_list("settlorInfo.nonTaxable",
+        List(
+            "bulletpoint1",
+            "bulletpoint2",
+            "bulletpoint3",
+            "bulletpoint4"
+        )
+    )
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph2")</p>
+
+    @components.bullet_list("settlorInfo.nonTaxable",
+        List(
+            "bulletpoint5",
+            "bulletpoint6",
+            "bulletpoint7"
+        )
+    )
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph3")</p>
+
+    @components.bullet_list("settlorInfo.nonTaxable",
+        List(
+            "bulletpoint8",
+            "bulletpoint9",
+            "bulletpoint10",
+            "bulletpoint11"
+        )
+    )
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph4")</p>
+
+    <h2>@messages("settlorInfo.nonTaxable.subheading2")</h2>
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph5")</p>
+
+    <details class="govuk-details" data-module="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              @messages("settlorInfo.nonTaxable.details")
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <h4>@messages("settlorInfo.nonTaxable.details.subheading1")</h4>
+            @messages("settlorInfo.nonTaxable.details.paragraph1")
+            <h4>@messages("settlorInfo.nonTaxable.details.subheading2")</h4>
+            @messages("settlorInfo.nonTaxable.details.paragraph2")
+        </div>
+    </details>
+
+    <h2>@messages("settlorInfo.nonTaxable.subheading3")</h2>
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph6")</p>
+
+    <p>@messages("settlorInfo.nonTaxable.paragraph7")</p>
+
+    @components.bullet_list("settlorInfo.nonTaxable",
+        List(
+            "bulletpoint12",
+            "bulletpoint13",
+            "bulletpoint14"
+        )
+    )
+
+    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url)
+
+}
