@@ -126,6 +126,11 @@ POST       /:draftId/deceased/do-you-know-country-of-nationality-will           
 GET        /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
 POST       /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
+GET        /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
 
 # Living Settlor
 

@@ -151,6 +151,11 @@ removeSettlor.error.required = Select yes if you want to remove the settlor
 5mld.countryOfNationalityYesNo.error.required = Select yes if you know the settlor’s country of nationality
 5mld.countryOfNationalityYesNo.hint = The country of nationality is usually where the settlor was born and where their passport was registered.
 
+5mld.countryOfNationalityInTheUkYesNo.title = Did the settlor have UK nationality?
+5mld.countryOfNationalityInTheUkYesNo.heading = Did {0} have UK nationality?
+5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = Did {0} have UK nationality?
+5mld.countryOfNationalityInTheUkYesNo.error.required = Select yes if the settlor had UK nationality
+
 settlorDateOfBirthYesNo.title = Do you know the settlor’s date of birth?
 settlorDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 settlorDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
