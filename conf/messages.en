@@ -145,6 +145,12 @@ removeSettlor.heading = Are you sure you want to remove {0}?
 removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
+5mld.countryOfNationalityYesNo.title = Do you know the settlor’s country of nationality?
+5mld.countryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
+5mld.countryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
+5mld.countryOfNationalityYesNo.error.required = Select yes if you know the settlor’s country of nationality
+5mld.countryOfNationalityYesNo.hint = The country of nationality is usually where the settlor was born and where their passport was registered.
+
 settlorDateOfBirthYesNo.title = Do you know the settlor’s date of birth?
 settlorDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 settlorDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
