@@ -37,7 +37,8 @@ class SettlorsMapperSpec extends SpecBase {
     name = "Name",
     companyType = None,
     companyTime = None,
-    identification = None
+    identification = None,
+    countryOfResidence = None
   )
 
   "Settlors mapper" must {

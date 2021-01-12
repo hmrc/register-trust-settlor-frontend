@@ -39,7 +39,8 @@ object Settlor {
 case class SettlorCompany(name: String,
                           companyType: Option[String],
                           companyTime: Option[Boolean],
-                          identification: Option[IdentificationOrgType])
+                          identification: Option[IdentificationOrgType],
+                          countryOfResidence: Option[String])
 
 object SettlorCompany {
   implicit val settlorCompanyFormat: Format[SettlorCompany] = Json.format[SettlorCompany]

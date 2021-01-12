@@ -21,6 +21,7 @@ import models.UserAnswers
 import models.pages.KindOfBusiness._
 import models.pages.{InternationalAddress, UKAddress}
 import pages.living_settlor.business._
+import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class BusinessSettlorsMapperSpec extends SpecBase {
 
@@ -70,7 +71,56 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               identification = Some(IdentificationOrgType(
                 utr = Some(utr),
                 address = None
-              ))
+              )),
+              countryOfResidence = None
+            ))
+          }
+
+          "Country of residence is set to the UK in 5mld mode" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorBusinessNamePage(index), name).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(SettlorBusinessUtrPage(index), utr).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+              .set(CountryOfResidencePage(index), "GB").success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(SettlorCompany(
+              name = name,
+              companyType = None,
+              companyTime = None,
+              identification = Some(IdentificationOrgType(
+                utr = Some(utr),
+                address = None
+              )),
+              countryOfResidence = Some("GB")
+            ))
+          }
+
+          "Country of residence is set to outside the UK in 5mld mode" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorBusinessNamePage(index), name).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(SettlorBusinessUtrPage(index), utr).success.value
+              .set(CountryOfResidenceYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(SettlorCompany(
+              name = name,
+              companyType = None,
+              companyTime = None,
+              identification = Some(IdentificationOrgType(
+                utr = Some(utr),
+                address = None
+              )),
+              countryOfResidence = Some("FR")
             ))
           }
 
@@ -92,7 +142,8 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               identification = Some(IdentificationOrgType(
                 utr = None,
                 address = Some(ukAddressType)
-              ))
+              )),
+              countryOfResidence = None
             ))
           }
 
@@ -114,7 +165,8 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               identification = Some(IdentificationOrgType(
                 utr = None,
                 address = Some(nonUkAddressType)
-              ))
+              )),
+              countryOfResidence = None
             ))
           }
 
@@ -131,7 +183,8 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               name = name,
               companyType = None,
               companyTime = None,
-              identification = None
+              identification = None,
+              countryOfResidence = None
             ))
           }
         }
@@ -156,7 +209,8 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               identification = Some(IdentificationOrgType(
                 utr = Some(utr),
                 address = None
-              ))
+              )),
+              countryOfResidence = None
             ))
           }
 
@@ -178,7 +232,8 @@ class BusinessSettlorsMapperSpec extends SpecBase {
               identification = Some(IdentificationOrgType(
                 utr = Some(utr),
                 address = None
-              ))
+              )),
+              countryOfResidence = None
             ))
           }
         }
@@ -204,13 +259,15 @@ class BusinessSettlorsMapperSpec extends SpecBase {
             name = name(0),
             companyType = None,
             companyTime = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           ),
           SettlorCompany(
             name = name(1),
             companyType = None,
             companyTime = None,
-            identification = None
+            identification = None,
+            countryOfResidence = None
           )
         )
       }

@@ -30,7 +30,7 @@ class BusinessSettlorsMapper @Inject()(addressMapper: AddressMapper) extends Map
 
      val mappedSettlors = settlors.flatMap {
        case ls: BusinessSettlor =>
-         Some(SettlorCompany(ls.name, ls.companyType, ls.companyTime, identificationOrgMap(ls)))
+         Some(SettlorCompany(ls.name, ls.companyType, ls.companyTime, identificationOrgMap(ls), ls.countryOfResidence))
        case _: IndividualSettlor =>
          None
      }
