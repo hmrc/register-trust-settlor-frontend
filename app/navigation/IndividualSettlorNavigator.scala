@@ -17,7 +17,7 @@
 package navigation
 
 import javax.inject.Singleton
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.living_settlor.individual._
 import play.api.mvc.Call
@@ -26,7 +26,11 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class IndividualSettlorNavigator extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override def nextPage(page: Page, mode: Mode, draftId: String,
+                        af: AffinityGroup = AffinityGroup.Organisation,
+                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorIndividualNamePage(index) => _ => _ =>
       controllers.living_settlor.individual.routes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorIndividualDateOfBirthYesNoPage(index)  => _ => yesNoNav(

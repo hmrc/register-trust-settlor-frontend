@@ -28,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorDateOfBirthYesNoView
 
@@ -37,6 +38,7 @@ class SettlorDateOfBirthYesNoController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
                                                    @DeceasedSettlor navigator: Navigator,
+                                                   featureFlagService: FeatureFlagService,
                                                    actions: Actions,
                                                    requireName: NameRequiredActionProvider,
                                                    yesNoFormProvider: YesNoFormProvider,
@@ -71,8 +73,9 @@ class SettlorDateOfBirthYesNoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorDateOfBirthYesNoPage, value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, mode, draftId, fiveMldEnabled = is5mld)(updatedAnswers))
         }
       )
   }

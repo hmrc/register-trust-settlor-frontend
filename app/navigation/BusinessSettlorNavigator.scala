@@ -19,7 +19,7 @@ package navigation
 import controllers.living_settlor.business.{routes => businessRoutes}
 import javax.inject.Singleton
 import models.pages.KindOfTrust._
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.living_settlor.business._
 import pages.trust_type._
@@ -29,7 +29,11 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class BusinessSettlorNavigator extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override def nextPage(page: Page, mode: Mode, draftId: String,
+                        af: AffinityGroup = AffinityGroup.Organisation,
+                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorBusinessNamePage(index)  =>_ => _ =>
       businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorBusinessUtrYesNoPage(index)  => _ => yesNoNav(

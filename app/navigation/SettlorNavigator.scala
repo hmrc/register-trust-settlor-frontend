@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import models.pages.AddASettlor._
 import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.KindOfTrust._
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages.living_settlor._
 import pages.{AddASettlorPage, AddASettlorYesNoPage, _}
 import play.api.mvc.Call
@@ -32,7 +32,11 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override def nextPage(page: Page, mode: Mode, draftId: String,
+                        af: AffinityGroup = AffinityGroup.Organisation,
+                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case AddASettlorPage => _ => addSettlorRoute(draftId)
     case AddASettlorYesNoPage  => _ => yesNoNav(AddASettlorYesNoPage,
       yesCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId),

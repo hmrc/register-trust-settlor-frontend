@@ -19,7 +19,7 @@ package navigation
 import controllers.living_settlor.routes
 import javax.inject.Singleton
 import models.pages.KindOfTrust._
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.trust_type._
 import play.api.mvc.Call
@@ -28,7 +28,11 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class TrustTypeNavigator extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override def nextPage(page: Page, mode: Mode, draftId: String,
+                        af: AffinityGroup = AffinityGroup.Organisation,
+                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SetUpAfterSettlorDiedYesNoPage  => _ => yesNoNav(
       fromPage = SetUpAfterSettlorDiedYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
