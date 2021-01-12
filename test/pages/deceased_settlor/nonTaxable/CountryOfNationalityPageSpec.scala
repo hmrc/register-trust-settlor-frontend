@@ -29,13 +29,4 @@ class CountryOfNationalityPageSpec extends PageBehaviours {
     beRemovable[String](CountryOfNationalityPage)
   }
 
-//  "remove SettlorDateOfBirth when SettlorDateOfBirthYesNoPage is set to false" in {
-//    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-//      (initial, str) =>
-//        val answers: UserAnswers = initial.set(SettlorsDateOfBirthPage, LocalDate.now()).success.value
-//        val result: UserAnswers = answers.set(SettlorDateOfBirthYesNoPage, false).success.value
-//
-//        result.get(SettlorsDateOfBirthPage) mustNot be (defined)
-//    }
-//  }
 }

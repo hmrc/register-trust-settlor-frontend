@@ -16,8 +16,6 @@
 
 package pages.deceased_settlor.nonTaxable
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
@@ -33,13 +31,16 @@ class CountryOfNationalityYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfNationalityYesNoPage)
   }
 
-//  "remove SettlorDateOfBirth when SettlorDateOfBirthYesNoPage is set to false" in {
-//    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-//      (initial, str) =>
-//        val answers: UserAnswers = initial.set(SettlorsDateOfBirthPage, LocalDate.now()).success.value
-//        val result: UserAnswers = answers.set(SettlorDateOfBirthYesNoPage, false).success.value
-//
-//        result.get(SettlorsDateOfBirthPage) mustNot be (defined)
-//    }
-//  }
+  "remove pages when CountryOfNationalityYesNoPage is set to false" in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+          .set(CountryOfNationalityPage, "ES").success.value
+
+        val result = answers.set(CountryOfNationalityYesNoPage, false).success.value
+
+        result.get(CountryOfNationalityInTheUkYesNoPage) mustNot be(defined)
+        result.get(CountryOfNationalityPage) mustNot be(defined)
+    }
+  }
 }

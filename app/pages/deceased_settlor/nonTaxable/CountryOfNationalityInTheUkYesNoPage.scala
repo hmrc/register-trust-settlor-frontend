@@ -16,9 +16,12 @@
 
 package pages.deceased_settlor.nonTaxable
 
+import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.DeceasedSettlor
+
+import scala.util.Try
 
 case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
 
@@ -26,10 +29,9 @@ case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] 
 
   override def toString: String = "countryOfNationalityInTheUkYesNo"
 
-//  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-//    value match {
-//      case Some(false) => userAnswers.remove(CountryOfResidenceInTheUkYesNoPage(index))
-//        .flatMap(_.remove(CountryOfResidencePage(index)))
-//      case _ => super.cleanup(value, userAnswers)
-//    }
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+    value match {
+      case Some(true) => userAnswers.set(CountryOfNationalityPage, "GB")
+      case _ => super.cleanup(value, userAnswers)
+    }
 }

@@ -16,7 +16,9 @@
 
 package pages.deceased_settlor.nonTaxable
 
+import models.UserAnswers
 import pages.behaviours.PageBehaviours
+import org.scalacheck.Arbitrary.arbitrary
 
 class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 
@@ -29,13 +31,27 @@ class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfNationalityInTheUkYesNoPage)
   }
 
-//  "remove SettlorDateOfBirth when SettlorDateOfBirthYesNoPage is set to false" in {
-//    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-//      (initial, str) =>
-//        val answers: UserAnswers = initial.set(SettlorsDateOfBirthPage, LocalDate.now()).success.value
-//        val result: UserAnswers = answers.set(SettlorDateOfBirthYesNoPage, false).success.value
-//
-//        result.get(SettlorsDateOfBirthPage) mustNot be (defined)
-//    }
-//  }
+  "Yes selected - set CountryOfNationalityPage to 'GB' " in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage, true).success.value
+          .set(CountryOfNationalityPage, "ES").success.value
+
+        val result = answers.set(CountryOfNationalityInTheUkYesNoPage, true).success.value
+
+        result.get(CountryOfNationalityPage).get mustBe "GB"
+    }
+  }
+
+  "No selected" in {
+    forAll(arbitrary[UserAnswers]) {
+      initial =>
+        val answers: UserAnswers = initial.set(CountryOfNationalityYesNoPage, true).success.value
+          .set(CountryOfNationalityPage, "ES").success.value
+
+        val result = answers.set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+
+        result.get(CountryOfNationalityPage).get mustBe "ES"
+    }
+  }
 }
