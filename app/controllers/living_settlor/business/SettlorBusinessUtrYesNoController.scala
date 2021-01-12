@@ -20,6 +20,7 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
@@ -28,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.living_settlor.business.SettlorBusinessUtrYesNoView
 
@@ -36,6 +38,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class SettlorBusinessUtrYesNoController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
+                                                   featureFlagService: FeatureFlagService,
                                                    @BusinessSettlor navigator: Navigator,
                                                    actions: Actions,
                                                    requireName: NameRequiredActionProvider,
@@ -69,8 +72,9 @@ class SettlorBusinessUtrYesNoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessUtrYesNoPage(index), value))
+            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, draftId, is5mld)(updatedAnswers))
         }
       )
   }

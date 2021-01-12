@@ -28,7 +28,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class TrustTypeNavigator extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SetUpAfterSettlorDiedYesNoPage  => _ => yesNoNav(
       fromPage = SetUpAfterSettlorDiedYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),

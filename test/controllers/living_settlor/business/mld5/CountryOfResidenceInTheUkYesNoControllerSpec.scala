@@ -17,15 +17,12 @@
 package controllers.living_settlor.business.mld5
 
 import base.SpecBase
-import config.annotations.BusinessSettlor
 import forms.YesNoFormProvider
 import models.NormalMode
-import navigation.{FakeNavigator, Navigator}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoView

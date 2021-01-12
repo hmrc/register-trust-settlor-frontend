@@ -23,7 +23,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 
 class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override protected def route(draftId: String, fiveMldEnabled: Boolean = false): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case _ => _ => _ => desiredRoute
   }
 
