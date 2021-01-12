@@ -156,6 +156,13 @@ removeSettlor.error.required = Select yes if you want to remove the settlor
 5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = Did {0} have UK nationality?
 5mld.countryOfNationalityInTheUkYesNo.error.required = Select yes if the settlor had UK nationality
 
+5mld.countryOfNationality.title = What was the settlor’s country of nationality?
+5mld.countryOfNationality.heading = What was {0}’s country of nationality?
+5mld.countryOfNationality.checkYourAnswersLabel = What was {0}’s country of nationality?
+5mld.countryOfNationality.error.required = Enter a country
+5mld.countryOfNationality.error.length = The country of nationality must be 100 characters or less
+5mld.countryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 settlorDateOfBirthYesNo.title = Do you know the settlor’s date of birth?
 settlorDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 settlorDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?

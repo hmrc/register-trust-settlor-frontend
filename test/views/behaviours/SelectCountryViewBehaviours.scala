@@ -27,6 +27,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
   def selectCountryPage(form: Form[String],
                  createView: Form[String] => HtmlFormat.Appendable,
                  messageKeyPrefix: String,
+                 messageKeyParam: String,
                  expectedHintKey: Option[String] = None) = {
 
     "behave like a page with a string value field" when {
@@ -37,7 +38,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
           val doc = asDocument(createView(form))
           val expectedHintText = expectedHintKey map (k => messages(k))
-          assertContainsLabel(doc, "value", messages(s"$messageKeyPrefix.heading"), expectedHintText)
+          assertContainsLabel(doc, "value", messages(s"$messageKeyPrefix.heading", messageKeyParam), expectedHintText)
         }
 
         "contain an input for the value" in {
