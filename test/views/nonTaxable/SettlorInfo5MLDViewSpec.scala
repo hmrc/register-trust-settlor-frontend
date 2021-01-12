@@ -19,17 +19,17 @@ package views.nonTaxable
 import controllers.trust_type.routes
 import models.NormalMode
 import views.behaviours.ViewBehaviours
-import views.html.nonTaxable.SettlorInfoView
+import views.html.nonTaxable.SettlorInfo5MLDView
 
-class SettlorInfoViewSpec extends ViewBehaviours {
+class SettlorInfo5MLDViewSpec extends ViewBehaviours {
 
-  "SettlorInfo view" must {
+  "SettlorInfo5MLD view" must {
 
-    val view = viewFor[SettlorInfoView](Some(emptyUserAnswers))
+    val view = viewFor[SettlorInfo5MLDView](Some(emptyUserAnswers))
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "settlorInfo.nonTaxable",
+    behave like normalPage(applyView, "5mld.settlorInfo",
       "caption",
       "subheading1",
       "paragraph1",
