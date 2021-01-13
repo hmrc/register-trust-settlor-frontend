@@ -16,9 +16,11 @@
 
 package utils
 
+import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.living_settlor.business.mld5.{routes => businessMld5Routes}
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.living_settlor.individual.{routes => individualRoutes}
+import controllers.living_settlor.individual.mld5.{routes => individual5mldRoutes}
 import controllers.living_settlor.routes
 import controllers.trust_type.{routes => trustTypeRoutes}
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
@@ -28,6 +30,7 @@ import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.living_settlor.individual._
+import pages.living_settlor.individual.{mld5 => individual5mldPages}
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
@@ -69,16 +72,16 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       wasSetUpInAdditionToWillTrust,
 
       deceasedSettlorsName,
-      yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", controllers.deceased_settlor.routes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", controllers.deceased_settlor.routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      dateQuestion(SettlorsDateOfBirthPage, "settlorsDateOfBirth", controllers.deceased_settlor.routes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      ninoQuestion(SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", controllers.deceased_settlor.routes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", controllers.deceased_settlor.routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", controllers.deceased_settlor.routes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      addressQuestion(SettlorsUKAddressPage, "settlorsUKAddress", controllers.deceased_settlor.routes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, arg),
-      addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", controllers.deceased_settlor.routes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url, arg)
+      yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, arg),
+      dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", deceasedRoutes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, arg),
+      yesNoQuestion(SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, arg),
+      dateQuestion(SettlorsDateOfBirthPage, "settlorsDateOfBirth", deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, arg),
+      yesNoQuestion(SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, arg),
+      ninoQuestion(SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, arg),
+      yesNoQuestion(SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, arg),
+      yesNoQuestion(WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, arg),
+      addressQuestion(SettlorsUKAddressPage, "settlorsUKAddress", deceasedRoutes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, arg),
+      addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", deceasedRoutes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url, arg)
     ).flatten
   }
 
@@ -126,8 +129,14 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       nameQuestion(SettlorIndividualNamePage(index), "settlorIndividualName", individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url),
       yesNoQuestion(SettlorIndividualDateOfBirthYesNoPage(index), "settlorIndividualDateOfBirthYesNo", individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
       dateQuestion(SettlorIndividualDateOfBirthPage(index), "settlorIndividualDateOfBirth", individualRoutes.SettlorIndividualDateOfBirthController.onPageLoad(NormalMode, index, draftId).url, arg),
+      yesNoQuestion(individual5mldPages.CountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationalityYesNo", individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
+      yesNoQuestion(individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualUkCountryOfNationalityYesNo", individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
+      countryQuestion(individual5mldPages.CountryOfNationalityPage(index), individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationality", individual5mldRoutes.CountryOfNationalityController.onPageLoad(NormalMode, index, draftId).url, arg),
       yesNoQuestion(SettlorIndividualNINOYesNoPage(index), "settlorIndividualNINOYesNo", individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
       ninoQuestion(SettlorIndividualNINOPage(index), "settlorIndividualNINO", individualRoutes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, draftId).url, arg),
+      yesNoQuestion(individual5mldPages.CountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidencyYesNo", individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
+      yesNoQuestion(individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualUkCountryOfResidencyYesNo", individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
+      countryQuestion(individual5mldPages.CountryOfResidencyPage(index), individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidency", individual5mldRoutes.CountryOfResidencyController.onPageLoad(NormalMode, index, draftId).url, arg),
       yesNoQuestion(SettlorAddressYesNoPage(index), "settlorIndividualAddressYesNo", individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
       yesNoQuestion(SettlorAddressUKYesNoPage(index), "settlorIndividualAddressUKYesNo", individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
       addressQuestion(SettlorAddressUKPage(index), "settlorIndividualAddressUK", individualRoutes.SettlorIndividualAddressUKController.onPageLoad(NormalMode, index, draftId).url, arg),
@@ -135,7 +144,8 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
       yesNoQuestion(SettlorIndividualPassportYesNoPage(index), "settlorIndividualPassportYesNo", individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
       passportOrIdCardDetailsQuestion(SettlorIndividualPassportPage(index), "settlorIndividualPassport", individualRoutes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, draftId).url, arg),
       yesNoQuestion(SettlorIndividualIDCardYesNoPage(index), "settlorIndividualIDCardYesNo", individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      passportOrIdCardDetailsQuestion(SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", individualRoutes.SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId).url, arg)
+      passportOrIdCardDetailsQuestion(SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", individualRoutes.SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId).url, arg),
+      yesNoQuestion(individual5mldPages.LegallyIncapableYesNoPage(index), "settlorIndividualLegallyIncapableYesNo", individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId).url, arg)
     ).flatten
   }
 
