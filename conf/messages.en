@@ -89,6 +89,8 @@ site.address.international.line2 = Address line 2
 site.address.international.line3 = Address line 3 (optional)
 site.address.international.country = Country
 
+site.address.country.select = Select a country
+
 internationalAddress.error.line1.required = Enter address line 1
 internationalAddress.error.line2.required = Enter address line 2
 internationalAddress.error.country.required = Select a country
@@ -404,6 +406,24 @@ settlorBusinessUtr.error.invalidCharacters = Enter the business’s Unique Taxpa
 settlorBusinessUtr.hint = This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 settlorBusinessUtr.p1 = You can
 settlorBusinessUtr.link = find a lost UTR number (opens in a new window or tab)
+
+settlorBusiness.5mld.countryOfResidenceYesNo.title = Do you know the business’s country of residence?
+settlorBusiness.5mld.countryOfResidenceYesNo.heading = Do you know {0}’s country of residence?
+settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+settlorBusiness.5mld.countryOfResidenceYesNo.error.required = Select yes if you know the business’s country of residence
+settlorBusiness.5mld.countryOfResidenceYesNo.hint = The country of residence is usually where the business is registered (incorporated). The business has UK residency if it is registered with Companies House.
+
+settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.title = Does the business have UK residency?
+settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.heading = Does {0} have UK residency?
+settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Does {0} have UK residency?
+settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the business has UK residency
+
+settlorBusiness.5mld.countryOfResidence.title = What is the business’s country of residence?
+settlorBusiness.5mld.countryOfResidence.heading = What is {0}’s country of residence?
+settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel = What is {0}’s country of residence?
+settlorBusiness.5mld.countryOfResidence.error.required = Enter a country
+settlorBusiness.5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+settlorBusiness.5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 settlorBusinessAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 settlorBusinessAddressYesNo.title = Do you know the settlor’s address?

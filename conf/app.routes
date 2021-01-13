@@ -230,6 +230,21 @@ POST       /:draftId/living/:index/business/utr                                 
 GET        /:draftId/living/:index/business/change-utr                                     controllers.living_settlor.business.SettlorBusinessUtrController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/business/change-utr                                     controllers.living_settlor.business.SettlorBusinessUtrController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
+GET        /:draftId/living/:index/business/has-country-of-residence                       controllers.living_settlor.business.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/has-country-of-residence                       controllers.living_settlor.business.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/business/change-has-country-of-residence                controllers.living_settlor.business.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/change-has-country-of-residence                controllers.living_settlor.business.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/business/uk-residence                                   controllers.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/uk-residence                                   controllers.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/business/change-uk-residence                            controllers.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/change-uk-residence                            controllers.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/business/country-of-residence                           controllers.living_settlor.business.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/country-of-residence                           controllers.living_settlor.business.mld5.CountryOfResidenceController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/business/change-country-of-residence                    controllers.living_settlor.business.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/business/change-country-of-residence                    controllers.living_settlor.business.mld5.CountryOfResidenceController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
 GET        /:draftId/living/:index/business/address-yes-no                                 controllers.living_settlor.business.SettlorBusinessAddressYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/business/address-yes-no                                 controllers.living_settlor.business.SettlorBusinessAddressYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/living/:index/business/change-address-yes-no                          controllers.living_settlor.business.SettlorBusinessAddressYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)

@@ -18,9 +18,11 @@ package navigation
 
 import base.SpecBase
 import controllers.living_settlor.business.routes
+import controllers.living_settlor.business.mld5.{routes => mld5Routes}
 import models.pages.KindOfTrust.{Employees, Intervivos}
 import models.{Mode, NormalMode}
 import pages.living_settlor.business._
+import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.trust_type.KindOfTrustPage
 
 class BusinessSettlorNavigatorSpec extends SpecBase {
@@ -49,33 +51,239 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
         }
       }
 
-      "no" must {
-        "redirect to address yes/no" in {
-          val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
+      "no" when {
+        "not in 5mld mode" must {
+          "redirect to address yes/no" in {
+            val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
-          navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
-            .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "in 5mld mode" must {
+          "redirect to address yes/no" in {
+            val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
+
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+              .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
         }
       }
     }
 
     "SettlorBusinessUtrPage" when {
-      "a trust for the employees of a company" must {
-        "redirect to kind of business" in {
-          val userAnswers = emptyUserAnswers.set(KindOfTrustPage, Employees).success.value
+      "not in 5mld mode" must {
+        "for a trust for the employees of a company" must {
+          "redirect to kind of business" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-          navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
-            .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "for a trust that is not for the employees of a company" must {
+          "redirect to check answers" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
+          }
         }
       }
 
-      "not a trust for the employees of a company" must {
-        "redirect to check answers" in {
-          val userAnswers = emptyUserAnswers.set(KindOfTrustPage, Intervivos).success.value
+      "in 5mld mode" must {
+        "for a trust for the employees of a company" must {
+          "redirect to Country of Residence Yes No page" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-          navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
-            .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+              .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
         }
+
+        "for a trust that is not for the employees of a company" must {
+          "redirect to Country of Residence Yes No page" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+              .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+      }
+    }
+
+    "CountryOfResidenceYesNoPage" when {
+
+      "yes" must {
+        "redirect to CountryOfResidenceInTheUkYesNoPage" in {
+          val userAnswers = emptyUserAnswers
+            .set(CountryOfResidenceYesNoPage(index), true).success.value
+
+          navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+            .mustBe(mld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, index, fakeDraftId))
+        }
+      }
+
+      "no" when {
+        "for a trust for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to kind of business if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "for a trust that is not for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to check answers if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidenceYesNoPage(index), false).success.value
+
+            navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+    }
+
+    "CountryOfResidenceInTheUkYesNoPage" when {
+
+      "no" must {
+        "redirect to CountryOfResidencePage" in {
+          val userAnswers = emptyUserAnswers
+            .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
+
+          navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+            .mustBe(mld5Routes.CountryOfResidenceController.onPageLoad(mode, index, fakeDraftId))
+        }
+      }
+
+      "yes" when {
+        "for a trust for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+            navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to kind of business if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+            navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "for a trust that is not for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+            navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to check answers if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
+
+            navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
+          }
+        }
+      }
+    }
+
+    "CountryOfResidencePage" must {
+
+        "for a trust for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to kind of business if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Employees).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "for a trust that is not for the employees of a company" must {
+          "redirect to address yes/no if no UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), false).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+
+          "redirect to check answers if a UTR was provided" in {
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, Intervivos).success.value
+              .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+              .set(CountryOfResidencePage(index), "FR").success.value
+
+            navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
+          }
       }
     }
 

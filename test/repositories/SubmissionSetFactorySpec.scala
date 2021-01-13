@@ -225,7 +225,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             val settlors: Settlors = Settlors(
               settlor = None,
               settlorCompany = Some(List(
-                SettlorCompany(businessName, None, None, None)
+                SettlorCompany(businessName, None, None, None, None)
               ))
             )
 

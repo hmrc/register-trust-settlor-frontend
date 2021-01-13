@@ -21,7 +21,7 @@ import play.api.data.FormError
 
 class CountryFormProviderSpec extends StringFieldBehaviours {
 
-  val messagePrefix = "5mld.countryOfNationality"
+  val messagePrefix = "settlorBusiness.5mld.countryOfResidence"
   val requiredKey = s"$messagePrefix.error.required"
   val lengthKey = s"$messagePrefix.error.length"
   val maxLength = 100

@@ -20,10 +20,16 @@ import base.SpecBase
 import controllers.routes._
 import forms.UtrFormProvider
 import models.NormalMode
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessUtrPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
+import services.FeatureFlagService
 import views.html.living_settlor.business.SettlorBusinessUtrView
+
+import scala.concurrent.Future
 
 class SettlorBusinessUtrControllerSpec extends SpecBase {
 
@@ -101,8 +107,15 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers
         .set(SettlorBusinessNamePage(index), fakeBusinessName).success.value
 
+      val featureFlagService = mock[FeatureFlagService]
+
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService),
+          ).build()
+
+      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val request =
         FakeRequest(POST, settlorBusinessUtrRoute)
