@@ -86,7 +86,7 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     case CountryOfNationalityInTheUkYesNoPage => _ => yesNoNav(
       fromPage = CountryOfNationalityInTheUkYesNoPage,
       yesCall = SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId),
-      noCall = CountryOfNationalityController.onPageLoad(NormalMode, draftId),
+      noCall = CountryOfNationalityController.onPageLoad(NormalMode, draftId)
     )
   }
 
