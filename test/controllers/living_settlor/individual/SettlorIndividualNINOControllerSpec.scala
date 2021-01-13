@@ -21,22 +21,26 @@ import controllers.routes._
 import forms.NinoFormProvider
 import models.NormalMode
 import models.pages.FullName
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.living_settlor.individual.{SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage}
-import play.api.mvc.Call
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.living_settlor.individual.SettlorIndividualNINOView
+
+import scala.concurrent.Future
 
 class SettlorIndividualNINOControllerSpec extends SpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val formProvider: NinoFormProvider = new NinoFormProvider()
+  private val form: Form[String] = formProvider("settlorIndividualNINO")
+  private val index: Int = 0
+  private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  val formProvider = new NinoFormProvider()
-  val form = formProvider("settlorIndividualNINO")
-  val index = 0
-  val name = FullName("First", Some("Middle"), "Last")
-
-  lazy val settlorIndividualNINORoute = routes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualNINORoute: String = routes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, fakeDraftId).url
 
   "SettlorIndividualNINO Controller" must {
 
@@ -83,11 +87,15 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorIndividualNINOYesNoPage(index), true).success.value
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[FeatureFlagService].toInstance(mockFeatureFlagService))
+        .build()
 
       val request =
         FakeRequest(POST, settlorIndividualNINORoute)
@@ -96,7 +104,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }
