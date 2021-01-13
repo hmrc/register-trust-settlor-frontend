@@ -14,67 +14,68 @@
  * limitations under the License.
  */
 
-package controllers.living_settlor.business
+package controllers.deceased_settlor.nonTaxable
 
-import config.annotations.BusinessSettlor
-import controllers.actions.Actions
-import controllers.actions.living_settlor.business.NameRequiredActionProvider
-import forms.YesNoFormProvider
-
+import config.annotations.DeceasedSettlor
+import controllers.actions._
+import controllers.actions.deceased_settlor.NameRequiredActionProvider
+import forms.CountryFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.living_settlor.business.SettlorBusinessUtrYesNoPage
+import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.nonTaxable.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.living_settlor.business.SettlorBusinessUtrYesNoView
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.deceased_settlor.nonTaxable.CountryOfNationalityView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SettlorBusinessUtrYesNoController @Inject()(
+class CountryOfNationalityController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
-                                                   featureFlagService: FeatureFlagService,
-                                                   @BusinessSettlor navigator: Navigator,
+                                                   @DeceasedSettlor navigator: Navigator,
                                                    actions: Actions,
                                                    requireName: NameRequiredActionProvider,
-                                                   formProvider: YesNoFormProvider,
+                                                   formProvider: CountryFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   view: SettlorBusinessUtrYesNoView
+                                                   view: CountryOfNationalityView,
+                                                   val countryOptions: CountryOptionsNonUK
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
+  val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
+
+  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
-      val form: Form[Boolean] = formProvider.withPrefix("settlorBusinessUtrYesNo")
+      val name = request.userAnswers.get(SettlorsNamePage).get
 
-      val preparedForm = request.userAnswers.get(SettlorBusinessUtrYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(CountryOfNationalityPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index, request.businessName))
+      Ok(view(preparedForm, countryOptions.options, mode, draftId, name))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
+  def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
-      val form: Form[Boolean] = formProvider.withPrefix("settlorBusinessUtrYesNo")
+      val name = request.userAnswers.get(SettlorsNamePage).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, request.businessName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, name))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessUtrYesNoPage(index), value))
-            is5mld         <- featureFlagService.is5mldEnabled()
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, draftId, fiveMldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityPage, mode, draftId)(updatedAnswers))
         }
       )
   }

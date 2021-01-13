@@ -25,10 +25,10 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
   val answer = "ES"
 
   def selectCountryPage(form: Form[String],
-                        createView: Form[String] => HtmlFormat.Appendable,
-                        messageKeyPrefix: String,
-                        messageKeyParam: String,
-                        expectedHintKey: Option[String] = None) = {
+                 createView: Form[String] => HtmlFormat.Appendable,
+                 messageKeyPrefix: String,
+                 messageKeyParam: String,
+                 expectedHintKey: Option[String] = None) = {
 
     "behave like a page with a string value field" when {
 

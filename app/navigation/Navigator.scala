@@ -23,10 +23,9 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 
 trait Navigator {
 
-  protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call]
+  protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call]
 
-  def nextPage(page: Page, mode: Mode, draftId: String, fiveMldEnabled: Boolean = false, af: AffinityGroup = AffinityGroup.Organisation): UserAnswers => Call =
-    route(draftId, fiveMldEnabled)(page)(af)
+  def nextPage(page: Page, mode: Mode, draftId: String, af: AffinityGroup = AffinityGroup.Organisation, fiveMldEnabled: Boolean = false): UserAnswers => Call
 
   def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
     answers.get(fromPage)

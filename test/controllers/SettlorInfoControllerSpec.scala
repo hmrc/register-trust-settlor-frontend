@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
 import views.html.SettlorInfoView
-import views.html.nonTaxable.{SettlorInfoView => nonTaxableSettlorInfoView}
+import views.html.nonTaxable.SettlorInfo5MLDView
 
 import scala.concurrent.Future
 
@@ -72,7 +72,7 @@ class SettlorInfoControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[nonTaxableSettlorInfoView]
+      val view = application.injector.instanceOf[SettlorInfo5MLDView]
 
       status(result) mustEqual OK
 

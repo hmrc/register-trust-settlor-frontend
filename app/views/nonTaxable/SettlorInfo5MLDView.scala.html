@@ -24,18 +24,18 @@
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("settlorInfo.nonTaxable.title")}"
+    title = s"${messages("5mld.settlorInfo.title")}"
     ) {
 
     @components.back_link()
 
-    @components.heading_with_caption("settlorInfo.nonTaxable")
+    @components.heading_with_caption("5mld.settlorInfo")
 
-    <h2>@messages("settlorInfo.nonTaxable.subheading1")</h2>
+    <h2>@messages("5mld.settlorInfo.subheading1")</h2>
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph1")</p>
+    <p>@messages("5mld.settlorInfo.paragraph1")</p>
 
-    @components.bullet_list("settlorInfo.nonTaxable",
+    @components.bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -44,9 +44,9 @@
         )
     )
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph2")</p>
+    <p>@messages("5mld.settlorInfo.paragraph2")</p>
 
-    @components.bullet_list("settlorInfo.nonTaxable",
+    @components.bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint5",
             "bulletpoint6",
@@ -54,9 +54,9 @@
         )
     )
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph3")</p>
+    <p>@messages("5mld.settlorInfo.paragraph3")</p>
 
-    @components.bullet_list("settlorInfo.nonTaxable",
+    @components.bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint8",
             "bulletpoint9",
@@ -65,33 +65,33 @@
         )
     )
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph4")</p>
+    <p>@messages("5mld.settlorInfo.paragraph4")</p>
 
-    <h2>@messages("settlorInfo.nonTaxable.subheading2")</h2>
+    <h2>@messages("5mld.settlorInfo.subheading2")</h2>
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph5")</p>
+    <p>@messages("5mld.settlorInfo.paragraph5")</p>
 
     <details class="govuk-details" data-module="govuk-details">
         <summary class="govuk-details__summary">
             <span class="govuk-details__summary-text">
-              @messages("settlorInfo.nonTaxable.details")
+              @messages("5mld.settlorInfo.details")
             </span>
         </summary>
         <div class="govuk-details__text">
-            <h4>@messages("settlorInfo.nonTaxable.details.subheading1")</h4>
-            @messages("settlorInfo.nonTaxable.details.paragraph1")
-            <h4>@messages("settlorInfo.nonTaxable.details.subheading2")</h4>
-            @messages("settlorInfo.nonTaxable.details.paragraph2")
+            <h4>@messages("5mld.settlorInfo.details.subheading1")</h4>
+            @messages("5mld.settlorInfo.details.paragraph1")
+            <h4>@messages("5mld.settlorInfo.details.subheading2")</h4>
+            @messages("5mld.settlorInfo.details.paragraph2")
         </div>
     </details>
 
-    <h2>@messages("settlorInfo.nonTaxable.subheading3")</h2>
+    <h2>@messages("5mld.settlorInfo.subheading3")</h2>
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph6")</p>
+    <p>@messages("5mld.settlorInfo.paragraph6")</p>
 
-    <p>@messages("settlorInfo.nonTaxable.paragraph7")</p>
+    <p>@messages("5mld.settlorInfo.paragraph7")</p>
 
-    @components.bullet_list("settlorInfo.nonTaxable",
+    @components.bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint12",
             "bulletpoint13",

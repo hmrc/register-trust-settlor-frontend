@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 
-package forms
+package pages.deceased_settlor.nonTaxable
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import pages.behaviours.PageBehaviours
 
-class CountryFormProvider @Inject() extends Mappings {
+class CountryOfNationalityPageSpec extends PageBehaviours {
 
-  def withPrefix(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            maxLength(100, s"$prefix.error.length"),
-            regexp(Validation.countryRegex, s"$prefix.error.invalidCharacters"),
-            isNotEmpty("value", s"$prefix.error.required")
-          ))
-        )
+  "CountryOfNationalityPage" must {
+
+    beRetrievable[String](CountryOfNationalityPage)
+
+    beSettable[String](CountryOfNationalityPage)
+
+    beRemovable[String](CountryOfNationalityPage)
+  }
+
 }

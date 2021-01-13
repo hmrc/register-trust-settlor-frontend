@@ -14,32 +14,30 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor
+package controllers.deceased_settlor.nonTaxable
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.SessionExpiredController
+import controllers.deceased_settlor.routes.SettlorsNameController
+import controllers.deceased_settlor.nonTaxable.routes.CountryOfNationalityYesNoController
 import forms.YesNoFormProvider
 import models.NormalMode
 import models.pages.FullName
-import pages.deceased_settlor.{SettlorDateOfBirthYesNoPage, SettlorsNamePage}
+import pages.deceased_settlor.nonTaxable.CountryOfNationalityYesNoPage
+import pages.deceased_settlor.SettlorsNamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
-import views.html.deceased_settlor.SettlorDateOfBirthYesNoView
-import play.api.inject.bind
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import scala.concurrent.Future
+import views.html.deceased_settlor.nonTaxable.CountryOfNationalityYesNoView
 
-class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
+class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
-  val form = new YesNoFormProvider().withPrefix("settlorDateOfBirthYesNo")
+  val form = new YesNoFormProvider().withPrefix("5mld.countryOfNationalityYesNo")
 
-  lazy val settlorDateOfBirthYesNoRoute = routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val countryOfNationalityYesNoRoute = CountryOfNationalityYesNoController.onPageLoad(NormalMode, fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
-  "SettlorDateOfBirthYesNo Controller" must {
+  "CountryOfNationalityYesNoController Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -48,11 +46,11 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorDateOfBirthYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SettlorDateOfBirthYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
 
       status(result) mustEqual OK
 
@@ -64,14 +62,14 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorDateOfBirthYesNoPage, true).success.value.set(SettlorsNamePage,
+      val userAnswers = emptyUserAnswers.set(CountryOfNationalityYesNoPage, true).success.value.set(SettlorsNamePage,
         name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorDateOfBirthYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
 
-      val view = application.injector.instanceOf[SettlorDateOfBirthYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
 
       val result = route(application, request).value
 
@@ -88,18 +86,11 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
         name).success.value
 
-      val featureFlagService = mock[FeatureFlagService]
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(
-          bind[FeatureFlagService].toInstance(featureFlagService)
-        ).build()
-
-      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, settlorDateOfBirthYesNoRoute)
+        FakeRequest(POST, countryOfNationalityYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -119,12 +110,12 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, settlorDateOfBirthYesNoRoute)
+        FakeRequest(POST, countryOfNationalityYesNoRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SettlorDateOfBirthYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
 
       val result = route(application, request).value
 
@@ -140,7 +131,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, settlorDateOfBirthYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
 
       val result = route(application, request).value
 
@@ -156,7 +147,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, settlorDateOfBirthYesNoRoute)
+        FakeRequest(POST, countryOfNationalityYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -173,13 +164,13 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, settlorDateOfBirthYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
 
       application.stop()
     }

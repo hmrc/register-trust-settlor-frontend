@@ -21,7 +21,7 @@ import controllers.living_settlor.business.mld5.{routes => business5mldRoutes}
 
 import javax.inject.Singleton
 import models.pages.KindOfTrust._
-import models.{NormalMode, UserAnswers}
+import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
@@ -32,16 +32,20 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class BusinessSettlorNavigator extends Navigator {
 
-  override protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override def nextPage(page: Page, mode: Mode, draftId: String,
+                        af: AffinityGroup = AffinityGroup.Organisation,
+                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorBusinessNamePage(index)  =>_ => _ =>
       businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorBusinessUtrYesNoPage(index)  =>_ => ua => yesNoNav(
       fromPage = SettlorBusinessUtrYesNoPage(index),
       yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
-      noCall = fiveMldYesNo(draftId, index, fiveMldEnabled)(ua)
+      noCall = fiveMldYesNo(draftId, index, fiveMld)(ua)
     )(ua)
     case SettlorBusinessUtrPage(index) =>_ => ua =>
-      fiveMldYesNo(draftId, index, fiveMldEnabled)(ua)
+      fiveMldYesNo(draftId, index, fiveMld)(ua)
     case CountryOfResidenceYesNoPage(index) =>_ => ua =>
       yesNoNav(
         fromPage = CountryOfResidenceYesNoPage(index),

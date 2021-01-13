@@ -32,7 +32,7 @@ class SettlorInfoController @Inject()(
                                        featureFlagService: FeatureFlagService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: SettlorInfoView,
-                                       view5mld: nonTaxable.SettlorInfoView
+                                       view5mld: nonTaxable.SettlorInfo5MLDView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {

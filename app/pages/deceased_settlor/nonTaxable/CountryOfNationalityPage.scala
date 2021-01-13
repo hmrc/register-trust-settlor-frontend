@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package forms
+package pages.deceased_settlor.nonTaxable
 
-import forms.mappings.Mappings
-import javax.inject.Inject
-import play.api.data.Form
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.DeceasedSettlor
 
-class CountryFormProvider @Inject() extends Mappings {
+case object  CountryOfNationalityPage extends QuestionPage[String] {
 
-  def withPrefix(prefix: String): Form[String] =
-    Form(
-      "value" -> text(s"$prefix.error.required")
-        .verifying(
-          firstError(
-            maxLength(100, s"$prefix.error.length"),
-            regexp(Validation.countryRegex, s"$prefix.error.invalidCharacters"),
-            isNotEmpty("value", s"$prefix.error.required")
-          ))
-        )
+  override def path: JsPath = DeceasedSettlor.path \ toString
+
+  override def toString: String = "countryOfNationality"
+
 }

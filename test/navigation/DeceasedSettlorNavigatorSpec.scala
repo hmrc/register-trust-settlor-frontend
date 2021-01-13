@@ -18,8 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.deceased_settlor.routes
+import controllers.deceased_settlor.nonTaxable.routes._
 import models.{Mode, NormalMode}
 import pages.deceased_settlor._
+import pages.deceased_settlor.nonTaxable.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
 import play.api.mvc.Call
 
 class DeceasedSettlorNavigatorSpec extends SpecBase {
@@ -182,5 +184,89 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
           .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(fakeDraftId)))
       }
     }
+
+
+    "a 5mld trust" must {
+
+      "SettlorsDateOfBirthYesNoPage -> Yes -> SettlorsDateOfBirth page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorDateOfBirthYesNoPage, true).success.value
+
+        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(routes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "SettlorsDateOfBirthYesNoPage -> No -> CountryOfNationality Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorDateOfBirthYesNoPage, false).success.value
+
+        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfNationalityYesNoPage -> Yes -> CountryOfNationalityInTheUk Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfNationalityYesNoPage, true).success.value
+
+        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfNationalityYesNoPage -> No -> SettlorsNINo Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfNationalityYesNoPage, false).success.value
+
+        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfNationalityInTheUk -> Yes -> SettlorsNINo Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
+
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfNationalityInTheUk -> No -> CountryOfNationality page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(CountryOfNationalityController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfNationality -> SettlorsNINo Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfNationalityPage, "ES").success.value
+
+        navigator.nextPage(CountryOfNationalityPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+          .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+
+    }
+
+
+
+
+
+
+
+
   }
 }
