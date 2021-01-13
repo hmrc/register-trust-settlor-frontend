@@ -14,16 +14,19 @@
  * limitations under the License.
  */
 
-package pages.deceased_settlor.nonTaxable
+package pages.deceased_settlor.mld5
 
-import pages.QuestionPage
-import play.api.libs.json.JsPath
-import sections.DeceasedSettlor
+import pages.behaviours.PageBehaviours
 
-case object  CountryOfNationalityPage extends QuestionPage[String] {
+class CountryOfNationalityPageSpec extends PageBehaviours {
 
-  override def path: JsPath = DeceasedSettlor.path \ toString
+  "CountryOfNationalityPage" must {
 
-  override def toString: String = "countryOfNationality"
+    beRetrievable[String](CountryOfNationalityPage)
+
+    beSettable[String](CountryOfNationalityPage)
+
+    beRemovable[String](CountryOfNationalityPage)
+  }
 
 }

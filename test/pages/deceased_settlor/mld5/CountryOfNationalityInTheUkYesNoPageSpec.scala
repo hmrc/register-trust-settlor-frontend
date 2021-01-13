@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pages.deceased_settlor.nonTaxable
+package pages.deceased_settlor.mld5
 
 import models.UserAnswers
 import pages.behaviours.PageBehaviours

@@ -18,12 +18,12 @@ package navigation
 
 import config.FrontendAppConfig
 import controllers.deceased_settlor.routes._
-import controllers.deceased_settlor.nonTaxable.routes._
+import controllers.deceased_settlor.mld5.routes._
 import javax.inject.{Inject, Singleton}
 import models.{Mode, NormalMode, UserAnswers}
 import pages.Page
 import pages.deceased_settlor._
-import pages.deceased_settlor.nonTaxable._
+import pages.deceased_settlor.mld5._
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
 

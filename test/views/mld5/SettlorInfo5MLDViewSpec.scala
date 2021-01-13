@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package views.nonTaxable
+package views.mld5
 
 import controllers.trust_type.routes
 import models.NormalMode
 import views.behaviours.ViewBehaviours
-import views.html.nonTaxable.SettlorInfo5MLDView
+import views.html.mld5.SettlorInfo5MLDView
 
 class SettlorInfo5MLDViewSpec extends ViewBehaviours {
 

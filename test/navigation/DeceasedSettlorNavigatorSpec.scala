@@ -18,10 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.deceased_settlor.routes
-import controllers.deceased_settlor.nonTaxable.routes._
+import controllers.deceased_settlor.mld5.routes._
 import models.{Mode, NormalMode}
 import pages.deceased_settlor._
-import pages.deceased_settlor.nonTaxable.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
+import pages.deceased_settlor.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
 import play.api.mvc.Call
 
 class DeceasedSettlorNavigatorSpec extends SpecBase {

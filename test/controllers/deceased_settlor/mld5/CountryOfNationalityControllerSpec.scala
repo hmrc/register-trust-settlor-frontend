@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor.nonTaxable
+package controllers.deceased_settlor.mld5
 
 import base.SpecBase
-import controllers.deceased_settlor.nonTaxable.routes.CountryOfNationalityController
+import controllers.deceased_settlor.mld5.routes.CountryOfNationalityController
 import controllers.deceased_settlor.routes.SettlorsNameController
 import controllers.routes.SessionExpiredController
 import forms.CountryFormProvider
 import models.NormalMode
 import models.pages.FullName
 import pages.deceased_settlor.SettlorsNamePage
-import pages.deceased_settlor.nonTaxable.CountryOfNationalityPage
+import pages.deceased_settlor.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityView
+import views.html.deceased_settlor.mld5.CountryOfNationalityView
 
 class CountryOfNationalityControllerSpec extends SpecBase {
 

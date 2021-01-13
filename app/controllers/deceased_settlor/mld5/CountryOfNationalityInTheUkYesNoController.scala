@@ -14,52 +14,50 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor.nonTaxable
+package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
-import forms.CountryFormProvider
+import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.deceased_settlor.SettlorsNamePage
-import pages.deceased_settlor.nonTaxable.CountryOfNationalityPage
+import pages.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.countryOptions.CountryOptionsNonUK
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityView
+import views.html.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfNationalityController @Inject()(
+class CountryOfNationalityInTheUkYesNoController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
                                                    @DeceasedSettlor navigator: Navigator,
                                                    actions: Actions,
                                                    requireName: NameRequiredActionProvider,
-                                                   formProvider: CountryFormProvider,
+                                                   yesNoFormProvider: YesNoFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfNationalityView,
-                                                   val countryOptions: CountryOptionsNonUK
+                                                   view: CountryOfNationalityInTheUkYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
+  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfNationalityInTheUkYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      val preparedForm = request.userAnswers.get(CountryOfNationalityPage) match {
+      val preparedForm = request.userAnswers.get(CountryOfNationalityInTheUkYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, mode, draftId, name))
+      Ok(view(preparedForm, mode, draftId, name))
   }
 
   def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
@@ -69,13 +67,13 @@ class CountryOfNationalityController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, mode, draftId)(updatedAnswers))
         }
       )
   }

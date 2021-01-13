@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.deceased_settlor.nonTaxable
+package views.deceased_settlor.mld5
 
 import forms.YesNoFormProvider
 import models.NormalMode
@@ -22,7 +22,7 @@ import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoView
+import views.html.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoView
 
 class CountryOfNationalityInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 

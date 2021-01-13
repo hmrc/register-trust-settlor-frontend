@@ -16,7 +16,7 @@
 
 @import models.pages.FullName
 
-@import controllers.deceased_settlor.nonTaxable.routes._
+@import controllers.deceased_settlor.mld5.routes._
 @import models.Mode
 
 @this(
@@ -27,10 +27,10 @@
 @(form: Form[_], mode: Mode, draftId: String, name : FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("5mld.countryOfNationalityYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("5mld.countryOfNationalityInTheUkYesNo.title")}"
     ) {
 
-    @formHelper(action = CountryOfNationalityYesNoController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CountryOfNationalityInTheUkYesNoController.onSubmit(mode, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -38,10 +38,9 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("5mld.countryOfNationalityYesNo.heading", name.toString),
+            label = messages("5mld.countryOfNationalityInTheUkYesNo.heading", name.toString),
             legendClass = Some("heading-large"),
-            legendAsHeading = true,
-            hint = Some(messages("5mld.countryOfNationalityYesNo.hint"))
+            legendAsHeading = true
         )
 
         @components.submit_button()

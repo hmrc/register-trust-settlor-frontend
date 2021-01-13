@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor.nonTaxable
+package controllers.deceased_settlor.mld5
 
 import base.SpecBase
-import controllers.routes.SessionExpiredController
+import controllers.deceased_settlor.mld5.routes.CountryOfNationalityInTheUkYesNoController
 import controllers.deceased_settlor.routes.SettlorsNameController
-import controllers.deceased_settlor.nonTaxable.routes.CountryOfNationalityYesNoController
+import controllers.routes.SessionExpiredController
 import forms.YesNoFormProvider
 import models.NormalMode
 import models.pages.FullName
-import pages.deceased_settlor.nonTaxable.CountryOfNationalityYesNoPage
 import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityYesNoView
+import views.html.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoView
 
-class CountryOfNationalityYesNoControllerSpec extends SpecBase {
+class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
-  val form = new YesNoFormProvider().withPrefix("5mld.countryOfNationalityYesNo")
+  val form = new YesNoFormProvider().withPrefix("5mld.countryOfNationalityInTheUkYesNo")
 
-  lazy val countryOfNationalityYesNoRoute = CountryOfNationalityYesNoController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val countryOfNationalityInTheUkYesNoRoute = CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
-  "CountryOfNationalityYesNoController Controller" must {
+  "CountryOfNationalityInTheUkYesNoController Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -46,11 +46,11 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityInTheUkYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityInTheUkYesNoView]
 
       status(result) mustEqual OK
 
@@ -62,14 +62,14 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CountryOfNationalityYesNoPage, true).success.value.set(SettlorsNamePage,
+      val userAnswers = emptyUserAnswers.set(CountryOfNationalityInTheUkYesNoPage, true).success.value.set(SettlorsNamePage,
         name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityInTheUkYesNoRoute)
 
-      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityInTheUkYesNoView]
 
       val result = route(application, request).value
 
@@ -90,7 +90,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, countryOfNationalityYesNoRoute)
+        FakeRequest(POST, countryOfNationalityInTheUkYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -110,12 +110,12 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, countryOfNationalityYesNoRoute)
+        FakeRequest(POST, countryOfNationalityInTheUkYesNoRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[CountryOfNationalityYesNoView]
+      val view = application.injector.instanceOf[CountryOfNationalityInTheUkYesNoView]
 
       val result = route(application, request).value
 
@@ -131,7 +131,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityInTheUkYesNoRoute)
 
       val result = route(application, request).value
 
@@ -147,7 +147,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, countryOfNationalityYesNoRoute)
+        FakeRequest(POST, countryOfNationalityInTheUkYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -164,7 +164,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, countryOfNationalityYesNoRoute)
+      val request = FakeRequest(GET, countryOfNationalityInTheUkYesNoRoute)
 
       val result = route(application, request).value
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views.deceased_settlor.nonTaxable
+package views.deceased_settlor.mld5
 
 import forms.CountryFormProvider
 import models.NormalMode
@@ -24,7 +24,7 @@ import play.twirl.api.HtmlFormat
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.behaviours.SelectCountryViewBehaviours
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityView
+import views.html.deceased_settlor.mld5.CountryOfNationalityView
 
 class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
 

@@ -14,50 +14,52 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor.nonTaxable
+package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
-import forms.YesNoFormProvider
+import forms.CountryFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.deceased_settlor.nonTaxable.CountryOfNationalityYesNoPage
 import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityYesNoView
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.deceased_settlor.mld5.CountryOfNationalityView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfNationalityYesNoController @Inject()(
+class CountryOfNationalityController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
                                                    @DeceasedSettlor navigator: Navigator,
                                                    actions: Actions,
                                                    requireName: NameRequiredActionProvider,
-                                                   yesNoFormProvider: YesNoFormProvider,
+                                                   formProvider: CountryFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfNationalityYesNoView
+                                                   view: CountryOfNationalityView,
+                                                   val countryOptions: CountryOptionsNonUK
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfNationalityYesNo")
+  val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage) match {
+      val preparedForm = request.userAnswers.get(CountryOfNationalityPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name))
+      Ok(view(preparedForm, countryOptions.options, mode, draftId, name))
   }
 
   def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
@@ -67,13 +69,13 @@ class CountryOfNationalityYesNoController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, name))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityPage, mode, draftId)(updatedAnswers))
         }
       )
   }

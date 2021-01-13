@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor.nonTaxable
+package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
 import controllers.actions._
@@ -23,18 +23,18 @@ import forms.YesNoFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
+import pages.deceased_settlor.mld5.CountryOfNationalityYesNoPage
 import pages.deceased_settlor.SettlorsNamePage
-import pages.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoView
+import views.html.deceased_settlor.mld5.CountryOfNationalityYesNoView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class CountryOfNationalityInTheUkYesNoController @Inject()(
+class CountryOfNationalityYesNoController @Inject()(
                                                    override val messagesApi: MessagesApi,
                                                    registrationsRepository: RegistrationsRepository,
                                                    @DeceasedSettlor navigator: Navigator,
@@ -42,17 +42,17 @@ class CountryOfNationalityInTheUkYesNoController @Inject()(
                                                    requireName: NameRequiredActionProvider,
                                                    yesNoFormProvider: YesNoFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfNationalityInTheUkYesNoView
+                                                   view: CountryOfNationalityYesNoView
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfNationalityInTheUkYesNo")
+  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfNationalityYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      val preparedForm = request.userAnswers.get(CountryOfNationalityInTheUkYesNoPage) match {
+      val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -71,9 +71,9 @@ class CountryOfNationalityInTheUkYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityInTheUkYesNoPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage, mode, draftId)(updatedAnswers))
         }
       )
   }
