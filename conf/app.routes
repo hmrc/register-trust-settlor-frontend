@@ -136,6 +136,21 @@ POST       /:draftId/deceased/country-of-nationality-will                       
 GET        /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.mld5.CountryOfNationalityController.onPageLoad(mode: Mode = CheckMode, draftId: String)
 POST       /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.mld5.CountryOfNationalityController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
+GET        /:draftId/deceased/do-you-know-country-of-residence-will                       controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/do-you-know-country-of-residence-will                       controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-do-you-know-country-of-residence-will                controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-do-you-know-country-of-residence-will                controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/deceased/uk-residency-will                                           controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/uk-residency-will                                           controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-uk-residency-will                                    controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-uk-residency-will                                    controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/deceased/country-of-residence-will                                   controllers.deceased_settlor.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/country-of-residence-will                                   controllers.deceased_settlor.mld5.CountryOfResidenceController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-country-of-residence-will                            controllers.deceased_settlor.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-country-of-residence-will                            controllers.deceased_settlor.mld5.CountryOfResidenceController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
 # Living Settlor
 
 GET        /:draftId/living/:index/individual-or-business                                  controllers.living_settlor.SettlorIndividualOrBusinessController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
