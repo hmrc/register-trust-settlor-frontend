@@ -31,7 +31,7 @@ import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.CheckYourAnswersHelper
+import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
@@ -48,6 +48,8 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
   private lazy val settlorBusinessAnswerRoute: String = routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
   private lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
+
+  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   "SettlorBusinessAnswer Controller" must {
 
@@ -67,7 +69,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
             .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
         val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
         val expectedSections = Seq(
           AnswerSection(
@@ -111,7 +113,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
             .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
         val countryOptions = injector.instanceOf[CountryOptions]
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
         val expectedSections = Seq(
           AnswerSection(
@@ -156,7 +158,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
             .set(SettlorBusinessAddressUKPage(index), addressUK).success.value
 
         val countryOptions = injector.instanceOf[CountryOptions]
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
         val expectedSections = Seq(
           AnswerSection(
@@ -201,7 +203,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
             .set(SettlorBusinessAddressInternationalPage(index), addressInternational).success.value
 
         val countryOptions = injector.instanceOf[CountryOptions]
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit = true)
+        val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
 
         val expectedSections = Seq(
           AnswerSection(

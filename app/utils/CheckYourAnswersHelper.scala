@@ -19,8 +19,8 @@ package utils
 import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.living_settlor.business.mld5.{routes => businessMld5Routes}
 import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.individual.mld5.{routes => individual5mldRoutes}
+import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.routes
 import controllers.trust_type.{routes => trustTypeRoutes}
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
@@ -28,23 +28,22 @@ import models.{NormalMode, UserAnswers}
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
-import pages.living_settlor.individual._
-import pages.living_settlor.individual.{mld5 => individual5mldPages}
+import pages.living_settlor.business.mld5._
+import pages.living_settlor.individual.{mld5 => individual5mldPages, _}
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
 import queries.Gettable
 import sections.LivingSettlors
-import utils.CheckAnswersFormatters._
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorLivingViewModel}
 
 import java.time.LocalDate
 import javax.inject.Inject
 
-class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
+class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
+                                       checkAnswersFormatters: CheckAnswersFormatters)
                                       (userAnswers: UserAnswers,
                                        draftId: String,
                                        canEdit: Boolean)
@@ -203,7 +202,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = yesOrNo(x),
+        answer = checkAnswersFormatters.yesOrNo(x),
         changeUrl = Some(changeUrl),
         labelArg = labelArg,
         canEdit = canEdit
@@ -218,7 +217,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = HtmlFormat.escape(x.format(dateFormatter)),
+        answer = HtmlFormat.escape(checkAnswersFormatters.formatDate(x)),
         changeUrl = Some(changeUrl),
         labelArg = labelArg,
         canEdit = canEdit
@@ -233,7 +232,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = HtmlFormat.escape(formatNino(x)),
+        answer = HtmlFormat.escape(checkAnswersFormatters.formatNino(x)),
         changeUrl = Some(changeUrl),
         labelArg = labelArg,
         canEdit = canEdit
@@ -249,7 +248,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = addressFormatter(x, countryOptions),
+        answer = checkAnswersFormatters.addressFormatter(x, countryOptions),
         changeUrl = Some(changeUrl),
         labelArg = labelArg,
         canEdit = canEdit
@@ -267,7 +266,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
         userAnswers.get(query) map { x =>
           AnswerRow(
             label = s"$labelKey.checkYourAnswersLabel",
-            answer = HtmlFormat.escape(country(x, countryOptions)),
+            answer = HtmlFormat.escape(checkAnswersFormatters.country(x, countryOptions)),
             changeUrl = Some(changeUrl),
             labelArg = labelArg,
             canEdit = canEdit
@@ -302,12 +301,24 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
-        answer = passportOrIDCard(x, countryOptions),
+        answer = checkAnswersFormatters.passportOrIDCard(x, countryOptions),
         changeUrl = Some(changeUrl),
         labelArg = labelArg,
         canEdit = canEdit
       )
     }
+  }
+
+  private def deceasedSettlorName(userAnswers: UserAnswers): String = {
+    userAnswers.get(SettlorsNamePage).map(_.toString).getOrElse("")
+  }
+
+  private def livingSettlorName(index: Int, userAnswers: UserAnswers): String = {
+    userAnswers.get(SettlorIndividualNamePage(index)).map(_.toString).getOrElse("")
+  }
+
+  private def businessSettlorName(index: Int, userAnswers: UserAnswers): String = {
+    userAnswers.get(SettlorBusinessNamePage(index)).getOrElse("")
   }
 
   private def kindOfTrust: Option[AnswerRow] = {
