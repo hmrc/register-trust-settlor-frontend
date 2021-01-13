@@ -23,12 +23,18 @@ import controllers.routes._
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
 import models.{NormalMode, UserAnswers}
 import models.pages.FullName
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.deceased_settlor.SettlorsDateOfBirthView
+
+import scala.concurrent.Future
 
 class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
@@ -90,8 +96,15 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val featureFlagService = mock[FeatureFlagService]
+
       val application =
-        applicationBuilder(userAnswers = Some(baseAnswers)).build()
+        applicationBuilder(userAnswers = Some(baseAnswers))
+          .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService)
+          ).build()
+
+      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val request =
         FakeRequest(POST, settlorsDateOfBirthRoute)
