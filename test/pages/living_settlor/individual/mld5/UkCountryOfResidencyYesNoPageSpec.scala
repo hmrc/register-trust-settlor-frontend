@@ -47,7 +47,7 @@ class UkCountryOfResidencyYesNoPageSpec extends PageBehaviours {
     }
 
     "not implement cleanup logic" when {
-      
+
       "NO selected and previous selection was NO" in {
         forAll(arbitrary[UserAnswers]) {
           userAnswers =>
