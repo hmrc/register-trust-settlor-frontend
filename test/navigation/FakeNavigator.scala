@@ -29,6 +29,6 @@ class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Naviga
 
   override def nextPage(page: Page, mode: Mode, draftId: String,
                         af: AffinityGroup = AffinityGroup.Organisation,
-                        fiveMldEnabled: Boolean = false): UserAnswers => Call = _ => desiredRoute
+                        is5mldEnabled: Boolean = false): UserAnswers => Call = _ => desiredRoute
 
 }

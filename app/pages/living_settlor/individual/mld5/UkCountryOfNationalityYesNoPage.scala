@@ -14,25 +14,31 @@
  * limitations under the License.
  */
 
-package pages.deceased_settlor.nonTaxable
+package pages.living_settlor.individual.mld5
 
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.DeceasedSettlor
+import sections.LivingSettlors
 import utils.Constants.GB
 
 import scala.util.Try
 
-case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
+case class UkCountryOfNationalityYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
-  override def path: JsPath = DeceasedSettlor.path \ toString
+  override def path: JsPath = LivingSettlors.path \ index \ toString
 
-  override def toString: String = "countryOfNationalityInTheUkYesNo"
+  override def toString: String = "ukCountryOfNationalityYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+    val hasGbCountryOfNationality: Boolean = userAnswers.get(CountryOfNationalityPage(index)).contains(GB)
     value match {
-      case Some(true) => userAnswers.set(CountryOfNationalityPage, GB)
-      case _ => super.cleanup(value, userAnswers)
+      case Some(true) =>
+        userAnswers.set(CountryOfNationalityPage(index), GB)
+      case Some(false) if hasGbCountryOfNationality =>
+        userAnswers.remove(CountryOfNationalityPage(index))
+      case _ =>
+        super.cleanup(value, userAnswers)
     }
+  }
 }

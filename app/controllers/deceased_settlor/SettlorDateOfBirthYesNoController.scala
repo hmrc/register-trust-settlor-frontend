@@ -75,7 +75,7 @@ class SettlorDateOfBirthYesNoController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorDateOfBirthYesNoPage, value))
             is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, mode, draftId, fiveMldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, mode, draftId, is5mldEnabled = is5mld)(updatedAnswers))
         }
       )
   }

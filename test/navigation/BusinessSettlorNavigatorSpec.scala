@@ -65,7 +65,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to address yes/no" in {
             val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
-            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
@@ -104,7 +104,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               .set(KindOfTrustPage, Employees).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
@@ -115,7 +115,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               .set(KindOfTrustPage, Intervivos).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, fiveMldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }

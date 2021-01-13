@@ -16,21 +16,20 @@
 
 package config
 
-import java.net.{URI, URLEncoder}
-import java.time.LocalDate
-
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.{Call, Request}
 
+import java.net.{URI, URLEncoder}
+import java.time.LocalDate
+
 @Singleton
 class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
-  final val UK_COUNTRY_CODE = "GB"
 
   private val contactHost = configuration.get[String]("contact-frontend.host")
   private val contactFormServiceIdentifier = "trusts"

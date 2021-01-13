@@ -74,7 +74,7 @@ class SettlorBusinessUtrYesNoController @Inject()(
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessUtrYesNoPage(index), value))
             is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, draftId, fiveMldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, draftId, is5mldEnabled = is5mld)(updatedAnswers))
         }
       )
   }
