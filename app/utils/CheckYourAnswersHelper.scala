@@ -25,12 +25,11 @@ import controllers.living_settlor.routes
 import controllers.trust_type.{routes => trustTypeRoutes}
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
 import models.{NormalMode, UserAnswers}
-import pages.deceased_settlor._
-import pages.living_settlor._
-import pages.living_settlor.business._
-import pages.living_settlor.business.mld5._
-import pages.living_settlor.individual.{mld5 => individual5mldPages, _}
+import pages.living_settlor.business.{mld5 => business5mldPages}
+import pages.living_settlor.individual.{mld5 => individual5mldPages}
+import pages.living_settlor.{business => businessPages, individual => individualPages, _}
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
+import pages.{deceased_settlor => deceasedPages}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
@@ -51,7 +50,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
 
   def deceasedSettlor: Option[Seq[AnswerSection]] = {
 
-    if (deceasedSettlorsName.nonEmpty) {
+    if (deceasedSettlorNameQuestion.nonEmpty) {
       Some(Seq(AnswerSection(
         headingKey = None,
         rows = deceasedSettlorQuestions,
@@ -63,24 +62,24 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   val deceasedSettlorQuestions: Seq[AnswerRow] = {
-    val arg = deceasedSettlorName(userAnswers)
+    val name = settlorName(deceasedPages.SettlorsNamePage)
 
     Seq(
-      wasSetUpAfterSettlorDied,
-      kindOfTrust,
-      wasSetUpInAdditionToWillTrust,
+      wasSetUpAfterSettlorDiedQuestion,
+      kindOfTrustQuestion,
+      wasSetUpInAdditionToWillTrustQuestion,
 
-      deceasedSettlorsName,
-      yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", deceasedRoutes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      dateQuestion(SettlorsDateOfBirthPage, "settlorsDateOfBirth", deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      ninoQuestion(SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      yesNoQuestion(WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, arg),
-      addressQuestion(SettlorsUKAddressPage, "settlorsUKAddress", deceasedRoutes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, arg),
-      addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", deceasedRoutes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url, arg)
+      deceasedSettlorNameQuestion,
+      yesNoQuestion(deceasedPages.SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      dateQuestion(deceasedPages.SettlorDateOfDeathPage, "settlorDateOfDeath", deceasedRoutes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceasedPages.SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      dateQuestion(deceasedPages.SettlorsDateOfBirthPage, "settlorsDateOfBirth", deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceasedPages.SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      ninoQuestion(deceasedPages.SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceasedPages.SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceasedPages.WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      addressQuestion(deceasedPages.SettlorsUKAddressPage, "settlorsUKAddress", deceasedRoutes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, name),
+      addressQuestion(deceasedPages.SettlorsInternationalAddressPage, "settlorsInternationalAddress", deceasedRoutes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url, name)
     ).flatten
   }
 
@@ -110,9 +109,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
 
   def trustTypeQuestions(index: Int): Seq[AnswerRow] = {
     Seq(
-      wasSetUpAfterSettlorDied,
-      kindOfTrust,
-      wasSetUpInAdditionToWillTrust,
+      wasSetUpAfterSettlorDiedQuestion,
+      kindOfTrustQuestion,
+      wasSetUpInAdditionToWillTrustQuestion,
       enumQuestion(HowDeedOfVariationCreatedPage, "howDeedOfVariationCreated", trustTypeRoutes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId).url, "howDeedOfVariationCreated"),
       yesNoQuestion(HoldoverReliefYesNoPage, "holdoverReliefYesNo", trustTypeRoutes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId).url),
       yesNoQuestion(EfrbsYesNoPage, "employerFinancedRbsYesNo", trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId).url),
@@ -122,55 +121,55 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   def settlorIndividualQuestions(index: Int): Seq[AnswerRow] = {
-    val arg = livingSettlorName(index, userAnswers)
+    val name = settlorName(individualPages.SettlorIndividualNamePage(index))
 
     trustTypeQuestions(index) ++ Seq(
-      nameQuestion(SettlorIndividualNamePage(index), "settlorIndividualName", individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url),
-      yesNoQuestion(SettlorIndividualDateOfBirthYesNoPage(index), "settlorIndividualDateOfBirthYesNo", individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      dateQuestion(SettlorIndividualDateOfBirthPage(index), "settlorIndividualDateOfBirth", individualRoutes.SettlorIndividualDateOfBirthController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(individual5mldPages.CountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationalityYesNo", individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualUkCountryOfNationalityYesNo", individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      countryQuestion(individual5mldPages.CountryOfNationalityPage(index), individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationality", individual5mldRoutes.CountryOfNationalityController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorIndividualNINOYesNoPage(index), "settlorIndividualNINOYesNo", individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      ninoQuestion(SettlorIndividualNINOPage(index), "settlorIndividualNINO", individualRoutes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(individual5mldPages.CountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidencyYesNo", individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualUkCountryOfResidencyYesNo", individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      countryQuestion(individual5mldPages.CountryOfResidencyPage(index), individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidency", individual5mldRoutes.CountryOfResidencyController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorAddressYesNoPage(index), "settlorIndividualAddressYesNo", individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorAddressUKYesNoPage(index), "settlorIndividualAddressUKYesNo", individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      addressQuestion(SettlorAddressUKPage(index), "settlorIndividualAddressUK", individualRoutes.SettlorIndividualAddressUKController.onPageLoad(NormalMode, index, draftId).url, arg),
-      addressQuestion(SettlorAddressInternationalPage(index), "settlorIndividualAddressInternational", individualRoutes.SettlorIndividualAddressInternationalController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorIndividualPassportYesNoPage(index), "settlorIndividualPassportYesNo", individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      passportOrIdCardDetailsQuestion(SettlorIndividualPassportPage(index), "settlorIndividualPassport", individualRoutes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorIndividualIDCardYesNoPage(index), "settlorIndividualIDCardYesNo", individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      passportOrIdCardDetailsQuestion(SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", individualRoutes.SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(individual5mldPages.LegallyIncapableYesNoPage(index), "settlorIndividualLegallyIncapableYesNo", individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId).url, arg)
+      nameQuestion(individualPages.SettlorIndividualNamePage(index), "settlorIndividualName", individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url),
+      yesNoQuestion(individualPages.SettlorIndividualDateOfBirthYesNoPage(index), "settlorIndividualDateOfBirthYesNo", individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      dateQuestion(individualPages.SettlorIndividualDateOfBirthPage(index), "settlorIndividualDateOfBirth", individualRoutes.SettlorIndividualDateOfBirthController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individual5mldPages.CountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationalityYesNo", individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualUkCountryOfNationalityYesNo", individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      countryQuestion(individual5mldPages.CountryOfNationalityPage(index), individual5mldPages.UkCountryOfNationalityYesNoPage(index), "settlorIndividualCountryOfNationality", individual5mldRoutes.CountryOfNationalityController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individualPages.SettlorIndividualNINOYesNoPage(index), "settlorIndividualNINOYesNo", individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      ninoQuestion(individualPages.SettlorIndividualNINOPage(index), "settlorIndividualNINO", individualRoutes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individual5mldPages.CountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidencyYesNo", individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualUkCountryOfResidencyYesNo", individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      countryQuestion(individual5mldPages.CountryOfResidencyPage(index), individual5mldPages.UkCountryOfResidencyYesNoPage(index), "settlorIndividualCountryOfResidency", individual5mldRoutes.CountryOfResidencyController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individualPages.SettlorAddressYesNoPage(index), "settlorIndividualAddressYesNo", individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individualPages.SettlorAddressUKYesNoPage(index), "settlorIndividualAddressUKYesNo", individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      addressQuestion(individualPages.SettlorAddressUKPage(index), "settlorIndividualAddressUK", individualRoutes.SettlorIndividualAddressUKController.onPageLoad(NormalMode, index, draftId).url, name),
+      addressQuestion(individualPages.SettlorAddressInternationalPage(index), "settlorIndividualAddressInternational", individualRoutes.SettlorIndividualAddressInternationalController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individualPages.SettlorIndividualPassportYesNoPage(index), "settlorIndividualPassportYesNo", individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      passportOrIdCardDetailsQuestion(individualPages.SettlorIndividualPassportPage(index), "settlorIndividualPassport", individualRoutes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individualPages.SettlorIndividualIDCardYesNoPage(index), "settlorIndividualIDCardYesNo", individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      passportOrIdCardDetailsQuestion(individualPages.SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", individualRoutes.SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(individual5mldPages.LegallyIncapableYesNoPage(index), "settlorIndividualLegallyIncapableYesNo", individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId).url, name)
     ).flatten
   }
 
   def settlorBusinessQuestions(index: Int): Seq[AnswerRow] = {
-    val arg: String = businessSettlorName(index, userAnswers)
+    val name: String = settlorName(businessPages.SettlorBusinessNamePage(index))
 
     trustTypeQuestions(index) ++ Seq(
-      stringQuestion(SettlorBusinessNamePage(index), "settlorBusinessName", businessRoutes.SettlorBusinessNameController.onPageLoad(NormalMode, index, draftId).url),
-      yesNoQuestion(SettlorBusinessUtrYesNoPage(index), "settlorBusinessUtrYesNo", businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      stringQuestion(SettlorBusinessUtrPage(index), "settlorBusinessUtr", businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(CountryOfResidenceYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceYesNo", businessMld5Routes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo", businessMld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      countryQuestion(CountryOfResidencePage(index), CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidence", businessMld5Routes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorBusinessAddressYesNoPage(index), "settlorBusinessAddressYesNo", businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      yesNoQuestion(SettlorBusinessAddressUKYesNoPage(index), "settlorBusinessAddressUKYesNo", businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url, arg),
-      addressQuestion(SettlorBusinessAddressUKPage(index), "settlorBusinessAddressUK", businessRoutes.SettlorBusinessAddressUKController.onPageLoad(NormalMode, index, draftId).url, arg),
-      addressQuestion(SettlorBusinessAddressInternationalPage(index), "settlorBusinessAddressInternational", businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(NormalMode, index, draftId).url, arg),
-      enumQuestion(SettlorBusinessTypePage(index), "settlorBusinessType", businessRoutes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, draftId).url, "kindOfBusiness", arg),
-      yesNoQuestion(SettlorBusinessTimeYesNoPage(index), "settlorBusinessTimeYesNo", businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(NormalMode, index, draftId).url, arg)
+      stringQuestion(businessPages.SettlorBusinessNamePage(index), "settlorBusinessName", businessRoutes.SettlorBusinessNameController.onPageLoad(NormalMode, index, draftId).url),
+      yesNoQuestion(businessPages.SettlorBusinessUtrYesNoPage(index), "settlorBusinessUtrYesNo", businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      stringQuestion(businessPages.SettlorBusinessUtrPage(index), "settlorBusinessUtr", businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(business5mldPages.CountryOfResidenceYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceYesNo", businessMld5Routes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(business5mldPages.CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo", businessMld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      countryQuestion(business5mldPages.CountryOfResidencePage(index), business5mldPages.CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidence", businessMld5Routes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(businessPages.SettlorBusinessAddressYesNoPage(index), "settlorBusinessAddressYesNo", businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      yesNoQuestion(businessPages.SettlorBusinessAddressUKYesNoPage(index), "settlorBusinessAddressUKYesNo", businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
+      addressQuestion(businessPages.SettlorBusinessAddressUKPage(index), "settlorBusinessAddressUK", businessRoutes.SettlorBusinessAddressUKController.onPageLoad(NormalMode, index, draftId).url, name),
+      addressQuestion(businessPages.SettlorBusinessAddressInternationalPage(index), "settlorBusinessAddressInternational", businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(NormalMode, index, draftId).url, name),
+      enumQuestion(businessPages.SettlorBusinessTypePage(index), "settlorBusinessType", businessRoutes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, draftId).url, "kindOfBusiness", name),
+      yesNoQuestion(businessPages.SettlorBusinessTimeYesNoPage(index), "settlorBusinessTimeYesNo", businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(NormalMode, index, draftId).url, name)
     ).flatten
   }
 
   private def stringQuestion(query: Gettable[String],
-                     labelKey: String,
-                     changeUrl: String,
-                     labelArg: String = ""): Option[AnswerRow] = {
+                             labelKey: String,
+                             changeUrl: String,
+                             labelArg: String = ""): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -183,8 +182,8 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def nameQuestion(query: Gettable[FullName],
-                   labelKey: String,
-                   changeUrl: String): Option[AnswerRow] = {
+                           labelKey: String,
+                           changeUrl: String): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -196,9 +195,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def yesNoQuestion(query: Gettable[Boolean],
-                    labelKey: String,
-                    changeUrl: String,
-                    labelArg: String = ""): Option[AnswerRow] = {
+                            labelKey: String,
+                            changeUrl: String,
+                            labelArg: String = ""): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -211,9 +210,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def dateQuestion(query: Gettable[LocalDate],
-                   labelKey: String,
-                   changeUrl: String,
-                   labelArg: String = ""): Option[AnswerRow] = {
+                           labelKey: String,
+                           changeUrl: String,
+                           labelArg: String = ""): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -226,9 +225,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def ninoQuestion(query: Gettable[String],
-                   labelKey: String,
-                   changeUrl: String,
-                   labelArg: String): Option[AnswerRow] = {
+                           labelKey: String,
+                           changeUrl: String,
+                           labelArg: String): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -241,10 +240,10 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def addressQuestion[T <: Address](query: Gettable[T],
-                                    labelKey: String,
-                                    changeUrl: String,
-                                    labelArg: String)
-                                   (implicit reads: Reads[T]): Option[AnswerRow] = {
+                                            labelKey: String,
+                                            changeUrl: String,
+                                            labelArg: String)
+                                           (implicit reads: Reads[T]): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -257,10 +256,10 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def countryQuestion(query: Gettable[String],
-                      yesNoQuery: Gettable[Boolean],
-                      labelKey: String,
-                      changeUrl: String,
-                      labelArg: String): Option[AnswerRow] = {
+                              yesNoQuery: Gettable[Boolean],
+                              labelKey: String,
+                              changeUrl: String,
+                              labelArg: String): Option[AnswerRow] = {
     userAnswers.get(yesNoQuery) flatMap {
       case false =>
         userAnswers.get(query) map { x =>
@@ -278,11 +277,11 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def enumQuestion[T](query: Gettable[T],
-                      labelKey: String,
-                      changeUrl: String,
-                      enumPrefix: String,
-                      labelArg: String = "")
-                     (implicit reads: Reads[T]): Option[AnswerRow] = {
+                              labelKey: String,
+                              changeUrl: String,
+                              enumPrefix: String,
+                              labelArg: String = "")
+                             (implicit reads: Reads[T]): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -295,9 +294,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   }
 
   private def passportOrIdCardDetailsQuestion(query: Gettable[PassportOrIdCardDetails],
-                                      labelKey: String,
-                                      changeUrl: String,
-                                      labelArg: String): Option[AnswerRow] = {
+                                              labelKey: String,
+                                              changeUrl: String,
+                                              labelArg: String): Option[AnswerRow] = {
     userAnswers.get(query) map { x =>
       AnswerRow(
         label = s"$labelKey.checkYourAnswersLabel",
@@ -309,31 +308,23 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
     }
   }
 
-  private def deceasedSettlorName(userAnswers: UserAnswers): String = {
-    userAnswers.get(SettlorsNamePage).map(_.toString).getOrElse("")
+  private def settlorName[T](page: Gettable[T])(implicit rds: Reads[T]): String = {
+    userAnswers.get(page).map(_.toString).getOrElse("")
   }
 
-  private def livingSettlorName(index: Int, userAnswers: UserAnswers): String = {
-    userAnswers.get(SettlorIndividualNamePage(index)).map(_.toString).getOrElse("")
-  }
-
-  private def businessSettlorName(index: Int, userAnswers: UserAnswers): String = {
-    userAnswers.get(SettlorBusinessNamePage(index)).getOrElse("")
-  }
-
-  private def kindOfTrust: Option[AnswerRow] = {
-    enumQuestion(KindOfTrustPage, "kindOfTrust", trustTypeRoutes.KindOfTrustController.onPageLoad(NormalMode, draftId).url, "kindOfTrust")
-  }
-
-  private def deceasedSettlorsName: Option[AnswerRow] = {
-    nameQuestion(SettlorsNamePage, "settlorsName", controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId).url)
-  }
-
-  private def wasSetUpAfterSettlorDied: Option[AnswerRow] = {
+  private def wasSetUpAfterSettlorDiedQuestion: Option[AnswerRow] = {
     yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDied", trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url)
   }
 
-  private def wasSetUpInAdditionToWillTrust: Option[AnswerRow] = {
+  private def deceasedSettlorNameQuestion: Option[AnswerRow] = {
+    nameQuestion(deceasedPages.SettlorsNamePage, "settlorsName", controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId).url)
+  }
+
+  private def kindOfTrustQuestion: Option[AnswerRow] = {
+    enumQuestion(KindOfTrustPage, "kindOfTrust", trustTypeRoutes.KindOfTrustController.onPageLoad(NormalMode, draftId).url, "kindOfTrust")
+  }
+
+  private def wasSetUpInAdditionToWillTrustQuestion: Option[AnswerRow] = {
     yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url)
   }
 
