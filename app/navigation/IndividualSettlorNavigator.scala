@@ -26,7 +26,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class IndividualSettlorNavigator extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorIndividualNamePage(index) => _ => _ =>
       controllers.living_settlor.individual.routes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorIndividualDateOfBirthYesNoPage(index)  => _ => yesNoNav(

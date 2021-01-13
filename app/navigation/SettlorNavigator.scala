@@ -32,7 +32,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case AddASettlorPage => _ => addSettlorRoute(draftId)
     case AddASettlorYesNoPage  => _ => yesNoNav(AddASettlorYesNoPage,
       yesCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId),

@@ -14,17 +14,23 @@
  * limitations under the License.
  */
 
-package navigation
+package forms
 
-import models.UserAnswers
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import forms.mappings.Mappings
+import play.api.data.Form
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
+import javax.inject.Inject
 
-  override protected def route(draftId: String, fiveMldEnabled: Boolean = false): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case _ => _ => _ => desiredRoute
-  }
+class CountryFormProvider @Inject() extends Mappings {
 
+  def withPrefix(prefix: String): Form[String] =
+    Form(
+      "value" -> text(s"$prefix.error.required")
+        .verifying(
+          firstError(
+            maxLength(100, s"$prefix.error.length"),
+            regexp(Validation.countryRegex, s"$prefix.error.invalidCharacters"),
+            isNotEmpty("value", s"$prefix.error.required")
+          ))
+        )
 }

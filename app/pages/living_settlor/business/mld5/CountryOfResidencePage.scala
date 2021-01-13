@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package navigation
+package pages.living_settlor.business.mld5
 
-import models.UserAnswers
-import pages._
-import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.LivingSettlors
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
+final case class CountryOfResidencePage(index : Int) extends QuestionPage[String] {
 
-  override protected def route(draftId: String, fiveMldEnabled: Boolean = false): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case _ => _ => _ => desiredRoute
-  }
+  override def path: JsPath = LivingSettlors.path \ index \ toString
+
+  override def toString: String = "countryOfResidence"
 
 }

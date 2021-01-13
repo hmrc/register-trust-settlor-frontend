@@ -28,7 +28,7 @@ import uk.gov.hmrc.auth.core.AffinityGroup
 @Singleton
 class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
-  override protected def route(draftId: String): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
+  override protected def route(draftId: String, fiveMldEnabled: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorsNamePage => _ => _ =>
       controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId)
     case SettlorDateOfDeathYesNoPage => _ => yesNoNav(

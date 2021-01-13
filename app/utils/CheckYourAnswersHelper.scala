@@ -17,14 +17,17 @@
 package utils
 
 import controllers.living_settlor.business.{routes => businessRoutes}
+import controllers.living_settlor.business.mld5.{routes => businessMld5Routes}
 import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.routes
 import controllers.trust_type.{routes => trustTypeRoutes}
+
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business._
+import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.living_settlor.individual._
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import play.api.i18n.Messages
@@ -126,6 +129,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     settlorBusinessName(index),
     settlorBusinessUtrYesNo(index),
     settlorBusinessUtr(index),
+    settlorBusinessCountryOfResidenceYesNo(index),
+    settlorBusinessCountryOfResidenceInTheUkYesNo(index),
+    settlorBusinessCountryOfResidence(index),
     settlorBusinessAddressYesNo(index),
     settlorBusinessAddressUkYesNo(index),
     settlorBusinessAddressUk(index),
@@ -164,6 +170,41 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
         businessSettlorName(index, userAnswers),
         canEdit = canEdit
       )
+  }
+
+  def settlorBusinessCountryOfResidenceYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(businessMld5Routes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        businessSettlorName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def settlorBusinessCountryOfResidenceInTheUkYesNo(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) map {
+    x =>
+      AnswerRow(
+        "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(businessMld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId).url),
+        businessSettlorName(index, userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def settlorBusinessCountryOfResidence(index: Int): Option[AnswerRow] = userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) flatMap {
+    case false => userAnswers.get(CountryOfResidencePage(index)) map {
+      x =>
+        AnswerRow(
+          "settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel",
+          HtmlFormat.escape(country(x, countryOptions)),
+          Some(businessMld5Routes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId).url),
+          canEdit = canEdit
+        )
+    }
+    case _ => None
   }
 
   private def settlorBusinessAddressYesNo(index: Int): Option[AnswerRow] = userAnswers.get(SettlorBusinessAddressYesNoPage(index)) map {
