@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package pages.deceased_settlor.mld5
+package pages.living_settlor.individual.mld5
 
-import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.DeceasedSettlor
-import utils.Constants.GB
+import sections.LivingSettlors
 
-import scala.util.Try
+case class CountryOfResidencyPage(index: Int) extends QuestionPage[String] {
 
-case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
+  override def path: JsPath = LivingSettlors.path \ index \ toString
 
-  override def path: JsPath = DeceasedSettlor.path \ toString
-
-  override def toString: String = "countryOfNationalityInTheUkYesNo"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
-    value match {
-      case Some(true) => userAnswers.set(CountryOfNationalityPage, GB)
-      case _ => super.cleanup(value, userAnswers)
-    }
+  override def toString: String = "countryOfResidency"
 }

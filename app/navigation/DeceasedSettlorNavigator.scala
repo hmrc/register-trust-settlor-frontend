@@ -32,7 +32,7 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
 
   override def nextPage(page: Page, mode: Mode, draftId: String,
                         af: AffinityGroup = AffinityGroup.Organisation,
-                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+                        is5mldEnabled: Boolean = false): UserAnswers => Call = route(draftId, is5mldEnabled)(page)(af)
 
   def simpleNavigation(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SettlorsNamePage => _ => _ =>

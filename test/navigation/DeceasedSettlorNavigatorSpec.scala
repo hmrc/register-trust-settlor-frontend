@@ -193,7 +193,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(SettlorDateOfBirthYesNoPage, true).success.value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(routes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId))
 
       }
@@ -203,7 +203,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(SettlorDateOfBirthYesNoPage, false).success.value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(SettlorDateOfBirthYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId))
 
       }
@@ -213,7 +213,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(CountryOfNationalityYesNoPage, true).success.value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId))
 
       }
@@ -223,7 +223,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(CountryOfNationalityYesNoPage, false).success.value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(CountryOfNationalityYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
 
       }
@@ -233,7 +233,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
 
       }
@@ -243,7 +243,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(CountryOfNationalityController.onPageLoad(NormalMode, draftId))
 
       }
@@ -253,7 +253,7 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         val answers = emptyUserAnswers
           .set(CountryOfNationalityPage, "ES").success.value
 
-        navigator.nextPage(CountryOfNationalityPage, NormalMode, draftId, fiveMldEnabled = true)(answers)
+        navigator.nextPage(CountryOfNationalityPage, NormalMode, draftId, is5mldEnabled = true)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
 
       }

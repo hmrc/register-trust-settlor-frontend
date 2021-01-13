@@ -30,7 +30,7 @@ class TrustTypeNavigator extends Navigator {
 
   override def nextPage(page: Page, mode: Mode, draftId: String,
                         af: AffinityGroup = AffinityGroup.Organisation,
-                        fiveMldEnabled: Boolean = false): UserAnswers => Call = route(draftId, fiveMldEnabled)(page)(af)
+                        is5mldEnabled: Boolean = false): UserAnswers => Call = route(draftId, is5mldEnabled)(page)(af)
 
   override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
     case SetUpAfterSettlorDiedYesNoPage  => _ => yesNoNav(

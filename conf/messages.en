@@ -302,6 +302,45 @@ dateOfBirth.error.invalid = Enter a real date of birth
 dateOfBirth.error.future = Date of birth must be today or in the past
 dateOfBirth.error.past = Date of birth must be after 31 December 1499
 
+settlorIndividualCountryOfNationalityYesNo.title = Do you know the settlor’s country of nationality?
+settlorIndividualCountryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
+settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
+settlorIndividualCountryOfNationalityYesNo.error.required = Select yes if you know the settlor’s country of nationality
+
+settlorIndividualUkCountryOfNationalityYesNo.title = Does the settlor have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNo.heading = Does {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNo.error.required = Select yes if the settlor has UK nationality
+
+settlorIndividualCountryOfNationality.title = What is the settlor’s country of nationality?
+settlorIndividualCountryOfNationality.heading = What is {0}’s country of nationality?
+settlorIndividualCountryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
+settlorIndividualCountryOfNationality.error.required = Enter a country
+settlorIndividualCountryOfNationality.error.length = The country of nationality must be 100 characters or less
+settlorIndividualCountryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+settlorIndividualCountryOfResidencyYesNo.title = Do you know the settlor’s country of residence?
+settlorIndividualCountryOfResidencyYesNo.heading = Do you know {0}’s country of residence?
+settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+settlorIndividualCountryOfResidencyYesNo.error.required = Select yes if you know the settlor’s country of residence
+
+settlorIndividualUkCountryOfResidencyYesNo.title = Is the settlor a UK resident?
+settlorIndividualUkCountryOfResidencyYesNo.heading = Is {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel = Is {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNo.error.required = Select yes if the settlor is a UK resident
+
+settlorIndividualCountryOfResidency.title = What is the settlor’s country of residence?
+settlorIndividualCountryOfResidency.heading = What is {0}’s country of residence?
+settlorIndividualCountryOfResidency.checkYourAnswersLabel = What is {0}’s country of residence?
+settlorIndividualCountryOfResidency.error.required = Enter a country
+settlorIndividualCountryOfResidency.error.length = The country of residence must be 100 characters or less
+settlorIndividualCountryOfResidency.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+settlorIndividualLegallyIncapableYesNo.title = Does the settlor have mental capacity at the time of registration?
+settlorIndividualLegallyIncapableYesNo.heading = Does {0} have mental capacity at the time of registration?
+settlorIndividualLegallyIncapableYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
+settlorIndividualLegallyIncapableYesNo.error.required = Select yes if the settlor has mental capacity at the time of registration
+
 settlorIndividualAddressYesNo.title = Do you know the settlor’s address?
 settlorIndividualAddressYesNo.heading = Do you know {0}’s address?
 settlorIndividualAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?

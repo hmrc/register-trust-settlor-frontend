@@ -16,32 +16,35 @@
 
 package controllers.living_settlor.individual
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import controllers.routes._
 import forms.PassportOrIdCardFormProvider
 import models.NormalMode
 import models.pages.{FullName, PassportOrIdCardDetails}
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.living_settlor.individual.{SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage}
-import play.api.mvc.Call
+import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import utils._
 import utils.countryOptions.CountryOptions
 import views.html.living_settlor.individual.SettlorIndividualPassportView
 
+import java.time.{LocalDate, ZoneOffset}
+import scala.concurrent.Future
+
 class SettlorIndividualPassportControllerSpec extends SpecBase {
 
-  def onwardRoute = Call("GET", "/foo")
+  private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(appConfig)
+  private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualPassport")
+  private val index: Int = 0
+  private val name: FullName = FullName("First", Some("Middle"), "Last")
+  private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  val formProvider = new PassportOrIdCardFormProvider(appConfig)
-  val form = formProvider("settlorIndividualPassport")
-  val index = 0
-  val name = FullName("First", Some("Middle"), "Last")
-  val validAnswer = LocalDate.now(ZoneOffset.UTC)
-
-  lazy val settlorIndividualPassportRoute = routes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualPassportRoute: String = routes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, fakeDraftId).url
 
   "SettlorIndividualPassport Controller" must {
 
@@ -96,11 +99,15 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualNamePage(index),name).success.value
 
-      val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[FeatureFlagService].toInstance(mockFeatureFlagService))
+        .build()
 
       val request =
         FakeRequest(POST, settlorIndividualPassportRoute)
@@ -115,7 +122,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual onwardRoute.url
+      redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
     }

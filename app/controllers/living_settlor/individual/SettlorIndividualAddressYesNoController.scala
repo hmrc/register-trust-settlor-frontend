@@ -20,6 +20,7 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
@@ -28,6 +29,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.living_settlor.individual.SettlorIndividualAddressYesNoView
 
@@ -41,10 +43,11 @@ class SettlorIndividualAddressYesNoController @Inject()(
                                                          requireName: NameRequiredActionProvider,
                                                          yesNoFormProvider: YesNoFormProvider,
                                                          val controllerComponents: MessagesControllerComponents,
-                                                         view: SettlorIndividualAddressYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                         view: SettlorIndividualAddressYesNoView,
+                                                         featureFlagService: FeatureFlagService
+                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualAddressYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualAddressYesNo")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
@@ -71,8 +74,9 @@ class SettlorIndividualAddressYesNoController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorAddressYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorAddressYesNoPage(index), mode, draftId)(updatedAnswers))
+            _ <- registrationsRepository.set(updatedAnswers)
+            is5mldEnabled <- featureFlagService.is5mldEnabled()
+          } yield Redirect(navigator.nextPage(SettlorAddressYesNoPage(index), mode, draftId, is5mldEnabled = is5mldEnabled)(updatedAnswers))
         }
       )
   }
