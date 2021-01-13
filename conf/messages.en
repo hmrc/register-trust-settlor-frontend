@@ -305,6 +305,7 @@ dateOfBirth.error.past = Date of birth must be after 31 December 1499
 settlorIndividualCountryOfNationalityYesNo.title = Do you know the settlor’s country of nationality?
 settlorIndividualCountryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
 settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?
+settlorIndividualCountryOfNationalityYesNo.hint = The country of nationality is usually where the settlor was born and where their passport is registered.
 settlorIndividualCountryOfNationalityYesNo.error.required = Select yes if you know the settlor’s country of nationality
 
 settlorIndividualUkCountryOfNationalityYesNo.title = Does the settlor have UK nationality?
@@ -322,6 +323,7 @@ settlorIndividualCountryOfNationality.error.invalidCharacters = The country of n
 settlorIndividualCountryOfResidencyYesNo.title = Do you know the settlor’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.heading = Do you know {0}’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
+settlorIndividualCountryOfResidencyYesNo.hint = The country of residence is usually where the settlor lives and works most of the time during the tax year.
 settlorIndividualCountryOfResidencyYesNo.error.required = Select yes if you know the settlor’s country of residence
 
 settlorIndividualUkCountryOfResidencyYesNo.title = Is the settlor a UK resident?
