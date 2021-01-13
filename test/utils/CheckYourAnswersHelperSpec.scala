@@ -20,6 +20,7 @@ import java.time.LocalDate
 
 import base.SpecBase
 import controllers.deceased_settlor.{routes => deceasedRoutes}
+import controllers.deceased_settlor.mld5.{routes => deceased5MLDRoutes}
 import controllers.trust_type.{routes => trustTypeRoutes}
 import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.business.{routes => businessRoutes}
@@ -188,6 +189,81 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             ))
           }
         }
+      }
+
+      "trust set up after settlor died - 5MLD" when {
+
+        val baseAnswers: UserAnswers = emptyUserAnswers
+          .set(trustTypePages.SetUpAfterSettlorDiedYesNoPage, true).success.value
+
+        "no DoD, DoB, nationality, address or NINO" in {
+
+          val userAnswers = baseAnswers
+            .set(deceasedPages.SettlorsNamePage, name).success.value
+            .set(deceasedPages.SettlorDateOfDeathYesNoPage, false).success.value
+            .set(deceasedPages.SettlorDateOfBirthYesNoPage, false).success.value
+            .set(deceasedPages.mld5.CountryOfNationalityYesNoPage, false).success.value
+            .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
+            .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
+
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+
+          val result = helper.deceasedSettlor
+
+          result mustBe Some(Seq(
+            AnswerSection(
+              headingKey = None,
+              rows = Seq(
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
+                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
+                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceased5MLDRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+              ),
+              sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
+            )
+          ))
+        }
+
+        "DoB, Nationality and NINO" in {
+
+          val userAnswers = baseAnswers
+            .set(deceasedPages.SettlorsNamePage, name).success.value
+            .set(deceasedPages.SettlorDateOfDeathYesNoPage, true).success.value
+            .set(deceasedPages.SettlorDateOfDeathPage, dateOfDeath).success.value
+            .set(deceasedPages.SettlorDateOfBirthYesNoPage, true).success.value
+            .set(deceasedPages.SettlorsDateOfBirthPage, date).success.value
+            .set(deceasedPages.mld5.CountryOfNationalityYesNoPage, true).success.value
+            .set(deceasedPages.mld5.CountryOfNationalityInTheUkYesNoPage, true).success.value
+            .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, true).success.value
+            .set(deceasedPages.SettlorNationalInsuranceNumberPage, nino).success.value
+
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, fakeDraftId, canEdit)
+
+          val result = helper.deceasedSettlor
+
+          result mustBe Some(Seq(
+            AnswerSection(
+              headingKey = None,
+              rows = Seq(
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
+                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
+                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5MLDRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5MLDRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                AnswerRow(label = "settlorNationalInsuranceNumber.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+              ),
+              sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
+            )
+          ))
+        }
+
       }
 
       "deed of variation set up in addition to will trust" in {

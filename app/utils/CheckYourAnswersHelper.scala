@@ -21,10 +21,11 @@ import controllers.living_settlor.business.mld5.{routes => businessMld5Routes}
 import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.routes
 import controllers.trust_type.{routes => trustTypeRoutes}
-
+import controllers.deceased_settlor.mld5.{routes => deceasedMld5Routes}
 import javax.inject.Inject
 import models.{NormalMode, UserAnswers}
 import pages.deceased_settlor._
+import pages.deceased_settlor.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
@@ -66,6 +67,9 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
     deceasedSettlorDateOfDeath,
     deceasedSettlorDateOfBirthYesNo,
     deceasedSettlorsDateOfBirth,
+    countryOfNationalityYesNo,
+    countryOfNationalityInUkYesNo,
+    countryOfNationality,
     deceasedSettlorsNINoYesNo,
     deceasedSettlorNationalInsuranceNumber,
     deceasedSettlorsLastKnownAddressYesNo,
@@ -569,6 +573,43 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions)
         canEdit = canEdit
       )
   }
+
+  def countryOfNationalityYesNo: Option[AnswerRow] = userAnswers.get(CountryOfNationalityYesNoPage) map {
+    x =>
+      AnswerRow(
+        "5mld.countryOfNationalityYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(deceasedMld5Routes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId).url),
+        deceasedSettlorName(userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfNationalityInUkYesNo: Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage) map {
+    x =>
+      AnswerRow(
+        "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel",
+        yesOrNo(x),
+        Some(deceasedMld5Routes.CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId).url),
+        deceasedSettlorName(userAnswers),
+        canEdit = canEdit
+      )
+  }
+
+  def countryOfNationality: Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage) flatMap {
+    case false => userAnswers.get(CountryOfNationalityPage) map {
+      x =>
+        AnswerRow(
+          "5mld.countryOfNationality.checkYourAnswersLabel",
+          HtmlFormat.escape(country(x, countryOptions)),
+          Some(deceasedMld5Routes.CountryOfNationalityController.onPageLoad(NormalMode, draftId).url),
+          deceasedSettlorName(userAnswers),
+          canEdit = canEdit
+        )
+    }
+    case _ => None
+  }
+
 
   private def deceasedSettlorNationalInsuranceNumber: Option[AnswerRow] = userAnswers.get(SettlorNationalInsuranceNumberPage) map {
     x =>
