@@ -24,7 +24,6 @@ import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.deceased_settlor.mld5.CountryOfNationalityYesNoPage
-import pages.deceased_settlor.SettlorsNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -50,24 +49,20 @@ class CountryOfNationalityYesNoController @Inject()(
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
-      val name = request.userAnswers.get(SettlorsNamePage).get
-
       val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name))
+      Ok(view(preparedForm, mode, draftId, request.name))
   }
 
   def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
-      val name = request.userAnswers.get(SettlorsNamePage).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId, request.name))),
 
         value => {
           for {

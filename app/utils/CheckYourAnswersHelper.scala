@@ -70,24 +70,19 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
       wasSetUpAfterSettlorDiedQuestion,
       kindOfTrustQuestion,
       wasSetUpInAdditionToWillTrustQuestion,
-
       deceasedSettlorNameQuestion,
       yesNoQuestion(deceasedPages.SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, name),
       dateQuestion(deceasedPages.SettlorDateOfDeathPage, "settlorDateOfDeath", deceasedRoutes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, name),
       dateQuestion(deceasedPages.SettlorsDateOfBirthPage, "settlorsDateOfBirth", deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, name),
-
       yesNoQuestion(deceased5mldPages.CountryOfNationalityYesNoPage, "5mld.countryOfNationalityYesNo", deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceased5mldPages.CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationalityInTheUkYesNo", deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId).url, name),
       countryQuestion(deceased5mldPages.CountryOfNationalityPage, deceased5mldPages.CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationality", deceased5mldRoutes.CountryOfNationalityController.onPageLoad(NormalMode, draftId).url, name),
-
       yesNoQuestion(deceasedPages.SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, name),
       ninoQuestion(deceasedPages.SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, name),
-
       yesNoQuestion(deceased5mldPages.CountryOfResidenceYesNoPage, "5mld.countryOfResidenceYesNo", deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceased5mldPages.CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidenceInTheUkYesNo", deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId).url, name),
       countryQuestion(deceased5mldPages.CountryOfResidencePage, deceased5mldPages.CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidence", deceased5mldRoutes.CountryOfResidenceController.onPageLoad(NormalMode, draftId).url, name),
-
       yesNoQuestion(deceasedPages.SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, name),
       addressQuestion(deceasedPages.SettlorsUKAddressPage, "settlorsUKAddress", deceasedRoutes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, name),
@@ -339,119 +334,5 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
   private def wasSetUpInAdditionToWillTrustQuestion: Option[AnswerRow] = {
     yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url)
   }
-
-//  private def deceasedSettlorsLastKnownAddressYesNo: Option[AnswerRow] = userAnswers.get(SettlorsLastKnownAddressYesNoPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorsLastKnownAddressYesNo.checkYourAnswersLabel",
-//        yesOrNo(x),
-//        Some(controllers.deceased_settlor.routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
-//  private def deceasedSettlorsInternationalAddress: Option[AnswerRow] = userAnswers.get(SettlorsInternationalAddressPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorsInternationalAddress.checkYourAnswersLabel",
-//        internationalAddress(x, countryOptions),
-//        Some(controllers.deceased_settlor.routes.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
-//  private def deceasedSettlorsDateOfBirth: Option[AnswerRow] = userAnswers.get(SettlorsDateOfBirthPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorsDateOfBirth.checkYourAnswersLabel",
-//        HtmlFormat.escape(x.format(dateFormatter)),
-//        Some(controllers.deceased_settlor.routes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
-//  def countryOfNationalityYesNo: Option[AnswerRow] = userAnswers.get(CountryOfNationalityYesNoPage) map {
-//    x =>
-//      AnswerRow(
-//        "5mld.countryOfNationalityYesNo.checkYourAnswersLabel",
-//        yesOrNo(x),
-//        Some(deceasedMld5Routes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
-//  def countryOfNationalityInUkYesNo: Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage) map {
-//    x =>
-//      AnswerRow(
-//        "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel",
-//        yesOrNo(x),
-//        Some(deceasedMld5Routes.CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-
-//  def countryOfNationality: Option[AnswerRow] = userAnswers.get(CountryOfNationalityInTheUkYesNoPage) flatMap {
-//    case false => userAnswers.get(CountryOfNationalityPage) map {
-//      x =>
-//        AnswerRow(
-//          "5mld.countryOfNationality.checkYourAnswersLabel",
-//          HtmlFormat.escape(country(x, countryOptions)),
-//          Some(deceasedMld5Routes.CountryOfNationalityController.onPageLoad(NormalMode, draftId).url),
-//          deceasedSettlorName(userAnswers),
-//          canEdit = canEdit
-//        )
-//    }
-//    case _ => None
-//  }
-
-
-//  private def deceasedSettlorNationalInsuranceNumber: Option[AnswerRow] = userAnswers.get(SettlorNationalInsuranceNumberPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorNationalInsuranceNumber.checkYourAnswersLabel",
-//        HtmlFormat.escape(formatNino(x)),
-//        Some(controllers.deceased_settlor.routes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-//
-//  private def deceasedSettlorDateOfDeathYesNo: Option[AnswerRow] = userAnswers.get(SettlorDateOfDeathYesNoPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorDateOfDeathYesNo.checkYourAnswersLabel",
-//        yesOrNo(x),
-//        Some(controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-//
-//  private def deceasedSettlorDateOfDeath: Option[AnswerRow] = userAnswers.get(SettlorDateOfDeathPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorDateOfDeath.checkYourAnswersLabel",
-//        HtmlFormat.escape(x.format(dateFormatter)),
-//        Some(controllers.deceased_settlor.routes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
-//
-//  private def deceasedSettlorDateOfBirthYesNo: Option[AnswerRow] = userAnswers.get(SettlorDateOfBirthYesNoPage) map {
-//    x =>
-//      AnswerRow(
-//        "settlorDateOfBirthYesNo.checkYourAnswersLabel",
-//        yesOrNo(x),
-//        Some(controllers.deceased_settlor.routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url),
-//        deceasedSettlorName(userAnswers),
-//        canEdit = canEdit
-//      )
-//  }
 
 }
