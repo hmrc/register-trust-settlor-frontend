@@ -30,7 +30,10 @@ class SettlorsMapperSpec extends SpecBase {
   private val individualSettlor: Settlor = Settlor(
     name = FullName("Joe", None, "Bloggs"),
     dateOfBirth = None,
-    identification = None
+    identification = None,
+    countryOfResidence = None,
+    nationality = None,
+    legallyIncapable = None
   )
 
   private val businessSettlor: SettlorCompany = SettlorCompany(

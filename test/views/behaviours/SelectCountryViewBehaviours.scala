@@ -18,11 +18,15 @@ package views.behaviours
 
 import play.api.data.{Form, FormError}
 import play.twirl.api.HtmlFormat
+import utils.InputOption
+import utils.countryOptions.CountryOptionsNonUK
 import views.ViewUtils
 
 trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "ES"
+
+  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
   def selectCountryPage(form: Form[String],
                  createView: Form[String] => HtmlFormat.Appendable,

@@ -16,12 +16,13 @@
 
 package mapping
 
-import java.time.LocalDate
-
 import base.SpecBase
 import models.UserAnswers
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor.individual._
+import pages.living_settlor.individual.mld5._
+
+import java.time.LocalDate
 
 class IndividualSettlorsMapperSpec extends SpecBase {
 
@@ -47,162 +48,266 @@ class IndividualSettlorsMapperSpec extends SpecBase {
 
     "map user answers to individual settlor model" when {
 
-      "no settlors" in {
+      "4mld" when {
 
-        val result = mapper.build(emptyUserAnswers)
+        "no settlors" in {
 
-        result mustBe None
+          val result = mapper.build(emptyUserAnswers)
+
+          result mustBe None
+        }
+
+        "one settlor" when {
+
+          val index: Int = 0
+
+          "NINO" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+              .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+              .set(SettlorIndividualNINOPage(index), nino).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(Settlor(
+              name = name,
+              dateOfBirth = None,
+              identification = Some(IdentificationType(
+                nino = Some(nino),
+                passport = None,
+                address = None
+              )),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ))
+          }
+
+          "UK address and passport" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+              .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+              .set(SettlorAddressYesNoPage(index), true).success.value
+              .set(SettlorAddressUKYesNoPage(index), true).success.value
+              .set(SettlorAddressUKPage(index), ukAddress).success.value
+              .set(SettlorIndividualPassportYesNoPage(index), true).success.value
+              .set(SettlorIndividualPassportPage(index), passportOrIdCard).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(Settlor(
+              name = name,
+              dateOfBirth = None,
+              identification = Some(IdentificationType(
+                nino = None,
+                passport = Some(passportOrIdCardType),
+                address = Some(ukAddressType)
+              )),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ))
+          }
+
+          "non-UK address and ID card" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+              .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+              .set(SettlorAddressYesNoPage(index), true).success.value
+              .set(SettlorAddressUKYesNoPage(index), false).success.value
+              .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
+              .set(SettlorIndividualPassportYesNoPage(index), false).success.value
+              .set(SettlorIndividualIDCardYesNoPage(index), true).success.value
+              .set(SettlorIndividualIDCardPage(index), passportOrIdCard).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(Settlor(
+              name = name,
+              dateOfBirth = None,
+              identification = Some(IdentificationType(
+                nino = None,
+                passport = Some(passportOrIdCardType),
+                address = Some(nonUkAddressType)
+              )),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ))
+          }
+
+          "UK address and no passport/ID card" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+              .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+              .set(SettlorAddressYesNoPage(index), true).success.value
+              .set(SettlorAddressUKYesNoPage(index), false).success.value
+              .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
+              .set(SettlorIndividualPassportYesNoPage(index), false).success.value
+              .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(Settlor(
+              name = name,
+              dateOfBirth = None,
+              identification = Some(IdentificationType(
+                nino = None,
+                passport = None,
+                address = Some(nonUkAddressType)
+              )),
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ))
+          }
+
+          "no identification" in {
+
+            val userAnswers: UserAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
+              .set(SettlorIndividualDateOfBirthPage(index), date).success.value
+              .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+              .set(SettlorAddressYesNoPage(index), false).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe List(Settlor(
+              name = name,
+              dateOfBirth = Some(date),
+              identification = None,
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ))
+          }
+        }
+
+        "more than one settlor" in {
+
+          def name(index: Int): FullName = FullName("Name", None, s"$index")
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorIndividualNamePage(0), name(0)).success.value
+            .set(SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
+            .set(SettlorIndividualNINOYesNoPage(0), false).success.value
+            .set(SettlorAddressYesNoPage(0), false).success.value
+
+            .set(SettlorIndividualNamePage(1), name(1)).success.value
+            .set(SettlorIndividualDateOfBirthYesNoPage(1), false).success.value
+            .set(SettlorIndividualNINOYesNoPage(1), false).success.value
+            .set(SettlorAddressYesNoPage(1), false).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe List(
+            Settlor(
+              name = name(0),
+              dateOfBirth = None,
+              identification = None,
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            ),
+            Settlor(
+              name = name(1),
+              dateOfBirth = None,
+              identification = None,
+              countryOfResidence = None,
+              nationality = None,
+              legallyIncapable = None
+            )
+          )
+        }
       }
-      
-      "one settlor" when {
+
+      "5mld" when {
 
         val index: Int = 0
 
-        "NINO" in {
+        "country of nationality and residency unknown" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe List(Settlor(
-            name = name,
-            dateOfBirth = None,
-            identification = Some(IdentificationType(
-              nino = Some(nino),
-              passport = None,
-              address = None
-            ))
-          ))
-        }
-
-        "UK address and passport" in {
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+            .set(CountryOfNationalityYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), true).success.value
-            .set(SettlorAddressUKPage(index), ukAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), true).success.value
-            .set(SettlorIndividualPassportPage(index), passportOrIdCard).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe List(Settlor(
-            name = name,
-            dateOfBirth = None,
-            identification = Some(IdentificationType(
-              nino = None,
-              passport = Some(passportOrIdCardType),
-              address = Some(ukAddressType)
-            ))
-          ))
-        }
-
-        "non-UK address and ID card" in {
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), false).success.value
-            .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), true).success.value
-            .set(SettlorIndividualIDCardPage(index), passportOrIdCard).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe List(Settlor(
-            name = name,
-            dateOfBirth = None,
-            identification = Some(IdentificationType(
-              nino = None,
-              passport = Some(passportOrIdCardType),
-              address = Some(nonUkAddressType)
-            ))
-          ))
-        }
-
-        "UK address and no passport/ID card" in {
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), false).success.value
-            .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe List(Settlor(
-            name = name,
-            dateOfBirth = None,
-            identification = Some(IdentificationType(
-              nino = None,
-              passport = None,
-              address = Some(nonUkAddressType)
-            ))
-          ))
-        }
-
-        "no identification" in {
-
-          val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
-            .set(SettlorIndividualDateOfBirthPage(index), date).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+            .set(CountryOfResidencyYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), true).success.value
 
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
             name = name,
-            dateOfBirth = Some(date),
-            identification = None
+            dateOfBirth = None,
+            identification = None,
+            countryOfResidence = None,
+            nationality = None,
+            legallyIncapable = Some(false)
           ))
         }
-      }
 
-      "more than one settlor" in {
+        "UK country of nationality and residency" in {
 
-        def name(index: Int): FullName = FullName("Name", None, s"$index")
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorIndividualNamePage(index), name).success.value
+            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+            .set(CountryOfNationalityYesNoPage(index), true).success.value
+            .set(UkCountryOfNationalityYesNoPage(index), true).success.value
+            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+            .set(CountryOfResidencyYesNoPage(index), true).success.value
+            .set(UkCountryOfResidencyYesNoPage(index), true).success.value
+            .set(SettlorAddressYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), false).success.value
 
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorIndividualNamePage(0), name(0)).success.value
-          .set(SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
-          .set(SettlorIndividualNINOYesNoPage(0), false).success.value
-          .set(SettlorAddressYesNoPage(0), false).success.value
+          val result = mapper.build(userAnswers).get
 
-          .set(SettlorIndividualNamePage(1), name(1)).success.value
-          .set(SettlorIndividualDateOfBirthYesNoPage(1), false).success.value
-          .set(SettlorIndividualNINOYesNoPage(1), false).success.value
-          .set(SettlorAddressYesNoPage(1), false).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe List(
-          Settlor(
-            name = name(0),
+          result mustBe List(Settlor(
+            name = name,
             dateOfBirth = None,
-            identification = None
-          ),
-          Settlor(
-            name = name(1),
+            identification = None,
+            countryOfResidence = Some("GB"),
+            nationality = Some("GB"),
+            legallyIncapable = Some(true)
+          ))
+        }
+
+        "non-UK country of nationality and residency" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorIndividualNamePage(index), name).success.value
+            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+            .set(CountryOfNationalityYesNoPage(index), true).success.value
+            .set(UkCountryOfNationalityYesNoPage(index), false).success.value
+            .set(CountryOfNationalityPage(index), "FR").success.value
+            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+            .set(CountryOfResidencyYesNoPage(index), true).success.value
+            .set(UkCountryOfResidencyYesNoPage(index), false).success.value
+            .set(CountryOfResidencyPage(index), "ES").success.value
+            .set(SettlorAddressYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), false).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe List(Settlor(
+            name = name,
             dateOfBirth = None,
-            identification = None
-          )
-        )
+            identification = None,
+            countryOfResidence = Some("ES"),
+            nationality = Some("FR"),
+            legallyIncapable = Some(true)
+          ))
+        }
       }
     }
   }

@@ -24,11 +24,12 @@ import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.CheckYourAnswersHelper
+import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
 class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
+                                     checkAnswersFormatters: CheckAnswersFormatters,
                                      settlorsMapper: SettlorsMapper,
                                      countryOptions: CountryOptions,
                                      deceasedSettlorMapper: DeceasedSettlorMapper,
@@ -73,7 +74,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
   def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
                                (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(userAnswers, userAnswers.draftId, false)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
 
     if (status.contains(Status.Completed)) {
 

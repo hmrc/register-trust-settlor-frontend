@@ -27,8 +27,15 @@ class IndividualSettlorsMapper @Inject()(addressMapper: AddressMapper) extends M
      val settlors = userAnswers.get(mapping.reads.LivingSettlors).getOrElse(List.empty[IndividualSettlor])
 
      val mappedSettlors = settlors.flatMap {
-       case ls: IndividualSettlor =>
-       Some(Settlor(ls.name, ls.dateOfBirth, identificationMap(ls)))
+       case settlor: IndividualSettlor =>
+       Some(Settlor(
+         name = settlor.name,
+         dateOfBirth = settlor.dateOfBirth,
+         identification = identificationMap(settlor),
+         countryOfResidence = settlor.countryOfResidence,
+         nationality = settlor.nationality,
+         legallyIncapable = settlor.hasMentalCapacity.map(!_)
+       ))
        case _: BusinessSettlor =>
          None
      }

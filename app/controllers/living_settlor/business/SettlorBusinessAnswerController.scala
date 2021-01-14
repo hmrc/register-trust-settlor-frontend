@@ -34,7 +34,7 @@ import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerCompon
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import utils.CheckYourAnswersHelper
+import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
@@ -51,7 +51,8 @@ class SettlorBusinessAnswerController @Inject()(
                                                  requiredAnswer: RequiredAnswerActionProvider,
                                                  view: SettlorAnswersView,
                                                  countryOptions: CountryOptions,
-                                                 val controllerComponents: MessagesControllerComponents
+                                                 val controllerComponents: MessagesControllerComponents,
+                                                 checkAnswersFormatters: CheckAnswersFormatters
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
@@ -61,7 +62,7 @@ class SettlorBusinessAnswerController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new CheckYourAnswersHelper(countryOptions)(request.userAnswers, draftId, canEdit = true)
+      val answers = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
 
       val sections = Seq(
         AnswerSection(
