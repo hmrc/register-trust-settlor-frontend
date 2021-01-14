@@ -18,10 +18,10 @@ package navigation
 
 import base.SpecBase
 import controllers.deceased_settlor.routes
-import controllers.deceased_settlor.nonTaxable.routes._
+import controllers.deceased_settlor.mld5.routes._
 import models.{Mode, NormalMode}
 import pages.deceased_settlor._
-import pages.deceased_settlor.nonTaxable.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage}
+import pages.deceased_settlor.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import play.api.mvc.Call
 
 class DeceasedSettlorNavigatorSpec extends SpecBase {
@@ -257,16 +257,95 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId))
 
       }
+      
+      "CountryOfResidenceYesNoPage -> Yes -> CountryOfResidenceInTheUk Yes No page" in {
 
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceYesNoPage, true).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfResidenceYesNoPage -> No (with Nino) -> DeceasedSettlorAnswer page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+          .set(CountryOfResidenceYesNoPage, false).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
+
+      }
+
+      "CountryOfResidenceYesNoPage -> No (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+          .set(CountryOfResidenceYesNoPage, false).success.value
+
+        navigator.nextPage(CountryOfResidenceYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfResidenceInTheUk -> No -> CountryOfResidence page" in {
+
+        val answers = emptyUserAnswers
+          .set(CountryOfResidenceInTheUkYesNoPage, false).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(CountryOfResidenceController.onPageLoad(NormalMode, draftId))
+
+      }
+
+
+      "CountryOfResidenceInTheUk -> Yes (with Nino) -> DeceasedSettlorAnswer page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
+
+      }
+
+      "CountryOfResidenceInTheUk -> Yes (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+
+        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
+
+      "CountryOfResidence (with Nino) -> DeceasedSettlorAnswer page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+          .set(CountryOfResidencePage, "ES").success.value
+
+        navigator.nextPage(CountryOfResidencePage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
+
+      }
+
+      "CountryOfResidence (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
+
+        val answers = emptyUserAnswers
+          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+          .set(CountryOfResidencePage, "ES").success.value
+
+        navigator.nextPage(CountryOfResidencePage, NormalMode, draftId, is5mldEnabled = true)(answers)
+          .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId))
+
+      }
 
     }
-
-
-
-
-
-
-
 
   }
 }

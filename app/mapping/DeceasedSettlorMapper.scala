@@ -19,6 +19,7 @@ package mapping
 import javax.inject.Inject
 import models.UserAnswers
 import pages.deceased_settlor._
+import pages.deceased_settlor.mld5.{CountryOfNationalityPage, CountryOfResidencePage}
 
 class DeceasedSettlorMapper @Inject()(addressMapper: AddressMapper) extends Mapping[WillType] {
 
@@ -28,12 +29,16 @@ class DeceasedSettlorMapper @Inject()(addressMapper: AddressMapper) extends Mapp
       settlorsDateOfBirth = userAnswers.get(SettlorsDateOfBirthPage)
       settlorDateOfDeath = userAnswers.get(SettlorDateOfDeathPage)
       settlorIdentification = identificationStatus(userAnswers)
+      countryOfResidence = userAnswers.get(CountryOfResidencePage)
+      nationality = userAnswers.get(CountryOfNationalityPage)
     } yield {
       WillType(
         name = settlorsName,
         dateOfBirth = settlorsDateOfBirth,
         dateOfDeath = settlorDateOfDeath,
-        identification = settlorIdentification
+        identification = settlorIdentification,
+        countryOfResidence = countryOfResidence,
+        nationality = nationality
       )
     }
   }

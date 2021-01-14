@@ -158,7 +158,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
         val status: Status = Completed
         val trustDetails: TrustDetailsType = TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
-        val deceasedSettlor: WillType = WillType(name, None, None, None)
+        val deceasedSettlor: WillType = WillType(name, None, None, None, None, None)
 
         val arbitraryUserAnswers: UserAnswers = emptyUserAnswers
 

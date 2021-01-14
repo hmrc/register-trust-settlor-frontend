@@ -22,6 +22,7 @@ import base.SpecBase
 import models.UserAnswers
 import models.pages.{FullName, InternationalAddress, UKAddress}
 import pages.deceased_settlor._
+import pages.deceased_settlor.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 
 class DeceasedSettlorMapperSpec extends SpecBase {
 
@@ -44,97 +45,202 @@ class DeceasedSettlorMapperSpec extends SpecBase {
 
     "map user answers to deceased settlor model" when {
 
-      "NINO" in {
+      "4mld" when {
 
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, name).success.value
-          .set(SettlorDateOfDeathYesNoPage, false).success.value
-          .set(SettlorDateOfBirthYesNoPage, false).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(SettlorNationalInsuranceNumberPage, nino).success.value
+        "NINO" in {
 
-        val result = mapper.build(userAnswers).get
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+            .set(SettlorNationalInsuranceNumberPage, nino).success.value
 
-        result mustBe WillType(
-          name = name,
-          dateOfBirth = None,
-          dateOfDeath = None,
-          identification = Some(Identification(
-            nino = Some(nino),
-            address = None
-          ))
-        )
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = Some(nino),
+              address = None
+            )),
+            countryOfResidence = None,
+            nationality = None
+          )
+
+        }
+
+        "UK address" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+            .set(SettlorsLastKnownAddressYesNoPage, true).success.value
+            .set(WasSettlorsAddressUKYesNoPage, true).success.value
+            .set(SettlorsUKAddressPage, ukAddress).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = None,
+              address = Some(ukAddressType)
+            )),
+            countryOfResidence = None,
+            nationality = None
+          )
+        }
+
+        "non-UK address" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+            .set(SettlorsLastKnownAddressYesNoPage, true).success.value
+            .set(WasSettlorsAddressUKYesNoPage, false).success.value
+            .set(SettlorsInternationalAddressPage, nonUkAddress).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = None,
+              address = Some(nonUkAddressType)
+            )),
+            countryOfResidence = None,
+            nationality = None
+          )
+        }
+
+        "no identification" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, true).success.value
+            .set(SettlorDateOfDeathPage, dod).success.value
+            .set(SettlorDateOfBirthYesNoPage, true).success.value
+            .set(SettlorsDateOfBirthPage, dob).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, false).success.value
+            .set(SettlorsLastKnownAddressYesNoPage, false).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = Some(dob),
+            dateOfDeath = Some(dod),
+            identification = None,
+            countryOfResidence = None,
+            nationality = None
+          )
+        }
 
       }
 
-      "UK address" in {
+      "5mld" when {
 
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, name).success.value
-          .set(SettlorDateOfDeathYesNoPage, false).success.value
-          .set(SettlorDateOfBirthYesNoPage, false).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(SettlorsLastKnownAddressYesNoPage, true).success.value
-          .set(WasSettlorsAddressUKYesNoPage, true).success.value
-          .set(SettlorsUKAddressPage, ukAddress).success.value
+        "country of nationality and residency unknown" in {
 
-        val result = mapper.build(userAnswers).get
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(CountryOfNationalityYesNoPage, false).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+            .set(SettlorNationalInsuranceNumberPage, nino).success.value
+            .set(CountryOfResidenceYesNoPage, false).success.value
 
-        result mustBe WillType(
-          name = name,
-          dateOfBirth = None,
-          dateOfDeath = None,
-          identification = Some(Identification(
-            nino = None,
-            address = Some(ukAddressType)
-          ))
-        )
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = Some(nino),
+              address = None
+            )),
+            countryOfResidence = None,
+            nationality = None
+          )
+
+        }
+
+        "UK country of nationality and residency" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(CountryOfNationalityYesNoPage, true).success.value
+            .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
+            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+            .set(SettlorNationalInsuranceNumberPage, nino).success.value
+            .set(CountryOfResidenceYesNoPage, true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = Some(nino),
+              address = None
+            )),
+            countryOfResidence = Some("GB"),
+            nationality = Some("GB")
+          )
+
+        }
+
+        "Non-UK country of nationality and residency" in {
+
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorsNamePage, name).success.value
+            .set(SettlorDateOfDeathYesNoPage, false).success.value
+            .set(SettlorDateOfBirthYesNoPage, false).success.value
+            .set(CountryOfNationalityYesNoPage, true).success.value
+            .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+            .set(CountryOfNationalityPage, "ES").success.value
+            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
+            .set(SettlorNationalInsuranceNumberPage, nino).success.value
+            .set(CountryOfResidenceYesNoPage, true).success.value
+            .set(CountryOfResidenceInTheUkYesNoPage, false).success.value
+            .set(CountryOfResidencePage, "FR").success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe WillType(
+            name = name,
+            dateOfBirth = None,
+            dateOfDeath = None,
+            identification = Some(Identification(
+              nino = Some(nino),
+              address = None
+            )),
+            countryOfResidence = Some("FR"),
+            nationality = Some("ES")
+          )
+
+        }
+
       }
 
-      "non-UK address" in {
-
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, name).success.value
-          .set(SettlorDateOfDeathYesNoPage, false).success.value
-          .set(SettlorDateOfBirthYesNoPage, false).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(SettlorsLastKnownAddressYesNoPage, true).success.value
-          .set(WasSettlorsAddressUKYesNoPage, false).success.value
-          .set(SettlorsInternationalAddressPage, nonUkAddress).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe WillType(
-          name = name,
-          dateOfBirth = None,
-          dateOfDeath = None,
-          identification = Some(Identification(
-            nino = None,
-            address = Some(nonUkAddressType)
-          ))
-        )
-      }
-
-      "no identification" in {
-
-        val userAnswers: UserAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, name).success.value
-          .set(SettlorDateOfDeathYesNoPage, true).success.value
-          .set(SettlorDateOfDeathPage, dod).success.value
-          .set(SettlorDateOfBirthYesNoPage, true).success.value
-          .set(SettlorsDateOfBirthPage, dob).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(SettlorsLastKnownAddressYesNoPage, false).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe WillType(
-          name = name,
-          dateOfBirth = Some(dob),
-          dateOfDeath = Some(dod),
-          identification = None
-        )
-      }
     }
+
   }
 }

@@ -17,6 +17,7 @@
 package utils
 
 import controllers.deceased_settlor.{routes => deceasedRoutes}
+import controllers.deceased_settlor.mld5.{routes => deceased5mldRoutes}
 import controllers.living_settlor.business.mld5.{routes => businessMld5Routes}
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.living_settlor.individual.mld5.{routes => individual5mldRoutes}
@@ -30,6 +31,7 @@ import pages.living_settlor.individual.{mld5 => individual5mldPages}
 import pages.living_settlor.{business => businessPages, individual => individualPages, _}
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
 import pages.{deceased_settlor => deceasedPages}
+import pages.deceased_settlor.{mld5 => deceased5mldPages}
 import play.api.i18n.Messages
 import play.api.libs.json.Reads
 import play.twirl.api.HtmlFormat
@@ -37,8 +39,8 @@ import queries.Gettable
 import sections.LivingSettlors
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorLivingViewModel}
-
 import java.time.LocalDate
+
 import javax.inject.Inject
 
 class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
@@ -68,14 +70,19 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
       wasSetUpAfterSettlorDiedQuestion,
       kindOfTrustQuestion,
       wasSetUpInAdditionToWillTrustQuestion,
-
       deceasedSettlorNameQuestion,
       yesNoQuestion(deceasedPages.SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url, name),
       dateQuestion(deceasedPages.SettlorDateOfDeathPage, "settlorDateOfDeath", deceasedRoutes.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url, name),
       dateQuestion(deceasedPages.SettlorsDateOfBirthPage, "settlorsDateOfBirth", deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceased5mldPages.CountryOfNationalityYesNoPage, "5mld.countryOfNationalityYesNo", deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceased5mldPages.CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationalityInTheUkYesNo", deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      countryQuestion(deceased5mldPages.CountryOfNationalityPage, deceased5mldPages.CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationality", deceased5mldRoutes.CountryOfNationalityController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url, name),
       ninoQuestion(deceasedPages.SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceased5mldPages.CountryOfResidenceYesNoPage, "5mld.countryOfResidenceYesNo", deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      yesNoQuestion(deceased5mldPages.CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidenceInTheUkYesNo", deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId).url, name),
+      countryQuestion(deceased5mldPages.CountryOfResidencePage, deceased5mldPages.CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidence", deceased5mldRoutes.CountryOfResidenceController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url, name),
       yesNoQuestion(deceasedPages.WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url, name),
       addressQuestion(deceasedPages.SettlorsUKAddressPage, "settlorsUKAddress", deceasedRoutes.SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url, name),

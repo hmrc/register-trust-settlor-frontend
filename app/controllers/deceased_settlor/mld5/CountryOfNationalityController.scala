@@ -14,68 +14,63 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor
+package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
-import forms.YesNoFormProvider
+import forms.CountryFormProvider
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
-import pages.deceased_settlor.{SettlorsNamePage, SettlorsNationalInsuranceYesNoPage}
+import pages.deceased_settlor.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.deceased_settlor.SettlorsNINoYesNoView
+import utils.countryOptions.CountryOptionsNonUK
+import views.html.deceased_settlor.mld5.CountryOfNationalityView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class SettlorsNINoYesNoController @Inject()(
-                                             override val messagesApi: MessagesApi,
-                                             registrationsRepository: RegistrationsRepository,
-                                             @DeceasedSettlor navigator: Navigator,
-                                             featureFlagService: FeatureFlagService,
-                                             actions: Actions,
-                                             requireName: NameRequiredActionProvider,
-                                             yesNoFormProvider: YesNoFormProvider,
-                                             val controllerComponents: MessagesControllerComponents,
-                                             view: SettlorsNINoYesNoView
+class CountryOfNationalityController @Inject()(
+                                                   override val messagesApi: MessagesApi,
+                                                   registrationsRepository: RegistrationsRepository,
+                                                   @DeceasedSettlor navigator: Navigator,
+                                                   actions: Actions,
+                                                   requireName: NameRequiredActionProvider,
+                                                   formProvider: CountryFormProvider,
+                                                   val controllerComponents: MessagesControllerComponents,
+                                                   view: CountryOfNationalityView,
+                                                   val countryOptions: CountryOptionsNonUK
                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorsNationalInsuranceYesNo")
+  val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
-      val name = request.userAnswers.get(SettlorsNamePage).get
-
-      val preparedForm = request.userAnswers.get(SettlorsNationalInsuranceYesNoPage) match {
+      val preparedForm = request.userAnswers.get(CountryOfNationalityPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name))
+      Ok(view(preparedForm, countryOptions.options, mode, draftId, request.name))
   }
 
   def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
-      val name = request.userAnswers.get(SettlorsNamePage).get
-
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, request.name))),
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsNationalInsuranceYesNoPage, value))
-            is5mld         <- featureFlagService.is5mldEnabled()
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsNationalInsuranceYesNoPage, mode, draftId, is5mldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityPage, mode, draftId)(updatedAnswers))
         }
       )
   }

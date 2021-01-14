@@ -14,34 +14,30 @@
  * limitations under the License.
  */
 
-package controllers.deceased_settlor
+package controllers.deceased_settlor.mld5
 
 import base.SpecBase
-import controllers.routes._
-import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
+import controllers.deceased_settlor.mld5.routes.CountryOfResidenceYesNoController
+import controllers.deceased_settlor.routes.SettlorsNameController
+import controllers.routes.SessionExpiredController
+import forms.YesNoFormProvider
 import models.NormalMode
 import models.pages.FullName
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
-import play.api.inject.bind
+import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.mld5.CountryOfResidenceYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
-import views.html.deceased_settlor.SettlorNationalInsuranceNumberView
+import views.html.deceased_settlor.mld5.CountryOfResidenceYesNoView
 
-import scala.concurrent.Future
+class CountryOfResidenceYesNoControllerSpec extends SpecBase {
 
-class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
+  val form = new YesNoFormProvider().withPrefix("5mld.countryOfResidenceYesNo")
 
-  val formProvider = new SettlorNationalInsuranceNumberFormProvider()
-  val form = formProvider()
-
-  lazy val settlorNationalInsuranceNumberRoute = routes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode,fakeDraftId).url
+  lazy val countryOfResidenceYesNoRoute = CountryOfResidenceYesNoController.onPageLoad(NormalMode, fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
-  "SettlorNationalInsuranceNumber Controller" must {
+  "CountryOfResidenceYesNoController Controller" must {
 
     "return OK and the correct view for a GET" in {
 
@@ -50,11 +46,11 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SettlorNationalInsuranceNumberView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       status(result) mustEqual OK
 
@@ -66,47 +62,41 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorNationalInsuranceNumberPage, "answer").success.value.set(SettlorsNamePage,
+      val userAnswers = emptyUserAnswers.set(CountryOfResidenceYesNoPage, true).success.value.set(SettlorsNamePage,
         name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
-      val view = application.injector.instanceOf[SettlorNationalInsuranceNumberView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), NormalMode,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val featureFlagService = mock[FeatureFlagService]
-
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
         name).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(
-            bind[FeatureFlagService].toInstance(featureFlagService)
-          ).build()
-
-      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+        applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, settlorNationalInsuranceNumberRoute)
-          .withFormUrlEncodedBody(("value", "JP123456A"))
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
       application.stop()
@@ -120,19 +110,19 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, settlorNationalInsuranceNumberRoute)
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SettlorNationalInsuranceNumberView]
+      val view = application.injector.instanceOf[CountryOfResidenceYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, NormalMode,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -141,7 +131,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val result = route(application, request).value
 
@@ -157,8 +147,8 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, settlorNationalInsuranceNumberRoute)
-          .withFormUrlEncodedBody(("value", "answer"))
+        FakeRequest(POST, countryOfResidenceYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -174,13 +164,13 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
+      val request = FakeRequest(GET, countryOfResidenceYesNoRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
 
       application.stop()
     }
