@@ -28,3 +28,39 @@ settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel = Beth yw gwlad br
 settlorBusiness.5mld.countryOfResidence.error.required = Nodwch wlad
 #settlorBusiness.5mld.countryOfResidence.error.length =
 #settlorBusiness.5mld.countryOfResidence.error.invalidCharacters =
+
+#5mld.countryOfResidenceYesNo.title =
+#5mld.countryOfResidenceYesNo.heading =
+#5mld.countryOfResidenceYesNo.checkYourAnswersLabel =
+#5mld.countryOfResidenceYesNo.error.required =
+#5mld.countryOfResidenceYesNo.hint =
+
+#5mld.countryOfResidenceInTheUkYesNo.title =
+#5mld.countryOfResidenceInTheUkYesNo.heading =
+#5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel =
+#5mld.countryOfResidenceInTheUkYesNo.error.required =
+
+#5mld.countryOfResidence.title =
+#5mld.countryOfResidence.heading =
+#5mld.countryOfResidence.checkYourAnswersLabel =
+5mld.countryOfResidence.error.required = Nodwch wlad
+#5mld.countryOfResidence.error.length =
+#5mld.countryOfResidence.error.invalidCharacters =
+
+#5mld.countryOfNationalityYesNo.title =
+5mld.countryOfNationalityYesNo.heading = A ydych yn gwybod beth yw gwlad cenedligrwydd {0}?
+5mld.countryOfNationalityYesNo.checkYourAnswersLabel = A ydych yn gwybod beth yw gwlad cenedligrwydd {0}?
+#5mld.countryOfNationalityYesNo.error.required =
+5mld.countryOfNationalityYesNo.hint = Y wlad cenedligrwydd fel arfer yw’r wlad lle ganwyd y setlwr a lle mae ei basbort wedi’i gofrestru.
+
+#5mld.countryOfNationalityInTheUkYesNo.title =
+5mld.countryOfNationalityInTheUkYesNo.heading = A oedd gan {0} genedligrwydd y DU?
+5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel = A oedd gan {0} genedligrwydd y DU?
+#5mld.countryOfNationalityInTheUkYesNo.error.required =
+
+#5mld.countryOfNationality.title =
+5mld.countryOfNationality.heading = Beth oedd gwlad cenedligrwydd {0}?
+5mld.countryOfNationality.checkYourAnswersLabel = Beth oedd gwlad cenedligrwydd {0}?
+5mld.countryOfNationality.error.required = Nodwch wlad
+#5mld.countryOfNationality.error.length =
+#5mld.countryOfNationality.error.invalidCharacters =
