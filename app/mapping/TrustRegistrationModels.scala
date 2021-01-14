@@ -103,7 +103,10 @@ object AddressType {
 case class WillType(name: FullName,
                     dateOfBirth: Option[LocalDate],
                     dateOfDeath: Option[LocalDate],
-                    identification: Option[Identification])
+                    identification: Option[Identification],
+                    countryOfResidence: Option[String],
+                    nationality: Option[String]
+                    )
 
 object WillType {
   implicit val willTypeFormat: Format[WillType] = Json.format[WillType]
