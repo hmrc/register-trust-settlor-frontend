@@ -39,15 +39,16 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
       controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId)
     case SettlorDateOfDeathPage => _ => _ =>
       controllers.deceased_settlor.routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
-    case SettlorsDateOfBirthPage => _ => _ => fiveMldYesNo(draftId, fiveMld)
-    case SettlorNationalInsuranceNumberPage => _ => _ =>
-      controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
+    case SettlorsDateOfBirthPage => _ => _ => fiveMldNationalityYesNo(draftId, fiveMld)
+    case SettlorNationalInsuranceNumberPage => _ => _ => fiveMldResidenceWithNino(draftId, fiveMld)
     case SettlorsUKAddressPage => _ => _ =>
       controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
     case SettlorsInternationalAddressPage => _ => _ =>
       controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
     case CountryOfNationalityPage => _ => _ =>
       controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
+    case CountryOfResidencePage => _ => answers => fiveMldResidenceCheckNino(draftId, fiveMld)(answers)
+//      controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
     case DeceasedSettlorAnswerPage => _ => _ =>
       Call("GET", config.registrationProgressUrl(draftId))
   }
@@ -61,12 +62,12 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     case SettlorDateOfBirthYesNoPage => _ => yesNoNav(
       fromPage = SettlorDateOfBirthYesNoPage,
       yesCall = SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId),
-      noCall = fiveMldYesNo(draftId, fiveMld)
+      noCall = fiveMldNationalityYesNo(draftId, fiveMld)
     )
     case SettlorsNationalInsuranceYesNoPage => _ => yesNoNav(
       fromPage = SettlorsNationalInsuranceYesNoPage,
       yesCall = SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId),
-      noCall = SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
+      noCall = fiveMldResidenceYesNo(draftId, fiveMld)
     )
     case SettlorsLastKnownAddressYesNoPage => _ => yesNoNav(
       fromPage = SettlorsLastKnownAddressYesNoPage,
@@ -88,13 +89,46 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
       yesCall = SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId),
       noCall = CountryOfNationalityController.onPageLoad(NormalMode, draftId)
     )
+    case CountryOfResidenceYesNoPage => _ => answers => yesNoNav(
+      fromPage = CountryOfResidenceYesNoPage,
+      yesCall = CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId),
+      noCall = fiveMldResidenceCheckNino(draftId, fiveMld)(answers)
+    )(answers)
+    case CountryOfResidenceInTheUkYesNoPage => _ => answers => yesNoNav(
+      fromPage = CountryOfResidenceInTheUkYesNoPage,
+      yesCall = fiveMldResidenceCheckNino(draftId, fiveMld)(answers),
+      noCall = CountryOfResidenceController.onPageLoad(NormalMode, draftId)
+    )(answers)
   }
 
-  private def fiveMldYesNo(draftId: String, fiveMld: Boolean): Call = {
+  private def fiveMldNationalityYesNo(draftId: String, fiveMld: Boolean): Call = {
     if (fiveMld) {
       CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId)
     } else {
       SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
+    }
+  }
+
+  private def fiveMldResidenceYesNo(draftId: String, fiveMld: Boolean): Call = {
+    if (fiveMld) {
+      CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+    } else {
+      SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
+    }
+  }
+
+  private def fiveMldResidenceWithNino(draftId: String, fiveMld: Boolean): Call = {
+    if (fiveMld) {
+      CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+    } else {
+      DeceasedSettlorAnswerController.onPageLoad(draftId)
+    }
+  }
+
+  private def fiveMldResidenceCheckNino(draftId: String, fiveMld: Boolean)(answers: UserAnswers): Call = {
+    answers.get(SettlorsNationalInsuranceYesNoPage) match {
+      case Some(true) => DeceasedSettlorAnswerController.onPageLoad(draftId)
+      case _ => SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
     }
   }
 
