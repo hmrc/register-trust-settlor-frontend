@@ -21,10 +21,16 @@ import controllers.routes._
 import forms.YesNoFormProvider
 import models.NormalMode
 import models.pages.FullName
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsNationalInsuranceYesNoPage}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 import views.html.deceased_settlor.SettlorsNINoYesNoView
+
+import scala.concurrent.Future
 
 class SettlorsNINoYesNoControllerSpec extends SpecBase {
 
@@ -80,11 +86,18 @@ class SettlorsNINoYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
+      val featureFlagService = mock[FeatureFlagService]
+
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
         name).success.value
 
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(
+            bind[FeatureFlagService].toInstance(featureFlagService)
+          ).build()
+
+      when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val request =
         FakeRequest(POST, settlorsNINoYesNoRoute)
