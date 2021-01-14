@@ -28,6 +28,7 @@ import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => busine
 import pages.trust_type.KindOfTrustPage
 import pages.{DeceasedSettlorStatus, RegistrationProgress, deceased_settlor => deceasedPages, trust_type => trustTypePages}
 import play.api.libs.json.Json
+import utils.CheckAnswersFormatters
 import utils.countryOptions.CountryOptions
 
 class SubmissionSetFactorySpec extends SpecBase {
@@ -36,6 +37,8 @@ class SubmissionSetFactorySpec extends SpecBase {
 
   private val name: FullName = FullName("Joe", Some("Joseph"), "Bloggs")
   private val businessName: String = "Business Ltd."
+
+  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   "Submission set factory" when {
 
@@ -167,7 +170,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
         when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(status))
 
-        val factory = new SubmissionSetFactory(mockRegistrationProgress, mockSettlorsMapper, countryOptions, mockDeceasedSettlorMapper, mockTrustDetailsMapper)
+        val factory = new SubmissionSetFactory(mockRegistrationProgress, checkAnswersFormatters, mockSettlorsMapper, countryOptions, mockDeceasedSettlorMapper, mockTrustDetailsMapper)
 
         "trust details" in {
 
@@ -196,7 +199,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             val settlors: Settlors = Settlors(
               settlor = Some(List(
-                Settlor(name, None, None)
+                Settlor(name, None, None, None, None, None)
               )),
               settlorCompany = None
             )

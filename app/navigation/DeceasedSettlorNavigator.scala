@@ -48,7 +48,6 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     case CountryOfNationalityPage => _ => _ =>
       controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
     case CountryOfResidencePage => _ => answers => fiveMldResidenceCheckNino(draftId, fiveMld)(answers)
-//      controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
     case DeceasedSettlorAnswerPage => _ => _ =>
       Call("GET", config.registrationProgressUrl(draftId))
   }

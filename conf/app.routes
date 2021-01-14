@@ -175,6 +175,21 @@ POST       /:draftId/living/:index/individual/date-of-birth                     
 GET        /:draftId/living/:index/individual/change-date-of-birth                         controllers.living_settlor.individual.SettlorIndividualDateOfBirthController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/change-date-of-birth                         controllers.living_settlor.individual.SettlorIndividualDateOfBirthController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
+GET        /:draftId/living/:index/individual/do-you-know-country-of-nationality           controllers.living_settlor.individual.mld5.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/do-you-know-country-of-nationality           controllers.living_settlor.individual.mld5.CountryOfNationalityYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-do-you-know-country-of-nationality    controllers.living_settlor.individual.mld5.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-do-you-know-country-of-nationality    controllers.living_settlor.individual.mld5.CountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/has-uk-country-of-nationality                controllers.living_settlor.individual.mld5.UkCountryOfNationalityYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/has-uk-country-of-nationality                controllers.living_settlor.individual.mld5.UkCountryOfNationalityYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-has-uk-country-of-nationality         controllers.living_settlor.individual.mld5.UkCountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-has-uk-country-of-nationality         controllers.living_settlor.individual.mld5.UkCountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/country-of-nationality                       controllers.living_settlor.individual.mld5.CountryOfNationalityController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/country-of-nationality                       controllers.living_settlor.individual.mld5.CountryOfNationalityController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-country-of-nationality                controllers.living_settlor.individual.mld5.CountryOfNationalityController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-country-of-nationality                controllers.living_settlor.individual.mld5.CountryOfNationalityController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
 GET        /:draftId/living/:index/individual/address-yes-no                               controllers.living_settlor.individual.SettlorIndividualAddressYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/address-yes-no                               controllers.living_settlor.individual.SettlorIndividualAddressYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/living/:index/individual/change-address-yes-no                        controllers.living_settlor.individual.SettlorIndividualAddressYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
@@ -189,6 +204,21 @@ GET        /:draftId/living/:index/individual/nino-yes-no                       
 POST       /:draftId/living/:index/individual/nino-yes-no                                  controllers.living_settlor.individual.SettlorIndividualNINOYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/living/:index/individual/change-nino-yes-noo                          controllers.living_settlor.individual.SettlorIndividualNINOYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/change-nino-yes-noo                          controllers.living_settlor.individual.SettlorIndividualNINOYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/do-you-know-country-of-residency             controllers.living_settlor.individual.mld5.CountryOfResidencyYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/do-you-know-country-of-residency             controllers.living_settlor.individual.mld5.CountryOfResidencyYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-do-you-know-country-of-residency      controllers.living_settlor.individual.mld5.CountryOfResidencyYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-do-you-know-country-of-residency      controllers.living_settlor.individual.mld5.CountryOfResidencyYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/has-uk-country-of-residency                  controllers.living_settlor.individual.mld5.UkCountryOfResidencyYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/has-uk-country-of-residency                  controllers.living_settlor.individual.mld5.UkCountryOfResidencyYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-has-uk-country-of-residency           controllers.living_settlor.individual.mld5.UkCountryOfResidencyYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-has-uk-country-of-residency           controllers.living_settlor.individual.mld5.UkCountryOfResidencyYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/country-of-residency                         controllers.living_settlor.individual.mld5.CountryOfResidencyController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/country-of-residency                         controllers.living_settlor.individual.mld5.CountryOfResidencyController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-country-of-residency                  controllers.living_settlor.individual.mld5.CountryOfResidencyController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-country-of-residency                  controllers.living_settlor.individual.mld5.CountryOfResidencyController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
 GET        /:draftId/living/:index/individual/international-address                        controllers.living_settlor.individual.SettlorIndividualAddressInternationalController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/international-address                        controllers.living_settlor.individual.SettlorIndividualAddressInternationalController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
@@ -224,6 +254,11 @@ GET        /:draftId/living/:index/individual/passport-yes-no                   
 POST       /:draftId/living/:index/individual/passport-yes-no                              controllers.living_settlor.individual.SettlorIndividualPassportYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
 GET        /:draftId/living/:index/individual/change-passport-yes-no                       controllers.living_settlor.individual.SettlorIndividualPassportYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/change-passport-yes-no                       controllers.living_settlor.individual.SettlorIndividualPassportYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+
+GET        /:draftId/living/:index/individual/mental-capacity-yes-no                       controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/mental-capacity-yes-no                       controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-mental-capacity-yes-no                controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-mental-capacity-yes-no                controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
 GET        /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onPageLoad(index : Int, draftId : String)
 POST       /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onSubmit(index : Int, draftId : String)

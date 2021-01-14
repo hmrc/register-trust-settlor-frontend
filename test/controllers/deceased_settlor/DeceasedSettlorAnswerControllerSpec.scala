@@ -29,7 +29,7 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.CheckYourAnswersHelper
+import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import utils.countryOptions.CountryOptions
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
@@ -38,6 +38,8 @@ import java.time.LocalDate
 import scala.concurrent.Future
 
 class DeceasedSettlorAnswerControllerSpec extends SpecBase {
+
+  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   "DeceasedSettlorAnswer Controller" must {
 
@@ -61,7 +63,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
 
       val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
@@ -104,7 +106,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
 
       val countryOptions = injector.instanceOf[CountryOptions]
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions)(answers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
