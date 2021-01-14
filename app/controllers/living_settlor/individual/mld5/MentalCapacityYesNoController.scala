@@ -35,15 +35,15 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class MentalCapacityYesNoController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 registrationsRepository: RegistrationsRepository,
-                                                 @IndividualSettlor navigator: Navigator,
-                                                 actions: Actions,
-                                                 requireName: NameRequiredActionProvider,
-                                                 yesNoFormProvider: YesNoFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: MentalCapacityYesNoView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               override val messagesApi: MessagesApi,
+                                               registrationsRepository: RegistrationsRepository,
+                                               @IndividualSettlor navigator: Navigator,
+                                               actions: Actions,
+                                               requireName: NameRequiredActionProvider,
+                                               yesNoFormProvider: YesNoFormProvider,
+                                               val controllerComponents: MessagesControllerComponents,
+                                               view: MentalCapacityYesNoView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
 
