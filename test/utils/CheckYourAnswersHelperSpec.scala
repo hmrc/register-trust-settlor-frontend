@@ -456,7 +456,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualNINOYesNoPage(index), true).success.value
               .set(individualPages.SettlorIndividualNINOPage(index), nino).success.value
               .set(individual5mldPages.CountryOfResidencyYesNoPage(index), false).success.value
-              .set(individual5mldPages.LegallyIncapableYesNoPage(index), false).success.value
+              .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
             val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
@@ -476,7 +476,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
                   AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualLegallyIncapableYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -493,7 +493,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualNINOPage(index), nino).success.value
               .set(individual5mldPages.CountryOfResidencyYesNoPage(index), true).success.value
               .set(individual5mldPages.UkCountryOfResidencyYesNoPage(index), true).success.value
-              .set(individual5mldPages.LegallyIncapableYesNoPage(index), false).success.value
+              .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
             val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
@@ -515,7 +515,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
                   AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualLegallyIncapableYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -534,7 +534,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.CountryOfResidencyYesNoPage(index), true).success.value
               .set(individual5mldPages.UkCountryOfResidencyYesNoPage(index), false).success.value
               .set(individual5mldPages.CountryOfResidencyPage(index), "FR").success.value
-              .set(individual5mldPages.LegallyIncapableYesNoPage(index), false).success.value
+              .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
             val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
@@ -558,7 +558,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
                   AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
                   AnswerRow(label = "settlorIndividualCountryOfResidency.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualLegallyIncapableYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )

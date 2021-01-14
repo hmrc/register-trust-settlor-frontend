@@ -20,9 +20,9 @@ import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
-case class LegallyIncapableYesNoPage(index: Int) extends QuestionPage[Boolean] {
+case class MentalCapacityYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 
-  override def toString: String = "legallyIncapableYesNo"
+  override def toString: String = "mentalCapacityYesNo"
 }

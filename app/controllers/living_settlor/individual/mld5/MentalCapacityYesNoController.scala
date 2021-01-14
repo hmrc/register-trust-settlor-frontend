@@ -23,18 +23,18 @@ import forms.YesNoFormProvider
 import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
-import pages.living_settlor.individual.mld5.LegallyIncapableYesNoPage
+import pages.living_settlor.individual.mld5.MentalCapacityYesNoPage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import views.html.living_settlor.individual.mld5.LegallyIncapableYesNoView
+import views.html.living_settlor.individual.mld5.MentalCapacityYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class LegallyIncapableYesNoController @Inject()(
+class MentalCapacityYesNoController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  registrationsRepository: RegistrationsRepository,
                                                  @IndividualSettlor navigator: Navigator,
@@ -42,10 +42,10 @@ class LegallyIncapableYesNoController @Inject()(
                                                  requireName: NameRequiredActionProvider,
                                                  yesNoFormProvider: YesNoFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: LegallyIncapableYesNoView
+                                                 view: MentalCapacityYesNoView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualLegallyIncapableYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
 
   private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
     actions.authWithData(draftId) andThen requireName(index, draftId)
@@ -54,7 +54,7 @@ class LegallyIncapableYesNoController @Inject()(
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(LegallyIncapableYesNoPage(index)) match {
+      val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -71,9 +71,9 @@ class LegallyIncapableYesNoController @Inject()(
 
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(LegallyIncapableYesNoPage(index), value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(LegallyIncapableYesNoPage(index), mode, draftId, is5mldEnabled = true)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), mode, draftId, is5mldEnabled = true)(updatedAnswers))
         }
       )
   }

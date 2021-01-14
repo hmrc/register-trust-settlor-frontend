@@ -18,14 +18,14 @@ package pages.living_settlor.individual.mld5
 
 import pages.behaviours.PageBehaviours
 
-class LegallyIncapableYesNoPageSpec extends PageBehaviours {
+class MentalCapacityYesNoPageSpec extends PageBehaviours {
 
-  "LegallyIncapableYesNoPage" must {
+  "MentalCapacityYesNoPage" must {
 
-    beRetrievable[Boolean](LegallyIncapableYesNoPage(0))
+    beRetrievable[Boolean](MentalCapacityYesNoPage(0))
 
-    beSettable[Boolean](LegallyIncapableYesNoPage(0))
+    beSettable[Boolean](MentalCapacityYesNoPage(0))
 
-    beRemovable[Boolean](LegallyIncapableYesNoPage(0))
+    beRemovable[Boolean](MentalCapacityYesNoPage(0))
   }
 }

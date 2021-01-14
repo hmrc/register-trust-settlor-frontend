@@ -22,19 +22,19 @@ import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.living_settlor.individual.mld5.LegallyIncapableYesNoView
+import views.html.living_settlor.individual.mld5.MentalCapacityYesNoView
 
-class LegallyIncapableYesNoViewSpec extends YesNoViewBehaviours {
+class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val messageKeyPrefix: String = "settlorIndividualLegallyIncapableYesNo"
+  private val messageKeyPrefix: String = "settlorIndividualMentalCapacityYesNo"
   private val index: Int = 0
   private val name: FullName = FullName("First", None, "Last")
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
-  "LegallyIncapableYesNo View" must {
+  "MentalCapacityYesNo View" must {
 
-    val view = viewFor[LegallyIncapableYesNoView](Some(emptyUserAnswers))
+    val view = viewFor[MentalCapacityYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, NormalMode, index, fakeDraftId, name)(fakeRequest, messages)

@@ -58,7 +58,7 @@ class IndividualSettlorNavigator extends Navigator {
       SettlorIndividualPassportYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorAddressInternationalPage(index) => _ => _ =>
       SettlorIndividualPassportYesNoController.onPageLoad(NormalMode, index, draftId)
-    case LegallyIncapableYesNoPage(index) => _ => _ =>
+    case MentalCapacityYesNoPage(index) => _ =>_ =>
       SettlorIndividualAnswerController.onPageLoad(index, draftId)
     case SettlorIndividualAnswerPage => _ => _ =>
       controllers.routes.AddASettlorController.onPageLoad(draftId)
@@ -163,7 +163,7 @@ class IndividualSettlorNavigator extends Navigator {
 
   private def navigateAwayFromCountryOfResidencyQuestions(userAnswers: UserAnswers, index: Int, draftId: String): Call = {
     if (isNinoDefined(userAnswers, index)) {
-      LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId)
+      MentalCapacityYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
       SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId)
     }
@@ -171,7 +171,7 @@ class IndividualSettlorNavigator extends Navigator {
 
   private def navigateToAnswersOrLegallyIncapable(is5mldEnabled: Boolean, index: Int, draftId: String): Call = {
     if (is5mldEnabled) {
-      LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId)
+      MentalCapacityYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
       SettlorIndividualAnswerController.onPageLoad(index, draftId)
     }

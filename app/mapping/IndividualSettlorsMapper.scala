@@ -34,7 +34,7 @@ class IndividualSettlorsMapper @Inject()(addressMapper: AddressMapper) extends M
          identification = identificationMap(settlor),
          countryOfResidence = settlor.countryOfResidence,
          nationality = settlor.nationality,
-         legallyIncapable = settlor.legallyIncapable.map(!_)
+         legallyIncapable = settlor.hasMentalCapacity.map(!_)
        ))
        case _: BusinessSettlor =>
          None

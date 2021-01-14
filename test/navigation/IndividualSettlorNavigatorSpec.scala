@@ -368,7 +368,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
                 .set(page, false).success.value
 
               navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-                .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
 
@@ -394,7 +394,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
                 .set(page, true).success.value
 
               navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-                .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
 
@@ -427,7 +427,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
               .set(page, "FR").success.value
 
             navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-              .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
 
@@ -480,7 +480,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
             val userAnswers = emptyUserAnswers.set(page, false).success.value
 
             navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-              .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
       }
@@ -547,7 +547,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         val page = SettlorIndividualPassportPage(index)
         "redirect to legally incapable yes/no" in {
           navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(emptyUserAnswers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
         }
       }
 
@@ -567,7 +567,7 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
             val userAnswers = emptyUserAnswers.set(page, false).success.value
 
             navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-              .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
       }
@@ -576,12 +576,12 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         val page = SettlorIndividualIDCardPage(index)
         "redirect to legally incapable yes/no" in {
           navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(emptyUserAnswers)
-            .mustBe(LegallyIncapableYesNoController.onPageLoad(mode, index, fakeDraftId))
+            .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
         }
       }
 
       "LegallyIncapableYesNoPage" must {
-        val page = LegallyIncapableYesNoPage(index)
+        val page = MentalCapacityYesNoPage(index)
         "redirect to check answers" in {
           navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(emptyUserAnswers)
             .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))

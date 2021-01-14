@@ -243,7 +243,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
             .set(CountryOfResidencyYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(LegallyIncapableYesNoPage(index), true).success.value
+            .set(MentalCapacityYesNoPage(index), true).success.value
 
           val result = mapper.build(userAnswers).get
 
@@ -268,7 +268,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(CountryOfResidencyYesNoPage(index), true).success.value
             .set(UkCountryOfResidencyYesNoPage(index), true).success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(LegallyIncapableYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), false).success.value
 
           val result = mapper.build(userAnswers).get
 
@@ -295,7 +295,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(UkCountryOfResidencyYesNoPage(index), false).success.value
             .set(CountryOfResidencyPage(index), "ES").success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(LegallyIncapableYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), false).success.value
 
           val result = mapper.build(userAnswers).get
 

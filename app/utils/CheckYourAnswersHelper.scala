@@ -143,7 +143,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
       passportOrIdCardDetailsQuestion(individualPages.SettlorIndividualPassportPage(index), "settlorIndividualPassport", individualRoutes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, draftId).url, name),
       yesNoQuestion(individualPages.SettlorIndividualIDCardYesNoPage(index), "settlorIndividualIDCardYesNo", individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(NormalMode, index, draftId).url, name),
       passportOrIdCardDetailsQuestion(individualPages.SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", individualRoutes.SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId).url, name),
-      yesNoQuestion(individual5mldPages.LegallyIncapableYesNoPage(index), "settlorIndividualLegallyIncapableYesNo", individual5mldRoutes.LegallyIncapableYesNoController.onPageLoad(NormalMode, index, draftId).url, name)
+      yesNoQuestion(individual5mldPages.MentalCapacityYesNoPage(index), "settlorIndividualMentalCapacityYesNo", individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(NormalMode, index, draftId).url, name)
     ).flatten
   }
 

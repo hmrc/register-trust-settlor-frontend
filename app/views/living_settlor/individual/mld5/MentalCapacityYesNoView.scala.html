@@ -25,10 +25,10 @@
 @(form: Form[_], mode: Mode, index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualLegallyIncapableYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualMentalCapacityYesNo.title")}"
 ) {
 
-    @formHelper(action = LegallyIncapableYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = MentalCapacityYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 
@@ -36,7 +36,7 @@
 
         @components.input_yes_no(
             field = form("value"),
-            label = messages("settlorIndividualLegallyIncapableYesNo.heading", name.toString),
+            label = messages("settlorIndividualMentalCapacityYesNo.heading", name.toString),
             legendClass = Some("heading-large")
         )
 

@@ -47,7 +47,7 @@ class CountryOfResidencyControllerSpec extends SpecBase {
 
   private val baseAnswers: UserAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
-  "CountryOfResidencyYesNo Controller" must {
+  "CountryOfResidency Controller" must {
 
     "return OK and the correct view for a GET" in {
 

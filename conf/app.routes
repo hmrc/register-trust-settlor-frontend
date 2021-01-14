@@ -240,10 +240,10 @@ POST       /:draftId/living/:index/individual/passport-yes-no                   
 GET        /:draftId/living/:index/individual/change-passport-yes-no                       controllers.living_settlor.individual.SettlorIndividualPassportYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/change-passport-yes-no                       controllers.living_settlor.individual.SettlorIndividualPassportYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
-GET        /:draftId/living/:index/individual/legally-incapable-yes-no                     controllers.living_settlor.individual.mld5.LegallyIncapableYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
-POST       /:draftId/living/:index/individual/legally-incapable-yes-no                     controllers.living_settlor.individual.mld5.LegallyIncapableYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
-GET        /:draftId/living/:index/individual/change-legally-incapable-yes-no              controllers.living_settlor.individual.mld5.LegallyIncapableYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
-POST       /:draftId/living/:index/individual/change-legally-incapable-yes-no              controllers.living_settlor.individual.mld5.LegallyIncapableYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/mental-capacity-yes-no                       controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onPageLoad(mode: Mode = NormalMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/mental-capacity-yes-no                       controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onSubmit(mode: Mode = NormalMode, index: Int, draftId: String)
+GET        /:draftId/living/:index/individual/change-mental-capacity-yes-no                controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onPageLoad(mode: Mode = CheckMode, index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/change-mental-capacity-yes-no                controllers.living_settlor.individual.mld5.MentalCapacityYesNoController.onSubmit(mode: Mode = CheckMode, index: Int, draftId: String)
 
 GET        /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onPageLoad(index : Int, draftId : String)
 POST       /:draftId/living/:index/individual/check-settlor-individual-answers             controllers.living_settlor.individual.SettlorIndividualAnswerController.onSubmit(index : Int, draftId : String)

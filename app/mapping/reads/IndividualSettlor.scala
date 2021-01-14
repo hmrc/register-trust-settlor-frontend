@@ -30,7 +30,7 @@ final case class IndividualSettlor(name: FullName,
                                    idCard: Option[PassportOrIdCardDetails],
                                    countryOfResidence: Option[String],
                                    nationality: Option[String],
-                                   legallyIncapable: Option[Boolean]) extends Settlor {
+                                   hasMentalCapacity: Option[Boolean]) extends Settlor {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 }
@@ -46,7 +46,7 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "idCard").readNullable[PassportOrIdCardDetails] and
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
-      (__ \ "legallyIncapableYesNo").readNullable[Boolean]
+      (__ \ "mentalCapacityYesNo").readNullable[Boolean]
       )(IndividualSettlor.apply _)
   }
 }
