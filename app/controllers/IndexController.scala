@@ -39,13 +39,13 @@ class IndexController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
-    repository.get(draftId) flatMap {
-      case Some(userAnswers) =>
-        Future.successful(redirect(userAnswers, draftId))
-      case _ =>
-        featureFlagService.is5mldEnabled().flatMap {
-          is5mldEnabled =>
-            val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier, is5mldEnabled)
+    featureFlagService.is5mldEnabled().flatMap {
+      is5mldEnabled =>
+        repository.get(draftId) flatMap {
+          case Some(userAnswers) =>
+            Future.successful(redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled), draftId))
+          case _ =>
+            val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled)
             repository.set(userAnswers) map {
               _ => redirect(userAnswers, draftId)
             }
