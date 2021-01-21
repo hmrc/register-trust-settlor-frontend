@@ -17,39 +17,43 @@
 package navigation
 
 import controllers.living_settlor.routes
-import javax.inject.Singleton
 import models.pages.KindOfTrust._
 import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.trust_type._
 import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+
+import javax.inject.Singleton
 
 @Singleton
 class TrustTypeNavigator extends Navigator {
 
-  override def nextPage(page: Page, mode: Mode, draftId: String,
-                        af: AffinityGroup = AffinityGroup.Organisation,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = route(draftId, is5mldEnabled)(page)(af)
+  override def nextPage(page: Page,
+                        mode: Mode,
+                        draftId: String,
+                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
 
-  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case SetUpAfterSettlorDiedYesNoPage  => _ => yesNoNav(
+    route(draftId, is5mldEnabled)(page)
+  }
+
+  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+    case SetUpAfterSettlorDiedYesNoPage => yesNoNav(
       fromPage = SetUpAfterSettlorDiedYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
       noCall = controllers.trust_type.routes.KindOfTrustController.onPageLoad(NormalMode, draftId)
     )
-    case KindOfTrustPage => _ => kindOfTrustPage(draftId)
-    case EfrbsYesNoPage  => _ => yesNoNav(
+    case KindOfTrustPage => kindOfTrustPage(draftId)
+    case EfrbsYesNoPage => yesNoNav(
       fromPage = EfrbsYesNoPage,
       yesCall = controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId),
       noCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
     )
-    case SetUpInAdditionToWillTrustYesNoPage  => _ => yesNoNav(
+    case SetUpInAdditionToWillTrustYesNoPage => yesNoNav(
       fromPage = SetUpInAdditionToWillTrustYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
       noCall = controllers.trust_type.routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId)
     )
-    case EfrbsStartDatePage | HowDeedOfVariationCreatedPage | HoldoverReliefYesNoPage => _ => _ =>
+    case EfrbsStartDatePage | HowDeedOfVariationCreatedPage | HoldoverReliefYesNoPage => _ =>
       routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
   }
 
