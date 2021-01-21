@@ -17,15 +17,19 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
 import models.pages.FullName
 import models.pages.IndividualOrBusiness.Individual
 import models.pages.Status.Completed
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, verify, when}
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
 import pages.{DeceasedSettlorStatus, LivingSettlorStatus, deceased_settlor => deceasedPages}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 
 import scala.concurrent.Future
 
@@ -95,6 +99,69 @@ class IndexControllerSpec extends SpecBase {
       redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
 
       application.stop()
+    }
+
+    "instantiate new set of user answers when none pre-existing" when {
+
+      val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
+
+      "5mld enabled" must {
+        "add is5mldEnabled = true value to user answers" in {
+
+          reset(registrationsRepository)
+
+          val application = applicationBuilder(userAnswers = None)
+            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+            .build()
+
+          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
+
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad(draftId).url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+
+          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+          uaCaptor.getValue.is5mldEnabled mustBe true
+
+          application.stop()
+        }
+      }
+
+      "5mld not enabled" must {
+        "add is5mldEnabled = false value to user answers" in {
+
+          reset(registrationsRepository)
+
+          val application = applicationBuilder(userAnswers = None)
+            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+            .build()
+
+          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+          when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad(draftId).url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+
+          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+          uaCaptor.getValue.is5mldEnabled mustBe false
+
+          application.stop()
+        }
+      }
     }
   }
 }

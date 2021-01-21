@@ -16,15 +16,14 @@
 
 package navigation
 
-import controllers.living_settlor.individual.routes._
 import controllers.living_settlor.individual.mld5.routes._
+import controllers.living_settlor.individual.routes._
 import models.{Mode, NormalMode, UserAnswers}
 import pages._
 import pages.living_settlor.individual._
 import pages.living_settlor.individual.mld5._
 import play.api.mvc.Call
 import uk.gov.hmrc.auth.core.AffinityGroup
-import utils.Constants.GB
 
 import javax.inject.Singleton
 
