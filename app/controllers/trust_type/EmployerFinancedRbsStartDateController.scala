@@ -19,6 +19,7 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.EfrbsStartDateFormProvider
+
 import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
@@ -30,6 +31,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.trust_type.EmployerFinancedRbsStartDateView
 
+import java.time.LocalDate
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmployerFinancedRbsStartDateController @Inject()(
@@ -40,9 +42,9 @@ class EmployerFinancedRbsStartDateController @Inject()(
                                                         formProvider: EfrbsStartDateFormProvider,
                                                         val controllerComponents: MessagesControllerComponents,
                                                         view: EmployerFinancedRbsStartDateView
-                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[LocalDate] = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>

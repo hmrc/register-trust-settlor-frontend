@@ -42,9 +42,9 @@ class SettlorDateOfDeathYesNoController @Inject()(
                                                    yesNoFormProvider: YesNoFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: SettlorDateOfDeathYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorDateOfDeathYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorDateOfDeathYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -59,7 +59,7 @@ class SettlorDateOfDeathYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId, name))
   }
 
-  def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get

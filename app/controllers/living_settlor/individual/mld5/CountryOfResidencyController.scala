@@ -75,7 +75,7 @@ class CountryOfResidencyController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencyPage(index), mode, draftId, is5mldEnabled = true)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidencyPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

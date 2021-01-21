@@ -17,32 +17,20 @@
 package controllers
 
 import base.SpecBase
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
 import views.html.SettlorInfoView
 import views.html.mld5.SettlorInfo5MLDView
 
-import scala.concurrent.Future
-
 class SettlorInfoControllerSpec extends SpecBase {
-
-  lazy val mockFeatureFlagService = mock[FeatureFlagService]
 
   "SettlorInfo Controller" must {
 
     "return OK and the correct view for a GET with 5mld disabled" in {
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(false))
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-        ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, routes.SettlorInfoController.onPageLoad(fakeDraftId).url)
 
@@ -60,13 +48,9 @@ class SettlorInfoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET with 5mld enabled" in {
 
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any()))
-        .thenReturn(Future.successful(true))
+      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
-        .overrides(
-          bind[FeatureFlagService].toInstance(mockFeatureFlagService)
-        ).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(GET, routes.SettlorInfoController.onPageLoad(fakeDraftId).url)
 
@@ -81,7 +65,6 @@ class SettlorInfoControllerSpec extends SpecBase {
 
       application.stop()
     }
-
 
   }
 }

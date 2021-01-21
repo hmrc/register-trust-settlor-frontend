@@ -20,8 +20,10 @@ import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.InternationalAddressFormProvider
+
 import javax.inject.Inject
 import models.Mode
+import models.pages.InternationalAddress
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorsInternationalAddressPage, SettlorsNamePage}
 import play.api.data.Form
@@ -46,7 +48,7 @@ class SettlorsInternationalAddressController @Inject()(
                                                         val countryOptions: CountryOptionsNonUK
                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[InternationalAddress] = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>

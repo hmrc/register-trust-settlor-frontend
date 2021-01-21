@@ -31,17 +31,13 @@ class IndividualSettlorNavigator extends Navigator {
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
+                        draftId: String): UserAnswers => Call = route(draftId)(page)
 
-    route(draftId, is5mldEnabled)(page)
-  }
-
-  override protected def route(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     simpleNavigation(draftId) orElse
       yesNoNavigation(draftId) orElse
-      mldDependentSimpleNavigation(draftId, is5mldEnabled) orElse
-      mldDependentYesNoNavigation(draftId, is5mldEnabled)
+      mldDependentSimpleNavigation(draftId) orElse
+      mldDependentYesNoNavigation(draftId)
   }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
@@ -100,50 +96,50 @@ class IndividualSettlorNavigator extends Navigator {
       )
   }
 
-  private def mldDependentSimpleNavigation(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorIndividualDateOfBirthPage(index) => _ =>
-      navigateAwayFromDateOfBirthQuestions(is5mldEnabled, index, draftId)
-    case SettlorIndividualNINOPage(index) => _ =>
-      if (is5mldEnabled) {
+  private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorIndividualDateOfBirthPage(index) => ua =>
+      navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, index, draftId)
+    case SettlorIndividualNINOPage(index) => ua =>
+      if (ua.is5mldEnabled) {
         CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId)
       } else {
         SettlorIndividualAnswerController.onPageLoad(index, draftId)
       }
-    case SettlorIndividualPassportPage(index) => _ =>
-      navigateToAnswersOrLegallyIncapable(is5mldEnabled, index, draftId)
-    case SettlorIndividualIDCardPage(index) => _ =>
-      navigateToAnswersOrLegallyIncapable(is5mldEnabled, index, draftId)
+    case SettlorIndividualPassportPage(index) => ua =>
+      navigateToAnswersOrLegallyIncapable(ua.is5mldEnabled, index, draftId)
+    case SettlorIndividualIDCardPage(index) => ua =>
+      navigateToAnswersOrLegallyIncapable(ua.is5mldEnabled, index, draftId)
   }
 
-  private def mldDependentYesNoNavigation(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
-    case page @ SettlorIndividualDateOfBirthYesNoPage(index) =>
+  private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case page @ SettlorIndividualDateOfBirthYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualDateOfBirthController.onPageLoad(NormalMode, index, draftId),
-        noCall = navigateAwayFromDateOfBirthQuestions(is5mldEnabled, index, draftId)
-      )
-    case page @ SettlorIndividualNINOYesNoPage(index) =>
+        noCall = navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, index, draftId)
+      )(ua)
+    case page @ SettlorIndividualNINOYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualNINOController.onPageLoad(NormalMode, index, draftId),
-        noCall = if (is5mldEnabled) {
+        noCall = if (ua.is5mldEnabled) {
           CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId)
         } else {
           SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId)
         }
-      )
+      )(ua)
     case page @ SettlorAddressYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
-        noCall = navigateToAnswersOrLegallyIncapable(is5mldEnabled, index, draftId)
+        noCall = navigateToAnswersOrLegallyIncapable(ua.is5mldEnabled, index, draftId)
       )(ua)
-    case page @ SettlorIndividualIDCardYesNoPage(index) =>
+    case page @ SettlorIndividualIDCardYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualIDCardController.onPageLoad(NormalMode, index, draftId),
-        noCall = navigateToAnswersOrLegallyIncapable(is5mldEnabled, index, draftId)
-      )
+        noCall = navigateToAnswersOrLegallyIncapable(ua.is5mldEnabled, index, draftId)
+      )(ua)
   }
 
   private def navigateAwayFromDateOfBirthQuestions(is5mldEnabled: Boolean, index: Int, draftId: String): Call = {

@@ -42,9 +42,9 @@ class SettlorIndividualPassportYesNoController @Inject()(
                                                           yesNoFormProvider: YesNoFormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
                                                           view: SettlorIndividualPassportYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualPassportYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualPassportYesNo")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>

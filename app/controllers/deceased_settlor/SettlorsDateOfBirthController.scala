@@ -16,13 +16,10 @@
 
 package controllers.deceased_settlor
 
-import java.time.LocalDate
-
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
-import javax.inject.Inject
 import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
@@ -31,23 +28,23 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorsDateOfBirthView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorsDateOfBirthController @Inject()(
                                                override val messagesApi: MessagesApi,
                                                registrationsRepository: RegistrationsRepository,
                                                @DeceasedSettlor navigator: Navigator,
-                                               featureFlagService: FeatureFlagService,
                                                actions: Actions,
                                                requireName: NameRequiredActionProvider,
                                                formProvider: SettlorsDateOfBirthFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: SettlorsDateOfBirthView
-                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private def form(maxDate: (LocalDate, String)): Form[LocalDate] =
     formProvider.withConfig(maxDate)
@@ -77,9 +74,8 @@ class SettlorsDateOfBirthController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsDateOfBirthPage, value))
-            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsDateOfBirthPage, mode, draftId, is5mldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorsDateOfBirthPage, mode, draftId)(updatedAnswers))
         }
       )
   }

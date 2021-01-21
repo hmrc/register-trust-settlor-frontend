@@ -22,9 +22,9 @@ import play.api.mvc.Call
 
 trait Navigator {
 
-  protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, UserAnswers => Call]
+  protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call]
 
-  def nextPage(page: Page, mode: Mode, draftId: String, is5mldEnabled: Boolean = false): UserAnswers => Call
+  def nextPage(page: Page, mode: Mode, draftId: String): UserAnswers => Call
 
   def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
     answers.get(fromPage)

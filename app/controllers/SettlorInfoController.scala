@@ -17,31 +17,27 @@
 package controllers
 
 import controllers.actions.Actions
-import javax.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html._
 
-import scala.concurrent.ExecutionContext
+import javax.inject.Inject
 
 class SettlorInfoController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        actions: Actions,
-                                       featureFlagService: FeatureFlagService,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: SettlorInfoView,
                                        view5mld: mld5.SettlorInfo5MLDView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                     ) extends FrontendBaseController with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
-      featureFlagService.is5mldEnabled().map {
-        case true =>
-          Ok(view5mld(draftId))
-        case _ =>
-          Ok(view(draftId))
+      if (request.userAnswers.is5mldEnabled) {
+        Ok(view5mld(draftId))
+      } else {
+        Ok(view(draftId))
       }
   }
 }

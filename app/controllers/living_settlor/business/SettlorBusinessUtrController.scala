@@ -20,8 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.UtrFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessUtrPage
@@ -29,25 +27,24 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.living_settlor.business.SettlorBusinessUtrView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessUtrController @Inject()(
                                               override val messagesApi: MessagesApi,
                                               registrationsRepository: RegistrationsRepository,
-                                              featureFlagService: FeatureFlagService,
                                               @BusinessSettlor navigator: Navigator,
                                               actions: Actions,
                                               requireName: NameRequiredActionProvider,
                                               formProvider: UtrFormProvider,
                                               val controllerComponents: MessagesControllerComponents,
                                               view: SettlorBusinessUtrView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider("settlorBusinessUtr")
+  private val form: Form[String] = formProvider("settlorBusinessUtr")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
@@ -70,9 +67,8 @@ class SettlorBusinessUtrController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessUtrPage(index), value))
-            is5mld         <- featureFlagService.is5mldEnabled()
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessUtrPage(index), mode, draftId, is5mldEnabled = is5mld)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessUtrPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

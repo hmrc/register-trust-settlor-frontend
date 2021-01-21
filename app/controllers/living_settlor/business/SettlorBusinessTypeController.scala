@@ -20,6 +20,8 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.living_settlor.SettlorBusinessTypeFormProvider
+import models.pages.KindOfBusiness
+
 import javax.inject.Inject
 import models.{Enumerable, Mode}
 import navigation.Navigator
@@ -42,9 +44,9 @@ class SettlorBusinessTypeController @Inject()(
                                                formProvider: SettlorBusinessTypeFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: SettlorBusinessTypeView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  private val form: Form[KindOfBusiness] = formProvider()
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>

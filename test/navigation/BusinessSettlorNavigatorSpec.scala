@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.living_settlor.business.routes
 import controllers.living_settlor.business.mld5.{routes => mld5Routes}
 import models.pages.KindOfTrust.{Employees, Intervivos}
-import models.{Mode, NormalMode}
+import models.{Mode, NormalMode, UserAnswers}
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.trust_type.KindOfTrustPage
@@ -53,8 +53,9 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
       "no" when {
         "not in 5mld mode" must {
+          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
           "redirect to address yes/no" in {
-            val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
+            val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
             navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
               .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
@@ -62,10 +63,11 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
         }
 
         "in 5mld mode" must {
+          val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
           "redirect to address yes/no" in {
-            val userAnswers = emptyUserAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
+            val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
-            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
@@ -74,9 +76,10 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
     "SettlorBusinessUtrPage" when {
       "not in 5mld mode" must {
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
         "for a trust for the employees of a company" must {
           "redirect to kind of business" in {
-            val userAnswers = emptyUserAnswers
+            val userAnswers = baseAnswers
               .set(KindOfTrustPage, Employees).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
@@ -87,7 +90,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
         "for a trust that is not for the employees of a company" must {
           "redirect to check answers" in {
-            val userAnswers = emptyUserAnswers
+            val userAnswers = baseAnswers
               .set(KindOfTrustPage, Intervivos).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
@@ -98,24 +101,25 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
       }
 
       "in 5mld mode" must {
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
         "for a trust for the employees of a company" must {
           "redirect to Country of Residence Yes No page" in {
-            val userAnswers = emptyUserAnswers
+            val userAnswers = baseAnswers
               .set(KindOfTrustPage, Employees).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
 
         "for a trust that is not for the employees of a company" must {
           "redirect to Country of Residence Yes No page" in {
-            val userAnswers = emptyUserAnswers
+            val userAnswers = baseAnswers
               .set(KindOfTrustPage, Intervivos).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId, is5mldEnabled = true)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
               .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }

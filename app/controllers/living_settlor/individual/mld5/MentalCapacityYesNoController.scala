@@ -73,7 +73,7 @@ class MentalCapacityYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(MentalCapacityYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), mode, draftId, is5mldEnabled = true)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

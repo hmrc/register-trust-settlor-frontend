@@ -26,6 +26,7 @@ import pages.living_settlor._
 import pages.{AddASettlorPage, AddASettlorYesNoPage, _}
 import play.api.mvc.Call
 import sections.LivingSettlors
+import uk.gov.hmrc.http.HttpVerbs.GET
 
 import javax.inject.{Inject, Singleton}
 
@@ -34,17 +35,13 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
+                        draftId: String): UserAnswers => Call = route(draftId)(page)
 
-    route(draftId, is5mldEnabled)(page)
-  }
-
-  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case AddASettlorPage => addSettlorRoute(draftId)
     case AddASettlorYesNoPage => yesNoNav(AddASettlorYesNoPage,
       yesCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId),
-      noCall = Call("GET", config.registrationProgressUrl(draftId))
+      noCall = Call(GET, config.registrationProgressUrl(draftId))
     )
     case SettlorIndividualOrBusinessPage(index) => settlorIndividualOrBusinessPage(index, draftId)
   }
@@ -60,7 +57,7 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
       case Some(YesNow) =>
         routeToSettlorIndex
       case Some(YesLater) | Some(NoComplete) =>
-        Call("GET", config.registrationProgressUrl(draftId))
+        Call(GET, config.registrationProgressUrl(draftId))
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
   }

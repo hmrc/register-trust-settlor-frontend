@@ -20,8 +20,10 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.InternationalAddressFormProvider
+
 import javax.inject.Inject
 import models.Mode
+import models.pages.InternationalAddress
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessAddressInternationalPage
 import play.api.data.Form
@@ -44,9 +46,9 @@ class SettlorBusinessAddressInternationalController @Inject()(
                                                                val controllerComponents: MessagesControllerComponents,
                                                                view: SettlorBusinessAddressInternationalView,
                                                                val countryOptions: CountryOptionsNonUK
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[InternationalAddress] = formProvider()
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>

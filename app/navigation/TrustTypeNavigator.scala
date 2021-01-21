@@ -30,13 +30,9 @@ class TrustTypeNavigator extends Navigator {
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
+                        draftId: String): UserAnswers => Call = route(draftId)(page)
 
-    route(draftId, is5mldEnabled)(page)
-  }
-
-  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SetUpAfterSettlorDiedYesNoPage => yesNoNav(
       fromPage = SetUpAfterSettlorDiedYesNoPage,
       yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),

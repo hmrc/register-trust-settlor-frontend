@@ -19,16 +19,16 @@ package navigation
 import models.{Mode, UserAnswers}
 import pages._
 import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs.GET
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
+class FakeNavigator(val desiredRoute: Call = Call(GET, "/foo")) extends Navigator {
 
-  override protected def route(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case _ => _ => desiredRoute
   }
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = _ => desiredRoute
+                        draftId: String): UserAnswers => Call = _ => desiredRoute
 
 }

@@ -33,22 +33,18 @@ class BusinessSettlorNavigator extends Navigator {
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
+                        draftId: String): UserAnswers => Call = route(draftId)(page)
 
-    route(draftId, is5mldEnabled)(page)
-  }
-
-  override protected def route(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorBusinessNamePage(index) => _ =>
       businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
       fromPage = SettlorBusinessUtrYesNoPage(index),
       yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
-      noCall = fiveMldYesNo(draftId, index, is5mldEnabled)(ua)
+      noCall = fiveMldYesNo(draftId, index)(ua)
     )(ua)
     case SettlorBusinessUtrPage(index) => ua =>
-      fiveMldYesNo(draftId, index, is5mldEnabled)(ua)
+      fiveMldYesNo(draftId, index)(ua)
     case CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = CountryOfResidenceYesNoPage(index),
@@ -85,24 +81,24 @@ class BusinessSettlorNavigator extends Navigator {
       controllers.routes.AddASettlorController.onPageLoad(draftId)
   }
 
-  private def fiveMldYesNo(draftId: String, index: Int, is5mldEnabled: Boolean)(answers: UserAnswers): Call = {
-    if (is5mldEnabled) {
+  private def fiveMldYesNo(draftId: String, index: Int)(ua: UserAnswers): Call = {
+    if (ua.is5mldEnabled) {
       business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
-      fiveMldResumeJourney(draftId, index)(answers)
+      fiveMldResumeJourney(draftId, index)(ua)
     }
   }
 
-  private def fiveMldResumeJourney(draftId: String, index: Int)(answers: UserAnswers): Call = {
+  private def fiveMldResumeJourney(draftId: String, index: Int)(ua: UserAnswers): Call = {
     yesNoNav(
       fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = displayAdditionalQuestionsForEmploymentTrusts(draftId, index)(answers),
+      yesCall = displayAdditionalQuestionsForEmploymentTrusts(draftId, index)(ua),
       noCall = businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId)
-    )(answers)
+    )(ua)
   }
 
-  private def displayAdditionalQuestionsForEmploymentTrusts(draftId: String, index: Int)(answers: UserAnswers): Call =
-    answers.get(KindOfTrustPage) match {
+  private def displayAdditionalQuestionsForEmploymentTrusts(draftId: String, index: Int)(ua: UserAnswers): Call =
+    ua.get(KindOfTrustPage) match {
       case Some(Employees) => businessRoutes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, draftId)
       case Some(_) => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
       case None => controllers.routes.SessionExpiredController.onPageLoad()

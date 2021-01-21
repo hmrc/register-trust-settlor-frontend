@@ -40,9 +40,9 @@ class AdditionToWillTrustYesNoController @Inject()(
                                                     yesNoFormProvider: YesNoFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
                                                     view: AdditionToWillTrustYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
@@ -55,7 +55,7 @@ class AdditionToWillTrustYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String) = actions.authWithData(draftId).async {
+  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

@@ -24,6 +24,7 @@ import pages.Page
 import pages.deceased_settlor._
 import pages.deceased_settlor.mld5._
 import play.api.mvc.Call
+import uk.gov.hmrc.http.HttpVerbs.GET
 
 import javax.inject.{Inject, Singleton}
 
@@ -32,19 +33,15 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
 
   override def nextPage(page: Page,
                         mode: Mode,
-                        draftId: String,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = {
-    
-    route(draftId, is5mldEnabled)(page)
-  }
+                        draftId: String): UserAnswers => Call = route(draftId)(page)
 
-  def simpleNavigation(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorsNamePage => _ =>
       controllers.deceased_settlor.routes.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId)
     case SettlorDateOfDeathPage => _ =>
       controllers.deceased_settlor.routes.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
-    case SettlorsDateOfBirthPage => _ => fiveMldNationalityYesNo(draftId, is5mldEnabled)
-    case SettlorNationalInsuranceNumberPage => _ => fiveMldResidenceWithNino(draftId, is5mldEnabled)
+    case SettlorsDateOfBirthPage => ua => fiveMldNationalityYesNo(draftId, ua.is5mldEnabled)
+    case SettlorNationalInsuranceNumberPage => ua => fiveMldResidenceWithNino(draftId, ua.is5mldEnabled)
     case SettlorsUKAddressPage => _ =>
       controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId)
     case SettlorsInternationalAddressPage => _ =>
@@ -53,25 +50,25 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
       controllers.deceased_settlor.routes.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
     case CountryOfResidencePage => answers => fiveMldResidenceCheckNino(draftId)(answers)
     case DeceasedSettlorAnswerPage => _ =>
-      Call("GET", config.registrationProgressUrl(draftId))
+      Call(GET, config.registrationProgressUrl(draftId))
   }
 
-  def yesNoNavigation(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
+  def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorDateOfDeathYesNoPage => yesNoNav(
       fromPage = SettlorDateOfDeathYesNoPage,
       yesCall = SettlorDateOfDeathController.onPageLoad(NormalMode, draftId),
       noCall = SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
     )
-    case SettlorDateOfBirthYesNoPage => yesNoNav(
+    case SettlorDateOfBirthYesNoPage => ua => yesNoNav(
       fromPage = SettlorDateOfBirthYesNoPage,
       yesCall = SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId),
-      noCall = fiveMldNationalityYesNo(draftId, is5mldEnabled)
-    )
-    case SettlorsNationalInsuranceYesNoPage => yesNoNav(
+      noCall = fiveMldNationalityYesNo(draftId, ua.is5mldEnabled)
+    )(ua)
+    case SettlorsNationalInsuranceYesNoPage => ua => yesNoNav(
       fromPage = SettlorsNationalInsuranceYesNoPage,
       yesCall = SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId),
-      noCall = fiveMldResidenceYesNo(draftId, is5mldEnabled)
-    )
+      noCall = fiveMldResidenceYesNo(draftId, ua.is5mldEnabled)
+    )(ua)
     case SettlorsLastKnownAddressYesNoPage => yesNoNav(
       fromPage = SettlorsLastKnownAddressYesNoPage,
       yesCall = WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId),
@@ -135,8 +132,8 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     }
   }
 
-  override protected def route(draftId: String, is5mldEnabled: Boolean): PartialFunction[Page, UserAnswers => Call] = {
-    simpleNavigation(draftId, is5mldEnabled) orElse yesNoNavigation(draftId, is5mldEnabled)
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    simpleNavigation(draftId) orElse yesNoNavigation(draftId)
   }
 
 }

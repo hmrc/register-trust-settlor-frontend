@@ -73,7 +73,7 @@ class CountryOfNationalityYesNoController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage(index), mode, draftId, is5mldEnabled = true)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

@@ -40,9 +40,9 @@ class EmployerFinancedRbsYesNoController @Inject()(
                                                     yesNoFormProvider: YesNoFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
                                                     view: EmployerFinancedRbsYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("employerFinancedRbsYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("employerFinancedRbsYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>

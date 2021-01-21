@@ -20,8 +20,10 @@ import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.UKAddressFormProvider
+
 import javax.inject.Inject
 import models.Mode
+import models.pages.UKAddress
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsUKAddressPage}
 import play.api.data.Form
@@ -42,9 +44,9 @@ class SettlorsUKAddressController @Inject()(
                                              formProvider: UKAddressFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
                                              view: SettlorsUKAddressView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[UKAddress] = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>

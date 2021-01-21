@@ -35,18 +35,18 @@ import views.html.deceased_settlor.mld5.CountryOfNationalityView
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfNationalityController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   registrationsRepository: RegistrationsRepository,
-                                                   @DeceasedSettlor navigator: Navigator,
-                                                   actions: Actions,
-                                                   requireName: NameRequiredActionProvider,
-                                                   formProvider: CountryFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfNationalityView,
-                                                   val countryOptions: CountryOptionsNonUK
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                override val messagesApi: MessagesApi,
+                                                registrationsRepository: RegistrationsRepository,
+                                                @DeceasedSettlor navigator: Navigator,
+                                                actions: Actions,
+                                                requireName: NameRequiredActionProvider,
+                                                formProvider: CountryFormProvider,
+                                                val controllerComponents: MessagesControllerComponents,
+                                                view: CountryOfNationalityView,
+                                                val countryOptions: CountryOptionsNonUK
+                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
+  private val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -59,7 +59,7 @@ class CountryOfNationalityController @Inject()(
       Ok(view(preparedForm, countryOptions.options, mode, draftId, request.name))
   }
 
-  def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
