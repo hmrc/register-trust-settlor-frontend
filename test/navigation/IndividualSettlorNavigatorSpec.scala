@@ -453,24 +453,24 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
           }
 
           "UK country of residency" must {
-            "redirect to UK address" in {
+            "redirect to address UK yes/no" in {
               val userAnswers = emptyUserAnswers
                 .set(CountryOfResidencyPage(index), "GB").success.value
                 .set(page, true).success.value
 
               navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-                .mustBe(SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
 
           "non-UK country of residency" must {
-            "redirect to non-UK address" in {
+            "redirect to address UK yes/no" in {
               val userAnswers = emptyUserAnswers
                 .set(CountryOfResidencyPage(index), "FR").success.value
                 .set(page, true).success.value
 
               navigator.nextPage(page, mode, fakeDraftId, is5mldEnabled = is5mldEnabled)(userAnswers)
-                .mustBe(SettlorIndividualAddressInternationalController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
         }
