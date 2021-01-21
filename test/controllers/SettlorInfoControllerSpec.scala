@@ -24,7 +24,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.FeatureFlagService
 import views.html.SettlorInfoView
-import views.html.nonTaxable.SettlorInfo5MLDView
+import views.html.mld5.SettlorInfo5MLDView
 
 import scala.concurrent.Future
 

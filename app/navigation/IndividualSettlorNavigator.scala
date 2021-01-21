@@ -138,11 +138,7 @@ class IndividualSettlorNavigator extends Navigator {
     case page @ SettlorAddressYesNoPage(index) => _ => ua =>
       yesNoNav(
         fromPage = page,
-        yesCall = ua.get(CountryOfResidencyPage(index)) match {
-          case Some(GB) => SettlorIndividualAddressUKController.onPageLoad(NormalMode, index, draftId)
-          case Some(_) => SettlorIndividualAddressInternationalController.onPageLoad(NormalMode, index, draftId)
-          case _ => SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId)
-        },
+        yesCall = SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
         noCall = navigateToAnswersOrLegallyIncapable(is5mldEnabled, index, draftId)
       )(ua)
     case page @ SettlorIndividualIDCardYesNoPage(index) => _ =>

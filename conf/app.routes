@@ -121,20 +121,35 @@ POST       /:draftId/deceased/change-was-settlors-address-uk                    
 GET        /:draftId/deceased/check-answers                                                controllers.deceased_settlor.DeceasedSettlorAnswerController.onPageLoad(draftId: String)
 POST       /:draftId/deceased/check-answers                                                controllers.deceased_settlor.DeceasedSettlorAnswerController.onSubmit(draftId: String)
 
-GET        /:draftId/deceased/do-you-know-country-of-nationality-will                      controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/deceased/do-you-know-country-of-nationality-will                      controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.nonTaxable.CountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/deceased/do-you-know-country-of-nationality-will                      controllers.deceased_settlor.mld5.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/do-you-know-country-of-nationality-will                      controllers.deceased_settlor.mld5.CountryOfNationalityYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.mld5.CountryOfNationalityYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-do-you-know-country-of-nationality-will               controllers.deceased_settlor.mld5.CountryOfNationalityYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.nonTaxable.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/uk-nationality-will                                         controllers.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-uk-nationality-will                                  controllers.deceased_settlor.mld5.CountryOfNationalityInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
-GET        /:draftId/deceased/country-of-nationality-will                                 controllers.deceased_settlor.nonTaxable.CountryOfNationalityController.onPageLoad(mode: Mode = NormalMode, draftId: String)
-POST       /:draftId/deceased/country-of-nationality-will                                 controllers.deceased_settlor.nonTaxable.CountryOfNationalityController.onSubmit(mode: Mode = NormalMode, draftId: String)
-GET        /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.nonTaxable.CountryOfNationalityController.onPageLoad(mode: Mode = CheckMode, draftId: String)
-POST       /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.nonTaxable.CountryOfNationalityController.onSubmit(mode: Mode = CheckMode, draftId: String)
+GET        /:draftId/deceased/country-of-nationality-will                                 controllers.deceased_settlor.mld5.CountryOfNationalityController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/country-of-nationality-will                                 controllers.deceased_settlor.mld5.CountryOfNationalityController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.mld5.CountryOfNationalityController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-country-of-nationality-will                          controllers.deceased_settlor.mld5.CountryOfNationalityController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/deceased/do-you-know-country-of-residence-will                       controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/do-you-know-country-of-residence-will                       controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-do-you-know-country-of-residence-will                controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-do-you-know-country-of-residence-will                controllers.deceased_settlor.mld5.CountryOfResidenceYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/deceased/uk-residency-will                                           controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/uk-residency-will                                           controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-uk-residency-will                                    controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-uk-residency-will                                    controllers.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoController.onSubmit(mode: Mode = CheckMode, draftId: String)
+
+GET        /:draftId/deceased/country-of-residence-will                                   controllers.deceased_settlor.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = NormalMode, draftId: String)
+POST       /:draftId/deceased/country-of-residence-will                                   controllers.deceased_settlor.mld5.CountryOfResidenceController.onSubmit(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/deceased/change-country-of-residence-will                            controllers.deceased_settlor.mld5.CountryOfResidenceController.onPageLoad(mode: Mode = CheckMode, draftId: String)
+POST       /:draftId/deceased/change-country-of-residence-will                            controllers.deceased_settlor.mld5.CountryOfResidenceController.onSubmit(mode: Mode = CheckMode, draftId: String)
 
 # Living Settlor
 

@@ -149,6 +149,24 @@ removeSettlor.heading = Are you sure you want to remove {0}?
 removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
+5mld.countryOfResidenceYesNo.title = Do you know the settlor’s last known country of residence?
+5mld.countryOfResidenceYesNo.heading = Do you know {0}’s last known country of residence?
+5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
+5mld.countryOfResidenceYesNo.error.required = Select yes if you know the settlor’s last known country of residence
+5mld.countryOfResidenceYesNo.hint = The last known country of residence is usually where the settlor lived and worked most of the time during the tax year.
+
+5mld.countryOfResidenceInTheUkYesNo.title = Was the settlor a UK resident?
+5mld.countryOfResidenceInTheUkYesNo.heading = Was {0} a UK resident?
+5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel = Was {0} a UK resident?
+5mld.countryOfResidenceInTheUkYesNo.error.required = Select yes if the settlor was a UK resident
+
+5mld.countryOfResidence.title = What was the settlor’s country of residence?
+5mld.countryOfResidence.heading = What was {0}’s country of residence?
+5mld.countryOfResidence.checkYourAnswersLabel = What was {0}’s country of residence?
+5mld.countryOfResidence.error.required = Enter a country
+5mld.countryOfResidence.error.length = The country of residence must be 100 characters or less
+5mld.countryOfResidence.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 5mld.countryOfNationalityYesNo.title = Do you know the settlor’s country of nationality?
 5mld.countryOfNationalityYesNo.heading = Do you know {0}’s country of nationality?
 5mld.countryOfNationalityYesNo.checkYourAnswersLabel = Do you know {0}’s country of nationality?

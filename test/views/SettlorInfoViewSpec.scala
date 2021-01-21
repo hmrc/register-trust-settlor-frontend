@@ -29,7 +29,7 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
     val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
 
-    behave like normalPage(applyView, "settlorInfo",
+    behave like normalPageTitleWithCaption(applyView, "settlorInfo",
       "caption",
       "subheading1",
       "paragraph1",
