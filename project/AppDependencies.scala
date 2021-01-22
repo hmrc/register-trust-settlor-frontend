@@ -7,12 +7,12 @@ object AppDependencies {
     play.sbt.PlayImport.ws,
     "org.reactivemongo" %% "play2-reactivemongo"            % "0.18.6-play26",
     "uk.gov.hmrc"       %% "logback-json-logger"            % "4.6.0",
-    "uk.gov.hmrc"       %% "govuk-template"                 % "5.52.0-play-26",
+    "uk.gov.hmrc"       %% "govuk-template"                 % "5.60.0-play-26",
     "uk.gov.hmrc"       %% "play-health"                    % "3.14.0-play-26",
-    "uk.gov.hmrc"       %% "play-ui"                        % "8.8.0-play-26",
+    "uk.gov.hmrc"       %% "play-ui"                        % "8.21.0-play-26",
     "uk.gov.hmrc"       %% "play-conditional-form-mapping"  % "1.2.0-play-26",
     "uk.gov.hmrc"       %% "domain"                         % "5.9.0-play-26",
-    "uk.gov.hmrc"       %% "bootstrap-play-26"              % "1.4.0",
+    "uk.gov.hmrc"       %% "bootstrap-play-26"              % "1.16.0",
     "uk.gov.hmrc"       %% "play-language"                  % "4.7.0-play-26"
   )
 
