@@ -50,10 +50,12 @@ class IndexControllerSpec extends SpecBase {
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value
           .set(LivingSettlorStatus(0), Completed).success.value
 
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
         when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -72,10 +74,12 @@ class IndexControllerSpec extends SpecBase {
           .set(deceasedPages.SettlorsNamePage, name).success.value
           .set(DeceasedSettlorStatus, Completed).success.value
 
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
         when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
@@ -92,7 +96,9 @@ class IndexControllerSpec extends SpecBase {
 
         val userAnswers = emptyUserAnswers
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
 
         when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
         when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
