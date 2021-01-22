@@ -41,9 +41,9 @@ class HowDeedOfVariationCreatedController @Inject()(
                                                      deedOfVariationFormProvider: DeedOfVariationFormProvider,
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: HowDeedOfVariationCreatedView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
+  private val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
@@ -56,7 +56,7 @@ class HowDeedOfVariationCreatedController @Inject()(
       Ok(view(preparedForm, mode, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String) = actions.authWithData(draftId).async {
+  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

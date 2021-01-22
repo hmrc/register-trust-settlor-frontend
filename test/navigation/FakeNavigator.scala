@@ -19,16 +19,16 @@ package navigation
 import models.{Mode, UserAnswers}
 import pages._
 import play.api.mvc.Call
-import uk.gov.hmrc.auth.core.AffinityGroup
+import uk.gov.hmrc.http.HttpVerbs.GET
 
-class FakeNavigator(val desiredRoute: Call = Call("GET", "/foo")) extends Navigator {
+class FakeNavigator(val desiredRoute: Call = Call(GET, "/foo")) extends Navigator {
 
-  override protected def route(draftId: String, fiveMld: Boolean): PartialFunction[Page, AffinityGroup => UserAnswers => Call] = {
-    case _ => _ => _ => desiredRoute
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case _ => _ => desiredRoute
   }
 
-  override def nextPage(page: Page, mode: Mode, draftId: String,
-                        af: AffinityGroup = AffinityGroup.Organisation,
-                        is5mldEnabled: Boolean = false): UserAnswers => Call = _ => desiredRoute
+  override def nextPage(page: Page,
+                        mode: Mode,
+                        draftId: String): UserAnswers => Call = _ => desiredRoute
 
 }

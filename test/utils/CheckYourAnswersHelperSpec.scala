@@ -17,11 +17,11 @@
 package utils
 
 import base.SpecBase
-import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.deceased_settlor.mld5.{routes => deceased5mldRoutes}
+import controllers.deceased_settlor.{routes => deceasedRoutes}
 import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.individual.mld5.{routes => individual5mldRoutes}
+import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.living_settlor.{routes => livingRoutes}
 import controllers.trust_type.{routes => trustTypeRoutes}
 import models.pages.IndividualOrBusiness._
@@ -31,7 +31,6 @@ import models.{Mode, NormalMode, UserAnswers}
 import pages.living_settlor.individual.{mld5 => individual5mldPages}
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
 import pages.{LivingSettlorStatus, deceased_settlor => deceasedPages, trust_type => trustTypePages}
-import pages.deceased_settlor.{mld5 => deceased5mldPages}
 import play.twirl.api.Html
 import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}

@@ -17,13 +17,15 @@
 package controllers
 
 import controllers.actions.RegistrationIdentifierAction
+
 import javax.inject.Inject
 import models.UserAnswers
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
 import sections.{DeceasedSettlor, LivingSettlors}
+import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -31,23 +33,27 @@ import scala.concurrent.{ExecutionContext, Future}
 class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
-                                 identify: RegistrationIdentifierAction
+                                 identify: RegistrationIdentifierAction,
+                                 featureFlagService: FeatureFlagService
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
-    repository.get(draftId) flatMap {
-      case Some(userAnswers) =>
-        Future.successful(redirect(userAnswers, draftId))
-      case _ =>
-        val userAnswers = UserAnswers(draftId, Json.obj(), request.identifier)
-        repository.set(userAnswers) map {
-          _ => redirect(userAnswers, draftId)
+    featureFlagService.is5mldEnabled().flatMap {
+      is5mldEnabled =>
+        repository.get(draftId) flatMap {
+          case Some(userAnswers) =>
+            Future.successful(redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled), draftId))
+          case _ =>
+            val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled)
+            repository.set(userAnswers) map {
+              _ => redirect(userAnswers, draftId)
+            }
         }
     }
   }
 
-  private def redirect(userAnswers: UserAnswers, draftId: String) = {
+  private def redirect(userAnswers: UserAnswers, draftId: String): Result = {
     val livingSettlors = userAnswers.get(LivingSettlors).getOrElse(List.empty)
     val deceasedSettlor = userAnswers.get(DeceasedSettlor)
 

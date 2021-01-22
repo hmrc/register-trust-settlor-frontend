@@ -39,11 +39,10 @@ object ReadOnlyUserAnswers {
   implicit lazy val formats: OFormat[ReadOnlyUserAnswers] = Json.format[ReadOnlyUserAnswers]
 }
 
-final case class UserAnswers(
-                              draftId: String,
-                              data: JsObject = Json.obj(),
-                              internalAuthId :String
-                            ) {
+final case class UserAnswers(draftId: String,
+                             data: JsObject = Json.obj(),
+                             internalAuthId: String,
+                             is5mldEnabled: Boolean = false) {
 
   private val logger: Logger = Logger(getClass)
 
@@ -107,7 +106,8 @@ object UserAnswers {
     (
       (__ \ "_id").read[String] and
         (__ \ "data").read[JsObject] and
-        (__ \ "internalId").read[String]
+        (__ \ "internalId").read[String] and
+        (__ \ "is5mldEnabled").read[Boolean]
       ) (UserAnswers.apply _)
   }
 
@@ -118,7 +118,8 @@ object UserAnswers {
     (
       (__ \ "_id").write[String] and
         (__ \ "data").write[JsObject] and
-        (__ \ "internalId").write[String]
+        (__ \ "internalId").write[String] and
+        (__ \ "is5mldEnabled").write[Boolean]
       ) (unlift(UserAnswers.unapply))
   }
 }

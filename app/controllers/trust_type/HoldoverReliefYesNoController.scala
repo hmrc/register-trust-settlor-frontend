@@ -41,9 +41,9 @@ class HoldoverReliefYesNoController @Inject()(
                                                yesNoFormProvider: YesNoFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: HoldoverReliefYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")
 
   private def actions(draftId: String) =
     standardActions.authWithData(draftId) andThen
@@ -60,7 +60,7 @@ class HoldoverReliefYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String) = actions(draftId).async {
+  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

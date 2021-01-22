@@ -34,17 +34,17 @@ import views.html.deceased_settlor.mld5.CountryOfResidenceInTheUkYesNoView
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   registrationsRepository: RegistrationsRepository,
-                                                   @DeceasedSettlor navigator: Navigator,
-                                                   actions: Actions,
-                                                   requireName: NameRequiredActionProvider,
-                                                   yesNoFormProvider: YesNoFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfResidenceInTheUkYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                          override val messagesApi: MessagesApi,
+                                                          registrationsRepository: RegistrationsRepository,
+                                                          @DeceasedSettlor navigator: Navigator,
+                                                          actions: Actions,
+                                                          requireName: NameRequiredActionProvider,
+                                                          yesNoFormProvider: YesNoFormProvider,
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          view: CountryOfResidenceInTheUkYesNoView
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfResidenceInTheUkYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -57,7 +57,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId, request.name))
   }
 
-  def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(

@@ -20,8 +20,6 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.NinoFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNINOPage, SettlorIndividualNamePage}
@@ -29,10 +27,10 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.living_settlor.individual.SettlorIndividualNINOView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorIndividualNINOController @Inject()(
@@ -43,8 +41,7 @@ class SettlorIndividualNINOController @Inject()(
                                                  requireName: NameRequiredActionProvider,
                                                  formProvider: NinoFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: SettlorIndividualNINOView,
-                                                 featureFlagService: FeatureFlagService
+                                                 view: SettlorIndividualNINOView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[String] = formProvider("settlorIndividualNINO")
@@ -75,8 +72,7 @@ class SettlorIndividualNINOController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualNINOPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-            is5mldEnabled <- featureFlagService.is5mldEnabled()
-          } yield Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), mode, draftId, is5mldEnabled = is5mldEnabled)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

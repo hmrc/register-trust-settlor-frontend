@@ -17,15 +17,19 @@
 package controllers
 
 import base.SpecBase
+import models.UserAnswers
 import models.pages.FullName
 import models.pages.IndividualOrBusiness.Individual
 import models.pages.Status.Completed
+import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{reset, verify, when}
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
 import pages.{DeceasedSettlorStatus, LivingSettlorStatus, deceased_settlor => deceasedPages}
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FeatureFlagService
 
 import scala.concurrent.Future
 
@@ -33,68 +37,169 @@ class IndexControllerSpec extends SpecBase {
 
   private val name: FullName = FullName("Joe", None, "Bloggs")
 
-  "Index Controller" must {
+  private val featureFlagService: FeatureFlagService = mock[FeatureFlagService]
 
-    "redirect to add to page if there is at least one Completed living settlor" in {
+  "Index Controller" when {
 
-      val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-        .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-        .set(LivingSettlorStatus(0), Completed).success.value
+    "pre-existing user answers" must {
 
-      when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+      "redirect to add to page if there is at least one Completed living settlor" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+          .set(individualPages.SettlorIndividualNamePage(0), name).success.value
+          .set(LivingSettlorStatus(0), Completed).success.value
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad(draftId).url)
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
 
-      val result = route(application, request).value
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
-      status(result) mustEqual SEE_OTHER
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-      redirectLocation(result).get mustBe controllers.routes.AddASettlorController.onPageLoad(fakeDraftId).url
+        val result = route(application, request).value
 
-      application.stop()
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).get mustBe controllers.routes.AddASettlorController.onPageLoad(fakeDraftId).url
+
+        application.stop()
+      }
+
+      "redirect to deceased settlor check answers if there is a Completed deceased settlor" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(deceasedPages.SettlorsNamePage, name).success.value
+          .set(DeceasedSettlorStatus, Completed).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).get mustBe controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url
+
+        application.stop()
+      }
+
+      "redirect to info page if there are no completed settlors" in {
+
+        val userAnswers = emptyUserAnswers
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+        val result = route(application, request).value
+
+        status(result) mustEqual SEE_OTHER
+
+        redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+
+        application.stop()
+      }
+
+      "update value of is5mldEnabled in user answers" in {
+
+        reset(registrationsRepository)
+
+        val userAnswers = emptyUserAnswers.copy(is5mldEnabled = false)
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers))
+          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+          .build()
+
+        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
+
+        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+        route(application, request).value.map { _ =>
+          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+
+          uaCaptor.getValue.is5mldEnabled mustBe true
+
+          application.stop()
+        }
+      }
     }
 
-    "redirect to deceased settlor check answers if there is a Completed deceased settlor" in {
+    "no pre-existing user answers" must {
+      "instantiate new set of user answers" when {
 
-      val userAnswers = emptyUserAnswers
-        .set(deceasedPages.SettlorsNamePage, name).success.value
-        .set(DeceasedSettlorStatus, Completed).success.value
+        "5mld enabled" must {
+          "add is5mldEnabled = true value to user answers" in {
 
-      when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+            reset(registrationsRepository)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application = applicationBuilder(userAnswers = None)
+              .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+              .build()
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad(draftId).url)
+            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+            when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+            when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(true))
 
-      val result = route(application, request).value
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-      status(result) mustEqual SEE_OTHER
+            route(application, request).value.map { _ =>
+              val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+              verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-      redirectLocation(result).get mustBe controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url
+              uaCaptor.getValue.is5mldEnabled mustBe true
+              uaCaptor.getValue.draftId mustBe fakeDraftId
+              uaCaptor.getValue.internalAuthId mustBe "id"
 
-      application.stop()
-    }
+              application.stop()
+            }
+          }
+        }
 
-    "redirect to info page if there are no completed settlors" in {
+        "5mld not enabled" must {
+          "add is5mldEnabled = false value to user answers" in {
 
-      val userAnswers = emptyUserAnswers
+            reset(registrationsRepository)
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application = applicationBuilder(userAnswers = None)
+              .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+              .build()
 
-      when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
+            when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+            when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
-      val request = FakeRequest(GET, routes.IndexController.onPageLoad(draftId).url)
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-      val result = route(application, request).value
+            route(application, request).value.map { _ =>
+              val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+              verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-      status(result) mustEqual SEE_OTHER
+              uaCaptor.getValue.is5mldEnabled mustBe false
+              uaCaptor.getValue.draftId mustBe fakeDraftId
+              uaCaptor.getValue.internalAuthId mustBe "id"
 
-      redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
-
-      application.stop()
+              application.stop()
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -51,7 +51,7 @@ class DraftIdDataRetrievalAction(
 
     repository.get(draftId).map {
       userAnswers =>
-        OptionalRegistrationDataRequest(request.request, request.identifier, userAnswers, request.affinityGroup, request.enrolments, request.agentARN)
+        OptionalRegistrationDataRequest(request.request, request.internalId, userAnswers, request.affinityGroup, request.enrolments, request.agentARN)
     }
   }
 

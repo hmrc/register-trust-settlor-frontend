@@ -42,9 +42,9 @@ class CountryOfResidenceYesNoController @Inject()(
                                                    yesNoFormProvider: YesNoFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: CountryOfResidenceYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfResidenceYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfResidenceYesNo")
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -57,7 +57,7 @@ class CountryOfResidenceYesNoController @Inject()(
       Ok(view(preparedForm, mode, draftId, request.name))
   }
 
-  def onSubmit(mode: Mode, draftId: String) = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(

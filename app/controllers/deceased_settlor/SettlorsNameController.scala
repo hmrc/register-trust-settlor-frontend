@@ -35,8 +35,10 @@ package controllers.deceased_settlor
 import config.annotations.DeceasedSettlor
 import controllers.actions.Actions
 import forms.deceased_settlor.SettlorsNameFormProvider
+
 import javax.inject.Inject
 import models.Mode
+import models.pages.FullName
 import navigation.Navigator
 import pages.deceased_settlor.SettlorsNamePage
 import play.api.data.Form
@@ -56,9 +58,9 @@ class SettlorsNameController @Inject()(
                                         formProvider: SettlorsNameFormProvider,
                                         val controllerComponents: MessagesControllerComponents,
                                         view: SettlorsNameView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[FullName] = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>

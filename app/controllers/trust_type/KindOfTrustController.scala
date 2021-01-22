@@ -19,13 +19,16 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions._
 import forms.KindOfTrustFormProvider
+import models.pages.KindOfTrust
+import models.requests.RegistrationDataRequest
+
 import javax.inject.Inject
 import models.{Enumerable, Mode, NormalMode}
 import navigation.Navigator
 import pages.trust_type.{KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import views.html.trust_type.KindOfTrustView
@@ -43,11 +46,11 @@ class KindOfTrustController @Inject()(
                                        requiredAnswer: RequiredAnswerActionProvider
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  def actions(draftId: String) =
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
       requiredAnswer(RequiredAnswer(SetUpAfterSettlorDiedYesNoPage, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId)))
 
-  val form = formProvider()
+  private val form: Form[KindOfTrust] = formProvider()
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
@@ -60,7 +63,7 @@ class KindOfTrustController @Inject()(
       Ok(view(preparedForm, mode, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions(draftId)).async {
+  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(

@@ -21,16 +21,10 @@ import controllers.routes._
 import forms.YesNoFormProvider
 import models.NormalMode
 import models.pages.FullName
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorIndividualNamePage}
-import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
 import views.html.living_settlor.individual.SettlorIndividualAddressYesNoView
-
-import scala.concurrent.Future
 
 class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
@@ -86,15 +80,10 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorAddressYesNoPage(index), true).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[FeatureFlagService].toInstance(mockFeatureFlagService))
-        .build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, settlorIndividualAddressYesNoRoute)

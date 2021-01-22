@@ -42,9 +42,9 @@ class SettlorBusinessTimeYesNoController @Inject()(
                                                     yesNoFormProvider: YesNoFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
                                                     view: SettlorBusinessTimeYesNoView
-                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessTimeYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessTimeYesNo")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>

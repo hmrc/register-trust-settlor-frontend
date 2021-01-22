@@ -18,6 +18,8 @@ package controllers
 
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
+import models.pages.AddASettlor
+
 import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import models.{Enumerable, Mode}
@@ -26,7 +28,7 @@ import pages.trust_type.KindOfTrustPage
 import pages.{AddASettlorPage, AddASettlorYesNoPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddASettlorViewHelper
@@ -47,13 +49,13 @@ class AddASettlorController @Inject()(
                                        requiredAnswer: RequiredAnswerActionProvider
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val addAnotherForm = addAnotherFormProvider()
-  val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
+  private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
+  private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
 
-  private def actions(draftId: String) =
+  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen requiredAnswer(RequiredAnswer(KindOfTrustPage))
 
-  private def heading(count: Int)(implicit mp : MessagesProvider) = {
+  private def heading(count: Int)(implicit mp : MessagesProvider): String = {
     count match {
       case 0 => Messages("addASettlor.heading")
       case 1 => Messages("addASettlor.singular.heading")

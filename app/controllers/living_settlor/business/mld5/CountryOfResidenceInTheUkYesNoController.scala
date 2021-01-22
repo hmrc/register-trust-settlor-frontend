@@ -34,42 +34,42 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceInTheUkYesNoController @Inject()(
-                                               val controllerComponents: MessagesControllerComponents,
-                                               @BusinessSettlor navigator: Navigator,
-                                               actions: Actions,
-                                               formProvider: YesNoFormProvider,
-                                               view: CountryOfResidenceInTheUkYesNoView,
-                                               repository: RegistrationsRepository,
-                                               requireName: NameRequiredActionProvider
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                          val controllerComponents: MessagesControllerComponents,
+                                                          @BusinessSettlor navigator: Navigator,
+                                                          actions: Actions,
+                                                          formProvider: YesNoFormProvider,
+                                                          view: CountryOfResidenceInTheUkYesNoView,
+                                                          repository: RegistrationsRepository,
+                                                          requireName: NameRequiredActionProvider
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidenceInTheUkYesNo")
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)) {
-    implicit request =>
+      implicit request =>
 
-      val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
+        val preparedForm = request.userAnswers.get(CountryOfResidenceInTheUkYesNoPage(index)) match {
+          case None => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, mode, draftId , index, request.businessName))
-  }
+        Ok(view(preparedForm, mode, draftId , index, request.businessName))
+    }
 
   def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)).async {
-    implicit request =>
+      implicit request =>
 
-      form.bindFromRequest().fold(
-        formWithErrors =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId , index, request.businessName))),
+        form.bindFromRequest().fold(
+          formWithErrors =>
+            Future.successful(BadRequest(view(formWithErrors, mode, draftId , index, request.businessName))),
 
-        value =>
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
-            _              <- repository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, draftId)(updatedAnswers))
-      )
-  }
+          value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
+              _              <- repository.set(updatedAnswers)
+            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, draftId)(updatedAnswers))
+        )
+    }
 }

@@ -18,6 +18,8 @@ package controllers.living_settlor
 
 import controllers.actions.Actions
 import forms.deceased_settlor.SettlorIndividualOrBusinessFormProvider
+import models.pages.IndividualOrBusiness
+
 import javax.inject.Inject
 import models.{Enumerable, Mode}
 import navigation.Navigator
@@ -39,9 +41,9 @@ class SettlorIndividualOrBusinessController @Inject()(
                                                        formProvider: SettlorIndividualOrBusinessFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
                                                        view: SettlorIndividualOrBusinessView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
-  val form = formProvider()
+  private val form: Form[IndividualOrBusiness] = formProvider()
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>

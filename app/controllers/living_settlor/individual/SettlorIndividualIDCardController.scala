@@ -20,8 +20,6 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.PassportOrIdCardFormProvider
-
-import javax.inject.Inject
 import models.Mode
 import models.pages.PassportOrIdCardDetails
 import navigation.Navigator
@@ -30,11 +28,11 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
 import views.html.living_settlor.individual.SettlorIndividualIDCardView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorIndividualIDCardController @Inject()(
@@ -46,8 +44,7 @@ class SettlorIndividualIDCardController @Inject()(
                                                    formProvider: PassportOrIdCardFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
                                                    view: SettlorIndividualIDCardView,
-                                                   val countryOptions: CountryOptions,
-                                                   featureFlagService: FeatureFlagService
+                                                   val countryOptions: CountryOptions
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualIDCard")
@@ -78,8 +75,7 @@ class SettlorIndividualIDCardController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualIDCardPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-            is5mldEnabled <- featureFlagService.is5mldEnabled()
-          } yield Redirect(navigator.nextPage(SettlorIndividualIDCardPage(index), mode, draftId, is5mldEnabled = is5mldEnabled)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorIndividualIDCardPage(index), mode, draftId)(updatedAnswers))
         }
       )
   }

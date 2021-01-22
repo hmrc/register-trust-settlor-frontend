@@ -40,9 +40,9 @@ class SettlorBusinessNameController @Inject()(
                                                formProvider: SettlorBusinessNameFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: SettlorBusinessNameView
-                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  val form = formProvider()
+  private val form: Form[String] = formProvider()
 
   def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
