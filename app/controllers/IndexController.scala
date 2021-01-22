@@ -17,9 +17,8 @@
 package controllers
 
 import controllers.actions.RegistrationIdentifierAction
-
-import javax.inject.Inject
 import models.UserAnswers
+import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
@@ -28,6 +27,7 @@ import sections.{DeceasedSettlor, LivingSettlors}
 import services.FeatureFlagService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class IndexController @Inject()(
@@ -39,30 +39,36 @@ class IndexController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
+    def redirect(userAnswers: UserAnswers, draftId: String)(implicit request: IdentifierRequest[AnyContent]): Future[Result] = {
+      repository.set(userAnswers) map { _ =>
+        val livingSettlors = userAnswers.get(LivingSettlors).getOrElse(List.empty)
+        val deceasedSettlor = userAnswers.get(DeceasedSettlor)
+
+        if (livingSettlors.nonEmpty) {
+          Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+        } else if (deceasedSettlor.isDefined) {
+          Redirect(controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
+        } else {
+          Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
+        }
+      }
+    }
+
     featureFlagService.is5mldEnabled().flatMap {
       is5mldEnabled =>
         repository.get(draftId) flatMap {
           case Some(userAnswers) =>
-            Future.successful(redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled), draftId))
+            redirect(
+              userAnswers.copy(is5mldEnabled = is5mldEnabled),
+              draftId
+            )
           case _ =>
             val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled)
-            repository.set(userAnswers) map {
-              _ => redirect(userAnswers, draftId)
-            }
+            redirect(
+              userAnswers,
+              draftId
+            )
         }
-    }
-  }
-
-  private def redirect(userAnswers: UserAnswers, draftId: String): Result = {
-    val livingSettlors = userAnswers.get(LivingSettlors).getOrElse(List.empty)
-    val deceasedSettlor = userAnswers.get(DeceasedSettlor)
-
-    if (livingSettlors.nonEmpty) {
-      Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
-    } else if (deceasedSettlor.isDefined) {
-      Redirect(controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
-    } else {
-      Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
     }
   }
 }
