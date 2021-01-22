@@ -34,6 +34,8 @@
 
         @components.error_summary(form.errors)
 
+    <fieldset>
+
         <legend>
             @components.heading("settlorsName.heading")
         </legend>
@@ -55,7 +57,7 @@
             label = messages("settlorsName.lastName"),
             autocomplete = Some("family-name")
         )
-
+    </fieldset>
         @components.submit_button()
     }
 }
