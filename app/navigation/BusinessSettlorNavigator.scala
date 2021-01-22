@@ -36,43 +36,21 @@ class BusinessSettlorNavigator extends Navigator {
                         draftId: String): UserAnswers => Call = route(draftId)(page)
 
   override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    simpleNavigation(draftId) orElse
+      yesNoNavigation(draftId) orElse
+      mldDependentSimpleNavigation(draftId) orElse
+      mldDependentYesNoNavigation(draftId)
+  }
+
+  private def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorBusinessNamePage(index) => _ =>
       businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
-    case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
-      fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
-      noCall = fiveMldYesNo(draftId, index)(ua)
-    )(ua)
-    case SettlorBusinessUtrPage(index) => ua =>
-      fiveMldYesNo(draftId, index)(ua)
-    case CountryOfResidenceYesNoPage(index) => ua =>
-      yesNoNav(
-        fromPage = CountryOfResidenceYesNoPage(index),
-        yesCall = business5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId),
-        noCall = fiveMldResumeJourney(draftId, index)(ua)
-      )(ua)
-    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
-        yesCall = fiveMldResumeJourney(draftId, index)(ua),
-        noCall = business5mldRoutes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId)
-      )(ua)
     case CountryOfResidencePage(index) => ua =>
-      fiveMldResumeJourney(draftId, index)(ua)
-    case SettlorBusinessAddressYesNoPage(index) => ua => yesNoNav(
-      fromPage = SettlorBusinessAddressYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
-      noCall = displayAdditionalQuestionsForEmploymentTrusts(draftId, index)(ua)
-    )(ua)
-    case SettlorBusinessAddressUKYesNoPage(index) => yesNoNav(
-      fromPage = SettlorBusinessAddressUKYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessAddressUKController.onPageLoad(NormalMode, index, draftId),
-      noCall = businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(NormalMode, index, draftId)
-    )
+      navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
     case SettlorBusinessAddressUKPage(index) =>
-      displayAdditionalQuestionsForEmploymentTrusts(draftId, index)
+      navigateToAdditionalQuestionsOrAnswers(draftId, index)
     case SettlorBusinessAddressInternationalPage(index) =>
-      displayAdditionalQuestionsForEmploymentTrusts(draftId, index)
+      navigateToAdditionalQuestionsOrAnswers(draftId, index)
     case SettlorBusinessTypePage(index) => _ =>
       businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorBusinessTimeYesNoPage(index) => _ =>
@@ -81,23 +59,61 @@ class BusinessSettlorNavigator extends Navigator {
       controllers.routes.AddASettlorController.onPageLoad(draftId)
   }
 
-  private def fiveMldYesNo(draftId: String, index: Int)(ua: UserAnswers): Call = {
+  private def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case CountryOfResidenceYesNoPage(index) => ua =>
+      yesNoNav(
+        fromPage = CountryOfResidenceYesNoPage(index),
+        yesCall = business5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId),
+        noCall = navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
+      )(ua)
+    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
+      yesNoNav(
+        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
+        yesCall = navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua),
+        noCall = business5mldRoutes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId)
+      )(ua)
+    case SettlorBusinessAddressYesNoPage(index) => ua => yesNoNav(
+      fromPage = SettlorBusinessAddressYesNoPage(index),
+      yesCall = businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
+      noCall = navigateToAdditionalQuestionsOrAnswers(draftId, index)(ua)
+    )(ua)
+    case SettlorBusinessAddressUKYesNoPage(index) => yesNoNav(
+      fromPage = SettlorBusinessAddressUKYesNoPage(index),
+      yesCall = businessRoutes.SettlorBusinessAddressUKController.onPageLoad(NormalMode, index, draftId),
+      noCall = businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(NormalMode, index, draftId)
+    )
+  }
+
+  private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorBusinessUtrPage(index) => ua =>
+      navigateAwayFromUtrQuestions(draftId, index)(ua)
+  }
+
+  private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
+      fromPage = SettlorBusinessUtrYesNoPage(index),
+      yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
+      noCall = navigateAwayFromUtrQuestions(draftId, index)(ua)
+    )(ua)
+  }
+
+  private def navigateAwayFromUtrQuestions(draftId: String, index: Int)(ua: UserAnswers): Call = {
     if (ua.is5mldEnabled) {
       business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
-      fiveMldResumeJourney(draftId, index)(ua)
+      navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
     }
   }
 
-  private def fiveMldResumeJourney(draftId: String, index: Int)(ua: UserAnswers): Call = {
+  private def navigateToAddressQuestionsIfUtrUnknown(draftId: String, index: Int)(ua: UserAnswers): Call = {
     yesNoNav(
       fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = displayAdditionalQuestionsForEmploymentTrusts(draftId, index)(ua),
+      yesCall = navigateToAdditionalQuestionsOrAnswers(draftId, index)(ua),
       noCall = businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId)
     )(ua)
   }
 
-  private def displayAdditionalQuestionsForEmploymentTrusts(draftId: String, index: Int)(ua: UserAnswers): Call =
+  private def navigateToAdditionalQuestionsOrAnswers(draftId: String, index: Int)(ua: UserAnswers): Call =
     ua.get(KindOfTrustPage) match {
       case Some(Employees) => businessRoutes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, draftId)
       case Some(_) => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
