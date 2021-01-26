@@ -43,8 +43,8 @@ class IndividualSettlorNavigator extends Navigator {
   private def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorIndividualNamePage(index) => _ =>
       SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId)
-    case CountryOfNationalityPage(index) => _ =>
-      SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId)
+    case CountryOfNationalityPage(index) => ua =>
+      navigateAwayFromCountryOfNationalityQuestions(ua.isTaxable, index, draftId)
     case CountryOfResidencyPage(index) => ua =>
       navigateAwayFromCountryOfResidencyQuestions(ua, index, draftId)
     case SettlorAddressUKPage(index) => _ =>
@@ -58,18 +58,18 @@ class IndividualSettlorNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case page @ CountryOfNationalityYesNoPage(index) =>
+    case page @ CountryOfNationalityYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = UkCountryOfNationalityYesNoController.onPageLoad(NormalMode, index, draftId),
-        noCall = SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId)
-      )
-    case page @ UkCountryOfNationalityYesNoPage(index) =>
+        noCall = navigateAwayFromCountryOfNationalityQuestions(ua.isTaxable, index, draftId)
+      )(ua)
+    case page @ UkCountryOfNationalityYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
-        yesCall = SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId),
+        yesCall = navigateAwayFromCountryOfNationalityQuestions(ua.isTaxable, index, draftId),
         noCall = CountryOfNationalityController.onPageLoad(NormalMode, index, draftId)
-      )
+      )(ua)
     case page @ CountryOfResidencyYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
@@ -150,8 +150,16 @@ class IndividualSettlorNavigator extends Navigator {
     }
   }
 
-  private def navigateAwayFromCountryOfResidencyQuestions(userAnswers: UserAnswers, index: Int, draftId: String): Call = {
-    if (isNinoDefined(userAnswers, index)) {
+  private def navigateAwayFromCountryOfNationalityQuestions(isTaxable: Boolean, index: Int, draftId: String): Call = {
+    if (isTaxable) {
+      SettlorIndividualNINOYesNoController.onPageLoad(NormalMode, index, draftId)
+    } else {
+      CountryOfResidencyYesNoController.onPageLoad(NormalMode, index, draftId)
+    }
+  }
+
+  private def navigateAwayFromCountryOfResidencyQuestions(ua: UserAnswers, index: Int, draftId: String): Call = {
+    if (isNinoDefined(ua, index) || !ua.isTaxable) {
       MentalCapacityYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
       SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, draftId)
@@ -166,7 +174,7 @@ class IndividualSettlorNavigator extends Navigator {
     }
   }
 
-  private def isNinoDefined(userAnswers: UserAnswers, index: Int): Boolean = {
-    userAnswers.get(SettlorIndividualNINOPage(index)).isDefined
+  private def isNinoDefined(ua: UserAnswers, index: Int): Boolean = {
+    ua.get(SettlorIndividualNINOPage(index)).isDefined
   }
 }

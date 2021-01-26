@@ -231,169 +231,203 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
 
     "5mld enabled" when {
 
-      val is5mldEnabled: Boolean = true
-      val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = is5mldEnabled)
+      "taxable" when {
 
-      "SettlorIndividualNamePage" must {
-        val page = SettlorIndividualNamePage(index)
-        "redirect to date of birth yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
 
-      "SettlorIndividualDateOfBirthYesNoPage" when {
-        val page = SettlorIndividualDateOfBirthYesNoPage(index)
-        "yes" must {
-          "redirect to date of birth" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualDateOfBirthController.onPageLoad(mode, index, fakeDraftId))
+        "SettlorIndividualNamePage" must {
+          val page = SettlorIndividualNamePage(index)
+          "redirect to date of birth yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
 
-        "no" must {
-          "redirect to country of nationality yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "SettlorIndividualDateOfBirthPage" must {
-        val page = SettlorIndividualDateOfBirthPage(index)
-        "redirect to country of nationality yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "CountryOfNationalityYesNoPage" when {
-        val page = CountryOfNationalityYesNoPage(index)
-        "yes" must {
-          "redirect to uk country of nationality yes/no" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" must {
-          "redirect to NINO yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "UkCountryOfNationalityYesNoPage" when {
-        val page = UkCountryOfNationalityYesNoPage(index)
-        "yes" must {
-          "redirect to NINO yes/no" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" must {
-          "redirect to country of nationality" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(CountryOfNationalityController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "CountryOfNationalityPage" must {
-        val page = CountryOfNationalityPage(index)
-        "redirect to NINO yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "SettlorIndividualNINOYesNoPage" when {
-        val page = SettlorIndividualNINOYesNoPage(index)
-        "yes" must {
-          "redirect to NINO" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" must {
-          "redirect to country of residency yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "SettlorIndividualNINOPage" must {
-        val page = SettlorIndividualNINOPage(index)
-        "redirect to country of residency yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "CountryOfResidencyYesNoPage" when {
-        val page = CountryOfResidencyYesNoPage(index)
-        "yes" must {
-          "redirect to uk country of residency yes/no" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" when {
-
-          "NINO known" must {
-            "redirect to legally incapable yes/no" in {
-              val userAnswers = baseAnswers
-                .set(SettlorIndividualNINOPage(index), nino).success.value
-                .set(page, false).success.value
+        "SettlorIndividualDateOfBirthYesNoPage" when {
+          val page = SettlorIndividualDateOfBirthYesNoPage(index)
+          "yes" must {
+            "redirect to date of birth" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
 
               navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(SettlorIndividualDateOfBirthController.onPageLoad(mode, index, fakeDraftId))
             }
           }
 
-          "NINO not known" must {
-            "redirect to address yes/no" in {
+          "no" must {
+            "redirect to country of nationality yes/no" in {
               val userAnswers = baseAnswers.set(page, false).success.value
 
               navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-                .mustBe(SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
         }
-      }
 
-      "UkCountryOfResidencyYesNoPage" when {
-        val page = UkCountryOfResidencyYesNoPage(index)
-        "yes" when {
+        "SettlorIndividualDateOfBirthPage" must {
+          val page = SettlorIndividualDateOfBirthPage(index)
+          "redirect to country of nationality yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
 
+        "CountryOfNationalityYesNoPage" when {
+          val page = CountryOfNationalityYesNoPage(index)
+          "yes" must {
+            "redirect to uk country of nationality yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to NINO yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "UkCountryOfNationalityYesNoPage" when {
+          val page = UkCountryOfNationalityYesNoPage(index)
+          "yes" must {
+            "redirect to NINO yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of nationality" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfNationalityController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "CountryOfNationalityPage" must {
+          val page = CountryOfNationalityPage(index)
+          "redirect to NINO yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "SettlorIndividualNINOYesNoPage" when {
+          val page = SettlorIndividualNINOYesNoPage(index)
+          "yes" must {
+            "redirect to NINO" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of residency yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "SettlorIndividualNINOPage" must {
+          val page = SettlorIndividualNINOPage(index)
+          "redirect to country of residency yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "CountryOfResidencyYesNoPage" when {
+          val page = CountryOfResidencyYesNoPage(index)
+          "yes" must {
+            "redirect to uk country of residency yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" when {
+
+            "NINO known" must {
+              "redirect to legally incapable yes/no" in {
+                val userAnswers = baseAnswers
+                  .set(SettlorIndividualNINOPage(index), nino).success.value
+                  .set(page, false).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+
+            "NINO not known" must {
+              "redirect to address yes/no" in {
+                val userAnswers = baseAnswers.set(page, false).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+          }
+        }
+
+        "UkCountryOfResidencyYesNoPage" when {
+          val page = UkCountryOfResidencyYesNoPage(index)
+          "yes" when {
+
+            "NINO known" must {
+              "redirect to legally incapable yes/no" in {
+                val userAnswers = baseAnswers
+                  .set(SettlorIndividualNINOPage(index), nino).success.value
+                  .set(page, true).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+
+            "NINO not known" must {
+              "redirect to address yes/no" in {
+                val userAnswers = baseAnswers.set(page, true).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+          }
+
+          "no" must {
+            "redirect to country of residency" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "CountryOfResidencyPage" when {
+          val page = CountryOfResidencyPage(index)
           "NINO known" must {
             "redirect to legally incapable yes/no" in {
               val userAnswers = baseAnswers
                 .set(SettlorIndividualNINOPage(index), nino).success.value
-                .set(page, true).success.value
+                .set(page, "FR").success.value
 
               navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
                 .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
@@ -402,199 +436,327 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
 
           "NINO not known" must {
             "redirect to address yes/no" in {
-              val userAnswers = baseAnswers.set(page, true).success.value
-
-              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
                 .mustBe(SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
             }
           }
         }
 
-        "no" must {
-          "redirect to country of residency" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
+        "SettlorAddressYesNoPage" when {
+          val page = SettlorAddressYesNoPage(index)
+          "yes" when {
 
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId))
+            "country of residency not known" must {
+              "redirect to address UK yes/no" in {
+                val userAnswers = baseAnswers.set(page, true).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+
+            "UK country of residency" must {
+              "redirect to address UK yes/no" in {
+                val userAnswers = baseAnswers
+                  .set(CountryOfResidencyPage(index), "GB").success.value
+                  .set(page, true).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+
+            "non-UK country of residency" must {
+              "redirect to address UK yes/no" in {
+                val userAnswers = baseAnswers
+                  .set(CountryOfResidencyPage(index), "FR").success.value
+                  .set(page, true).success.value
+
+                navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                  .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+              }
+            }
+          }
+
+          "no" must {
+            "redirect to legally incapable yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
           }
         }
-      }
 
-      "CountryOfResidencyPage" when {
-        val page = CountryOfResidencyPage(index)
-        "NINO known" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers
-              .set(SettlorIndividualNINOPage(index), nino).success.value
-              .set(page, "FR").success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "NINO not known" must {
-          "redirect to address yes/no" in {
-            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-              .mustBe(SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "SettlorAddressYesNoPage" when {
-        val page = SettlorAddressYesNoPage(index)
-        "yes" when {
-
-          "country of residency not known" must {
-            "redirect to address UK yes/no" in {
+        "SettlorAddressUKYesNoPage" when {
+          val page = SettlorAddressUKYesNoPage(index)
+          "yes" must {
+            "redirect to UK address" in {
               val userAnswers = baseAnswers.set(page, true).success.value
 
               navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-                .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId))
             }
           }
 
-          "UK country of residency" must {
-            "redirect to address UK yes/no" in {
-              val userAnswers = baseAnswers
-                .set(CountryOfResidencyPage(index), "GB").success.value
-                .set(page, true).success.value
+          "no" must {
+            "redirect to international address" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
 
               navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-                .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
-            }
-          }
-
-          "non-UK country of residency" must {
-            "redirect to address UK yes/no" in {
-              val userAnswers = baseAnswers
-                .set(CountryOfResidencyPage(index), "FR").success.value
-                .set(page, true).success.value
-
-              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-                .mustBe(SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+                .mustBe(SettlorIndividualAddressInternationalController.onPageLoad(mode, index, fakeDraftId))
             }
           }
         }
 
-        "no" must {
+        "SettlorAddressUKPage" must {
+          val page = SettlorAddressUKPage(index)
+          "redirect to passport yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "SettlorAddressInternationalPage" must {
+          val page = SettlorAddressInternationalPage(index)
+          "redirect to passport yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "SettlorIndividualPassportYesNoPage" when {
+          val page = SettlorIndividualPassportYesNoPage(index)
+          "yes" must {
+            "redirect to passport" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualPassportController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to ID card yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "SettlorIndividualPassportPage" must {
+          val page = SettlorIndividualPassportPage(index)
           "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "SettlorIndividualIDCardYesNoPage" when {
+          val page = SettlorIndividualIDCardYesNoPage(index)
+          "yes" must {
+            "redirect to ID card" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualIDCardController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to legally incapable yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "SettlorIndividualIDCardPage" must {
+          val page = SettlorIndividualIDCardPage(index)
+          "redirect to legally incapable yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "LegallyIncapableYesNoPage" must {
+          val page = MentalCapacityYesNoPage(index)
+          "redirect to check answers" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
+          }
+        }
+
+        "SettlorIndividualAnswerPage" must {
+          val page = SettlorIndividualAnswerPage
+          "redirect to add-to page" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(AddASettlorController.onPageLoad(fakeDraftId))
+          }
+        }
+      }
+
+      "non-taxable" when {
+
+        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+        "SettlorIndividualNamePage" must {
+          val page = SettlorIndividualNamePage(index)
+          "redirect to date of birth yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "SettlorIndividualDateOfBirthYesNoPage" when {
+          val page = SettlorIndividualDateOfBirthYesNoPage(index)
+          "yes" must {
+            "redirect to date of birth" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualDateOfBirthController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of nationality yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "SettlorIndividualDateOfBirthPage" must {
+          val page = SettlorIndividualDateOfBirthPage(index)
+          "redirect to country of nationality yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "CountryOfNationalityYesNoPage" when {
+          val page = CountryOfNationalityYesNoPage(index)
+          "yes" must {
+            "redirect to uk country of nationality yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of residency yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "UkCountryOfNationalityYesNoPage" when {
+          val page = UkCountryOfNationalityYesNoPage(index)
+          "yes" must {
+            "redirect to country of residency yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of nationality" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfNationalityController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "CountryOfNationalityPage" must {
+          val page = CountryOfNationalityPage(index)
+          "redirect to country of residency yes/no" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+          }
+        }
+
+        "CountryOfResidencyYesNoPage" when {
+          val page = CountryOfResidencyYesNoPage(index)
+          "yes" must {
+            "redirect to uk country of residency yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to legally incapable yes/no" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "UkCountryOfResidencyYesNoPage" when {
+          val page = UkCountryOfResidencyYesNoPage(index)
+          "yes" must {
+            "redirect to legally incapable yes/no" in {
+              val userAnswers = baseAnswers.set(page, true).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+
+          "no" must {
+            "redirect to country of residency" in {
+              val userAnswers = baseAnswers.set(page, false).success.value
+
+              navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
+                .mustBe(CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId))
+            }
+          }
+        }
+
+        "CountryOfResidencyPage" must {
+          val page = CountryOfResidencyPage(index)
+          "redirect to legally incapable yes/no" in {
+            val userAnswers = baseAnswers.set(page, "FR").success.value
 
             navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
           }
         }
-      }
 
-      "SettlorAddressUKYesNoPage" when {
-        val page = SettlorAddressUKYesNoPage(index)
-        "yes" must {
-          "redirect to UK address" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId))
+        "LegallyIncapableYesNoPage" must {
+          val page = MentalCapacityYesNoPage(index)
+          "redirect to check answers" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
 
-        "no" must {
-          "redirect to international address" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualAddressInternationalController.onPageLoad(mode, index, fakeDraftId))
+        "SettlorIndividualAnswerPage" must {
+          val page = SettlorIndividualAnswerPage
+          "redirect to add-to page" in {
+            navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
+              .mustBe(AddASettlorController.onPageLoad(fakeDraftId))
           }
-        }
-      }
-
-      "SettlorAddressUKPage" must {
-        val page = SettlorAddressUKPage(index)
-        "redirect to passport yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "SettlorAddressInternationalPage" must {
-        val page = SettlorAddressInternationalPage(index)
-        "redirect to passport yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "SettlorIndividualPassportYesNoPage" when {
-        val page = SettlorIndividualPassportYesNoPage(index)
-        "yes" must {
-          "redirect to passport" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualPassportController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" must {
-          "redirect to ID card yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "SettlorIndividualPassportPage" must {
-        val page = SettlorIndividualPassportPage(index)
-        "redirect to legally incapable yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "SettlorIndividualIDCardYesNoPage" when {
-        val page = SettlorIndividualIDCardYesNoPage(index)
-        "yes" must {
-          "redirect to ID card" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(SettlorIndividualIDCardController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-
-        "no" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
-
-            navigator.nextPage(page, mode, fakeDraftId)(userAnswers)
-              .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
-          }
-        }
-      }
-
-      "SettlorIndividualIDCardPage" must {
-        val page = SettlorIndividualIDCardPage(index)
-        "redirect to legally incapable yes/no" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId))
-        }
-      }
-
-      "LegallyIncapableYesNoPage" must {
-        val page = MentalCapacityYesNoPage(index)
-        "redirect to check answers" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
-        }
-      }
-
-      "SettlorIndividualAnswerPage" must {
-        val page = SettlorIndividualAnswerPage
-        "redirect to add-to page" in {
-          navigator.nextPage(page, mode, fakeDraftId)(baseAnswers)
-            .mustBe(AddASettlorController.onPageLoad(fakeDraftId))
         }
       }
     }
