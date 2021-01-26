@@ -24,7 +24,7 @@ import org.scalatestplus.play.PlaySpec
 import play.api.Application
 import play.api.http.Status
 import play.api.inject.guice.GuiceApplicationBuilder
-import play.api.libs.json.Json
+import play.api.libs.json.{JsBoolean, Json}
 import play.api.test.Helpers.CONTENT_TYPE
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import utils.WireMockHelper
@@ -35,6 +35,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
 class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with OptionValues with WireMockHelper {
+
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   lazy val app: Application = new GuiceApplicationBuilder()
@@ -178,6 +179,50 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
         val result: HttpResponse = Await.result(connector.removeLivingSettlorsMappedPiece(testDraftId), Duration.Inf)
 
         result.status mustBe Status.OK
+      }
+    }
+
+    ".getIsTrustTaxable" must {
+
+      "return true if the trust is taxable" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/is-trust-taxable"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(JsBoolean(true).toString)
+            )
+        )
+
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        result.booleanValue() mustBe true
+      }
+
+      "return false if the trust is non-taxable" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/is-trust-taxable"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(JsBoolean(false).toString)
+            )
+        )
+
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        result.booleanValue() mustBe false
+      }
+
+      "recover to true as default" in {
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/is-trust-taxable"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.NOT_FOUND)
+            )
+        )
+
+        val result: Boolean = Await.result(connector.getIsTrustTaxable(testDraftId), Duration.Inf)
+        result.booleanValue() mustBe true
       }
     }
   }

@@ -231,7 +231,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
         val status: Int = 200
 
         when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(status)))
+          .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
 
@@ -245,7 +245,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
         val status: Int = 200
 
         when(mockConnector.removeDeceasedSettlorMappedPiece(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(status)))
+          .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeDeceasedSettlorMappedPiece(fakeDraftId), Duration.Inf)
 
@@ -259,7 +259,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
         val status: Int = 200
 
         when(mockConnector.removeLivingSettlorsMappedPiece(any())(any(), any()))
-          .thenReturn(Future.successful(HttpResponse(status)))
+          .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeLivingSettlorsMappedPiece(fakeDraftId), Duration.Inf)
 
