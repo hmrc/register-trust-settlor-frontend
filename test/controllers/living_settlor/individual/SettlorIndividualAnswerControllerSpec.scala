@@ -348,7 +348,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .thenReturn(Future.successful(true))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -374,10 +374,10 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
       when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -21,11 +21,11 @@
     main_template: MainTemplate
 )
 
-@(draftId: String)(implicit request: Request[_], messages: Messages)
+@(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${messages("5mld.settlorInfo.title")}"
-    ) {
+) {
 
     @components.back_link()
 
@@ -54,16 +54,19 @@
         )
     )
 
-    <p>@messages("5mld.settlorInfo.paragraph3")</p>
+    @if(isTaxable) {
+        <p>@messages("5mld.settlorInfo.paragraph3")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
-        List(
-            "bulletpoint8",
-            "bulletpoint9",
-            "bulletpoint10",
-            "bulletpoint11"
+        @components.bullet_list(
+            "5mld.settlorInfo",
+            List(
+                "bulletpoint8",
+                "bulletpoint9",
+                "bulletpoint10",
+                "bulletpoint11"
+            )
         )
-    )
+    }
 
     <p>@messages("5mld.settlorInfo.paragraph4")</p>
 

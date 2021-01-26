@@ -184,7 +184,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
         .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
 
       when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK)))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

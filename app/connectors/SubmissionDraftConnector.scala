@@ -19,6 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 
@@ -26,22 +27,22 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppConfig) {
+class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
   private val beneficiariesSection = "beneficiaries"
   private val statusSection = "status"
 
   def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)
-                     (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
+                     (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
   }
 
-  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] = {
+  def getDraftSection(draftId: String, section: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] = {
     http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
   }
 
-  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier, ec : ExecutionContext) : Future[Option[LocalDate]] = {
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier, ec: ExecutionContext): Future[Option[LocalDate]] = {
     http.GET[HttpResponse](s"$submissionsBaseUrl/$draftId/when-trust-setup").map {
       response =>
         (response.json \ "startDate").asOpt[LocalDate]
@@ -50,16 +51,23 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config : FrontendAppC
     }
   }
 
-  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[SubmissionDraftResponse] =
+  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] =
     getDraftSection(draftId, beneficiariesSection)
 
-  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec : ExecutionContext): Future[AllStatus] =
+  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] =
     getDraftSection(draftId, statusSection).map {
       section => section.data.as[AllStatus]
     }
 
-  def setStatus(draftId : String, status: AllStatus)
-               (implicit hc: HeaderCarrier, ec : ExecutionContext): Future[HttpResponse] = {
+  // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
+      case _ => true
+    }
+  }
+
+  def setStatus(draftId: String, status: AllStatus)
+               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
   }

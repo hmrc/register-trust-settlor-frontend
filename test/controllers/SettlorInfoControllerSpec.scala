@@ -46,25 +46,47 @@ class SettlorInfoControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "return OK and the correct view for a GET with 5mld enabled" in {
+    "return OK and the correct view for a GET with 5mld enabled" when {
 
-      val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true)
+      "taxable" in {
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
 
-      val request = FakeRequest(GET, routes.SettlorInfoController.onPageLoad(fakeDraftId).url)
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val result = route(application, request).value
+        val request = FakeRequest(GET, routes.SettlorInfoController.onPageLoad(fakeDraftId).url)
 
-      val view = application.injector.instanceOf[SettlorInfo5MLDView]
+        val result = route(application, request).value
 
-      status(result) mustEqual OK
+        val view = application.injector.instanceOf[SettlorInfo5MLDView]
 
-      contentAsString(result) mustEqual
-        view(fakeDraftId)(request, messages).toString
+        status(result) mustEqual OK
 
-      application.stop()
+        contentAsString(result) mustEqual
+          view(fakeDraftId, isTaxable = true)(request, messages).toString
+
+        application.stop()
+      }
+
+      "non-taxable" in {
+
+        val userAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request = FakeRequest(GET, routes.SettlorInfoController.onPageLoad(fakeDraftId).url)
+
+        val result = route(application, request).value
+
+        val view = application.injector.instanceOf[SettlorInfo5MLDView]
+
+        status(result) mustEqual OK
+
+        contentAsString(result) mustEqual
+          view(fakeDraftId, isTaxable = false)(request, messages).toString
+
+        application.stop()
+      }
     }
-
   }
 }
