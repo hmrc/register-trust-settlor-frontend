@@ -16,6 +16,7 @@
 
 package controllers
 
+import connectors.SubmissionDraftConnector
 import controllers.actions.RegistrationIdentifierAction
 import models.UserAnswers
 import models.requests.IdentifierRequest
@@ -34,12 +35,13 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: FeatureFlagService
+                                 featureFlagService: FeatureFlagService,
+                                 submissionDraftConnector: SubmissionDraftConnector
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
 
-    def redirect(userAnswers: UserAnswers, draftId: String)(implicit request: IdentifierRequest[AnyContent]): Future[Result] = {
+    def redirect(userAnswers: UserAnswers)(implicit request: IdentifierRequest[AnyContent]): Future[Result] = {
       repository.set(userAnswers) map { _ =>
         val livingSettlors = userAnswers.get(LivingSettlors).getOrElse(List.empty)
         val deceasedSettlor = userAnswers.get(DeceasedSettlor)
@@ -56,18 +58,15 @@ class IndexController @Inject()(
 
     featureFlagService.is5mldEnabled().flatMap {
       is5mldEnabled =>
-        repository.get(draftId) flatMap {
-          case Some(userAnswers) =>
-            redirect(
-              userAnswers.copy(is5mldEnabled = is5mldEnabled),
-              draftId
-            )
-          case _ =>
-            val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled)
-            redirect(
-              userAnswers,
-              draftId
-            )
+        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
+          isTaxable =>
+            repository.get(draftId) flatMap {
+              case Some(userAnswers) =>
+                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
+              case _ =>
+                val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable)
+                redirect(userAnswers)
+            }
         }
     }
   }
