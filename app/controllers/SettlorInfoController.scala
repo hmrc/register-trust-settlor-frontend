@@ -17,6 +17,7 @@
 package controllers
 
 import controllers.actions.Actions
+import models.UserAnswers
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
@@ -34,8 +35,9 @@ class SettlorInfoController @Inject()(
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
-      if (request.userAnswers.is5mldEnabled) {
-        Ok(view5mld(draftId))
+      val userAnswers: UserAnswers = request.userAnswers
+      if (userAnswers.is5mldEnabled) {
+        Ok(view5mld(draftId, userAnswers.isTaxable))
       } else {
         Ok(view(draftId))
       }

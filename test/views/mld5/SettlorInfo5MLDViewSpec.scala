@@ -23,47 +23,89 @@ import views.html.mld5.SettlorInfo5MLDView
 
 class SettlorInfo5MLDViewSpec extends ViewBehaviours {
 
-  "SettlorInfo5MLD view" must {
+  "SettlorInfo5MLD view" when {
 
-    val view = viewFor[SettlorInfo5MLDView](Some(emptyUserAnswers))
+    "taxable" must {
 
-    val applyView = view.apply(fakeDraftId)(fakeRequest, messages)
+      val view = viewFor[SettlorInfo5MLDView](Some(emptyUserAnswers))
 
-    behave like normalPageTitleWithCaption(applyView, "5mld.settlorInfo",
-      "caption",
-      "subheading1",
-      "paragraph1",
-      "bulletpoint1",
-      "bulletpoint2",
-      "bulletpoint3",
-      "bulletpoint4",
-      "paragraph2",
-      "bulletpoint5",
-      "bulletpoint6",
-      "bulletpoint7",
-      "paragraph3",
-      "bulletpoint8",
-      "bulletpoint9",
-      "bulletpoint10",
-      "bulletpoint11",
-      "paragraph4",
-      "subheading2",
-      "paragraph5",
-      "details",
-      "details.subheading1",
-      "details.paragraph1",
-      "details.subheading2",
-      "details.paragraph2",
-      "subheading3",
-      "paragraph6",
-      "paragraph7",
-      "bulletpoint12",
-      "bulletpoint13",
-      "bulletpoint14"
-    )
+      val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView)
+      behave like normalPageTitleWithCaption(applyView, "5mld.settlorInfo",
+        "caption",
+        "subheading1",
+        "paragraph1",
+        "bulletpoint1",
+        "bulletpoint2",
+        "bulletpoint3",
+        "bulletpoint4",
+        "paragraph2",
+        "bulletpoint5",
+        "bulletpoint6",
+        "bulletpoint7",
+        "paragraph3",
+        "bulletpoint8",
+        "bulletpoint9",
+        "bulletpoint10",
+        "bulletpoint11",
+        "paragraph4",
+        "subheading2",
+        "paragraph5",
+        "details",
+        "details.subheading1",
+        "details.paragraph1",
+        "details.subheading2",
+        "details.paragraph2",
+        "subheading3",
+        "paragraph6",
+        "paragraph7",
+        "bulletpoint12",
+        "bulletpoint13",
+        "bulletpoint14"
+      )
 
-    behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url )
+      behave like pageWithBackLink(applyView)
+
+      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url)
+    }
+
+    "non-taxable" must {
+
+      val view = viewFor[SettlorInfo5MLDView](Some(emptyUserAnswers))
+
+      val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
+
+      behave like normalPageTitleWithCaption(applyView, "5mld.settlorInfo",
+        "caption",
+        "subheading1",
+        "paragraph1",
+        "bulletpoint1",
+        "bulletpoint2",
+        "bulletpoint3",
+        "bulletpoint4",
+        "paragraph2",
+        "bulletpoint5",
+        "bulletpoint6",
+        "bulletpoint7",
+        "paragraph4",
+        "subheading2",
+        "paragraph5",
+        "details",
+        "details.subheading1",
+        "details.paragraph1",
+        "details.subheading2",
+        "details.paragraph2",
+        "subheading3",
+        "paragraph6",
+        "paragraph7",
+        "bulletpoint12",
+        "bulletpoint13",
+        "bulletpoint14"
+      )
+
+      behave like pageWithBackLink(applyView)
+
+      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url)
+    }
   }
 }
