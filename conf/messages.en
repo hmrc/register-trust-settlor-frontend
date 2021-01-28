@@ -627,7 +627,7 @@ settlorInfo.bulletpoint10 = if the business had existed for at least 2 years whe
 5mld.settlorInfo.bulletpoint11 = ID card details and address
 5mld.settlorInfo.paragraph4 = You also need to tell us if any of the living settlors are legally incapable at the time of registration. This is when the individual does not have mental capacity if they cannot understand information and make decisions about the trust due to a mental illness, learning disability, dementia or related condition, or they cannot communicate.
 5mld.settlorInfo.subheading2 = Settlors that are a business
-5mld.settlorInfo.paragraph5 = If the settlor is a business, tell us the business's name. If you know more details, tell us their country of residence.
+5mld.settlorInfo.paragraph5 = If the settlor is a business, tell us the business’s name. If you know more details, tell us their country of residence.
 
 5mld.settlorInfo.details = What we mean by country of residence
 5mld.settlorInfo.details.subheading1 = Individual
