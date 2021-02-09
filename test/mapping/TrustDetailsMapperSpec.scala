@@ -22,6 +22,7 @@ import models.pages.DeedOfVariation._
 import models.pages.KindOfTrust._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
 import pages.DeceasedSettlorStatus
+import pages.deceased_settlor.SettlorsNamePage
 import pages.living_settlor._
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type._
@@ -49,6 +50,23 @@ class TrustDetailsMapperSpec extends SpecBase {
           result mustBe None
         }
 
+        "setup after settlor died" in {
+
+          val userAnswers = flaggedAnswers
+            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            .set(SettlorsNamePage, fullName).success.value
+            .set(DeceasedSettlorStatus, Status.Completed).success.value
+
+          val result = mapper.build(userAnswers).get
+
+          result mustBe TrustDetailsType(
+            typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust,
+            deedOfVariation = None,
+            interVivos = None,
+            efrbsStartDate = None
+          )
+        }
+
         "deed of variation" when {
 
           val baseAnswers = flaggedAnswers
@@ -58,6 +76,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             val userAnswers = baseAnswers
               .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
+              .set(SettlorsNamePage, fullName).success.value
               .set(DeceasedSettlorStatus, Status.Completed).success.value
 
             val result = mapper.build(userAnswers).get
@@ -196,7 +215,7 @@ class TrustDetailsMapperSpec extends SpecBase {
         "set up after settlor died" in {
           val answers: UserAnswers = flaggedAnswers
             .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-            .set(pages.deceased_settlor.SettlorsNamePage, fullName).success.value
+            .set(SettlorsNamePage, fullName).success.value
 
           val result = mapper.build(answers)
           result mustBe None

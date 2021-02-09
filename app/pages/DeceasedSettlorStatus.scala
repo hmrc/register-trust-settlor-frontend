@@ -22,7 +22,7 @@ import sections.{DeceasedSettlor, Settlors}
 
 case object DeceasedSettlorStatus extends QuestionPage[Status] {
 
-  override def path: JsPath = JsPath \ Settlors \ DeceasedSettlor \toString
+  override def path: JsPath = JsPath \ Settlors \ DeceasedSettlor \ toString
 
   override def toString: String = "status"
 }

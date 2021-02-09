@@ -41,7 +41,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorLivingIndividualViewModel(`type` = Individual, name = None, status = InProgress)
+              SettlorIndividualViewModel(`type` = Individual, name = None, status = InProgress)
             )
           }
 
@@ -63,7 +63,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorLivingIndividualViewModel(`type` = Individual, name = Some("Joe Bloggs"), status = Completed)
+              SettlorIndividualViewModel(`type` = Individual, name = Some("Joe Bloggs"), status = Completed)
             )
           }
         }
@@ -80,7 +80,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorBusinessTypeViewModel(`type` = Business, name = None, status = InProgress)
+              SettlorBusinessViewModel(`type` = Business, name = None, status = InProgress)
             )
           }
 
@@ -98,7 +98,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
             json.validate[SettlorViewModel] mustEqual JsSuccess(
-              SettlorBusinessTypeViewModel(`type` = Business, name = Some("Business Ltd."), status = Completed)
+              SettlorBusinessViewModel(`type` = Business, name = Some("Business Ltd."), status = Completed)
             )
           }
         }
@@ -119,7 +119,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
           json.validate[SettlorViewModel] mustEqual JsSuccess(
-            SettlorDeceasedIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = InProgress)
+            SettlorDeceasedViewModel(`type` = Individual, name = "Joe Bloggs", status = InProgress)
           )
         }
 
@@ -141,7 +141,7 @@ class SettlorViewModelSpec extends SpecBase {
             """.stripMargin)
 
           json.validate[SettlorViewModel] mustEqual JsSuccess(
-            SettlorDeceasedIndividualViewModel(`type` = Individual, name = "Joe Bloggs", status = Completed)
+            SettlorDeceasedViewModel(`type` = Individual, name = "Joe Bloggs", status = Completed)
           )
         }
       }

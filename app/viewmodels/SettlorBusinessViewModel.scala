@@ -16,16 +16,13 @@
 
 package viewmodels
 
-import models.pages.IndividualOrBusiness
 import models.pages.IndividualOrBusiness.Business
-import models.pages.Status
+import models.pages.{IndividualOrBusiness, Status}
 import models.pages.Status.InProgress
 
-sealed trait SettlorBusinessViewModel extends SettlorViewModel
-
-final case class SettlorBusinessTypeViewModel(`type`: IndividualOrBusiness,
-                                              name: Option[String],
-                                              override val status: Status) extends SettlorBusinessViewModel
+final case class SettlorBusinessViewModel(`type`: IndividualOrBusiness,
+                                          name: Option[String],
+                                          override val status: Status) extends SettlorViewModel
 
 object SettlorBusinessViewModel {
 
@@ -33,17 +30,11 @@ object SettlorBusinessViewModel {
   import play.api.libs.json._
 
   implicit lazy val reads: Reads[SettlorBusinessViewModel] = {
-    (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Business).flatMap { _ =>
-      ((__ \ "businessName").readNullable[String] and
+    (
+      (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Business) and
+        (__ \ "businessName").readNullable[String] and
         (__ \ "status").readWithDefault[Status](InProgress)
-        ) ((name, status) => {
-        SettlorBusinessTypeViewModel(
-          Business,
-          name,
-          status
-        )
-      })
-    }
+      )(SettlorBusinessViewModel.apply _)
   }
 
 }

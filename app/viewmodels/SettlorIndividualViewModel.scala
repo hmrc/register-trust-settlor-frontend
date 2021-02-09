@@ -17,33 +17,24 @@
 package viewmodels
 
 import models.pages.IndividualOrBusiness.Individual
-import models.pages.{FullName, IndividualOrBusiness}
-import models.pages.Status
 import models.pages.Status.InProgress
+import models.pages.{FullName, IndividualOrBusiness, Status}
 
-sealed trait SettlorLivingViewModel extends SettlorViewModel
+final case class SettlorIndividualViewModel(`type`: IndividualOrBusiness,
+                                            name: Option[String],
+                                            override val status: Status) extends SettlorViewModel
 
-final case class SettlorLivingIndividualViewModel(`type`: IndividualOrBusiness,
-                                                  name: Option[String],
-                                                  override val status: Status) extends SettlorLivingViewModel
-
-object SettlorLivingViewModel {
+object SettlorIndividualViewModel {
 
   import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
-  implicit lazy val reads: Reads[SettlorLivingViewModel] = {
-    (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(x => x == Individual).flatMap { _ =>
-      ((__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
+  implicit lazy val reads: Reads[SettlorIndividualViewModel] = {
+    (
+      (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Individual) and
+        (__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
         (__ \ "status").readWithDefault[Status](InProgress)
-        ) ((name, status) => {
-        SettlorLivingIndividualViewModel(
-          Individual,
-          name,
-          status
-        )
-      })
-    }
+      )(SettlorIndividualViewModel.apply _)
   }
 
 }
