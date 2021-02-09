@@ -16,7 +16,10 @@
 
 package navigation
 
-import controllers.living_settlor.routes
+import controllers.deceased_settlor.routes._
+import controllers.living_settlor.routes._
+import controllers.routes._
+import controllers.trust_type.routes._
 import models.pages.KindOfTrust._
 import models.{Mode, NormalMode, UserAnswers}
 import pages._
@@ -33,37 +36,46 @@ class TrustTypeNavigator extends Navigator {
                         draftId: String): UserAnswers => Call = route(draftId)(page)
 
   override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SetUpAfterSettlorDiedYesNoPage => yesNoNav(
+    case SetUpAfterSettlorDiedYesNoPage => ua => yesNoNav(
       fromPage = SetUpAfterSettlorDiedYesNoPage,
-      yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
-      noCall = controllers.trust_type.routes.KindOfTrustController.onPageLoad(NormalMode, draftId)
-    )
+      yesCall = SettlorsNameController.onPageLoad(NormalMode, draftId),
+      noCall = if (ua.isTaxable) {
+        KindOfTrustController.onPageLoad(NormalMode, draftId)
+      } else {
+        redirectToLivingSettlorQuestions(draftId)
+      }
+    )(ua)
     case KindOfTrustPage => kindOfTrustPage(draftId)
     case EfrbsYesNoPage => yesNoNav(
       fromPage = EfrbsYesNoPage,
-      yesCall = controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId),
-      noCall = routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
+      yesCall = EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId),
+      noCall = redirectToLivingSettlorQuestions(draftId)
     )
     case SetUpInAdditionToWillTrustYesNoPage => yesNoNav(
       fromPage = SetUpInAdditionToWillTrustYesNoPage,
-      yesCall = controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId),
-      noCall = controllers.trust_type.routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId)
+      yesCall = SettlorsNameController.onPageLoad(NormalMode, draftId),
+      noCall = HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId)
     )
     case EfrbsStartDatePage | HowDeedOfVariationCreatedPage | HoldoverReliefYesNoPage => _ =>
-      routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
+      redirectToLivingSettlorQuestions(draftId)
   }
 
   private def kindOfTrustPage(draftId: String)(answers: UserAnswers): Call = {
     answers.get(KindOfTrustPage) match {
       case Some(Deed) =>
-        controllers.trust_type.routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId)
+        AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId)
       case Some(Intervivos) =>
-        controllers.trust_type.routes.HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId)
+        HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId)
       case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
-        routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
+        redirectToLivingSettlorQuestions(draftId)
       case Some(Employees) =>
-        controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+        EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId)
+      case _ =>
+        SessionExpiredController.onPageLoad()
     }
+  }
+
+  private def redirectToLivingSettlorQuestions(draftId: String): Call = {
+    SettlorIndividualOrBusinessController.onPageLoad(NormalMode, 0, draftId)
   }
 }
