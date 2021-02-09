@@ -21,11 +21,9 @@ import models.pages.{FullName, IndividualOrBusiness}
 import models.pages.Status
 import models.pages.Status.InProgress
 
-sealed trait SettlorDeceasedViewModel extends SettlorViewModel
-
-final case class SettlorDeceasedIndividualViewModel(`type`: IndividualOrBusiness,
-                                                    name: String,
-                                                    override val status: Status) extends SettlorDeceasedViewModel
+final case class SettlorDeceasedViewModel(`type`: IndividualOrBusiness,
+                                          name: String,
+                                          override val status: Status) extends SettlorViewModel
 object SettlorDeceasedViewModel {
 
   import play.api.libs.functional.syntax._
@@ -35,7 +33,7 @@ object SettlorDeceasedViewModel {
     ((__ \ "name").read[FullName].map(_.toString) and
       (__ \ "status").readWithDefault[Status](InProgress)
       ) ((name, status) => {
-      SettlorDeceasedIndividualViewModel(
+      SettlorDeceasedViewModel(
         Individual,
         name,
         status

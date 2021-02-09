@@ -36,21 +36,25 @@ class BusinessSettlorNavigator extends Navigator {
                         draftId: String): UserAnswers => Call = route(draftId)(page)
 
   override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    simpleNavigation(draftId) orElse
-      yesNoNavigation(draftId) orElse
-      mldDependentSimpleNavigation(draftId) orElse
-      mldDependentYesNoNavigation(draftId)
+    linearNavigation(draftId) orElse
+      yesNoNavigation(draftId)
   }
 
-  private def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorBusinessNamePage(index) => _ =>
-      businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
+  private def linearNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorBusinessNamePage(index) => ua =>
+      if (ua.isTaxable) {
+        businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId)
+      } else {
+        business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId)
+      }
+    case SettlorBusinessUtrPage(index) => ua =>
+      navigateAwayFromUtrQuestions(draftId, index)(ua)
     case CountryOfResidencePage(index) => ua =>
-      navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
+      navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
     case SettlorBusinessAddressUKPage(index) =>
-      navigateToAdditionalQuestionsOrAnswers(draftId, index)
+      navigateToAnswersOrEmployeeTypeQuestions(draftId, index)
     case SettlorBusinessAddressInternationalPage(index) =>
-      navigateToAdditionalQuestionsOrAnswers(draftId, index)
+      navigateToAnswersOrEmployeeTypeQuestions(draftId, index)
     case SettlorBusinessTypePage(index) => _ =>
       businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(NormalMode, index, draftId)
     case SettlorBusinessTimeYesNoPage(index) => _ =>
@@ -60,22 +64,27 @@ class BusinessSettlorNavigator extends Navigator {
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
+      fromPage = SettlorBusinessUtrYesNoPage(index),
+      yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
+      noCall = navigateAwayFromUtrQuestions(draftId, index)(ua)
+    )(ua)
     case CountryOfResidenceYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = CountryOfResidenceYesNoPage(index),
         yesCall = business5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, index, draftId),
-        noCall = navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
+        noCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
       )(ua)
     case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = CountryOfResidenceInTheUkYesNoPage(index),
-        yesCall = navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua),
+        yesCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua),
         noCall = business5mldRoutes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId)
       )(ua)
     case SettlorBusinessAddressYesNoPage(index) => ua => yesNoNav(
       fromPage = SettlorBusinessAddressYesNoPage(index),
       yesCall = businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(NormalMode, index, draftId),
-      noCall = navigateToAdditionalQuestionsOrAnswers(draftId, index)(ua)
+      noCall = navigateToAnswersOrEmployeeTypeQuestions(draftId, index)(ua)
     )(ua)
     case SettlorBusinessAddressUKYesNoPage(index) => yesNoNav(
       fromPage = SettlorBusinessAddressUKYesNoPage(index),
@@ -84,36 +93,27 @@ class BusinessSettlorNavigator extends Navigator {
     )
   }
 
-  private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorBusinessUtrPage(index) => ua =>
-      navigateAwayFromUtrQuestions(draftId, index)(ua)
-  }
-
-  private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
-      fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId),
-      noCall = navigateAwayFromUtrQuestions(draftId, index)(ua)
-    )(ua)
-  }
-
   private def navigateAwayFromUtrQuestions(draftId: String, index: Int)(ua: UserAnswers): Call = {
     if (ua.is5mldEnabled) {
       business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(NormalMode, index, draftId)
     } else {
-      navigateToAddressQuestionsIfUtrUnknown(draftId, index)(ua)
+      navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
     }
   }
 
-  private def navigateToAddressQuestionsIfUtrUnknown(draftId: String, index: Int)(ua: UserAnswers): Call = {
-    yesNoNav(
-      fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = navigateToAdditionalQuestionsOrAnswers(draftId, index)(ua),
-      noCall = businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId)
-    )(ua)
+  private def navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId: String, index: Int)(ua: UserAnswers): Call = {
+    if (ua.isTaxable) {
+      yesNoNav(
+        fromPage = SettlorBusinessUtrYesNoPage(index),
+        yesCall = navigateToAnswersOrEmployeeTypeQuestions(draftId, index)(ua),
+        noCall = businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(NormalMode, index, draftId)
+      )(ua)
+    } else {
+      businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
+    }
   }
 
-  private def navigateToAdditionalQuestionsOrAnswers(draftId: String, index: Int)(ua: UserAnswers): Call =
+  private def navigateToAnswersOrEmployeeTypeQuestions(draftId: String, index: Int)(ua: UserAnswers): Call =
     ua.get(KindOfTrustPage) match {
       case Some(Employees) => businessRoutes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, draftId)
       case Some(_) => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)

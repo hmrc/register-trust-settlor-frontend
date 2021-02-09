@@ -20,10 +20,9 @@ import mapping.TypeOfTrust.WillTrustOrIntestacyTrust
 import models.UserAnswers
 import models.pages.KindOfTrust._
 import models.pages.{DeedOfVariation, KindOfTrust}
-import pages.DeceasedSettlorStatus
 import pages.trust_type._
 import play.api.Logger
-import sections.LivingSettlors
+import sections.{DeceasedSettlor, LivingSettlors}
 
 class TrustDetailsMapper extends Mapping[TrustDetailsType] {
 
@@ -31,24 +30,27 @@ class TrustDetailsMapper extends Mapping[TrustDetailsType] {
 
   private def trustType(userAnswers: UserAnswers): Option[TypeOfTrust] = {
 
-    val settlors = (
-      userAnswers.get(LivingSettlors),
-      userAnswers.get(DeceasedSettlorStatus)
-    )
+    if (userAnswers.isTaxable) {
+      val settlors = (
+        userAnswers.get(LivingSettlors),
+        userAnswers.get(DeceasedSettlor)
+      )
 
-    settlors match {
-      case (Some(_), Some(_)) =>
-        logger.info("[trustType] - Cannot build trust type for Deed of variation yet")
-        None
-      case (Some(_), None) =>
-        userAnswers.get(KindOfTrustPage).map(mapTrustTypeToDes)
-      case (None, Some(_)) =>
-        Some(WillTrustOrIntestacyTrust)
-      case (None, None) =>
-        logger.info("[trustType] - Cannot build trust type due to no settlors")
-        None
+      settlors match {
+        case (Some(_), None) =>
+          userAnswers.get(KindOfTrustPage).map(mapTrustTypeToDes)
+        case (None, Some(_)) =>
+          Some(WillTrustOrIntestacyTrust)
+        case (None, None) =>
+          logger.info("[trustType] - Cannot build trust type due to no settlors")
+          None
+        case (Some(_), Some(_)) =>
+          logger.warn("[trustType] - User answers are in an invalid state")
+          None
+      }
+    } else {
+      None
     }
-
   }
 
   private def deedOfVariation(userAnswers: UserAnswers): Option[DeedOfVariation] =

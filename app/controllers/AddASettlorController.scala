@@ -19,8 +19,6 @@ package controllers
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import models.pages.AddASettlor
-
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import models.{Enumerable, Mode}
 import navigation.Navigator
@@ -34,6 +32,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
 import utils.AddASettlorViewHelper
 import views.html.{AddASettlorView, AddASettlorYesNoView}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AddASettlorController @Inject()(
@@ -45,17 +44,16 @@ class AddASettlorController @Inject()(
                                        addAnotherFormProvider: AddASettlorFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddASettlorView,
-                                       yesNoView: AddASettlorYesNoView,
-                                       requiredAnswer: RequiredAnswerActionProvider
+                                       yesNoView: AddASettlorYesNoView
                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
   private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    standardActions.authWithData(draftId) andThen requiredAnswer(RequiredAnswer(KindOfTrustPage))
+    standardActions.authWithData(draftId)
 
-  private def heading(count: Int)(implicit mp : MessagesProvider): String = {
+  private def heading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
       case 0 => Messages("addASettlor.heading")
       case 1 => Messages("addASettlor.singular.heading")
@@ -63,8 +61,10 @@ class AddASettlorController @Inject()(
     }
   }
 
-  private def trustHintText(implicit request: RegistrationDataRequest[AnyContent]): Option[String] = request.userAnswers.get(KindOfTrustPage) map { trust =>
-    s"addASettlor.$trust"
+  private def trustHintText(implicit request: RegistrationDataRequest[AnyContent]): Option[String] = {
+    request.userAnswers.get(KindOfTrustPage) map { trust =>
+      s"addASettlor.$trust"
+    }
   }
 
   def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {

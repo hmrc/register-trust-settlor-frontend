@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.Actions
 import forms.YesNoFormProvider
-import javax.inject.Inject
 import models.requests.RegistrationDataRequest
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -27,9 +26,10 @@ import play.api.mvc._
 import repositories.RegistrationsRepository
 import sections.LivingSettlors
 import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
-import viewmodels.{SettlorBusinessTypeViewModel, SettlorLivingIndividualViewModel, SettlorViewModel}
+import viewmodels.{SettlorBusinessViewModel, SettlorIndividualViewModel, SettlorViewModel}
 import views.html.RemoveSettlorYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class RemoveSettlorYesNoController @Inject()(
@@ -95,8 +95,8 @@ class RemoveSettlorYesNoController @Inject()(
       settlor <- pick.validate[SettlorViewModel]
     } yield {
       settlor match {
-        case individual: SettlorLivingIndividualViewModel => individual.name.getOrElse(default)
-        case business: SettlorBusinessTypeViewModel => business.name.getOrElse(default)
+        case individual: SettlorIndividualViewModel => individual.name.getOrElse(default)
+        case business: SettlorBusinessViewModel => business.name.getOrElse(default)
         case _ => default
       }
     }).getOrElse(default)

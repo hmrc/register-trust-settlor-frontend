@@ -17,14 +17,20 @@
 package controllers
 
 import base.SpecBase
+import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
-import models.NormalMode
-import models.pages.AddASettlor
+import models.pages.IndividualOrBusiness.Individual
 import models.pages.KindOfTrust.Intervivos
+import models.pages.{AddASettlor, FullName}
+import models.{NormalMode, UserAnswers}
+import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type.KindOfTrustPage
+import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import viewmodels.AddRow
 import views.html.{AddASettlorView, AddASettlorYesNoView}
 
 class AddASettlorControllerSpec extends SpecBase {
@@ -33,18 +39,13 @@ class AddASettlorControllerSpec extends SpecBase {
   lazy val submitAnotherRoute : String = routes.AddASettlorController.submitAnother(fakeDraftId).url
   lazy val submitYesNoRoute : String = routes.AddASettlorController.submitOne(fakeDraftId).url
 
-  val yesNoForm = new YesNoFormProvider().withPrefix("addASettlorYesNo")
+  val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addASettlorYesNo")
   val addSettlorForm = new AddASettlorFormProvider()()
-
-  val settlors = List()
 
   val hint = "addASettlor.Lifetime"
 
-  val userAnswersWithSettlorsComplete = emptyUserAnswers
-    .set(KindOfTrustPage, Intervivos)
-    .success
-    .value
-
+  val userAnswersWithSettlorsComplete: UserAnswers = emptyUserAnswers
+    .set(KindOfTrustPage, Intervivos).success.value
 
   "AddASettlor Controller" when {
 
@@ -68,9 +69,8 @@ class AddASettlorControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = None).build()
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", AddASettlor.values.head.toString))
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", AddASettlor.values.head.toString))
 
         val result = route(application, request).value
 
@@ -84,42 +84,51 @@ class AddASettlorControllerSpec extends SpecBase {
 
     "no settlors" must {
 
-      "return OK and the correct view for a GET" in {
+      "return OK and the correct view for a GET" when {
 
-        val answers = emptyUserAnswers
-          .set(KindOfTrustPage, Intervivos)
-          .success
-          .value
+        "taxable" in {
 
-        val application = applicationBuilder(userAnswers = Some(answers)).build()
+          val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
 
-        val request = FakeRequest(GET, getRoute)
+          val request = FakeRequest(GET, getRoute)
 
-        val result = route(application, request).value
+          val result = route(application, request).value
 
-        val view = application.injector.instanceOf[AddASettlorYesNoView]
+          val view = application.injector.instanceOf[AddASettlorYesNoView]
 
-        status(result) mustEqual OK
+          status(result) mustEqual OK
 
-        contentAsString(result) mustEqual
-          view(yesNoForm, NormalMode, fakeDraftId, Some(hint))(request, messages).toString
+          contentAsString(result) mustEqual
+            view(yesNoForm, NormalMode, fakeDraftId, Some(hint))(request, messages).toString
 
-        application.stop()
+          application.stop()
+        }
+
+        "non-taxable" in {
+
+          val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+          val request = FakeRequest(GET, getRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[AddASettlorYesNoView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(yesNoForm, NormalMode, fakeDraftId, None)(request, messages).toString
+
+          application.stop()
+        }
       }
 
       "redirect to the next page when valid data is submitted" in {
 
-        val answers = emptyUserAnswers
-          .set(KindOfTrustPage, Intervivos)
-          .success
-          .value
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
 
-        val application =
-          applicationBuilder(userAnswers = Some(answers)).build()
-
-        val request =
-          FakeRequest(POST, submitYesNoRoute)
-            .withFormUrlEncodedBody(("value", "true"))
+        val request = FakeRequest(POST, submitYesNoRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
         val result = route(application, request).value
 
@@ -132,16 +141,10 @@ class AddASettlorControllerSpec extends SpecBase {
 
       "return a Bad Request and errors when invalid data is submitted" in {
 
-        val answers = emptyUserAnswers
-          .set(KindOfTrustPage, Intervivos)
-          .success
-          .value
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
 
-        val application = applicationBuilder(userAnswers = Some(answers)).build()
-
-        val request =
-          FakeRequest(POST, submitYesNoRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, submitYesNoRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = yesNoForm.bind(Map("value" -> "invalid value"))
 
@@ -158,34 +161,73 @@ class AddASettlorControllerSpec extends SpecBase {
       }
     }
 
-    "there are settlors" ignore {
+    "there are settlors" must {
 
-      "return OK and the correct view for a GET" in {
+      "return OK and the correct view for a GET" when {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
+        val name = FullName("Joe", None, "Bloggs")
+        val index = 0
 
-        val request = FakeRequest(GET, getRoute)
+        val settlors = List(
+          AddRow(
+            name.toString,
+            "Individual Settlor",
+            SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url,
+            RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
+          )
+        )
 
-        val result = route(application, request).value
+        "taxable" in {
 
-        val view = application.injector.instanceOf[AddASettlorView]
+          val answers = userAnswersWithSettlorsComplete
+            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
 
-        status(result) mustEqual OK
+          val application = applicationBuilder(userAnswers = Some(answers)).build()
 
-        contentAsString(result) mustEqual
-          view(addSettlorForm, NormalMode, fakeDraftId,Nil, settlors, heading = "Do you want to add a settlor?", Some(hint))(request, messages).toString
+          val request = FakeRequest(GET, getRoute)
 
-        application.stop()
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[AddASettlorView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(addSettlorForm, NormalMode, fakeDraftId, settlors, Nil, heading = "Add a settlor", Some(hint))(request, messages).toString
+
+          application.stop()
+        }
+
+        "non-taxable" in {
+
+          val answers = emptyUserAnswers
+            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+            .set(SettlorIndividualNamePage(index), name).success.value
+
+          val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+          val request = FakeRequest(GET, getRoute)
+
+          val result = route(application, request).value
+
+          val view = application.injector.instanceOf[AddASettlorView]
+
+          status(result) mustEqual OK
+
+          contentAsString(result) mustEqual
+            view(addSettlorForm, NormalMode, fakeDraftId, settlors, Nil, heading = "Add a settlor", None)(request, messages).toString
+
+          application.stop()
+        }
       }
 
       "redirect to the next page when valid data is submitted" in {
 
-        val application =
-          applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", AddASettlor.options.head.value))
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", AddASettlor.options.head.value))
 
         val result = route(application, request).value
 
@@ -200,9 +242,8 @@ class AddASettlorControllerSpec extends SpecBase {
 
         val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
 
-        val request =
-          FakeRequest(POST, submitAnotherRoute)
-            .withFormUrlEncodedBody(("value", "invalid value"))
+        val request = FakeRequest(POST, submitAnotherRoute)
+          .withFormUrlEncodedBody(("value", "invalid value"))
 
         val boundForm = addSettlorForm.bind(Map("value" -> "invalid value"))
 
@@ -218,7 +259,7 @@ class AddASettlorControllerSpec extends SpecBase {
             NormalMode,
             fakeDraftId,
             Nil,
-            settlors,
+            Nil,
             heading = "Add a settlor",
             Some(hint)
           )(request, messages).toString

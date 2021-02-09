@@ -16,165 +16,240 @@
 
 package mapping
 
-import java.time.LocalDate
-
 import base.SpecBase
+import models.UserAnswers
 import models.pages.DeedOfVariation._
 import models.pages.KindOfTrust._
-import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
-import pages.DeceasedSettlorStatus
+import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
+import pages.deceased_settlor.SettlorsNamePage
 import pages.living_settlor._
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type._
 
+import java.time.LocalDate
+
 class TrustDetailsMapperSpec extends SpecBase {
 
-  "TrustDetails mapper" must {
+  private val fullName: FullName = FullName("Joe", None, "Bloggs")
+
+  "TrustDetails mapper" when {
 
     val mapper: TrustDetailsMapper = injector.instanceOf[TrustDetailsMapper]
 
-    "map user answers to trust details model" when {
+    "taxable" must {
 
-      "no settlors" in {
+      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
 
-        val result = mapper.build(emptyUserAnswers)
+      "not map user answers to trust details model" when {
 
-        result mustBe None
+        "no settlors" in {
+
+          val result = mapper.build(flaggedAnswers)
+
+          result mustBe None
+        }
+
+        "invalid user answers due to having living and deceased settlors" in {
+
+          val userAnswers = flaggedAnswers
+            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            .set(SettlorsNamePage, fullName).success.value
+            .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorIndividualNamePage(0), fullName).success.value
+
+          val result = mapper.build(userAnswers)
+
+          result mustBe None
+        }
       }
 
-      "deed of variation" when {
+      "map user answers to trust details model" when {
 
-        val baseAnswers = emptyUserAnswers
-          .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+        val setupAfterSettlorDiedAnswers = flaggedAnswers
+          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
 
-        "set up in addition to will trust" in {
+        "setup after settlor died" in {
 
-          val userAnswers = baseAnswers
-            .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
-            .set(DeceasedSettlorStatus, Status.Completed).success.value
+          val userAnswers = setupAfterSettlorDiedAnswers
+            .set(SettlorsNamePage, fullName).success.value
 
           val result = mapper.build(userAnswers).get
 
           result mustBe TrustDetailsType(
             typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust,
-            deedOfVariation = Some(AdditionToWill),
-            interVivos = None,
-            efrbsStartDate = None
-          )
-        }
-
-        "not set up in addition to will trust" in {
-
-          val userAnswers = baseAnswers
-            .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
-            .set(HowDeedOfVariationCreatedPage, ReplacedWill).success.value
-            .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe TrustDetailsType(
-            typeOfTrust = TypeOfTrust.DeedOfVariation,
-            deedOfVariation = Some(ReplacedWill),
-            interVivos = None,
-            efrbsStartDate = None
-          )
-        }
-      }
-
-      "intervivos" in {
-
-        val holdoverReliefYesNo: Boolean = true
-
-        val userAnswers = emptyUserAnswers
-          .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-          .set(HoldoverReliefYesNoPage, holdoverReliefYesNo).success.value
-          .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-          .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe TrustDetailsType(
-          typeOfTrust = TypeOfTrust.IntervivosSettlementTrust,
-          deedOfVariation = None,
-          interVivos = Some(holdoverReliefYesNo),
-          efrbsStartDate = None
-        )
-      }
-
-      "flat management" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(KindOfTrustPage, KindOfTrust.FlatManagement).success.value
-          .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-          .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe TrustDetailsType(
-          typeOfTrust = TypeOfTrust.FlatManagementTrust,
-          deedOfVariation = None,
-          interVivos = None,
-          efrbsStartDate = None
-        )
-      }
-
-      "heritage maintenance fund" in {
-
-        val userAnswers = emptyUserAnswers
-          .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
-          .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-          .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-        val result = mapper.build(userAnswers).get
-
-        result mustBe TrustDetailsType(
-          typeOfTrust = TypeOfTrust.HeritageTrust,
-          deedOfVariation = None,
-          interVivos = None,
-          efrbsStartDate = None
-        )
-      }
-
-      "employees" when {
-
-        "efrbs" in {
-
-          val date: LocalDate = LocalDate.parse("1996-02-03")
-
-          val userAnswers = emptyUserAnswers
-            .set(KindOfTrustPage, KindOfTrust.Employees).success.value
-            .set(EfrbsYesNoPage, true).success.value
-            .set(EfrbsStartDatePage, date).success.value
-            .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe TrustDetailsType(
-            typeOfTrust = TypeOfTrust.EmployeeRelated,
-            deedOfVariation = None,
-            interVivos = None,
-            efrbsStartDate = Some(date)
-          )
-        }
-
-        "not efrbs" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(KindOfTrustPage, KindOfTrust.Employees).success.value
-            .set(EfrbsYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-
-          val result = mapper.build(userAnswers).get
-
-          result mustBe TrustDetailsType(
-            typeOfTrust = TypeOfTrust.EmployeeRelated,
             deedOfVariation = None,
             interVivos = None,
             efrbsStartDate = None
           )
+        }
+
+        "not setup after settlor died" when {
+
+          val setupAfterSettlorDiedAnswers = flaggedAnswers
+            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+
+          "deed of variation" when {
+
+            val baseAnswers = setupAfterSettlorDiedAnswers
+              .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+
+            "set up in addition to will trust" in {
+
+              val userAnswers = baseAnswers
+                .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
+                .set(SettlorsNamePage, fullName).success.value
+
+              val result = mapper.build(userAnswers).get
+
+              result mustBe TrustDetailsType(
+                typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust,
+                deedOfVariation = Some(AdditionToWill),
+                interVivos = None,
+                efrbsStartDate = None
+              )
+            }
+
+            "not set up in addition to will trust" in {
+
+              val userAnswers = baseAnswers
+                .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
+                .set(HowDeedOfVariationCreatedPage, ReplacedWill).success.value
+                .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorIndividualNamePage(0), fullName).success.value
+
+              val result = mapper.build(userAnswers).get
+
+              result mustBe TrustDetailsType(
+                typeOfTrust = TypeOfTrust.DeedOfVariation,
+                deedOfVariation = Some(ReplacedWill),
+                interVivos = None,
+                efrbsStartDate = None
+              )
+            }
+          }
+
+          "intervivos" in {
+
+            val holdoverReliefYesNo: Boolean = true
+
+            val userAnswers = setupAfterSettlorDiedAnswers
+              .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
+              .set(HoldoverReliefYesNoPage, holdoverReliefYesNo).success.value
+              .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorIndividualNamePage(0), fullName).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe TrustDetailsType(
+              typeOfTrust = TypeOfTrust.IntervivosSettlementTrust,
+              deedOfVariation = None,
+              interVivos = Some(holdoverReliefYesNo),
+              efrbsStartDate = None
+            )
+          }
+
+          "flat management" in {
+
+            val userAnswers = setupAfterSettlorDiedAnswers
+              .set(KindOfTrustPage, KindOfTrust.FlatManagement).success.value
+              .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorIndividualNamePage(0), fullName).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe TrustDetailsType(
+              typeOfTrust = TypeOfTrust.FlatManagementTrust,
+              deedOfVariation = None,
+              interVivos = None,
+              efrbsStartDate = None
+            )
+          }
+
+          "heritage maintenance fund" in {
+
+            val userAnswers = setupAfterSettlorDiedAnswers
+              .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
+              .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorIndividualNamePage(0), fullName).success.value
+
+            val result = mapper.build(userAnswers).get
+
+            result mustBe TrustDetailsType(
+              typeOfTrust = TypeOfTrust.HeritageTrust,
+              deedOfVariation = None,
+              interVivos = None,
+              efrbsStartDate = None
+            )
+          }
+
+          "employees" when {
+
+            "efrbs" in {
+
+              val date: LocalDate = LocalDate.parse("1996-02-03")
+
+              val userAnswers = setupAfterSettlorDiedAnswers
+                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+                .set(EfrbsYesNoPage, true).success.value
+                .set(EfrbsStartDatePage, date).success.value
+                .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorIndividualNamePage(0), fullName).success.value
+
+              val result = mapper.build(userAnswers).get
+
+              result mustBe TrustDetailsType(
+                typeOfTrust = TypeOfTrust.EmployeeRelated,
+                deedOfVariation = None,
+                interVivos = None,
+                efrbsStartDate = Some(date)
+              )
+            }
+
+            "not efrbs" in {
+
+              val userAnswers = setupAfterSettlorDiedAnswers
+                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+                .set(EfrbsYesNoPage, false).success.value
+                .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorIndividualNamePage(0), fullName).success.value
+
+              val result = mapper.build(userAnswers).get
+
+              result mustBe TrustDetailsType(
+                typeOfTrust = TypeOfTrust.EmployeeRelated,
+                deedOfVariation = None,
+                interVivos = None,
+                efrbsStartDate = None
+              )
+            }
+          }
+        }
+      }
+    }
+
+    "non-taxable" must {
+
+      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+
+      "return None" when {
+
+        "set up after settlor died" in {
+          val answers: UserAnswers = flaggedAnswers
+            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            .set(SettlorsNamePage, fullName).success.value
+
+          val result = mapper.build(answers)
+          result mustBe None
+        }
+
+        "not set up after settlor died" in {
+          val answers: UserAnswers = flaggedAnswers
+            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+            .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorIndividualNamePage(0), fullName).success.value
+
+          val result = mapper.build(answers)
+          result mustBe None
         }
       }
     }

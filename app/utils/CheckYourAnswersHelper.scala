@@ -38,7 +38,7 @@ import play.twirl.api.HtmlFormat
 import queries.Gettable
 import sections.LivingSettlors
 import utils.countryOptions.CountryOptions
-import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorLivingViewModel}
+import viewmodels.{AnswerRow, AnswerSection, SettlorBusinessViewModel, SettlorIndividualViewModel}
 import java.time.LocalDate
 
 import javax.inject.Inject
@@ -99,7 +99,7 @@ class CheckYourAnswersHelper @Inject()(countryOptions: CountryOptions,
       case (settlor, index) =>
 
         val questions: Seq[AnswerRow] = settlor match {
-          case _: SettlorLivingViewModel => settlorIndividualQuestions(index)
+          case _: SettlorIndividualViewModel => settlorIndividualQuestions(index)
           case _: SettlorBusinessViewModel => settlorBusinessQuestions(index)
           case _ => Nil
         }

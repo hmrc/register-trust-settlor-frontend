@@ -52,7 +52,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
 
     vm match {
 
-      case SettlorLivingIndividualViewModel(_, name, status) => Some(AddRow(
+      case SettlorIndividualViewModel(_, name, status) => Some(AddRow(
         name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.individual"),
         changeUrl = if (status == InProgress) {
@@ -63,7 +63,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
       ))
 
-      case SettlorBusinessTypeViewModel(_, name, status) => Some(AddRow(
+      case SettlorBusinessViewModel(_, name, status) => Some(AddRow(
         name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.business"),
         changeUrl = if (status == InProgress) {
