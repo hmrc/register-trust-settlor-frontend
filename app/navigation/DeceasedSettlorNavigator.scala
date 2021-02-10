@@ -97,14 +97,6 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     )(answers)
   }
 
-  private def navigateAwayFromNationalityQuestions(isTaxable: Boolean, draftId: String): Call = {
-    if (isTaxable) {
-        rts.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
-      } else {
-      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
-      }
-  }
-
   private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorsDateOfBirthPage => ua =>
       navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, draftId)
@@ -141,14 +133,20 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
     }
   }
 
+  private def navigateAwayFromNationalityQuestions(isTaxable: Boolean, draftId: String): Call = {
+    if (isTaxable) {
+      rts.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
+    } else {
+      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+    }
+  }
+
   private def navigateAwayFromCountryOfResidencyQuestions(draftId: String)(answers: UserAnswers): Call = {
     answers.get(SettlorsNationalInsuranceYesNoPage) match {
-      case Some(true) => rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
-      case _ => if(answers.isTaxable) {
+      case Some(false) if answers.isTaxable =>
         rts.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
-      }else {
+      case _ =>
         rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
-      }
     }
   }
 
