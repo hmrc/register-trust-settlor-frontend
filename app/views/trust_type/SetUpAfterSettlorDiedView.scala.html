@@ -22,7 +22,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], mode: Mode, draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("setUpAfterSettlorDied.title")}"
@@ -39,7 +39,7 @@
             label = messages("setUpAfterSettlorDied.heading"),
             legendClass = Some("heading-large"),
             legendAsHeading = true,
-            hint = Some(messages("setUpAfterSettlorDied.hint"))
+            hint = if(isTaxable) Some(messages("setUpAfterSettlorDied.hint")) else None
         )
 
         @components.submit_button()
