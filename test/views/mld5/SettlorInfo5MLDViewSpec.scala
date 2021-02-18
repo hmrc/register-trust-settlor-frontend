@@ -49,19 +49,24 @@ class SettlorInfo5MLDViewSpec extends ViewBehaviours {
         "bulletpoint10",
         "bulletpoint11",
         "paragraph4",
-        "subheading2",
         "paragraph5",
+        "bulletpoint12",
+        "bulletpoint13",
+        "bulletpoint14",
+        "bulletpoint15",
+        "subheading2",
+        "paragraph6",
         "details",
         "details.subheading1",
         "details.paragraph1",
         "details.subheading2",
         "details.paragraph2",
         "subheading3",
-        "paragraph6",
         "paragraph7",
-        "bulletpoint12",
-        "bulletpoint13",
-        "bulletpoint14"
+        "paragraph8",
+        "bulletpoint16",
+        "bulletpoint17",
+        "bulletpoint18"
       )
 
       behave like pageWithBackLink(applyView)
@@ -87,20 +92,24 @@ class SettlorInfo5MLDViewSpec extends ViewBehaviours {
         "bulletpoint5",
         "bulletpoint6",
         "bulletpoint7",
-        "paragraph4",
-        "subheading2",
         "paragraph5",
+        "bulletpoint12",
+        "bulletpoint13",
+        "bulletpoint14",
+        "bulletpoint15",
+        "subheading2",
+        "paragraph6",
         "details",
         "details.subheading1",
         "details.paragraph1",
         "details.subheading2",
         "details.paragraph2",
         "subheading3",
-        "paragraph6",
         "paragraph7",
-        "bulletpoint12",
-        "bulletpoint13",
-        "bulletpoint14"
+        "paragraph8",
+        "bulletpoint16",
+        "bulletpoint17",
+        "bulletpoint18"
       )
 
       behave like pageWithBackLink(applyView)
