@@ -30,20 +30,38 @@ class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
 
   val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDied")
 
-  "SetUpAfterSettlorDied view" must {
+  "SetUpAfterSettlorDied view" when {
 
-    val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
+    "for a taxable trust" must {
+      val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId)(fakeRequest, messages)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, NormalMode, fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+      behave like normalPage(applyView(form), messageKeyPrefix)
 
-    behave like pageWithBackLink(applyView(form))
+      behave like pageWithBackLink(applyView(form))
 
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, Some(messageKeyPrefix))
+      behave like yesNoPage(form, applyView, messageKeyPrefix, Some(messageKeyPrefix))
 
-    behave like pageWithASubmitButton(applyView(form))
+      behave like pageWithASubmitButton(applyView(form))
+    }
+
+    "for a non taxable trust" must {
+      val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
+
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, NormalMode, fakeDraftId, isTaxable = false)(fakeRequest, messages)
+
+      behave like normalPage(applyView(form), messageKeyPrefix)
+
+      behave like pageWithBackLink(applyView(form))
+
+
+      behave like yesNoPage(form, applyView, messageKeyPrefix, None)
+
+      behave like pageWithASubmitButton(applyView(form))
+    }
   }
 }

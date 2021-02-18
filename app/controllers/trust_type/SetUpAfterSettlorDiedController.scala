@@ -52,7 +52,7 @@ class SetUpAfterSettlorDiedController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, mode, draftId, request.userAnswers.isTaxable))
   }
 
   def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
@@ -60,7 +60,7 @@ class SetUpAfterSettlorDiedController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, mode, draftId, request.userAnswers.isTaxable))),
 
         value => {
           for {
