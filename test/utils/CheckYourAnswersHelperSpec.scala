@@ -32,14 +32,12 @@ import pages.living_settlor.individual.{mld5 => individual5mldPages}
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
 import pages.{LivingSettlorStatus, deceased_settlor => deceasedPages, trust_type => trustTypePages}
 import play.twirl.api.Html
-import utils.countryOptions.CountryOptions
 import viewmodels.{AnswerRow, AnswerSection}
 
 import java.time.LocalDate
 
 class CheckYourAnswersHelperSpec extends SpecBase {
-
-  private val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
+  
   private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   private val mode: Mode = NormalMode
@@ -73,7 +71,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
             .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.deceasedSettlor
 
@@ -104,7 +102,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, true).success.value
             .set(deceasedPages.SettlorNationalInsuranceNumberPage, nino).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.deceasedSettlor
 
@@ -141,7 +139,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, true).success.value
               .set(deceasedPages.SettlorsUKAddressPage, ukAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.deceasedSettlor
 
@@ -169,7 +167,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, false).success.value
               .set(deceasedPages.SettlorsInternationalAddressPage, nonUkAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.deceasedSettlor
 
@@ -210,7 +208,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.mld5.CountryOfResidenceYesNoPage, false).success.value
             .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.deceasedSettlor
 
@@ -249,7 +247,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.mld5.CountryOfResidenceYesNoPage, true).success.value
               .set(deceasedPages.mld5.CountryOfResidenceInTheUkYesNoPage, true).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.deceasedSettlor
 
@@ -293,7 +291,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, true).success.value
               .set(deceasedPages.SettlorsUKAddressPage, ukAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.deceasedSettlor
 
@@ -337,7 +335,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
           .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
           .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-        val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+        val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
         val result = helper.deceasedSettlor
 
@@ -382,7 +380,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorAddressYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -419,7 +417,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualNINOPage(index), nino).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -458,7 +456,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualIDCardYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -499,7 +497,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualPassportPage(index), passportOrIdCardDetails).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -543,7 +541,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualIDCardPage(index), passportOrIdCardDetails).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -592,7 +590,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -629,7 +627,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -670,7 +668,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -714,7 +712,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(businessPages.SettlorBusinessAddressYesNoPage(index), false).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.livingSettlors
 
@@ -746,7 +744,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(businessPages.SettlorBusinessUtrPage(index), utr).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
           val result = helper.livingSettlors
 
@@ -781,7 +779,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(businessPages.SettlorBusinessAddressUKPage(index), ukAddress).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 
@@ -816,7 +814,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(businessPages.SettlorBusinessAddressInternationalPage(index), nonUkAddress).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
 
             val result = helper.livingSettlors
 

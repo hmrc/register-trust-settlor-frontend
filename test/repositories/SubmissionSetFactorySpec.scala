@@ -17,7 +17,7 @@
 package repositories
 
 import base.SpecBase
-import mapping.{DeceasedSettlorMapper, Settlor, SettlorCompany, Settlors, SettlorsMapper, TrustDetailsMapper, TrustDetailsType, TypeOfTrust, WillType}
+import mapping._
 import models.RegistrationSubmission.{AnswerRow, AnswerSection, DataSet, MappedPiece}
 import models.UserAnswers
 import models.pages.Status._
@@ -29,7 +29,6 @@ import pages.trust_type.KindOfTrustPage
 import pages.{DeceasedSettlorStatus, RegistrationProgress, deceased_settlor => deceasedPages, trust_type => trustTypePages}
 import play.api.libs.json.Json
 import utils.CheckAnswersFormatters
-import utils.countryOptions.CountryOptions
 
 class SubmissionSetFactorySpec extends SpecBase {
 
@@ -166,11 +165,10 @@ class SubmissionSetFactorySpec extends SpecBase {
         val mockSettlorsMapper: SettlorsMapper = mock[SettlorsMapper]
         val mockDeceasedSettlorMapper: DeceasedSettlorMapper = mock[DeceasedSettlorMapper]
         val mockTrustDetailsMapper: TrustDetailsMapper = mock[TrustDetailsMapper]
-        val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
 
         when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(status))
 
-        val factory = new SubmissionSetFactory(mockRegistrationProgress, checkAnswersFormatters, mockSettlorsMapper, countryOptions, mockDeceasedSettlorMapper, mockTrustDetailsMapper)
+        val factory = new SubmissionSetFactory(mockRegistrationProgress, checkAnswersFormatters, mockSettlorsMapper, mockDeceasedSettlorMapper, mockTrustDetailsMapper)
 
         "trust details" in {
 

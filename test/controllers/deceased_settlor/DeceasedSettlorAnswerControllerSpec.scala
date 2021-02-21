@@ -29,8 +29,8 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import utils.countryOptions.CountryOptions
+import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
@@ -61,9 +61,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
           .set(WasSettlorsAddressUKYesNoPage, true).success.value
           .set(SettlorsUKAddressPage, UKAddress("Line1", "Line2", None, Some("TownOrCity"), "NE62RT")).success.value
 
-      val countryOptions: CountryOptions = injector.instanceOf[CountryOptions]
-
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
@@ -104,9 +102,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
           .set(WasSettlorsAddressUKYesNoPage, false).success.value
           .set(SettlorsInternationalAddressPage, InternationalAddress("Line1", "Line2", None, "Country")).success.value
 
-      val countryOptions = injector.instanceOf[CountryOptions]
-
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(countryOptions, checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
+      val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
 
       val expectedSections = Seq(
         AnswerSection(
