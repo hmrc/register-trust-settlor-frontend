@@ -19,6 +19,7 @@ GET        /:draftId/information-you-need                                       
 
 GET        /:draftId/add                                                                   controllers.AddASettlorController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add                                                                   controllers.AddASettlorController.submitOne(mode: Mode = NormalMode, draftId: String)
+GET        /:draftId/add-another                                                           controllers.AddASettlorController.onPageLoad(mode: Mode = NormalMode, draftId: String)
 POST       /:draftId/add-another                                                           controllers.AddASettlorController.submitAnother(mode: Mode = NormalMode, draftId: String)
 
 GET        /:draftId/:index/remove-yes-no                                                  controllers.RemoveSettlorYesNoController.onPageLoad(index: Int, draftId: String)
