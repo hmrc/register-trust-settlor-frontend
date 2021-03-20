@@ -16,11 +16,13 @@
 
 package mapping.reads
 
-import java.time.LocalDate
-
+import mapping.IdentificationMapper.{buildAddress, buildPassport}
+import mapping.IdentificationType
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
+
+import java.time.LocalDate
 
 final case class IndividualSettlor(name: FullName,
                                    dateOfBirth: Option[LocalDate],
@@ -33,12 +35,17 @@ final case class IndividualSettlor(name: FullName,
                                    hasMentalCapacity: Option[Boolean]) extends Settlor {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
+
+  val identification: Option[IdentificationType] = (nino, passportOrId, address) match {
+    case (None, None, None) => None
+    case _ => Some(IdentificationType(nino, buildPassport(passportOrId), buildAddress(address)))
+  }
 }
 
 object IndividualSettlor extends SettlorReads {
 
-  implicit lazy val reads: Reads[IndividualSettlor] = {
-    ((__ \ "name").read[FullName] and
+  implicit lazy val reads: Reads[IndividualSettlor] = (
+    (__ \ "name").read[FullName] and
       (__ \ "dateOfBirth").readNullable[LocalDate] and
       (__ \ "nino").readNullable[String] and
       readAddress() and
@@ -47,7 +54,6 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
       (__ \ "mentalCapacityYesNo").readNullable[Boolean]
-      )(IndividualSettlor.apply _)
-  }
-}
+    )(IndividualSettlor.apply _)
 
+}

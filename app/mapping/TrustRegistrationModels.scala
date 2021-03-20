@@ -105,8 +105,7 @@ case class WillType(name: FullName,
                     dateOfDeath: Option[LocalDate],
                     identification: Option[Identification],
                     countryOfResidence: Option[String],
-                    nationality: Option[String]
-                    )
+                    nationality: Option[String])
 
 object WillType {
   implicit val willTypeFormat: Format[WillType] = Json.format[WillType]

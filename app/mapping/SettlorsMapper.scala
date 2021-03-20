@@ -19,7 +19,8 @@ package mapping
 import javax.inject.Inject
 import models.UserAnswers
 
-class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper, businessSettlorsMapper: BusinessSettlorsMapper) extends Mapping[Settlors] {
+class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper,
+                               businessSettlorsMapper: BusinessSettlorsMapper) {
 
    def build(userAnswers: UserAnswers): Option[Settlors] = {
      val individualSettlors = individualSettlorsMapper.build(userAnswers)

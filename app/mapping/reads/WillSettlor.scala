@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package pages.deceased_settlor
+package mapping.reads
 
-import models.pages.PassportOrIdCardDetails
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.DeceasedSettlor
+import sections.{DeceasedSettlor => section}
 
-case object SettlorsPassportIDCardPage extends QuestionPage[PassportOrIdCardDetails] {
-
-  override def path: JsPath = DeceasedSettlor.path \ toString
-
-  override def toString: String = "passportIdCard"
+case object WillSettlor extends QuestionPage[DeceasedSettlor] {
+  override def path: JsPath = section.path
+  override def toString: String = section.toString
 }

@@ -33,7 +33,7 @@ object Settlor {
   implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
     a.map(identity)
 
-  implicit lazy val reads : Reads[Settlor] = {
+  implicit lazy val reads: Reads[Settlor] = {
     IndividualSettlor.reads or
       BusinessSettlor.reads
   }

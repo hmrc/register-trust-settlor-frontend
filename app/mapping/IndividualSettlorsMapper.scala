@@ -16,53 +16,16 @@
 
 package mapping
 
-import javax.inject.Inject
-import mapping.reads.{BusinessSettlor, IndividualSettlor}
-import models.UserAnswers
-import models.pages.PassportOrIdCardDetails
+import mapping.reads.IndividualSettlor
 
-class IndividualSettlorsMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[Settlor]] {
+class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
 
-   def build(userAnswers: UserAnswers): Option[List[Settlor]] = {
-     val settlors = userAnswers.get(mapping.reads.LivingSettlors).getOrElse(List.empty[IndividualSettlor])
-
-     val mappedSettlors = settlors.flatMap {
-       case settlor: IndividualSettlor =>
-       Some(Settlor(
-         name = settlor.name,
-         dateOfBirth = settlor.dateOfBirth,
-         identification = identificationMap(settlor),
-         countryOfResidence = settlor.countryOfResidence,
-         nationality = settlor.nationality,
-         legallyIncapable = settlor.hasMentalCapacity.map(!_)
-       ))
-       case _: BusinessSettlor =>
-         None
-     }
-
-     mappedSettlors match {
-       case Nil => None
-       case _ => Some(mappedSettlors)
-     }
-  }
-
-  private def identificationMap(settlor: IndividualSettlor): Option[IdentificationType] = {
-
-    val identificationType = IdentificationType(
-      settlor.nino,
-      passportOrIdMap(settlor.passportOrId),
-      addressMapper.build(settlor.address)
-    )
-
-    identificationType match {
-      case IdentificationType(None, None, None) => None
-      case _ => Some(identificationType)
-    }
-  }
-
-  private def passportOrIdMap(passportOrIdCardDetails: Option[PassportOrIdCardDetails]): Option[PassportType] = {
-    passportOrIdCardDetails map { passportOrIdCardDetails =>
-      PassportType(passportOrIdCardDetails.cardNumber, passportOrIdCardDetails.expiryDate, passportOrIdCardDetails.country)
-    }
-  }
+  override def settlorType(settlor: IndividualSettlor): Settlor = Settlor(
+    name = settlor.name,
+    dateOfBirth = settlor.dateOfBirth,
+    identification = settlor.identification,
+    countryOfResidence = settlor.countryOfResidence,
+    nationality = settlor.nationality,
+    legallyIncapable = settlor.hasMentalCapacity.map(!_)
+  )
 }

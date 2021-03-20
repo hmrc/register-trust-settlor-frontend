@@ -24,9 +24,22 @@ import pages.trust_type._
 import play.api.Logger
 import sections.{DeceasedSettlor, LivingSettlors}
 
-class TrustDetailsMapper extends Mapping[TrustDetailsType] {
+class TrustDetailsMapper {
 
   private val logger: Logger = Logger(getClass)
+
+  def build(userAnswers: UserAnswers): Option[TrustDetailsType] = {
+    for {
+      typeOfTrust <- trustType(userAnswers)
+    } yield {
+      TrustDetailsType(
+        typeOfTrust = typeOfTrust,
+        deedOfVariation = deedOfVariation(userAnswers),
+        interVivos = userAnswers.get(HoldoverReliefYesNoPage),
+        efrbsStartDate = userAnswers.get(EfrbsStartDatePage)
+      )
+    }
+  }
 
   private def trustType(userAnswers: UserAnswers): Option[TypeOfTrust] = {
 
@@ -66,19 +79,6 @@ class TrustDetailsMapper extends Mapping[TrustDetailsType] {
       case Employees => TypeOfTrust.EmployeeRelated
       case FlatManagement => TypeOfTrust.FlatManagementTrust
       case HeritageMaintenanceFund => TypeOfTrust.HeritageTrust
-    }
-  }
-
-  override def build(userAnswers: UserAnswers): Option[TrustDetailsType] = {
-    for {
-      typeOfTrust <- trustType(userAnswers)
-    } yield {
-      TrustDetailsType(
-        typeOfTrust = typeOfTrust,
-        deedOfVariation = deedOfVariation(userAnswers),
-        interVivos = userAnswers.get(HoldoverReliefYesNoPage),
-        efrbsStartDate = userAnswers.get(EfrbsStartDatePage)
-      )
     }
   }
 

@@ -16,10 +16,28 @@
 
 package mapping
 
+import mapping.reads.LivingSettlors
 import models.UserAnswers
 
-trait Mapping[T] {
+import scala.reflect.ClassTag
 
-  def build(userAnswers: UserAnswers) : Option[T]
+abstract class Mapping[A, B <: mapping.reads.Settlor : ClassTag] {
+
+  def build(userAnswers: UserAnswers): Option[List[A]] = {
+    settlors(userAnswers) match {
+      case Nil => None
+      case list => Some(list.map(settlorType))
+    }
+  }
+
+  private def settlors(userAnswers: UserAnswers): List[B] = {
+    val runtimeClass = implicitly[ClassTag[B]].runtimeClass
+
+    userAnswers.get(LivingSettlors).getOrElse(Nil).collect {
+      case x: B if runtimeClass.isInstance(x) => x
+    }
+  }
+
+  def settlorType(settlor: B): A
 
 }
