@@ -17,6 +17,7 @@
 package mapping
 
 import mapping.reads.BusinessSettlor
+import models.SettlorCompany
 
 class BusinessSettlorsMapper extends Mapping[SettlorCompany, BusinessSettlor] {
 

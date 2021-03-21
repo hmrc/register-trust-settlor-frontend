@@ -17,7 +17,7 @@
 package mapping.reads
 
 import mapping.IdentificationMapper.buildAddress
-import mapping.IdentificationOrgType
+import models.IdentificationOrgType
 import models.pages.Address
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}

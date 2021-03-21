@@ -16,7 +16,11 @@
 
 package mapping
 
+import mapping.reads.DeceasedSettlor
+import models.pages.KindOfTrust
 import models.{Enumerable, WithName}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsError, JsSuccess, Reads, __}
 
 sealed trait TypeOfTrust
 
@@ -45,4 +49,15 @@ object TypeOfTrust extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[TypeOfTrust] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
+  val uaReads: Reads[TypeOfTrust] = (
+    (__ \ 'living).readWithDefault[List[mapping.reads.Settlor]](Nil) and
+      (__ \ 'deceased).readNullable[DeceasedSettlor]
+    ).tupled
+    .flatMap {
+      case (_ :: _, None) => (__ \ 'kindOfTrust).read[TypeOfTrust](KindOfTrust.typeofTrustReads)
+      case (Nil, Some(_)) => Reads(_ => JsSuccess(WillTrustOrIntestacyTrust))
+      case _ => Reads(_ => JsError("User answers are in an invalid state."))
+    }
+
 }

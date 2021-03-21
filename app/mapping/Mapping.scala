@@ -16,12 +16,15 @@
 
 package mapping
 
-import mapping.reads.LivingSettlors
+import mapping.reads.Settlor
 import models.UserAnswers
+import pages.QuestionPage
+import play.api.libs.json.JsPath
+import sections.{LivingSettlors => livingSettlors}
 
 import scala.reflect.ClassTag
 
-abstract class Mapping[A, B <: mapping.reads.Settlor : ClassTag] {
+abstract class Mapping[A, B <: Settlor : ClassTag] {
 
   def build(userAnswers: UserAnswers): Option[List[A]] = {
     settlors(userAnswers) match {
@@ -32,6 +35,10 @@ abstract class Mapping[A, B <: mapping.reads.Settlor : ClassTag] {
 
   private def settlors(userAnswers: UserAnswers): List[B] = {
     val runtimeClass = implicitly[ClassTag[B]].runtimeClass
+
+    case object LivingSettlors extends QuestionPage[List[Settlor]] {
+      override def path: JsPath = livingSettlors.path
+    }
 
     userAnswers.get(LivingSettlors).getOrElse(Nil).collect {
       case x: B if runtimeClass.isInstance(x) => x

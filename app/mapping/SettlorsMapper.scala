@@ -17,7 +17,7 @@
 package mapping
 
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Settlors, UserAnswers}
 
 class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper,
                                businessSettlorsMapper: BusinessSettlorsMapper) {

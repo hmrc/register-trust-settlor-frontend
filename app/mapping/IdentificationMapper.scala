@@ -16,6 +16,7 @@
 
 package mapping
 
+import models.{AddressType, PassportType}
 import models.pages.{Address, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import utils.Constants.GB
 

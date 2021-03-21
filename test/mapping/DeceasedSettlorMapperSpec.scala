@@ -17,9 +17,8 @@
 package mapping
 
 import java.time.LocalDate
-
 import base.SpecBase
-import models.UserAnswers
+import models.{AddressType, Identification, UserAnswers, WillType}
 import models.pages.{FullName, InternationalAddress, UKAddress}
 import pages.deceased_settlor._
 import pages.deceased_settlor.mld5.{CountryOfNationalityInTheUkYesNoPage, CountryOfNationalityPage, CountryOfNationalityYesNoPage, CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}

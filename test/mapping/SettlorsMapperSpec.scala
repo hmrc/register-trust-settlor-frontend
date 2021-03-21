@@ -17,7 +17,7 @@
 package mapping
 
 import base.SpecBase
-import models.UserAnswers
+import models.{Settlor, SettlorCompany, Settlors, UserAnswers}
 import models.pages.FullName
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when

@@ -18,6 +18,7 @@ package mapping
 
 import base.SpecBase
 import mapping.IdentificationMapper.buildAddress
+import models.AddressType
 import models.pages.{InternationalAddress, UKAddress}
 
 class IdentificationMapperSpec extends SpecBase {

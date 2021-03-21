@@ -17,6 +17,7 @@
 package mapping
 
 import mapping.reads.IndividualSettlor
+import models.Settlor
 
 class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
 

@@ -17,7 +17,7 @@
 package mapping.reads
 
 import mapping.IdentificationMapper.{buildAddress, buildPassport}
-import mapping.IdentificationType
+import models.IdentificationType
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}

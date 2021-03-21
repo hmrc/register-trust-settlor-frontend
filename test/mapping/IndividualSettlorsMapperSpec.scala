@@ -17,7 +17,7 @@
 package mapping
 
 import base.SpecBase
-import models.UserAnswers
+import models.{AddressType, IdentificationType, PassportType, Settlor, UserAnswers}
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor.individual._
 import pages.living_settlor.individual.mld5._
