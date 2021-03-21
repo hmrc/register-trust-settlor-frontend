@@ -23,7 +23,7 @@ class TrustDetailsMapper {
 
   def build(userAnswers: UserAnswers): Option[TrustDetailsType] = {
     if (userAnswers.isTaxable) {
-      userAnswers.getAtPath(section.path)(TrustDetailsType.reads)
+      userAnswers.getAtPath(section.path)(TrustDetailsType.uaReads)
     } else {
       None
     }

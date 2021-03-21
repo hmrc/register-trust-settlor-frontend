@@ -29,12 +29,10 @@ object SettlorIndividualViewModel {
   import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
-  implicit lazy val reads: Reads[SettlorIndividualViewModel] = {
-    (
-      (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Individual) and
-        (__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
-        (__ \ "status").readWithDefault[Status](InProgress)
-      )(SettlorIndividualViewModel.apply _)
-  }
+  implicit lazy val reads: Reads[SettlorIndividualViewModel] = (
+    (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Individual) and
+      (__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
+      (__ \ "status").readWithDefault[Status](InProgress)
+    )(SettlorIndividualViewModel.apply _)
 
 }

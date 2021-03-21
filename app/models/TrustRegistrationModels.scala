@@ -80,14 +80,14 @@ case class TrustDetailsType(typeOfTrust: TypeOfTrust,
 
 object TrustDetailsType {
 
-  implicit val reads: Reads[TrustDetailsType] = (
+  implicit val trustDetailsTypeFormat: Format[TrustDetailsType] = Json.format[TrustDetailsType]
+
+  val uaReads: Reads[TrustDetailsType] = (
     TypeOfTrust.uaReads and
       DeedOfVariation.uaReads and
       (__ \ 'holdoverReliefYesNo).readNullable[Boolean] and
       (__ \ 'efrbsStartDate).readNullable[LocalDate]
     )(TrustDetailsType.apply _)
-
-  implicit val writes: Writes[TrustDetailsType] = Json.writes[TrustDetailsType]
 }
 
 case class PassportType(number: String,

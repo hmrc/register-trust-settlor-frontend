@@ -24,21 +24,16 @@ import models.pages.Status.InProgress
 final case class SettlorDeceasedViewModel(`type`: IndividualOrBusiness,
                                           name: String,
                                           override val status: Status) extends SettlorViewModel
+
 object SettlorDeceasedViewModel {
 
   import play.api.libs.functional.syntax._
   import play.api.libs.json._
 
-  implicit lazy val reads: Reads[SettlorDeceasedViewModel] = {
-    ((__ \ "name").read[FullName].map(_.toString) and
+  implicit lazy val reads: Reads[SettlorDeceasedViewModel] = (
+    Reads(_ => JsSuccess(Individual)) and
+      (__ \ "name").read[FullName].map(_.toString) and
       (__ \ "status").readWithDefault[Status](InProgress)
-      ) ((name, status) => {
-      SettlorDeceasedViewModel(
-        Individual,
-        name,
-        status
-      )
-    })
-  }
+    )(SettlorDeceasedViewModel.apply _)
 
 }
