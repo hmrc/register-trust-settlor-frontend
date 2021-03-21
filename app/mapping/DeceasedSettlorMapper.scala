@@ -25,7 +25,7 @@ class DeceasedSettlorMapper extends {
   def build(userAnswers: UserAnswers): Option[WillType] = {
 
     userAnswers.getAtPath(entity.path)(DeceasedSettlor.reads) map { settlor =>
-      models.WillType(
+      WillType(
         name = settlor.name,
         dateOfBirth = settlor.dateOfBirth,
         dateOfDeath = settlor.dateOfDeath,
