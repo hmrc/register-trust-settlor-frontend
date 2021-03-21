@@ -17,7 +17,8 @@
 package models.pages
 
 import models.{Enumerable, WithName}
-import play.api.libs.json.{JsError, JsString, JsSuccess, Reads, Writes}
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsError, JsString, JsSuccess, Reads, Writes, __}
 import viewmodels.RadioOption
 
 sealed trait DeedOfVariation
@@ -65,4 +66,13 @@ object DeedOfVariation {
     case ReplacedWill => JsString("Replaced the will trust")
     case ReplaceAbsolute => JsString("Previously there was only an absolute interest under the will")
   }
+
+  val uaReads: Reads[Option[DeedOfVariation]] = {
+    (__ \ 'howDeedOfVariationCreated).read[DeedOfVariation].map(Some(_)) or
+      (__ \ 'setUpInAdditionToWillTrustYesNo).readNullable[Boolean].flatMap {
+        case Some(true) => Reads(_ => JsSuccess(Some(AdditionToWill)))
+        case _ => Reads(_ => JsSuccess(None))
+      }
+  }
+
 }

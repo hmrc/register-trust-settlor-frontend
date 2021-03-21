@@ -16,43 +16,16 @@
 
 package mapping
 
-import javax.inject.Inject
-import mapping.reads.{BusinessSettlor, IndividualSettlor}
-import models.UserAnswers
+import mapping.reads.BusinessSettlor
+import models.SettlorCompany
 
-class BusinessSettlorsMapper @Inject()(addressMapper: AddressMapper) extends Mapping[List[SettlorCompany]] {
+class BusinessSettlorsMapper extends Mapping[SettlorCompany, BusinessSettlor] {
 
-   def build(userAnswers: UserAnswers): Option[List[SettlorCompany]] = {
-
-     val settlors = userAnswers
-       .get(mapping.reads.LivingSettlors)
-       .getOrElse(List.empty[BusinessSettlor])
-
-     val mappedSettlors = settlors.flatMap {
-       case ls: BusinessSettlor =>
-         Some(SettlorCompany(ls.name, ls.companyType, ls.companyTime, identificationOrgMap(ls), ls.countryOfResidence))
-       case _: IndividualSettlor =>
-         None
-     }
-
-     mappedSettlors match {
-       case Nil => None
-       case _ => Some(mappedSettlors)
-     }
-  }
-
-
-
-  private def identificationOrgMap(settlor: BusinessSettlor): Option[IdentificationOrgType] = {
-
-    val identificationType = IdentificationOrgType(
-      settlor.utr,
-      addressMapper.build(settlor.address)
-    )
-
-    identificationType match {
-      case IdentificationOrgType(None, None) => None
-      case _ => Some(identificationType)
-    }
-  }
+  override def settlorType(settlor: BusinessSettlor): SettlorCompany = SettlorCompany(
+    name = settlor.name,
+    companyType = settlor.companyType,
+    companyTime = settlor.companyTime,
+    identification = settlor.identification,
+    countryOfResidence = settlor.countryOfResidence
+  )
 }

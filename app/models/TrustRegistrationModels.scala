@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package mapping
+package models
+
+import mapping.TypeOfTrust
+import models.pages.{DeedOfVariation, FullName}
+import play.api.libs.functional.syntax._
+import play.api.libs.json._
 
 import java.time.LocalDate
-
-import models.pages.{DeedOfVariation, FullName}
-import play.api.libs.json._
 
 case class Settlors(settlor: Option[List[Settlor]],
                     settlorCompany: Option[List[SettlorCompany]])
@@ -77,7 +79,15 @@ case class TrustDetailsType(typeOfTrust: TypeOfTrust,
                             efrbsStartDate: Option[LocalDate])
 
 object TrustDetailsType {
+
   implicit val trustDetailsTypeFormat: Format[TrustDetailsType] = Json.format[TrustDetailsType]
+
+  val uaReads: Reads[TrustDetailsType] = (
+    TypeOfTrust.uaReads and
+      DeedOfVariation.uaReads and
+      (__ \ 'holdoverReliefYesNo).readNullable[Boolean] and
+      (__ \ 'efrbsStartDate).readNullable[LocalDate]
+    )(TrustDetailsType.apply _)
 }
 
 case class PassportType(number: String,
@@ -105,8 +115,7 @@ case class WillType(name: FullName,
                     dateOfDeath: Option[LocalDate],
                     identification: Option[Identification],
                     countryOfResidence: Option[String],
-                    nationality: Option[String]
-                    )
+                    nationality: Option[String])
 
 object WillType {
   implicit val willTypeFormat: Format[WillType] = Json.format[WillType]

@@ -17,22 +17,18 @@
 package mapping
 
 import javax.inject.Inject
-import models.UserAnswers
+import models.{Settlors, UserAnswers}
 
-class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper, businessSettlorsMapper: BusinessSettlorsMapper) extends Mapping[Settlors] {
+class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper,
+                               businessSettlorsMapper: BusinessSettlorsMapper) {
 
    def build(userAnswers: UserAnswers): Option[Settlors] = {
-     val individualSettlors = individualSettlorsMapper.build(userAnswers)
-     val businessSettlors = businessSettlorsMapper.build(userAnswers)
 
-     val settlors = Settlors(
-       settlor = individualSettlors,
-       settlorCompany = businessSettlors
-     )
-
-     settlors match {
-       case Settlors(None, None) => None
-       case _ => Some(settlors)
+     (individualSettlorsMapper.build(userAnswers), businessSettlorsMapper.build(userAnswers)) match {
+       case (None, None) =>
+         None
+       case (individuals, businesses) =>
+         Some(Settlors(individuals, businesses))
      }
   }
 }

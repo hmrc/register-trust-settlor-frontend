@@ -17,7 +17,7 @@
 package mapping
 
 import base.SpecBase
-import models.UserAnswers
+import models.{TrustDetailsType, UserAnswers}
 import models.pages.DeedOfVariation._
 import models.pages.KindOfTrust._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
@@ -101,7 +101,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
               val result = mapper.build(userAnswers).get
 
-              result mustBe TrustDetailsType(
+              result mustBe models.TrustDetailsType(
                 typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust,
                 deedOfVariation = Some(AdditionToWill),
                 interVivos = None,
@@ -119,7 +119,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
               val result = mapper.build(userAnswers).get
 
-              result mustBe TrustDetailsType(
+              result mustBe models.TrustDetailsType(
                 typeOfTrust = TypeOfTrust.DeedOfVariation,
                 deedOfVariation = Some(ReplacedWill),
                 interVivos = None,
@@ -140,7 +140,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             val result = mapper.build(userAnswers).get
 
-            result mustBe TrustDetailsType(
+            result mustBe models.TrustDetailsType(
               typeOfTrust = TypeOfTrust.IntervivosSettlementTrust,
               deedOfVariation = None,
               interVivos = Some(holdoverReliefYesNo),
@@ -157,7 +157,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             val result = mapper.build(userAnswers).get
 
-            result mustBe TrustDetailsType(
+            result mustBe models.TrustDetailsType(
               typeOfTrust = TypeOfTrust.FlatManagementTrust,
               deedOfVariation = None,
               interVivos = None,
@@ -174,7 +174,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             val result = mapper.build(userAnswers).get
 
-            result mustBe TrustDetailsType(
+            result mustBe models.TrustDetailsType(
               typeOfTrust = TypeOfTrust.HeritageTrust,
               deedOfVariation = None,
               interVivos = None,
@@ -197,7 +197,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
               val result = mapper.build(userAnswers).get
 
-              result mustBe TrustDetailsType(
+              result mustBe models.TrustDetailsType(
                 typeOfTrust = TypeOfTrust.EmployeeRelated,
                 deedOfVariation = None,
                 interVivos = None,
@@ -215,7 +215,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
               val result = mapper.build(userAnswers).get
 
-              result mustBe TrustDetailsType(
+              result mustBe models.TrustDetailsType(
                 typeOfTrust = TypeOfTrust.EmployeeRelated,
                 deedOfVariation = None,
                 interVivos = None,

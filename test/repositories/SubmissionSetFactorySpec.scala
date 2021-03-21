@@ -19,7 +19,7 @@ package repositories
 import base.SpecBase
 import mapping._
 import models.RegistrationSubmission.{AnswerRow, AnswerSection, DataSet, MappedPiece}
-import models.UserAnswers
+import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
 import models.pages.Status._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
 import org.mockito.Matchers.any
@@ -156,7 +156,7 @@ class SubmissionSetFactorySpec extends SpecBase {
       "return mapped data if there are completed beneficiaries" when {
 
         val status: Status = Completed
-        val trustDetails: TrustDetailsType = TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
+        val trustDetails: TrustDetailsType = models.TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
         val deceasedSettlor: WillType = WillType(name, None, None, None, None, None)
 
         val arbitraryUserAnswers: UserAnswers = emptyUserAnswers

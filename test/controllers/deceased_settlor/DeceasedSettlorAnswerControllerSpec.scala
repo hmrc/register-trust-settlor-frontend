@@ -29,7 +29,6 @@ import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.countryOptions.CountryOptions
 import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView

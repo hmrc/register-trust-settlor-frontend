@@ -17,7 +17,7 @@
 package mapping
 
 import base.SpecBase
-import models.UserAnswers
+import models.{AddressType, IdentificationOrgType, SettlorCompany, UserAnswers}
 import models.pages.KindOfBusiness._
 import models.pages.{InternationalAddress, UKAddress}
 import pages.living_settlor.business._

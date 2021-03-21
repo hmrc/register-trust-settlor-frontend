@@ -16,51 +16,22 @@
 
 package mapping
 
-import javax.inject.Inject
-import models.UserAnswers
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5.{CountryOfNationalityPage, CountryOfResidencePage}
+import mapping.reads.DeceasedSettlor
+import models.{UserAnswers, WillType}
+import sections.{DeceasedSettlor => entity}
 
-class DeceasedSettlorMapper @Inject()(addressMapper: AddressMapper) extends Mapping[WillType] {
+class DeceasedSettlorMapper extends {
 
-  override def build(userAnswers: UserAnswers): Option[WillType] = {
-    for {
-      settlorsName <- userAnswers.get(SettlorsNamePage)
-      settlorsDateOfBirth = userAnswers.get(SettlorsDateOfBirthPage)
-      settlorDateOfDeath = userAnswers.get(SettlorDateOfDeathPage)
-      settlorIdentification = identificationStatus(userAnswers)
-      countryOfResidence = userAnswers.get(CountryOfResidencePage)
-      nationality = userAnswers.get(CountryOfNationalityPage)
-    } yield {
+  def build(userAnswers: UserAnswers): Option[WillType] = {
+
+    userAnswers.getAtPath(entity.path)(DeceasedSettlor.reads) map { settlor =>
       WillType(
-        name = settlorsName,
-        dateOfBirth = settlorsDateOfBirth,
-        dateOfDeath = settlorDateOfDeath,
-        identification = settlorIdentification,
-        countryOfResidence = countryOfResidence,
-        nationality = nationality
-      )
-    }
-  }
-
-  private def identificationStatus(userAnswers: UserAnswers): Option[Identification] = {
-    val settlorNinoYesNo = userAnswers.get(SettlorsNationalInsuranceYesNoPage)
-    val settlorsLastKnownAddressYesNo = userAnswers.get(SettlorsLastKnownAddressYesNoPage)
-
-    (settlorNinoYesNo, settlorsLastKnownAddressYesNo) match {
-      case (Some(true), _) => ninoMap(userAnswers)
-      case (Some(false), Some(true)) =>
-        val address = addressMapper.build(userAnswers, WasSettlorsAddressUKYesNoPage, SettlorsUKAddressPage, SettlorsInternationalAddressPage)
-        Some(Identification(None, address))
-      case (_, _) => None
-    }
-  }
-
-  private def ninoMap(userAnswers: UserAnswers): Option[Identification] = {
-    userAnswers.get(SettlorNationalInsuranceNumberPage) map { nino =>
-      Identification(
-        nino = Some(nino),
-        address = None
+        name = settlor.name,
+        dateOfBirth = settlor.dateOfBirth,
+        dateOfDeath = settlor.dateOfDeath,
+        identification = settlor.identification,
+        countryOfResidence = settlor.countryOfResidence,
+        nationality = settlor.nationality
       )
     }
   }
