@@ -20,7 +20,8 @@ import config.FrontendAppConfig
 import models.FeatureResponse
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.HttpClient
+import uk.gov.hmrc.http.HttpReads.Implicits.readFromJson
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}

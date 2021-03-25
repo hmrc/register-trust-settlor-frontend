@@ -33,7 +33,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
 import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
