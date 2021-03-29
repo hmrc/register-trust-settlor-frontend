@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.Logger
+import play.api.Logging
 import play.api.libs.json._
 import queries.{Gettable, Settable}
 
@@ -43,9 +43,7 @@ final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId: String,
                              is5mldEnabled: Boolean = false,
-                             isTaxable: Boolean = true) {
-
-  private val logger: Logger = Logger(getClass)
+                             isTaxable: Boolean = true) extends Logging {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     getAtPath(page.path)

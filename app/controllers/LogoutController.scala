@@ -22,9 +22,9 @@ import controllers.actions.RegistrationIdentifierAction
 import play.api.Logger.logger
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
-import uk.gov.hmrc.play.bootstrap.controller.FrontendBaseController
+import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.Session
 
 import scala.concurrent.ExecutionContext
@@ -38,7 +38,7 @@ class LogoutController @Inject()(appConfig: FrontendAppConfig,
 
   def logout: Action[AnyContent] = identify { request =>
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     logger.info(s"[Session ID: ${utils.Session.id(hc)}] user signed out from the service, asking for feedback")
 

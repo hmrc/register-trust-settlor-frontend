@@ -19,7 +19,7 @@ package controllers.actions
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
-import play.api.Logger
+import play.api.Logging
 import play.api.mvc.Results._
 import play.api.mvc.{Request, Result, _}
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
@@ -27,7 +27,7 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import utils.Session
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -35,8 +35,7 @@ import scala.concurrent.{ExecutionContext, Future}
 class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
                                                  trustsAuthFunctions: TrustsAuthorisedFunctions,
                                                  config: FrontendAppConfig
-                                                ) extends Action[A]  {
-  private val logger: Logger = Logger(getClass)
+                                                ) extends Action[A] with Logging {
 
   private def authoriseAgent(request : Request[A],
                              enrolments : Enrolments,
@@ -44,7 +43,7 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
                              action: Action[A]
                             ) = {
 
-    val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     def redirectToCreateAgentServicesAccount(reason: String): Future[Result] = {
       logger.info(s"[authoriseAgent][Session ID: ${Session.id(hc)}]: Agent services account required - $reason")
@@ -75,7 +74,7 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
                            action: Action[A]
                           ): Future[Result] = {
 
-    val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     val continueWithoutEnrolment =
       action(IdentifierRequest(request, internalId, AffinityGroup.Organisation, enrolments))
@@ -105,7 +104,7 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
 
   def apply(request: Request[A]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     val retrievals = Retrievals.internalId and
       Retrievals.affinityGroup and

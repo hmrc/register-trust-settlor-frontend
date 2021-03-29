@@ -20,8 +20,7 @@ import config.FrontendAppConfig
 import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
-import uk.gov.hmrc.play.bootstrap.http.HttpClient
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import java.time.LocalDate
 import javax.inject.Inject
@@ -51,13 +50,15 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     }
   }
 
-  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] =
+  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] = {
     getDraftSection(draftId, beneficiariesSection)
+  }
 
-  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] =
+  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] = {
     getDraftSection(draftId, statusSection).map {
       section => section.data.as[AllStatus]
     }
+  }
 
   // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {

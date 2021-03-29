@@ -21,7 +21,7 @@ import models.requests.{IdentifierRequest, OptionalRegistrationDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.HeaderCarrier
-import uk.gov.hmrc.play.HeaderCarrierConverter
+import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -47,7 +47,7 @@ class DraftIdDataRetrievalAction(
   extends ActionTransformer[IdentifierRequest, OptionalRegistrationDataRequest] {
 
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalRegistrationDataRequest[A]] = {
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
+    implicit implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     repository.get(draftId).map {
       userAnswers =>
