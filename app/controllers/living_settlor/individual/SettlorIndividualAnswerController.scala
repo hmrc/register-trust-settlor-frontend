@@ -18,14 +18,13 @@ package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
 import controllers.actions._
-import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
+import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
-import models.requests.RegistrationDataRequest
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.LivingSettlorStatus
-import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.individual.SettlorIndividualAnswerPage
 import pages.trust_type.KindOfTrustPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -33,8 +32,7 @@ import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerCompon
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
-import viewmodels.AnswerSection
+import utils.print.LivingSettlorPrintHelper
 import views.html.living_settlor.SettlorAnswersView
 
 import javax.inject.Inject
@@ -45,30 +43,22 @@ class SettlorIndividualAnswerController @Inject()(
                                                    registrationsRepository: RegistrationsRepository,
                                                    draftRegistrationService: DraftRegistrationService,
                                                    @IndividualSettlor navigator: Navigator,
-                                                   standardActions: Actions,
-                                                   requiredAnswer: RequiredAnswerActionProvider,
+                                                   actions: Actions,
+                                                   requireName: NameRequiredActionProvider,
                                                    view: SettlorAnswersView,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   checkAnswersFormatters: CheckAnswersFormatters
+                                                   livingSettlorPrintHelper: LivingSettlorPrintHelper
                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SettlorIndividualOrBusinessPage(index), SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId)))
+  private def actions(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =
+    actions.authWithData(draftId) andThen requireName(index, draftId)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new CheckYourAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
+      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, index, draftId)
 
-      val sections = Seq(
-        AnswerSection(
-          None,
-          answers.settlorIndividualQuestions(index)
-        )
-      )
-
-      Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), sections))
+      Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), Seq(section)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {

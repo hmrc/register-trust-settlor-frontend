@@ -23,16 +23,17 @@ import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
 import play.api.i18n.Messages
 import play.api.libs.json.Json
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
+import utils.CheckYourAnswersHelper
+import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
 class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
-                                     checkAnswersFormatters: CheckAnswersFormatters,
                                      settlorsMapper: SettlorsMapper,
                                      deceasedSettlorMapper: DeceasedSettlorMapper,
-                                     trustDetailsMapper: TrustDetailsMapper) {
+                                     trustDetailsMapper: TrustDetailsMapper,
+                                     printHelpers: PrintHelpers) {
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.settlorsStatus(userAnswers)
@@ -46,7 +47,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]) = {
+  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
 
     if (status.contains(Completed)) {
 
@@ -72,7 +73,7 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
   def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
                                (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, userAnswers.draftId, false)
+    val checkYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId)
 
     if (status.contains(Status.Completed)) {
 

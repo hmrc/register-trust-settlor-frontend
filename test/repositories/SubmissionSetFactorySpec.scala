@@ -19,16 +19,16 @@ package repositories
 import base.SpecBase
 import mapping._
 import models.RegistrationSubmission.{AnswerRow, AnswerSection, DataSet, MappedPiece}
-import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
 import models.pages.Status._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
+import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
 import pages.trust_type.KindOfTrustPage
 import pages.{DeceasedSettlorStatus, RegistrationProgress, deceased_settlor => deceasedPages, trust_type => trustTypePages}
 import play.api.libs.json.Json
-import utils.CheckAnswersFormatters
+import utils.print.PrintHelpers
 
 class SubmissionSetFactorySpec extends SpecBase {
 
@@ -36,8 +36,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
   private val name: FullName = FullName("Joe", Some("Joseph"), "Bloggs")
   private val businessName: String = "Business Ltd."
-
-  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
 
   "Submission set factory" when {
 
@@ -69,7 +67,7 @@ class SubmissionSetFactorySpec extends SpecBase {
             AnswerSection(
               None,
               Seq(
-                AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "Yes", ""),
+                AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "Yes", name.toString),
                 AnswerRow("settlorsName.checkYourAnswersLabel", name.displayFullName, ""),
                 AnswerRow("settlorDateOfDeathYesNo.checkYourAnswersLabel", "No", name.toString),
                 AnswerRow("settlorDateOfBirthYesNo.checkYourAnswersLabel", "No", name.toString),
@@ -102,9 +100,9 @@ class SubmissionSetFactorySpec extends SpecBase {
               AnswerSection(
                 Some(messages("answerPage.section.settlor.subheading", 1)),
                 Seq(
-                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", ""),
-                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", ""),
-                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Individual", ""),
+                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", name.toString),
+                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", name.toString),
+                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Individual", name.toString),
                   AnswerRow("settlorIndividualName.checkYourAnswersLabel", name.displayFullName, ""),
                   AnswerRow("settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", "No", name.toString),
                   AnswerRow("settlorIndividualNINOYesNo.checkYourAnswersLabel", "No", name.toString),
@@ -129,10 +127,10 @@ class SubmissionSetFactorySpec extends SpecBase {
               AnswerSection(
                 Some(messages("answerPage.section.settlor.subheading", 1)),
                 Seq(
-                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", ""),
-                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", ""),
-                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Business", ""),
-                  AnswerRow("settlorBusinessName.checkYourAnswersLabel", businessName, ""),
+                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", businessName),
+                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", businessName),
+                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Business", businessName),
+                  AnswerRow("settlorBusinessName.checkYourAnswersLabel", businessName, businessName),
                   AnswerRow("settlorBusinessUtrYesNo.checkYourAnswersLabel", "No", businessName),
                   AnswerRow("settlorBusinessAddressYesNo.checkYourAnswersLabel", "No", businessName)
                 ),
@@ -165,10 +163,11 @@ class SubmissionSetFactorySpec extends SpecBase {
         val mockSettlorsMapper: SettlorsMapper = mock[SettlorsMapper]
         val mockDeceasedSettlorMapper: DeceasedSettlorMapper = mock[DeceasedSettlorMapper]
         val mockTrustDetailsMapper: TrustDetailsMapper = mock[TrustDetailsMapper]
+        val printHelpers = injector.instanceOf[PrintHelpers]
 
         when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(status))
 
-        val factory = new SubmissionSetFactory(mockRegistrationProgress, checkAnswersFormatters, mockSettlorsMapper, mockDeceasedSettlorMapper, mockTrustDetailsMapper)
+        val factory = new SubmissionSetFactory(mockRegistrationProgress, mockSettlorsMapper, mockDeceasedSettlorMapper, mockTrustDetailsMapper, printHelpers)
 
         "trust details" in {
 

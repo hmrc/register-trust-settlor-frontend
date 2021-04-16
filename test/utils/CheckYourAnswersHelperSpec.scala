@@ -32,13 +32,14 @@ import pages.living_settlor.individual.{mld5 => individual5mldPages}
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
 import pages.{LivingSettlorStatus, deceased_settlor => deceasedPages, trust_type => trustTypePages}
 import play.twirl.api.Html
+import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
 import java.time.LocalDate
 
 class CheckYourAnswersHelperSpec extends SpecBase {
   
-  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+  private val printHelpers = injector.instanceOf[PrintHelpers]
 
   private val mode: Mode = NormalMode
 
@@ -51,7 +52,6 @@ class CheckYourAnswersHelperSpec extends SpecBase {
   private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB11AB")
   private val nonUkAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", Some("Line 3"), "FR")
   private val passportOrIdCardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("GB", "0987654321", date)
-  private val canEdit: Boolean = true
 
   "Check your answers helper" must {
 
@@ -71,7 +71,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
             .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
           val result = helper.deceasedSettlor
 
@@ -79,12 +79,12 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             AnswerSection(
               headingKey = None,
               rows = Seq(
-                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
               ),
               sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
             )
@@ -102,7 +102,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, true).success.value
             .set(deceasedPages.SettlorNationalInsuranceNumberPage, nino).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
           val result = helper.deceasedSettlor
 
@@ -110,14 +110,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             AnswerSection(
               headingKey = None,
               rows = Seq(
-                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorNationalInsuranceNumber.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorNationalInsuranceNumber.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
               ),
               sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
             )
@@ -139,7 +139,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, true).success.value
               .set(deceasedPages.SettlorsUKAddressPage, ukAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.deceasedSettlor
 
@@ -147,14 +147,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = None,
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsUKAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(deceasedRoutes.SettlorsUKAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsUKAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(deceasedRoutes.SettlorsUKAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
               )
@@ -167,7 +167,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, false).success.value
               .set(deceasedPages.SettlorsInternationalAddressPage, nonUkAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.deceasedSettlor
 
@@ -175,14 +175,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = None,
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsInternationalAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(deceasedRoutes.SettlorsInternationalAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsInternationalAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(deceasedRoutes.SettlorsInternationalAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
               )
@@ -208,7 +208,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(deceasedPages.mld5.CountryOfResidenceYesNoPage, false).success.value
             .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
           val result = helper.deceasedSettlor
 
@@ -216,14 +216,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             AnswerSection(
               headingKey = None,
               rows = Seq(
-                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
               ),
               sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
             )
@@ -247,7 +247,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.mld5.CountryOfResidenceYesNoPage, true).success.value
               .set(deceasedPages.mld5.CountryOfResidenceInTheUkYesNoPage, true).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.deceasedSettlor
 
@@ -255,18 +255,18 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = None,
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorNationalInsuranceNumber.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorNationalInsuranceNumber.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(deceasedRoutes.SettlorNationalInsuranceNumberController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
                 ),
                 sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
               )
@@ -291,7 +291,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(deceasedPages.WasSettlorsAddressUKYesNoPage, true).success.value
               .set(deceasedPages.SettlorsUKAddressPage, ukAddress).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.deceasedSettlor
 
@@ -299,20 +299,20 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = None,
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorsUKAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(deceasedRoutes.SettlorsUKAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfDeath.checkYourAnswersLabel", answer = Html("16 February 2010"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(deceasedRoutes.SettlorsDateOfBirthController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfNationalityInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfNationalityInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceased5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "wasSettlorsAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(deceasedRoutes.WasSettlorsAddressUKYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorsUKAddress.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(deceasedRoutes.SettlorsUKAddressController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
               )
@@ -335,7 +335,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
           .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
           .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
 
-        val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+        val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
         val result = helper.deceasedSettlor
 
@@ -343,14 +343,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
           AnswerSection(
             headingKey = None,
             rows = Seq(
-              AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-              AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-              AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-              AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-              AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-              AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-              AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-              AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+              AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "settlorsName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(deceasedRoutes.SettlorsNameController.onPageLoad(mode, fakeDraftId).url), canEdit = true),
+              AnswerRow(label = "settlorDateOfDeathYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfDeathYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "settlorDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorDateOfBirthYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "settlorsNationalInsuranceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsNINoYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+              AnswerRow(label = "settlorsLastKnownAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(deceasedRoutes.SettlorsLastKnownAddressYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true)
             ),
             sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
           )
@@ -380,7 +380,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorAddressYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -388,15 +388,15 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "howDeedOfVariationCreated.checkYourAnswersLabel", answer = Html("to replace a will trust"), changeUrl = Some(trustTypeRoutes.HowDeedOfVariationCreatedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.AdditionToWillTrustYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "howDeedOfVariationCreated.checkYourAnswersLabel", answer = Html("to replace a will trust"), changeUrl = Some(trustTypeRoutes.HowDeedOfVariationCreatedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -417,7 +417,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualNINOPage(index), nino).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -425,15 +425,15 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust created during their lifetime to gift or transfer assets"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "holdoverReliefYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.HoldoverReliefYesNoController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust created during their lifetime to gift or transfer assets"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "holdoverReliefYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.HoldoverReliefYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -456,7 +456,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualIDCardYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -464,17 +464,17 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for a building or building with tenants"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for a building or building with tenants"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -497,7 +497,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualPassportPage(index), passportOrIdCardDetails).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -505,17 +505,17 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualPassport.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualPassportController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualPassport.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualPassportController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -541,7 +541,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individualPages.SettlorIndividualIDCardPage(index), passportOrIdCardDetails).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -549,20 +549,20 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "employerFinancedRbsStartDate.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsStartDateController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(individualRoutes.SettlorIndividualAddressInternationalController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualIDCard.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "employerFinancedRbsStartDate.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsStartDateController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(individualRoutes.SettlorIndividualAddressInternationalController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualPassportYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualIDCard.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(individualRoutes.SettlorIndividualIDCardController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -590,7 +590,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -598,16 +598,16 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -627,7 +627,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -635,18 +635,18 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -668,7 +668,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(individual5mldPages.MentalCapacityYesNoPage(index), false).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -676,20 +676,20 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfNationality.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualCountryOfResidency.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = "Joe Bloggs", canEdit = canEdit)
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(individualRoutes.SettlorIndividualNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = true),
+                  AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individualRoutes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.UkCountryOfNationalityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfNationality.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(individual5mldRoutes.CountryOfNationalityController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individualRoutes.SettlorIndividualNINOYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(individualRoutes.SettlorIndividualNINOController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.UkCountryOfResidencyYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualCountryOfResidency.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(individual5mldRoutes.CountryOfResidencyController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true),
+                  AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(individual5mldRoutes.MentalCapacityYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = name.toString, canEdit = true)
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -712,7 +712,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(businessPages.SettlorBusinessAddressYesNoPage(index), false).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
           val result = helper.livingSettlors
 
@@ -720,13 +720,13 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             AnswerSection(
               headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
               rows = Seq(
-                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit)
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.EmployerFinancedRbsYesNoController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true)
               ),
               sectionKey = Some(messages("answerPage.section.settlors.heading"))
             )
@@ -744,7 +744,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             .set(businessPages.SettlorBusinessUtrPage(index), utr).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
-          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+          val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
           val result = helper.livingSettlors
 
@@ -752,12 +752,12 @@ class CheckYourAnswersHelperSpec extends SpecBase {
             AnswerSection(
               headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
               rows = Seq(
-                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                AnswerRow(label = "settlorBusinessUtr.checkYourAnswersLabel", answer = Html("1234567890"), changeUrl = Some(businessRoutes.SettlorBusinessUtrController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit)
+                AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                AnswerRow(label = "settlorBusinessUtr.checkYourAnswersLabel", answer = Html("1234567890"), changeUrl = Some(businessRoutes.SettlorBusinessUtrController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true)
               ),
               sectionKey = Some(messages("answerPage.section.settlors.heading"))
             )
@@ -779,7 +779,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(businessPages.SettlorBusinessAddressUKPage(index), ukAddress).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -787,14 +787,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )
@@ -814,7 +814,7 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               .set(businessPages.SettlorBusinessAddressInternationalPage(index), nonUkAddress).success.value
               .set(LivingSettlorStatus(index), Completed).success.value
 
-            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit)
+            val helper: CheckYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, fakeDraftId)
 
             val result = helper.livingSettlors
 
@@ -822,14 +822,14 @@ class CheckYourAnswersHelperSpec extends SpecBase {
               AnswerSection(
                 headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
                 rows = Seq(
-                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
-                  AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = canEdit),
+                  AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(trustTypeRoutes.SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(trustTypeRoutes.KindOfTrustController.onPageLoad(mode, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(livingRoutes.SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(businessRoutes.SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(businessRoutes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
+                  AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName, canEdit = true),
                 ),
                 sectionKey = Some(messages("answerPage.section.settlors.heading"))
               )

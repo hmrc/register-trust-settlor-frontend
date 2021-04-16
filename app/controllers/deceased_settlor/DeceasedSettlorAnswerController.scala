@@ -29,8 +29,7 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
-import viewmodels.AnswerSection
+import utils.print.DeceasedSettlorPrintHelper
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
 import javax.inject.Inject
@@ -45,22 +44,15 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeceasedSettlorAnswerView,
                                                  draftRegistrationService: DraftRegistrationService,
-                                                 checkAnswersFormatters: CheckAnswersFormatters
+                                                 deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
+      val section = deceasedSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId)
 
-      val sections = Seq(
-        AnswerSection(
-          None,
-          checkYourAnswersHelper.deceasedSettlorQuestions
-        )
-      )
-
-      Ok(view(draftId, sections))
+      Ok(view(draftId, Seq(section)))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {

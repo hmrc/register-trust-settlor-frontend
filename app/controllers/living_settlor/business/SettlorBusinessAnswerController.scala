@@ -18,15 +18,14 @@ package controllers.living_settlor.business
 
 import config.annotations.BusinessSettlor
 import controllers.actions._
+import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import controllers.living_settlor.business.routes.SettlorBusinessAnswerController
-import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
-import models.requests.RegistrationDataRequest
+import models.requests.SettlorBusinessNameRequest
 import navigation.Navigator
 import pages.LivingSettlorStatus
-import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business.SettlorBusinessAnswerPage
 import pages.trust_type.KindOfTrustPage
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -34,8 +33,7 @@ import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerCompon
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
-import viewmodels.AnswerSection
+import utils.print.BusinessSettlorPrintHelper
 import views.html.living_settlor.SettlorAnswersView
 
 import javax.inject.Inject
@@ -46,30 +44,22 @@ class SettlorBusinessAnswerController @Inject()(
                                                  registrationsRepository: RegistrationsRepository,
                                                  draftRegistrationService: DraftRegistrationService,
                                                  @BusinessSettlor navigator: Navigator,
-                                                 standardActions: Actions,
-                                                 requiredAnswer: RequiredAnswerActionProvider,
+                                                 actions: Actions,
+                                                 requireName: NameRequiredActionProvider,
                                                  view: SettlorAnswersView,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 checkAnswersFormatters: CheckAnswersFormatters
+                                                 businessSettlorPrintHelper: BusinessSettlorPrintHelper
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private def actions(index: Int, draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
-    standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SettlorIndividualOrBusinessPage(index), SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId)))
+  private def actions(index: Int, draftId: String): ActionBuilder[SettlorBusinessNameRequest, AnyContent] =
+    actions.authWithData(draftId) andThen requireName(index, draftId)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val answers = new CheckYourAnswersHelper(checkAnswersFormatters)(request.userAnswers, draftId, canEdit = true)
+      val section = businessSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.businessName, index, draftId)
 
-      val sections = Seq(
-        AnswerSection(
-          None,
-          answers.settlorBusinessQuestions(index)
-        )
-      )
-
-      Ok(view(SettlorBusinessAnswerController.onSubmit(index, draftId), sections))
+      Ok(view(SettlorBusinessAnswerController.onSubmit(index, draftId), Seq(section)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
