@@ -26,7 +26,9 @@ import models.pages._
 import models.{Mode, NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.LivingSettlorStatus
 import pages.living_settlor._
 import pages.living_settlor.individual._
@@ -36,8 +38,8 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 import java.time.LocalDate
 
-class LivingSettlorPrintHelperSpec extends SpecBase with BeforeAndAfterEach {
-  
+class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChecks with BeforeAndAfterEach {
+
   private val answerRowConverter = injector.instanceOf[AnswerRowConverter]
   private val mockTrustTypePrintHelper = mock[TrustTypePrintHelper]
   private val livingSettlorPrintHelper = new LivingSettlorPrintHelper(answerRowConverter, mockTrustTypePrintHelper)
@@ -51,7 +53,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with BeforeAndAfterEach {
   private val nonUkAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", Some("Line 3"), "FR")
   private val passportOrIdCardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("GB", "0987654321", date)
   private val index: Int = 0
-  
+
   override def beforeEach(): Unit = {
     reset(mockTrustTypePrintHelper)
     when(mockTrustTypePrintHelper.answerRows(any(), any())(any())).thenReturn(Nil)
@@ -297,11 +299,24 @@ class LivingSettlorPrintHelperSpec extends SpecBase with BeforeAndAfterEach {
   private def assertThatUserAnswersProduceExpectedAnswerRows(userAnswers: UserAnswers,
                                                      expectedAnswerRows: Seq[AnswerRow]): Assertion = {
 
-    val checkDetailsSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, name.toString, index, fakeDraftId)
+    val checkDetailsSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, name.toString, fakeDraftId, index)
     checkDetailsSection mustEqual AnswerSection(
       headingKey = None,
       rows = expectedAnswerRows,
       sectionKey = None
     )
+
+    val firstPrintSection = livingSettlorPrintHelper.printSection(userAnswers, name.toString, fakeDraftId, index)
+    firstPrintSection mustEqual AnswerSection(
+      headingKey = Some(messages("answerPage.section.settlor.subheading", index + 1)),
+      rows = expectedAnswerRows,
+      sectionKey = Some(messages("answerPage.section.settlors.heading"))
+    )
+
+    forAll(arbitrary[Int].suchThat(_ > 0)) { subsequentIndex =>
+      val subsequentPrintSection = livingSettlorPrintHelper.printSection(userAnswers, name.toString, fakeDraftId, subsequentIndex)
+      subsequentPrintSection.headingKey mustBe Some(messages("answerPage.section.settlor.subheading", subsequentIndex + 1))
+      subsequentPrintSection.sectionKey mustBe None
+    }
   }
 }

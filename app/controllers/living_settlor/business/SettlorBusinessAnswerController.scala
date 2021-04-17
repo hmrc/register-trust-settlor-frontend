@@ -57,7 +57,7 @@ class SettlorBusinessAnswerController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section = businessSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.businessName, index, draftId)
+      val section = businessSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.businessName, draftId, index)
 
       Ok(view(SettlorBusinessAnswerController.onSubmit(index, draftId), Seq(section)))
   }

@@ -56,7 +56,7 @@ class SettlorIndividualAnswerController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, index, draftId)
+      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId, index)
 
       Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), Seq(section)))
   }

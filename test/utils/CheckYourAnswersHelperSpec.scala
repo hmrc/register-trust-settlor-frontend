@@ -35,6 +35,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
   private val mockPrintHelpers = mock[PrintHelpers]
 
+  private val fakeAnswerSection = AnswerSection()
+
   override def beforeEach(): Unit = {
     reset(mockPrintHelpers)
   }
@@ -45,8 +47,6 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
       "there is a deceased settlor" must {
         "return Some deceased settlor section" in {
-
-          val fakeAnswerSection = AnswerSection()
 
           when(mockPrintHelpers.deceasedSettlorSection(any(), any(), any())(any()))
             .thenReturn(fakeAnswerSection)
@@ -75,13 +75,11 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
       "there are living settlors" must {
         "return Some living settlor sections" in {
 
-          val fakeAnswerRows = Nil
+          when(mockPrintHelpers.livingSettlorSection(any(), any(), any(), any())(any()))
+            .thenReturn(fakeAnswerSection)
 
-          when(mockPrintHelpers.livingSettlorRows(any(), any(), any(), any())(any()))
-            .thenReturn(fakeAnswerRows)
-
-          when(mockPrintHelpers.businessSettlorRows(any(), any(), any(), any())(any()))
-            .thenReturn(fakeAnswerRows)
+          when(mockPrintHelpers.businessSettlorSection(any(), any(), any(), any())(any()))
+            .thenReturn(fakeAnswerSection)
 
           val userAnswers = emptyUserAnswers
             .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
@@ -91,18 +89,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(userAnswers, fakeDraftId)
 
-          helper.livingSettlors mustBe Some(Seq(
-            AnswerSection(
-              headingKey = Some(messages("answerPage.section.settlor.subheading", 1)),
-              rows = fakeAnswerRows,
-              sectionKey = Some(messages("answerPage.section.settlors.heading"))
-            ),
-            AnswerSection(
-              headingKey = Some(messages("answerPage.section.settlor.subheading", 2)),
-              rows = fakeAnswerRows,
-              sectionKey = None
-            )
-          ))
+          helper.livingSettlors mustBe Some(Seq(fakeAnswerSection, fakeAnswerSection))
         }
       }
 

@@ -27,7 +27,9 @@ import models.pages._
 import models.{Mode, NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, when}
+import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.LivingSettlorStatus
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business._
@@ -35,7 +37,7 @@ import pages.living_settlor.business.mld5._
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 
-class BusinessSettlorPrintHelperSpec extends SpecBase with BeforeAndAfterEach {
+class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChecks with BeforeAndAfterEach {
 
   private val answerRowConverter = injector.instanceOf[AnswerRowConverter]
   private val mockTrustTypePrintHelper = mock[TrustTypePrintHelper]
@@ -167,13 +169,26 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with BeforeAndAfterEach {
   }
 
   private def assertThatUserAnswersProduceExpectedAnswerRows(userAnswers: UserAnswers,
-                                                     expectedAnswerRows: Seq[AnswerRow]): Assertion = {
+                                                             expectedAnswerRows: Seq[AnswerRow]): Assertion = {
 
-    val checkDetailsSection = businessSettlorPrintHelper.checkDetailsSection(userAnswers, businessName, index, fakeDraftId)
+    val checkDetailsSection = businessSettlorPrintHelper.checkDetailsSection(userAnswers, businessName, fakeDraftId, index)
     checkDetailsSection mustEqual AnswerSection(
       headingKey = None,
       rows = expectedAnswerRows,
       sectionKey = None
     )
+    
+    val firstPrintSection = businessSettlorPrintHelper.printSection(userAnswers, businessName, fakeDraftId, index)
+    firstPrintSection mustEqual AnswerSection(
+      headingKey = Some(messages("answerPage.section.settlor.subheading", index + 1)),
+      rows = expectedAnswerRows,
+      sectionKey = Some(messages("answerPage.section.settlors.heading"))
+    )
+    
+    forAll(arbitrary[Int].suchThat(_ > 0)) { subsequentIndex =>
+      val subsequentPrintSection = businessSettlorPrintHelper.printSection(userAnswers, businessName , fakeDraftId, subsequentIndex)
+      subsequentPrintSection.headingKey mustBe Some(messages("answerPage.section.settlor.subheading", subsequentIndex + 1))
+      subsequentPrintSection.sectionKey mustBe None
+    }
   }
 }

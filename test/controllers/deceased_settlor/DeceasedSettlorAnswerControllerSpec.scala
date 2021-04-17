@@ -50,7 +50,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
       val fakeAnswerSection = AnswerSection()
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
 
       val answers: UserAnswers = emptyUserAnswers

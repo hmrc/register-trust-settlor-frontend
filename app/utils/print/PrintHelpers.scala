@@ -18,7 +18,7 @@ package utils.print
 
 import models.UserAnswers
 import play.api.i18n.Messages
-import viewmodels.{AnswerRow, AnswerSection}
+import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
@@ -30,12 +30,12 @@ class PrintHelpers @Inject()(deceasedSettlorPrintHelper: DeceasedSettlorPrintHel
                             (implicit messages: Messages): AnswerSection =
     deceasedSettlorPrintHelper.printSection(userAnswers, name, draftId)
 
-  def livingSettlorRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                       (implicit messages: Messages): Seq[AnswerRow] =
-    livingSettlorPrintHelper.answerRows(userAnswers, name, index, draftId)
+  def livingSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+                          (implicit messages: Messages): AnswerSection =
+    livingSettlorPrintHelper.printSection(userAnswers, name, draftId, index)
 
-  def businessSettlorRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                         (implicit messages: Messages): Seq[AnswerRow] =
-    businessSettlorPrintHelper.answerRows(userAnswers, name, index, draftId)
+  def businessSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+                            (implicit messages: Messages): AnswerSection =
+    businessSettlorPrintHelper.printSection(userAnswers, name, draftId, index)
 
 }
