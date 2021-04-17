@@ -29,9 +29,7 @@ import viewmodels.AnswerRow
 
 class BusinessSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
                                            trustTypePrintHelper: TrustTypePrintHelper)
-  extends SettlorPrintHelper(trustTypePrintHelper) {
-
-  override def arc: AnswerRowConverter = answerRowConverter
+  extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
 
   override def answerRows(index: Int, draftId: String)
                          (bound: AnswerRowConverter#Bound)

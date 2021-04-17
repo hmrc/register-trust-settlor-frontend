@@ -118,8 +118,7 @@ class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatter
           label = s"$labelKey.checkYourAnswersLabel",
           answer = format(x),
           changeUrl = Some(changeUrl),
-          labelArg = labelArg,
-          canEdit = true
+          labelArg = labelArg
         )
       }
     }

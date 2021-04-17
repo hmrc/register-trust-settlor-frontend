@@ -20,9 +20,8 @@ import models.UserAnswers
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper) {
-
-  def arc: AnswerRowConverter
+abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper,
+                                  answerRowConverter: AnswerRowConverter) {
 
   def headingKey(index: Int)(implicit messages: Messages): Option[String] =
     Some(messages("answerPage.section.settlor.subheading", index + 1))
@@ -53,7 +52,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper) {
   private def answerRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
                         (implicit messages: Messages): Seq[AnswerRow] = {
 
-    val bound = arc.bind(userAnswers, name)
+    val bound = answerRowConverter.bind(userAnswers, name)
 
     trustTypePrintHelper.answerRows(userAnswers, draftId) ++
       answerRows(index, draftId)(bound).flatten
