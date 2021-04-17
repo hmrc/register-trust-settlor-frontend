@@ -19,7 +19,9 @@ package utils.print
 import com.google.inject.Inject
 import controllers.living_settlor.business.mld5.routes._
 import controllers.living_settlor.business.routes._
+import controllers.living_settlor.routes
 import models.{NormalMode, UserAnswers}
+import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5._
 import play.api.i18n.Messages
@@ -42,7 +44,8 @@ class BusinessSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverte
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    trustTypePrintHelper.answerRows(userAnswers, name, index, draftId) ++ Seq(
+    trustTypePrintHelper.answerRows(userAnswers, draftId) ++ Seq(
+      bound.enumQuestion(SettlorIndividualOrBusinessPage(index), "settlorIndividualOrBusiness", routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId).url, "settlorIndividualOrBusiness"),
       bound.stringQuestion(SettlorBusinessNamePage(index), "settlorBusinessName", SettlorBusinessNameController.onPageLoad(NormalMode, index, draftId).url),
       bound.yesNoQuestion(SettlorBusinessUtrYesNoPage(index), "settlorBusinessUtrYesNo", SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, draftId).url),
       bound.stringQuestion(SettlorBusinessUtrPage(index), "settlorBusinessUtr", SettlorBusinessUtrController.onPageLoad(NormalMode, index, draftId).url),

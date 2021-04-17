@@ -19,7 +19,9 @@ package utils.print
 import com.google.inject.Inject
 import controllers.living_settlor.individual.mld5.routes._
 import controllers.living_settlor.individual.routes._
+import controllers.living_settlor.routes
 import models.{NormalMode, UserAnswers}
+import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.individual._
 import pages.living_settlor.individual.mld5._
 import play.api.i18n.Messages
@@ -42,7 +44,8 @@ class LivingSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    trustTypePrintHelper.answerRows(userAnswers, name, index, draftId) ++ Seq(
+    trustTypePrintHelper.answerRows(userAnswers, draftId) ++ Seq(
+      bound.enumQuestion(SettlorIndividualOrBusinessPage(index), "settlorIndividualOrBusiness", routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId).url, "settlorIndividualOrBusiness"),
       bound.nameQuestion(SettlorIndividualNamePage(index), "settlorIndividualName", SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url),
       bound.yesNoQuestion(SettlorIndividualDateOfBirthYesNoPage(index), "settlorIndividualDateOfBirthYesNo", SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, draftId).url),
       bound.dateQuestion(SettlorIndividualDateOfBirthPage(index), "settlorIndividualDateOfBirth", SettlorIndividualDateOfBirthController.onPageLoad(NormalMode, index, draftId).url),

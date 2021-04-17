@@ -19,15 +19,14 @@ package utils.print
 import com.google.inject.Inject
 import controllers.deceased_settlor.mld5.routes._
 import controllers.deceased_settlor.routes._
-import controllers.trust_type.routes._
 import models.{NormalMode, UserAnswers}
 import pages.deceased_settlor._
 import pages.deceased_settlor.mld5._
-import pages.trust_type.{KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import play.api.i18n.Messages
 import viewmodels.{AnswerRow, AnswerSection}
 
-class DeceasedSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
+class DeceasedSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
+                                           trustTypePrintHelper: TrustTypePrintHelper) {
 
   def checkDetailsSection(userAnswers: UserAnswers, name: String, draftId: String)
                          (implicit messages: Messages): AnswerSection = {
@@ -52,10 +51,7 @@ class DeceasedSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverte
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
 
-    Seq(
-      bound.yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDied", SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url),
-      bound.enumQuestion(KindOfTrustPage, "kindOfTrust", KindOfTrustController.onPageLoad(NormalMode, draftId).url, "kindOfTrust"),
-      bound.yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url),
+    trustTypePrintHelper.answerRows(userAnswers, draftId) ++ Seq(
       bound.nameQuestion(SettlorsNamePage, "settlorsName", controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId).url),
       bound.yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url),
       bound.dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url),

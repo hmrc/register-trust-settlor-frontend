@@ -24,226 +24,57 @@ import org.mockito.Matchers._
 import org.mockito.Mockito._
 import pages.living_settlor._
 import pages.living_settlor.individual._
-import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
+import pages.trust_type._
 import play.api.Application
+import play.api.inject.bind
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.LivingSettlorPrintHelper
+import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
 
-import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
   private val settlorName: FullName = FullName("first name", Some("middle name"), "last name")
-  private val validDate: LocalDate = LocalDate.now(ZoneOffset.UTC)
-  private val nino: String = "CC123456A"
-  private val AddressUK: UKAddress = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
-  private val AddressInternational: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
-  private val passportOrIDCardDetails: PassportOrIdCardDetails = PassportOrIdCardDetails("Field 1", "Field 2", LocalDate.now(ZoneOffset.UTC))
   private val index: Int = 0
 
   private lazy val settlorIndividualAnswerRoute: String = routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
   private lazy val onSubmit: Call = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
-
-  private val livingSettlorPrintHelper = injector.instanceOf[LivingSettlorPrintHelper]
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorIndividualNamePage(index), settlorName).success.value
 
   "SettlorIndividualAnswer Controller" must {
 
-    "settlor individual" when {
+    "return OK and the correct view for a GET" in {
 
-      "no date of birth, no nino, no address" must {
+      val mockPrintHelper = mock[LivingSettlorPrintHelper]
 
-        "return OK and the correct view for a GET" in {
+      val fakeAnswerSection = AnswerSection()
 
-          val userAnswers: UserAnswers = baseAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), false).success.value
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
 
-          val expectedSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, settlorName.toString, index, fakeDraftId)
+      val application: Application = applicationBuilder(userAnswers = Some(baseAnswers))
+        .overrides(bind[LivingSettlorPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
-          val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val request = FakeRequest(GET, settlorIndividualAnswerRoute)
 
-          val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+      val result: Future[Result] = route(application, request).value
 
-          val result: Future[Result] = route(application, request).value
+      val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
 
-          val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
+      status(result) mustEqual OK
 
-          status(result) mustEqual OK
+      contentAsString(result) mustEqual
+        view(onSubmit, Seq(fakeAnswerSection))(request, messages).toString
 
-          contentAsString(result) mustEqual
-            view(onSubmit, Seq(expectedSection))(request, messages).toString
-
-          application.stop()
-        }
-
-      }
-
-      "with date of birth, with nino, and no address" must {
-
-        "return OK and the correct view for a GET" in {
-
-          val userAnswers: UserAnswers = baseAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplaceAbsolute).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
-            .set(SettlorIndividualDateOfBirthPage(index), validDate).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-            .set(SettlorAddressYesNoPage(index), false).success.value
-
-          val expectedSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, settlorName.toString, index, fakeDraftId)
-
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-          val request = FakeRequest(GET, settlorIndividualAnswerRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[SettlorAnswersView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(onSubmit, Seq(expectedSection))(request, messages).toString
-
-          application.stop()
-        }
-
-      }
-
-      "no date of birth, no nino, UK address, no passport, no ID card" must {
-
-        "return OK and the correct view for a GET" in {
-
-          val userAnswers = baseAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), true).success.value
-            .set(SettlorAddressUKPage(index), AddressUK).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
-
-          val expectedSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, settlorName.toString, index, fakeDraftId)
-
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-          val request = FakeRequest(GET, settlorIndividualAnswerRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[SettlorAnswersView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(onSubmit, Seq(expectedSection))(request, messages).toString
-
-          application.stop()
-        }
-
-      }
-
-      "no date of birth, no nino, International address, no passport, no ID card" must {
-
-        "return OK and the correct view for a GET" in {
-
-          val userAnswers = baseAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), false).success.value
-            .set(SettlorAddressInternationalPage(index), AddressInternational).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
-
-          val expectedSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, settlorName.toString, index, fakeDraftId)
-
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-          val request = FakeRequest(GET, settlorIndividualAnswerRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[SettlorAnswersView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(onSubmit, Seq(expectedSection))(request, messages).toString
-
-          application.stop()
-        }
-
-      }
-
-      "no date of birth, no nino, UK address, passport, ID card" must {
-
-        "return OK and the correct view for a GET" in {
-
-          val userAnswers = baseAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), true).success.value
-            .set(SettlorAddressUKPage(index), AddressUK).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), true).success.value
-            .set(SettlorIndividualPassportPage(index), passportOrIDCardDetails).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), true).success.value
-            .set(SettlorIndividualIDCardPage(index), passportOrIDCardDetails).success.value
-
-          val expectedSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, settlorName.toString, index, fakeDraftId)
-
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-          val request = FakeRequest(GET, settlorIndividualAnswerRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[SettlorAnswersView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(onSubmit, Seq(expectedSection))(request, messages).toString
-
-          application.stop()
-        }
-
-      }
-
+      application.stop()
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

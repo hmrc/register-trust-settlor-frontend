@@ -17,20 +17,18 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.living_settlor.routes
 import controllers.trust_type.routes._
 import models.{NormalMode, UserAnswers}
-import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.trust_type._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class TrustTypePrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
 
-  def answerRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+  def answerRows(userAnswers: UserAnswers, draftId: String)
                 (implicit messages: Messages): Seq[AnswerRow] = {
 
-    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers, name)
+    val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers)
 
     Seq(
       bound.yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDied", SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url),
@@ -39,8 +37,7 @@ class TrustTypePrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
       bound.enumQuestion(HowDeedOfVariationCreatedPage, "howDeedOfVariationCreated", HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId).url, "howDeedOfVariationCreated"),
       bound.yesNoQuestion(HoldoverReliefYesNoPage, "holdoverReliefYesNo", HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId).url),
       bound.yesNoQuestion(EfrbsYesNoPage, "employerFinancedRbsYesNo", EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId).url),
-      bound.dateQuestion(EfrbsStartDatePage, "employerFinancedRbsStartDate", EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId).url),
-      bound.enumQuestion(SettlorIndividualOrBusinessPage(index), "settlorIndividualOrBusiness", routes.SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, draftId).url, "settlorIndividualOrBusiness")
+      bound.dateQuestion(EfrbsStartDatePage, "employerFinancedRbsStartDate", EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId).url)
     ).flatten
 
   }

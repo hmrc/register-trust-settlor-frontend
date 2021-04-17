@@ -18,15 +18,13 @@ package repositories
 
 import base.SpecBase
 import mapping._
-import models.RegistrationSubmission.{AnswerRow, AnswerSection, DataSet, MappedPiece}
+import models.RegistrationSubmission.{DataSet, MappedPiece}
 import models.pages.Status._
-import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, Status}
+import models.pages.{FullName, Status}
 import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
-import pages.trust_type.KindOfTrustPage
-import pages.{DeceasedSettlorStatus, RegistrationProgress, deceased_settlor => deceasedPages, trust_type => trustTypePages}
+import pages.RegistrationProgress
 import play.api.libs.json.Json
 import utils.print.PrintHelpers
 
@@ -39,119 +37,16 @@ class SubmissionSetFactorySpec extends SpecBase {
 
   "Submission set factory" when {
 
-    ".answerSectionsIfCompleted" must {
-
-      "return no answer sections if no completed beneficiaries" in {
-
-        val result = factory.answerSectionsIfCompleted(emptyUserAnswers, Some(InProgress))
-
-        result mustBe Nil
-      }
-
-      "return completed answer sections" when {
-
-        "deceased settlor" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(trustTypePages.SetUpAfterSettlorDiedYesNoPage, true).success.value
-            .set(deceasedPages.SettlorsNamePage, name).success.value
-            .set(deceasedPages.SettlorDateOfDeathYesNoPage, false).success.value
-            .set(deceasedPages.SettlorDateOfBirthYesNoPage, false).success.value
-            .set(deceasedPages.SettlorsNationalInsuranceYesNoPage, false).success.value
-            .set(deceasedPages.SettlorsLastKnownAddressYesNoPage, false).success.value
-            .set(DeceasedSettlorStatus, Completed).success.value
-
-          val result = factory.answerSectionsIfCompleted(userAnswers, Some(Completed))
-
-          result mustBe List(
-            AnswerSection(
-              None,
-              Seq(
-                AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "Yes", name.toString),
-                AnswerRow("settlorsName.checkYourAnswersLabel", name.displayFullName, ""),
-                AnswerRow("settlorDateOfDeathYesNo.checkYourAnswersLabel", "No", name.toString),
-                AnswerRow("settlorDateOfBirthYesNo.checkYourAnswersLabel", "No", name.toString),
-                AnswerRow("settlorsNationalInsuranceYesNo.checkYourAnswersLabel", "No", name.toString),
-                AnswerRow("settlorsLastKnownAddressYesNo.checkYourAnswersLabel", "No", name.toString)
-              ),
-              Some(messages("answerPage.section.deceasedSettlor.heading"))
-            )
-          )
-        }
-
-        "living settlor" when {
-
-          val baseAnswers = emptyUserAnswers
-            .set(trustTypePages.SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
-
-          "individual settlor" in {
-
-            val userAnswers = baseAnswers
-              .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-              .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-              .set(individualPages.SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
-              .set(individualPages.SettlorIndividualNINOYesNoPage(0), false).success.value
-              .set(individualPages.SettlorAddressYesNoPage(0), false).success.value
-
-            val result = factory.answerSectionsIfCompleted(userAnswers, Some(Completed))
-
-            result mustBe List(
-              AnswerSection(
-                Some(messages("answerPage.section.settlor.subheading", 1)),
-                Seq(
-                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", name.toString),
-                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", name.toString),
-                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Individual", name.toString),
-                  AnswerRow("settlorIndividualName.checkYourAnswersLabel", name.displayFullName, ""),
-                  AnswerRow("settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", "No", name.toString),
-                  AnswerRow("settlorIndividualNINOYesNo.checkYourAnswersLabel", "No", name.toString),
-                  AnswerRow("settlorIndividualAddressYesNo.checkYourAnswersLabel", "No", name.toString)
-                ),
-                Some(messages("answerPage.section.settlors.heading"))
-              )
-            )
-          }
-
-          "business settlor" in {
-
-            val userAnswers = baseAnswers
-              .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business).success.value
-              .set(businessPages.SettlorBusinessNamePage(0), businessName).success.value
-              .set(businessPages.SettlorBusinessUtrYesNoPage(0), false).success.value
-              .set(businessPages.SettlorBusinessAddressYesNoPage(0), false).success.value
-
-            val result = factory.answerSectionsIfCompleted(userAnswers, Some(Completed))
-
-            result mustBe List(
-              AnswerSection(
-                Some(messages("answerPage.section.settlor.subheading", 1)),
-                Seq(
-                  AnswerRow("setUpAfterSettlorDied.checkYourAnswersLabel", "No", businessName),
-                  AnswerRow("kindOfTrust.checkYourAnswersLabel", "A trust for the repair of historic buildings", businessName),
-                  AnswerRow("settlorIndividualOrBusiness.checkYourAnswersLabel", "Business", businessName),
-                  AnswerRow("settlorBusinessName.checkYourAnswersLabel", businessName, businessName),
-                  AnswerRow("settlorBusinessUtrYesNo.checkYourAnswersLabel", "No", businessName),
-                  AnswerRow("settlorBusinessAddressYesNo.checkYourAnswersLabel", "No", businessName)
-                ),
-                Some(messages("answerPage.section.settlors.heading"))
-              )
-            )
-          }
-        }
-      }
-    }
-
     ".createFrom" must {
 
-      "return no mapped data if there are no completed beneficiaries" in {
+      "return no mapped data if there are no completed settlors" in {
 
         val result = factory.answerSectionsIfCompleted(emptyUserAnswers, Some(InProgress))
 
         result mustBe Nil
       }
 
-      "return mapped data if there are completed beneficiaries" when {
+      "return mapped data if there are completed settlors" when {
 
         val status: Status = Completed
         val trustDetails: TrustDetailsType = models.TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
@@ -163,11 +58,17 @@ class SubmissionSetFactorySpec extends SpecBase {
         val mockSettlorsMapper: SettlorsMapper = mock[SettlorsMapper]
         val mockDeceasedSettlorMapper: DeceasedSettlorMapper = mock[DeceasedSettlorMapper]
         val mockTrustDetailsMapper: TrustDetailsMapper = mock[TrustDetailsMapper]
-        val printHelpers = injector.instanceOf[PrintHelpers]
+        val printHelpers: PrintHelpers = injector.instanceOf[PrintHelpers]
 
         when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(status))
 
-        val factory = new SubmissionSetFactory(mockRegistrationProgress, mockSettlorsMapper, mockDeceasedSettlorMapper, mockTrustDetailsMapper, printHelpers)
+        val factory = new SubmissionSetFactory(
+          registrationProgress = mockRegistrationProgress,
+          settlorsMapper = mockSettlorsMapper,
+          deceasedSettlorMapper = mockDeceasedSettlorMapper,
+          trustDetailsMapper = mockTrustDetailsMapper,
+          printHelpers = printHelpers
+        )
 
         "trust details" in {
 

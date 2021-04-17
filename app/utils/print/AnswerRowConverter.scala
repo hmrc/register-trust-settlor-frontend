@@ -30,7 +30,7 @@ import java.time.LocalDate
 
 class AnswerRowConverter @Inject()(checkAnswersFormatters: CheckAnswersFormatters) {
 
-  def bind(userAnswers: UserAnswers, name: String)
+  def bind(userAnswers: UserAnswers, name: String = "")
           (implicit messages: Messages): Bound = new Bound(userAnswers, name)
 
   class Bound(userAnswers: UserAnswers, name: String)(implicit messages: Messages) {
