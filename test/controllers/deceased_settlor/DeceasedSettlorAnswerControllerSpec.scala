@@ -18,58 +18,47 @@ package controllers.deceased_settlor
 
 import base.SpecBase
 import controllers.routes._
-import models.pages.{FullName, InternationalAddress, UKAddress}
+import models.pages.FullName
 import models.{NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
+import org.scalatest.BeforeAndAfterEach
 import pages.deceased_settlor._
-import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
 import play.api.Application
+import play.api.inject.bind
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
+import utils.print.DeceasedSettlorPrintHelper
 import viewmodels.AnswerSection
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
 
-import java.time.LocalDate
 import scala.concurrent.Future
 
-class DeceasedSettlorAnswerControllerSpec extends SpecBase {
+class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEach {
 
-  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+  private val name: FullName = FullName("First", None, "Last")
 
   "DeceasedSettlorAnswer Controller" must {
 
     lazy val deceasedSettlorsAnswerRoute = routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url
 
-    "return OK and the correct view for a GET (UK National)" in {
+    "return OK and the correct view for a GET" in {
 
-      val answers: UserAnswers =
-        emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-          .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
-          .set(SettlorDateOfDeathYesNoPage, true).success.value
-          .set(SettlorDateOfDeathPage, LocalDate.now).success.value
-          .set(SettlorDateOfBirthYesNoPage, true).success.value
-          .set(SettlorsDateOfBirthPage, LocalDate.now).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(SettlorNationalInsuranceNumberPage, "AB123456C").success.value
-          .set(SettlorsLastKnownAddressYesNoPage, true).success.value
-          .set(WasSettlorsAddressUKYesNoPage, true).success.value
-          .set(SettlorsUKAddressPage, UKAddress("Line1", "Line2", None, Some("TownOrCity"), "NE62RT")).success.value
+      val mockPrintHelper = mock[DeceasedSettlorPrintHelper]
 
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
+      val fakeAnswerSection = AnswerSection()
 
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          checkYourAnswersHelper.deceasedSettlorQuestions
-        )
-      )
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
 
-      val application: Application = applicationBuilder(userAnswers = Some(answers)).build()
+      val answers: UserAnswers = emptyUserAnswers
+        .set(SettlorsNamePage, name).success.value
+
+      val application: Application = applicationBuilder(userAnswers = Some(answers))
+        .overrides(bind[DeceasedSettlorPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
       val request = FakeRequest(GET, routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url)
 
@@ -80,48 +69,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeDraftId, expectedSections)(request, messages).toString
-
-      application.stop()
-    }
-
-    "return OK and the correct view for a GET (Non-UK National)" in {
-
-      val answers =
-        emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-          .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
-          .set(SettlorDateOfDeathYesNoPage, true).success.value
-          .set(SettlorDateOfDeathPage, LocalDate.now).success.value
-          .set(SettlorDateOfBirthYesNoPage, true).success.value
-          .set(SettlorsDateOfBirthPage, LocalDate.now).success.value
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(SettlorNationalInsuranceNumberPage, "AB123456C").success.value
-          .set(SettlorsLastKnownAddressYesNoPage, true).success.value
-          .set(WasSettlorsAddressUKYesNoPage, false).success.value
-          .set(SettlorsInternationalAddressPage, InternationalAddress("Line1", "Line2", None, "Country")).success.value
-
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(answers, fakeDraftId, canEdit = true)
-
-      val expectedSections = Seq(
-        AnswerSection(
-          None,
-          checkYourAnswersHelper.deceasedSettlorQuestions
-        )
-      )
-
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
-
-      val request = FakeRequest(GET, routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url)
-
-      val result = route(application, request).value
-
-      val view = application.injector.instanceOf[DeceasedSettlorAnswerView]
-
-      status(result) mustEqual OK
-
-      contentAsString(result) mustEqual
-        view(fakeDraftId, expectedSections)(request, messages).toString
+        view(fakeDraftId, Seq(fakeAnswerSection))(request, messages).toString
 
       application.stop()
     }

@@ -17,21 +17,21 @@
 package controllers.living_settlor.business
 
 import base.SpecBase
-import controllers.living_settlor.routes.SettlorIndividualOrBusinessController
 import controllers.routes._
+import models.UserAnswers
 import models.pages._
-import models.{NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import pages.living_settlor._
 import pages.living_settlor.business._
-import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, _}
+import pages.trust_type._
 import play.api.Application
+import play.api.inject.bind
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.http.HttpResponse
-import utils.{CheckAnswersFormatters, CheckYourAnswersHelper}
+import utils.print.BusinessSettlorPrintHelper
 import viewmodels.AnswerSection
 import views.html.living_settlor.SettlorAnswersView
 
@@ -40,212 +40,39 @@ import scala.concurrent.Future
 class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
   private val settlorName: String = "Settlor Org"
-  private val utr: String = "0987654321"
-  private val addressUK: UKAddress = UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")
-  private val addressInternational: InternationalAddress = InternationalAddress("line 1", "line 2", Some("line 3"), "ES")
   private val index: Int = 0
 
   private lazy val settlorBusinessAnswerRoute: String = routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
   private lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
 
-  private val checkAnswersFormatters = injector.instanceOf[CheckAnswersFormatters]
+  val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(SettlorBusinessNamePage(index), settlorName).success.value
 
   "SettlorBusinessAnswer Controller" must {
 
-    "settlor business - no utr, no address" must {
+    "return OK and the correct view for a GET" in {
 
-      "return OK and the correct view for a GET" in {
+      val mockPrintHelper = mock[BusinessSettlorPrintHelper]
 
-        val userAnswers: UserAnswers =
-          emptyUserAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorBusinessNamePage(index), settlorName).success.value
-            .set(SettlorBusinessUtrYesNoPage(index), false).success.value
-            .set(SettlorBusinessAddressYesNoPage(index), false).success.value
+      val fakeAnswerSection = AnswerSection()
 
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
 
-        val expectedSections = Seq(
-          AnswerSection(
-            None,
-            checkYourAnswersHelper.settlorBusinessQuestions(index)
-          )
-        )
-
-        val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
-
-        val result: Future[Result] = route(application, request).value
-
-        val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(onSubmit, expectedSections)(request, messages).toString
-
-        application.stop()
-      }
-
-    }
-
-    "settlor business - with utr, and no address" must {
-
-      "return OK and the correct view for a GET" in {
-
-        val userAnswers: UserAnswers =
-          emptyUserAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplaceAbsolute).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorBusinessNamePage(index), settlorName).success.value
-            .set(SettlorBusinessUtrYesNoPage(index), true).success.value
-            .set(SettlorBusinessUtrPage(index), utr).success.value
-            .set(SettlorBusinessAddressYesNoPage(index), false).success.value
-
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
-
-        val expectedSections = Seq(
-          AnswerSection(
-            None,
-            checkYourAnswersHelper.settlorBusinessQuestions(index)
-          )
-        )
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[SettlorAnswersView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(onSubmit, expectedSections)(request, messages).toString
-
-        application.stop()
-      }
-
-    }
-
-    "settlor business - no utr, UK address" must {
-
-      "return OK and the correct view for a GET" in {
-
-        val userAnswers =
-          emptyUserAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorBusinessNamePage(index), settlorName).success.value
-            .set(SettlorBusinessUtrYesNoPage(index), false).success.value
-            .set(SettlorBusinessAddressYesNoPage(index), true).success.value
-            .set(SettlorBusinessAddressUKYesNoPage(index), true).success.value
-            .set(SettlorBusinessAddressUKPage(index), addressUK).success.value
-
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
-
-        val expectedSections = Seq(
-          AnswerSection(
-            None,
-            checkYourAnswersHelper.settlorBusinessQuestions(index)
-          )
-        )
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[SettlorAnswersView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(onSubmit, expectedSections)(request, messages).toString
-
-        application.stop()
-      }
-
-    }
-
-    "settlor business - no utr, International address" must {
-
-      "return OK and the correct view for a GET" in {
-
-        val userAnswers =
-          emptyUserAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, false).success.value
-            .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-            .set(SettlorBusinessNamePage(index), settlorName).success.value
-            .set(SettlorBusinessUtrYesNoPage(index), false).success.value
-            .set(SettlorBusinessAddressYesNoPage(index), true).success.value
-            .set(SettlorBusinessAddressUKYesNoPage(index), false).success.value
-            .set(SettlorBusinessAddressInternationalPage(index), addressInternational).success.value
-
-        val checkYourAnswersHelper = new CheckYourAnswersHelper(checkAnswersFormatters)(userAnswers, fakeDraftId, canEdit = true)
-
-        val expectedSections = Seq(
-          AnswerSection(
-            None,
-            checkYourAnswersHelper.settlorBusinessQuestions(index)
-          )
-        )
-
-        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-        val request = FakeRequest(GET, settlorBusinessAnswerRoute)
-
-        val result = route(application, request).value
-
-        val view = application.injector.instanceOf[SettlorAnswersView]
-
-        status(result) mustEqual OK
-
-        contentAsString(result) mustEqual
-          view(onSubmit, expectedSections)(request, messages).toString
-
-        application.stop()
-      }
-
-    }
-
-    "redirect to SettlorIndividualOrBusinessPage on a GET if no answer for 'Is the settlor an individual or business?' at index" in {
-
-      val answers =
-        emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-          .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-          .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-          .set(HoldoverReliefYesNoPage, false).success.value
-          .set(SettlorBusinessNamePage(index), settlorName).success.value
-          .set(SettlorBusinessUtrYesNoPage(index), false).success.value
-          .set(SettlorBusinessAddressYesNoPage(index), false).success.value
-
-      val application = applicationBuilder(userAnswers = Some(answers)).build()
+      val application: Application = applicationBuilder(userAnswers = Some(baseAnswers))
+        .overrides(bind[BusinessSettlorPrintHelper].toInstance(mockPrintHelper))
+        .build()
 
       val request = FakeRequest(GET, settlorBusinessAnswerRoute)
 
-      val result = route(application, request).value
+      val result: Future[Result] = route(application, request).value
 
-      status(result) mustEqual SEE_OTHER
+      val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
 
-      redirectLocation(result).value mustEqual SettlorIndividualOrBusinessController.onPageLoad(NormalMode, index, fakeDraftId).url
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(onSubmit, Seq(fakeAnswerSection))(request, messages).toString
 
       application.stop()
     }
@@ -268,7 +95,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       reset(mockCreateDraftRegistrationService)
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = baseAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
@@ -297,7 +124,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       reset(mockCreateDraftRegistrationService)
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = baseAnswers
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
