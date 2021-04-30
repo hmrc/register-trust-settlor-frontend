@@ -24,6 +24,17 @@
 
 @(form: Form[_], mode: Mode, index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
+@content = {
+<p>@messages("settlorIndividualMentalCapacityYesNo.p1")</p>
+
+<ul class="govuk-list trust-list--bullet">
+    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint1")</li>
+    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint2")</li>
+    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint3")</li>
+    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint4")</li>
+</ul>
+}
+
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorIndividualMentalCapacityYesNo.title")}"
 ) {
@@ -37,7 +48,8 @@
         @components.input_yes_no(
             field = form("value"),
             label = messages("settlorIndividualMentalCapacityYesNo.heading", name.toString),
-            legendClass = Some("heading-large")
+            legendClass = Some("heading-large"),
+            additionalContent = Some(content)
         )
 
         @components.submit_button()
