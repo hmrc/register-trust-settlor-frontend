@@ -19,7 +19,7 @@ package navigation
 import config.FrontendAppConfig
 import controllers.deceased_settlor.mld5.{routes => mld5Rts}
 import controllers.deceased_settlor.{routes => rts}
-import models.{Mode, NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.Page
 import pages.deceased_settlor._
 import pages.deceased_settlor.mld5._
@@ -32,7 +32,6 @@ import javax.inject.{Inject, Singleton}
 class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   override def nextPage(page: Page,
-                        mode: Mode,
                         draftId: String): UserAnswers => Call = route(draftId)(page)
 
   override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
@@ -44,9 +43,9 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
 
   def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorsNamePage => _ =>
-      rts.SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId)
+      rts.SettlorDateOfDeathYesNoController.onPageLoad(draftId)
     case SettlorDateOfDeathPage => _ =>
-      rts.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
+      rts.SettlorDateOfBirthYesNoController.onPageLoad(draftId)
     case CountryOfResidencePage => ua =>
       navigateAwayFromCountryOfResidencyQuestions(draftId)(ua)
     case SettlorsUKAddressPage => _ =>
@@ -62,38 +61,38 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
   def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorDateOfDeathYesNoPage => yesNoNav(
       fromPage = SettlorDateOfDeathYesNoPage,
-      yesCall = rts.SettlorDateOfDeathController.onPageLoad(NormalMode, draftId),
-      noCall = rts.SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId)
+      yesCall = rts.SettlorDateOfDeathController.onPageLoad(draftId),
+      noCall = rts.SettlorDateOfBirthYesNoController.onPageLoad(draftId)
     )
     case CountryOfResidenceYesNoPage => answers => yesNoNav(
       fromPage = CountryOfResidenceYesNoPage,
-      yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId),
+      yesCall = mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(draftId),
       noCall = navigateAwayFromCountryOfResidencyQuestions(draftId)(answers)
     )(answers)
     case CountryOfResidenceInTheUkYesNoPage => answers => yesNoNav(
       fromPage = CountryOfResidenceInTheUkYesNoPage,
       yesCall = navigateAwayFromCountryOfResidencyQuestions(draftId)(answers),
-      noCall = mld5Rts.CountryOfResidenceController.onPageLoad(NormalMode, draftId)
+      noCall = mld5Rts.CountryOfResidenceController.onPageLoad(draftId)
     )(answers)
     case SettlorsLastKnownAddressYesNoPage => yesNoNav(
       fromPage = SettlorsLastKnownAddressYesNoPage,
-      yesCall = rts.WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId),
+      yesCall = rts.WasSettlorsAddressUKYesNoController.onPageLoad(draftId),
       noCall = rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
     )
     case WasSettlorsAddressUKYesNoPage => yesNoNav(
       fromPage = WasSettlorsAddressUKYesNoPage,
-      yesCall = rts.SettlorsUKAddressController.onPageLoad(NormalMode, draftId),
-      noCall = rts.SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId)
+      yesCall = rts.SettlorsUKAddressController.onPageLoad(draftId),
+      noCall = rts.SettlorsInternationalAddressController.onPageLoad(draftId)
     )
     case CountryOfNationalityYesNoPage => answers => yesNoNav(
       fromPage = CountryOfNationalityYesNoPage,
-      yesCall = mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId),
+      yesCall = mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(draftId),
       noCall = navigateAwayFromNationalityQuestions(answers.isTaxable, draftId)
     )(answers)
     case CountryOfNationalityInTheUkYesNoPage => answers => yesNoNav(
       fromPage = CountryOfNationalityInTheUkYesNoPage,
       yesCall = navigateAwayFromNationalityQuestions(answers.isTaxable, draftId),
-      noCall = mld5Rts.CountryOfNationalityController.onPageLoad(NormalMode, draftId)
+      noCall = mld5Rts.CountryOfNationalityController.onPageLoad(draftId)
     )(answers)
   }
 
@@ -102,7 +101,7 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
       navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, draftId)
     case SettlorNationalInsuranceNumberPage => ua =>
       if (ua.is5mldEnabled) {
-        mld5Rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+        mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
       } else {
         rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
       }
@@ -111,40 +110,40 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
   private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorDateOfBirthYesNoPage => ua => yesNoNav(
       fromPage = SettlorDateOfBirthYesNoPage,
-      yesCall = rts.SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId),
+      yesCall = rts.SettlorsDateOfBirthController.onPageLoad(draftId),
       noCall = navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, draftId)
     )(ua)
     case SettlorsNationalInsuranceYesNoPage => ua => yesNoNav(
       fromPage = SettlorsNationalInsuranceYesNoPage,
-      yesCall = rts.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId),
+      yesCall = rts.SettlorNationalInsuranceNumberController.onPageLoad(draftId),
       noCall = if (ua.is5mldEnabled) {
-        mld5Rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+        mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
       } else {
-        rts.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
+        rts.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId)
       }
     )(ua)
   }
 
   private def navigateAwayFromDateOfBirthQuestions(is5mldEnabled: Boolean, draftId: String): Call = {
     if (is5mldEnabled) {
-      mld5Rts.CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId)
+      mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
     } else {
-      rts.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
+      rts.SettlorsNINoYesNoController.onPageLoad(draftId)
     }
   }
 
   private def navigateAwayFromNationalityQuestions(isTaxable: Boolean, draftId: String): Call = {
     if (isTaxable) {
-      rts.SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId)
+      rts.SettlorsNINoYesNoController.onPageLoad(draftId)
     } else {
-      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId)
+      mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
     }
   }
 
   private def navigateAwayFromCountryOfResidencyQuestions(draftId: String)(answers: UserAnswers): Call = {
     answers.get(SettlorsNationalInsuranceYesNoPage) match {
       case Some(false) if answers.isTaxable =>
-        rts.SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId)
+        rts.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId)
       case _ =>
         rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
     }

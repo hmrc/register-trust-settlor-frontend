@@ -19,7 +19,6 @@ package utils.print
 import com.google.inject.Inject
 import controllers.deceased_settlor.mld5.routes._
 import controllers.deceased_settlor.routes._
-import models.NormalMode
 import pages.deceased_settlor._
 import pages.deceased_settlor.mld5._
 import play.api.i18n.Messages
@@ -32,23 +31,23 @@ class DeceasedSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverte
   override def answerRows(index: Int, draftId: String)
                          (bound: AnswerRowConverter#Bound)
                          (implicit messages: Messages): Seq[Option[AnswerRow]] = Seq(
-    bound.nameQuestion(SettlorsNamePage, "settlorsName", SettlorsNameController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", SettlorDateOfDeathYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", SettlorDateOfDeathController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", SettlorDateOfBirthYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.dateQuestion(SettlorsDateOfBirthPage, "settlorsDateOfBirth", SettlorsDateOfBirthController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(CountryOfNationalityYesNoPage, "5mld.countryOfNationalityYesNo", CountryOfNationalityYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationalityInTheUkYesNo", CountryOfNationalityInTheUkYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.countryQuestion(CountryOfNationalityPage, CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationality", CountryOfNationalityController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", SettlorsNINoYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.ninoQuestion(SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", SettlorNationalInsuranceNumberController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(CountryOfResidenceYesNoPage, "5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.countryQuestion(CountryOfResidencePage, CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", SettlorsLastKnownAddressYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.yesNoQuestion(WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", WasSettlorsAddressUKYesNoController.onPageLoad(NormalMode, draftId).url),
-    bound.addressQuestion(SettlorsUKAddressPage, "settlorsUKAddress", SettlorsUKAddressController.onPageLoad(NormalMode, draftId).url),
-    bound.addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", SettlorsInternationalAddressController.onPageLoad(NormalMode, draftId).url)
+    bound.nameQuestion(SettlorsNamePage, "settlorsName", SettlorsNameController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(SettlorDateOfDeathYesNoPage, "settlorDateOfDeathYesNo", SettlorDateOfDeathYesNoController.onPageLoad(draftId).url),
+    bound.dateQuestion(SettlorDateOfDeathPage, "settlorDateOfDeath", SettlorDateOfDeathController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(SettlorDateOfBirthYesNoPage, "settlorDateOfBirthYesNo", SettlorDateOfBirthYesNoController.onPageLoad(draftId).url),
+    bound.dateQuestion(SettlorsDateOfBirthPage, "settlorsDateOfBirth", SettlorsDateOfBirthController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(CountryOfNationalityYesNoPage, "5mld.countryOfNationalityYesNo", CountryOfNationalityYesNoController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationalityInTheUkYesNo", CountryOfNationalityInTheUkYesNoController.onPageLoad(draftId).url),
+    bound.countryQuestion(CountryOfNationalityPage, CountryOfNationalityInTheUkYesNoPage, "5mld.countryOfNationality", CountryOfNationalityController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(SettlorsNationalInsuranceYesNoPage, "settlorsNationalInsuranceYesNo", SettlorsNINoYesNoController.onPageLoad(draftId).url),
+    bound.ninoQuestion(SettlorNationalInsuranceNumberPage, "settlorNationalInsuranceNumber", SettlorNationalInsuranceNumberController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(CountryOfResidenceYesNoPage, "5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(draftId).url),
+    bound.countryQuestion(CountryOfResidencePage, CountryOfResidenceInTheUkYesNoPage, "5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(SettlorsLastKnownAddressYesNoPage, "settlorsLastKnownAddressYesNo", SettlorsLastKnownAddressYesNoController.onPageLoad(draftId).url),
+    bound.yesNoQuestion(WasSettlorsAddressUKYesNoPage, "wasSettlorsAddressUKYesNo", WasSettlorsAddressUKYesNoController.onPageLoad(draftId).url),
+    bound.addressQuestion(SettlorsUKAddressPage, "settlorsUKAddress", SettlorsUKAddressController.onPageLoad(draftId).url),
+    bound.addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", SettlorsInternationalAddressController.onPageLoad(draftId).url)
   )
 
   override def headingKey(index: Int)(implicit messages: Messages): Option[String] =

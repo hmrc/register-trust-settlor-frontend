@@ -28,7 +28,7 @@ final case class DeceasedSettlor(name: FullName,
                                  dateOfDeath: Option[LocalDate],
                                  dateOfBirth: Option[LocalDate],
                                  nino: Option[String],
-                                 address : Option[Address],
+                                 address: Option[Address],
                                  countryOfResidence: Option[String],
                                  nationality: Option[String]) {
 

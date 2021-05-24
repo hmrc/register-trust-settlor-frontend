@@ -16,15 +16,14 @@
 
 package views.living_settlor.individual
 
-import java.time.LocalDate
-
 import forms.DateOfBirthFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.living_settlor.individual.SettlorIndividualDateOfBirthView
+
+import java.time.LocalDate
 
 class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
@@ -39,9 +38,9 @@ class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalD
     val view = viewFor[SettlorIndividualDateOfBirthView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    val applyViewF = (form : Form[_]) => applyView(form)
+    val applyViewF = (form: Form[_]) => applyView(form)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

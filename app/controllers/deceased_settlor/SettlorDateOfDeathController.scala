@@ -16,15 +16,11 @@
 
 package controllers.deceased_settlor
 
-import java.time.LocalDate
-
 import config.FrontendAppConfig
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
-import javax.inject.Inject
-import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
@@ -35,6 +31,8 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorDateOfDeathView
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorDateOfDeathController @Inject()(
@@ -52,7 +50,7 @@ class SettlorDateOfDeathController @Inject()(
   private def form(maxDate: (LocalDate, String), minDate: (LocalDate, String)): Form[LocalDate] =
     formProvider.withConfig(maxDate, minDate)
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
@@ -63,11 +61,11 @@ class SettlorDateOfDeathController @Inject()(
           case Some(value) => form(maxDate, minDate).fill(value)
         }
 
-        Ok(view(preparedForm, mode, draftId, name))
+        Ok(view(preparedForm, draftId, name))
       }
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
@@ -75,13 +73,13 @@ class SettlorDateOfDeathController @Inject()(
       getMaxDate(draftId).flatMap { maxDate =>
         form(maxDate, minDate).bindFromRequest().fold(
           (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
+            Future.successful(BadRequest(view(formWithErrors, draftId, name))),
 
           value => {
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorDateOfDeathPage, value))
               _ <- registrationsRepository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(SettlorDateOfDeathPage, mode, draftId)(updatedAnswers))
+            } yield Redirect(navigator.nextPage(SettlorDateOfDeathPage, draftId)(updatedAnswers))
           }
         )
       }

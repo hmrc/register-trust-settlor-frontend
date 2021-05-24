@@ -20,8 +20,8 @@ import base.SpecBase
 import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.CountryFormProvider
+import models.UserAnswers
 import models.pages.FullName
-import models.{NormalMode, UserAnswers}
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.living_settlor.individual.mld5.CountryOfNationalityPage
 import play.api.data.Form
@@ -38,7 +38,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
   private val index: Int = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val onPageLoadRoute: String = routes.CountryOfNationalityController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val onPageLoadRoute: String = routes.CountryOfNationalityController.onPageLoad(index, fakeDraftId).url
 
   private val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
@@ -64,7 +64,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(form, index, fakeDraftId, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
@@ -85,7 +85,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode, index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(form.fill(validAnswer), index, fakeDraftId, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +126,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(boundForm, index, fakeDraftId, countryOptions, name)(request, messages).toString
 
       application.stop()
     }
@@ -143,7 +143,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }

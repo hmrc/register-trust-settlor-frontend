@@ -17,7 +17,6 @@
 package views.trust_type
 
 import forms.KindOfTrustFormProvider
-import models.NormalMode
 import models.pages.KindOfTrust
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -33,7 +32,7 @@ class KindOfTrustViewSpec extends ViewBehaviours {
   val view = viewFor[KindOfTrustView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId)(fakeRequest, messages)
+    view.apply(form, fakeDraftId)(fakeRequest, messages)
 
   "KindOfTrustView" must {
 

@@ -56,14 +56,14 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
     }
   }
 
-  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier) : Future[Option[LocalDate]] =
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]] =
     submissionDraftConnector.getTrustSetupDate(draftId)
 
-  override def getAllStatus(draftId: String)(implicit hc: HeaderCarrier) : Future[AllStatus] = {
+  override def getAllStatus(draftId: String)(implicit hc: HeaderCarrier): Future[AllStatus] = {
     submissionDraftConnector.getStatus(draftId)
   }
 
-  override def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier) : Future[Boolean] = {
+  override def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier): Future[Boolean] = {
     submissionDraftConnector.setStatus(draftId, status).map {
       response => response.status == http.Status.OK
     }
@@ -76,9 +76,9 @@ trait RegistrationsRepository {
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
 
-  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier) : Future[Option[LocalDate]]
+  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]]
 
-  def getAllStatus(draftId: String)(implicit hc: HeaderCarrier) : Future[AllStatus]
+  def getAllStatus(draftId: String)(implicit hc: HeaderCarrier): Future[AllStatus]
 
-  def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier) : Future[Boolean]
+  def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier): Future[Boolean]
 }

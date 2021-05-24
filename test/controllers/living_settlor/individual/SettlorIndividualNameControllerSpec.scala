@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.living_settlor.SettlorIndividualNameFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.mvc.Call
@@ -35,7 +34,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
   val form = formProvider()
   val index = 0
 
-  lazy val settlorIndividualNameRoute = routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorIndividualNameRoute = routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
 
   "SettlorIndividualName Controller" must {
@@ -53,7 +52,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index)(request, messages).toString
+        view(form, fakeDraftId, index)(request, messages).toString
 
       application.stop()
     }
@@ -74,7 +73,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FullName("first name", Some("middle name"), "last name")), NormalMode, fakeDraftId, index)(request, messages).toString
+        view(form.fill(FullName("first name", Some("middle name"), "last name")), fakeDraftId, index)(request, messages).toString
 
       application.stop()
     }
@@ -114,7 +113,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index)(request, messages).toString
+        view(boundForm, fakeDraftId, index)(request, messages).toString
 
       application.stop()
     }

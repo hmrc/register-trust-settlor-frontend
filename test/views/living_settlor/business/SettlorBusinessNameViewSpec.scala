@@ -17,7 +17,6 @@
 package views.living_settlor.business
 
 import forms.living_settlor.SettlorBusinessNameFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.StringViewBehaviours
@@ -34,7 +33,7 @@ class SettlorBusinessNameViewSpec extends StringViewBehaviours {
     val view = viewFor[SettlorBusinessNameView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, 0, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, 0, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -45,7 +44,7 @@ class SettlorBusinessNameViewSpec extends StringViewBehaviours {
       applyView,
       messageKeyPrefix,
       None,
-      controllers.living_settlor.business.routes.SettlorBusinessNameController.onSubmit(NormalMode, 0, fakeDraftId).url
+      controllers.living_settlor.business.routes.SettlorBusinessNameController.onSubmit(0, fakeDraftId).url
     )
   }
 }

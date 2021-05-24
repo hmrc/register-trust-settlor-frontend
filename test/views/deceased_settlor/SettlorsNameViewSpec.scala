@@ -17,7 +17,6 @@
 package views.deceased_settlor
 
 import forms.deceased_settlor.SettlorsNameFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -35,7 +34,7 @@ class SettlorsNameViewSpec extends QuestionViewBehaviours[FullName] {
     val view = viewFor[SettlorsNameView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(fakeRequest, messages)
 
 
     behave like normalPage(applyView(form), messageKeyPrefix)

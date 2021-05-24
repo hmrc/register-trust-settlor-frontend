@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
@@ -35,7 +34,7 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
   private lazy val settlorIndividualDateOfBirthYesNoRoute: String =
-    routes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+    routes.SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualDateOfBirthYesNo Controller" must {
 
@@ -54,7 +53,7 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -75,7 +74,7 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -113,7 +112,7 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -138,7 +137,7 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

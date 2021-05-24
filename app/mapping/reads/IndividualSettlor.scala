@@ -27,7 +27,7 @@ import java.time.LocalDate
 final case class IndividualSettlor(name: FullName,
                                    dateOfBirth: Option[LocalDate],
                                    nino: Option[String],
-                                   address : Option[Address],
+                                   address: Option[Address],
                                    passport: Option[PassportOrIdCardDetails],
                                    idCard: Option[PassportOrIdCardDetails],
                                    countryOfResidence: Option[String],

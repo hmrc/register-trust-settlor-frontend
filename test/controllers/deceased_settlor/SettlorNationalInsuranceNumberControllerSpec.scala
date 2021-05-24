@@ -19,7 +19,6 @@ package controllers.deceased_settlor
 import base.SpecBase
 import controllers.routes._
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
 import play.api.test.FakeRequest
@@ -31,7 +30,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
   val formProvider = new SettlorNationalInsuranceNumberFormProvider()
   val form = formProvider()
 
-  lazy val settlorNationalInsuranceNumberRoute = routes.SettlorNationalInsuranceNumberController.onPageLoad(NormalMode,fakeDraftId).url
+  lazy val settlorNationalInsuranceNumberRoute = routes.SettlorNationalInsuranceNumberController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -53,7 +52,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -74,7 +73,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form.fill("answer"), fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -118,7 +117,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -166,7 +165,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

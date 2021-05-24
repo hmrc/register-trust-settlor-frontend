@@ -19,7 +19,6 @@ package controllers.trust_type
 import base.SpecBase
 import controllers.routes._
 import forms.DeedOfVariationFormProvider
-import models.NormalMode
 import models.pages.{DeedOfVariation, KindOfTrust}
 import pages.trust_type.{HowDeedOfVariationCreatedPage, SetUpAfterSettlorDiedYesNoPage}
 import play.api.test.FakeRequest
@@ -30,7 +29,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
 
   val index = 0
 
-  lazy val deedOfVariationRoute = routes.HowDeedOfVariationCreatedController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val deedOfVariationRoute = routes.HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId).url
 
   val formProvider = new DeedOfVariationFormProvider()
   val form = formProvider()
@@ -52,7 +51,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -73,7 +72,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(DeedOfVariation.values.head), NormalMode, fakeDraftId)(request, messages).toString
+        view(form.fill(DeedOfVariation.values.head), fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -117,7 +116,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

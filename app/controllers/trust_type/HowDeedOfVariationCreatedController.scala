@@ -19,8 +19,6 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.DeedOfVariationFormProvider
-import javax.inject.Inject
-import models.Mode
 import models.pages.DeedOfVariation
 import navigation.Navigator
 import pages.trust_type.HowDeedOfVariationCreatedPage
@@ -31,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.trust_type.HowDeedOfVariationCreatedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class HowDeedOfVariationCreatedController @Inject()(
@@ -45,7 +44,7 @@ class HowDeedOfVariationCreatedController @Inject()(
 
   private val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(HowDeedOfVariationCreatedPage) match {
@@ -53,21 +52,21 @@ class HowDeedOfVariationCreatedController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HowDeedOfVariationCreatedPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, draftId)(updatedAnswers))
         }
       )
   }

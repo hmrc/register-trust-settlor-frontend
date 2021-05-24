@@ -38,7 +38,7 @@ trait ModelGenerators {
       } yield PassportOrIdCardDetails(field1, field2, field3)
     }
 
-  implicit lazy val arbitraryFullName : Arbitrary[FullName] = {
+  implicit lazy val arbitraryFullName: Arbitrary[FullName] = {
     Arbitrary {
       for {
         str <- arbitrary[String]
@@ -76,7 +76,7 @@ trait ModelGenerators {
       Gen.oneOf(IndividualOrBusiness.values.toSeq)
     }
 
-  implicit lazy val arbitraryLocalDate : Arbitrary[LocalDate] =
+  implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] =
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))
     }

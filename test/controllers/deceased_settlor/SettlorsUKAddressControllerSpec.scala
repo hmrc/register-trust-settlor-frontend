@@ -19,7 +19,6 @@ package controllers.deceased_settlor
 import base.SpecBase
 import controllers.routes._
 import forms.UKAddressFormProvider
-import models.NormalMode
 import models.pages.{FullName, UKAddress}
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsUKAddressPage}
 import play.api.test.FakeRequest
@@ -31,7 +30,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
   val formProvider = new UKAddressFormProvider()
   val form = formProvider()
 
-  lazy val settlorsUKAddressRoute = routes.SettlorsUKAddressController.onPageLoad(NormalMode,fakeDraftId).url
+  lazy val settlorsUKAddressRoute = routes.SettlorsUKAddressController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -53,7 +52,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -74,7 +73,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")), NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -120,7 +119,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -166,7 +165,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

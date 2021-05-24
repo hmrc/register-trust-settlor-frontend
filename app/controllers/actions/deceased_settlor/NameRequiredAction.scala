@@ -16,13 +16,12 @@
 
 package controllers.actions.deceased_settlor
 
-import javax.inject.Inject
-import models.NormalMode
 import models.requests.{RegistrationDataRequest, SettlorIndividualNameRequest}
 import pages.deceased_settlor.SettlorsNamePage
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameRequiredAction(draftId: String)(implicit val executionContext: ExecutionContext)
@@ -33,7 +32,7 @@ class NameRequiredAction(draftId: String)(implicit val executionContext: Executi
         Future.successful(
           request.userAnswers.get(SettlorsNamePage) match {
             case None =>
-              Left(Redirect(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(NormalMode, draftId)))
+              Left(Redirect(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(draftId)))
             case Some(name) =>
               Right(SettlorIndividualNameRequest(request, name))
           }

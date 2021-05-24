@@ -17,7 +17,6 @@
 package views.deceased_settlor
 
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -37,7 +36,7 @@ class SettlorNationalInsuranceNumberViewSpec extends StringViewBehaviours {
     val view = viewFor[SettlorNationalInsuranceNumberView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

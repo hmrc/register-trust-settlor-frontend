@@ -21,7 +21,6 @@ import controllers.deceased_settlor.mld5.routes.CountryOfResidenceController
 import controllers.deceased_settlor.routes.SettlorsNameController
 import controllers.routes.SessionExpiredController
 import forms.CountryFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.deceased_settlor.SettlorsNamePage
 import pages.deceased_settlor.mld5.CountryOfResidencePage
@@ -37,7 +36,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
   val formProvider = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("5mld.countryOfResidence")
 
-  lazy val countryOfResidenceRoute = CountryOfResidenceController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val countryOfResidenceRoute = CountryOfResidenceController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -61,7 +60,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -84,7 +83,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, NormalMode,fakeDraftId, name)(request, messages).toString
+        view(form.fill("Spain"), countryOptions,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -132,7 +131,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode,fakeDraftId, name)(request, messages).toString
+        view(boundForm, countryOptions,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -180,7 +179,7 @@ class CountryOfResidenceControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

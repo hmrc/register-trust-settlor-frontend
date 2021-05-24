@@ -15,7 +15,6 @@
  *@
 
 @import controllers.trust_type.routes._
-@import models.Mode
 @import models.pages.KindOfTrust
 
 @this(
@@ -23,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("kindOfTrust.title")}"
-    ) {
+) {
 
-    @formHelper(action = KindOfTrustController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = KindOfTrustController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

@@ -51,7 +51,7 @@ trait Formatters {
       Map(key -> value)
   }
 
-  private[mappings] def postcodeFormatter(requiredKey: String, invalidKey : String): Formatter[String] = new Formatter[String] {
+  private[mappings] def postcodeFormatter(requiredKey: String, invalidKey: String): Formatter[String] = new Formatter[String] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {
@@ -68,7 +68,7 @@ trait Formatters {
       Map(key -> value)
   }
 
-  private[mappings] def currencyFormatter(requiredKey: String, invalidKey : String): Formatter[String] = new Formatter[String] {
+  private[mappings] def currencyFormatter(requiredKey: String, invalidKey: String): Formatter[String] = new Formatter[String] {
 
     override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
       data.get(key) match {

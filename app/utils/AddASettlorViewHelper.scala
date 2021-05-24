@@ -19,8 +19,8 @@ package utils
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.living_settlor.individual.{routes => individualRoutes}
 import controllers.routes
+import models.UserAnswers
 import models.pages.Status._
-import models.{NormalMode, UserAnswers}
 import play.api.i18n.Messages
 import sections.LivingSettlors
 import viewmodels.{AddRow, AddToRows, SettlorViewModel, _}
@@ -56,7 +56,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.individual"),
         changeUrl = if (status == InProgress) {
-          individualRoutes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId).url
+          individualRoutes.SettlorIndividualNameController.onPageLoad(index, draftId).url
         } else {
           individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
         },
@@ -67,7 +67,7 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
         name = name.getOrElse(defaultName),
         typeLabel = messages("entity.settlor.business"),
         changeUrl = if (status == InProgress) {
-          businessRoutes.SettlorBusinessNameController.onPageLoad(NormalMode, index, draftId).url
+          businessRoutes.SettlorBusinessNameController.onPageLoad(index, draftId).url
         } else {
           businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId).url
         },

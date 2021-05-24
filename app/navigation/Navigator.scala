@@ -24,7 +24,7 @@ trait Navigator {
 
   protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call]
 
-  def nextPage(page: Page, mode: Mode, draftId: String): UserAnswers => Call
+  def nextPage(page: Page, draftId: String): UserAnswers => Call
 
   def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
     answers.get(fromPage)

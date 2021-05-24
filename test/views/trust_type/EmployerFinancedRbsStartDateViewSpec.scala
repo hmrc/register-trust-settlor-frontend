@@ -16,14 +16,13 @@
 
 package views.trust_type
 
-import java.time.LocalDate
-
 import forms.EfrbsStartDateFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.trust_type.EmployerFinancedRbsStartDateView
+
+import java.time.LocalDate
 
 class EmployerFinancedRbsStartDateViewSpec extends QuestionViewBehaviours[LocalDate] {
 
@@ -36,9 +35,9 @@ class EmployerFinancedRbsStartDateViewSpec extends QuestionViewBehaviours[LocalD
     val view = viewFor[EmployerFinancedRbsStartDateView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(fakeRequest, messages)
 
-    val applyViewF = (form : Form[_]) => applyView(form)
+    val applyViewF = (form: Form[_]) => applyView(form)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

@@ -19,7 +19,6 @@ package controllers.trust_type
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import pages.trust_type.EfrbsYesNoPage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -33,7 +32,7 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix("employerFinancedRbsYesNo")
 
-  lazy val EmployerFinancedRbsYesNoRoute = routes.EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val EmployerFinancedRbsYesNoRoute = routes.EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId).url
 
   "EmployerFinancedRbsYesNo Controller" must {
 
@@ -51,7 +50,7 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -71,7 +70,7 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId)(request, messages).toString
+        view(form.fill(true), fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -113,7 +112,7 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

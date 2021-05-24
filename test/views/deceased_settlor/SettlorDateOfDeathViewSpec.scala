@@ -16,15 +16,14 @@
 
 package views.deceased_settlor
 
-import java.time.LocalDate
-
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
 import views.html.deceased_settlor.SettlorDateOfDeathView
+
+import java.time.LocalDate
 
 class SettlorDateOfDeathViewSpec extends QuestionViewBehaviours[LocalDate] {
 
@@ -39,9 +38,9 @@ class SettlorDateOfDeathViewSpec extends QuestionViewBehaviours[LocalDate] {
     val view = viewFor[SettlorDateOfDeathView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
 
-    val applyViewF = (form : Form[_]) => applyView(form)
+    val applyViewF = (form: Form[_]) => applyView(form)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString, "hint")
 

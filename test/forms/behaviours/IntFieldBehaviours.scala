@@ -96,7 +96,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
   def intFieldWithMinimumWithGenerator(form: Form[_],
                                        fieldName: String,
                                        minimum: Int,
-                                       generator : Gen[Int],
+                                       generator: Gen[Int],
                                        expectedError: FormError): Unit = {
 
     s"not bind integers below $minimum" in {

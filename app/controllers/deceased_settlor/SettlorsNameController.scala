@@ -35,9 +35,6 @@ package controllers.deceased_settlor
 import config.annotations.DeceasedSettlor
 import controllers.actions.Actions
 import forms.deceased_settlor.SettlorsNameFormProvider
-
-import javax.inject.Inject
-import models.Mode
 import models.pages.FullName
 import navigation.Navigator
 import pages.deceased_settlor.SettlorsNamePage
@@ -48,6 +45,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorsNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorsNameController @Inject()(
@@ -62,7 +60,7 @@ class SettlorsNameController @Inject()(
 
   private val form: Form[FullName] = formProvider()
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorsNamePage) match {
@@ -70,21 +68,21 @@ class SettlorsNameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsNamePage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsNamePage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorsNamePage, draftId)(updatedAnswers))
         }
       )
   }

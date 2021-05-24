@@ -16,18 +16,17 @@
 
 package controllers.trust_type
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import controllers.routes._
 import forms.EfrbsStartDateFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.trust_type.EfrbsStartDatePage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.trust_type.EmployerFinancedRbsStartDateView
+
+import java.time.{LocalDate, ZoneOffset}
 
 class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
 
@@ -40,7 +39,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
-  lazy val employerFinancedRbsStartDateRoute = routes.EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val employerFinancedRbsStartDateRoute = routes.EmployerFinancedRbsStartDateController.onPageLoad(fakeDraftId).url
 
   "EmployerFinancedRbsStartDate Controller" must {
 
@@ -57,7 +56,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -77,7 +76,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode, fakeDraftId)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -124,7 +123,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

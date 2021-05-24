@@ -17,7 +17,6 @@
 package views.living_settlor.individual
 
 import forms.PassportOrIdCardFormProvider
-import models.NormalMode
 import models.pages.{FullName, PassportOrIdCardDetails}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -41,9 +40,9 @@ class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportO
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
 
-    val applyViewF = (form : Form[_]) => applyView(form)
+    val applyViewF = (form: Form[_]) => applyView(form)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

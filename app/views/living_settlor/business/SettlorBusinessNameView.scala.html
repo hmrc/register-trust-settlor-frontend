@@ -15,20 +15,19 @@
  *@
 
 @import controllers.living_settlor.business.routes._
-@import models.Mode
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusinessName.title")}"
-    ) {
+) {
 
-    @formHelper(action = SettlorBusinessNameController.onSubmit(mode, index, draftId), 'autoComplete -> "on") {
+    @formHelper(action = SettlorBusinessNameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
         @components.back_link()
 

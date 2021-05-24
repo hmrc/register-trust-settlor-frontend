@@ -24,7 +24,7 @@ import utils.Constants.GB
 
 import scala.util.Try
 
-final case class CountryOfResidenceInTheUkYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class CountryOfResidenceInTheUkYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 

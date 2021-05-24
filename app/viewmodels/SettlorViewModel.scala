@@ -37,7 +37,7 @@ object SettlorViewModel {
   implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
     a.map(identity)
 
-  implicit lazy val reads : Reads[SettlorViewModel] = {
+  implicit lazy val reads: Reads[SettlorViewModel] = {
     SettlorIndividualViewModel.reads or
       SettlorBusinessViewModel.reads or
       SettlorDeceasedViewModel.reads

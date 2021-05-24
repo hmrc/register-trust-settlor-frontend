@@ -18,9 +18,9 @@ package utils.print
 
 import base.SpecBase
 import controllers.trust_type.routes._
+import models.UserAnswers
 import models.pages.IndividualOrBusiness._
 import models.pages._
-import models.{Mode, NormalMode, UserAnswers}
 import org.scalatest.Assertion
 import pages.trust_type._
 import play.twirl.api.Html
@@ -31,8 +31,6 @@ import java.time.LocalDate
 class TrustTypePrintHelperSpec extends SpecBase {
 
   private val trustTypePrintHelper = injector.instanceOf[TrustTypePrintHelper]
-
-  private val mode: Mode = NormalMode
 
   private val date: LocalDate = LocalDate.parse("1996-02-03")
 
@@ -51,10 +49,10 @@ class TrustTypePrintHelperSpec extends SpecBase {
             .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill)(DeedOfVariation.writes).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(KindOfTrustController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(AdditionToWillTrustYesNoController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "howDeedOfVariationCreated.checkYourAnswersLabel", answer = Html("to replace a will trust"), changeUrl = Some(HowDeedOfVariationCreatedController.onPageLoad(mode, fakeDraftId).url))
+            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust through a Deed of Variation or family agreement"), changeUrl = Some(KindOfTrustController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(AdditionToWillTrustYesNoController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "howDeedOfVariationCreated.checkYourAnswersLabel", answer = Html("to replace a will trust"), changeUrl = Some(HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId).url))
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -68,9 +66,9 @@ class TrustTypePrintHelperSpec extends SpecBase {
             .set(HoldoverReliefYesNoPage, true).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust created during their lifetime to gift or transfer assets"), changeUrl = Some(KindOfTrustController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "holdoverReliefYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(HoldoverReliefYesNoController.onPageLoad(mode, fakeDraftId).url))
+            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust created during their lifetime to gift or transfer assets"), changeUrl = Some(KindOfTrustController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "holdoverReliefYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(HoldoverReliefYesNoController.onPageLoad(fakeDraftId).url))
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -83,8 +81,8 @@ class TrustTypePrintHelperSpec extends SpecBase {
             .set(KindOfTrustPage, KindOfTrust.FlatManagement).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for a building or building with tenants"), changeUrl = Some(KindOfTrustController.onPageLoad(mode, fakeDraftId).url))
+            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for a building or building with tenants"), changeUrl = Some(KindOfTrustController.onPageLoad(fakeDraftId).url))
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -97,8 +95,8 @@ class TrustTypePrintHelperSpec extends SpecBase {
             .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(KindOfTrustController.onPageLoad(mode, fakeDraftId).url))
+            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the repair of historic buildings"), changeUrl = Some(KindOfTrustController.onPageLoad(fakeDraftId).url))
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -113,10 +111,10 @@ class TrustTypePrintHelperSpec extends SpecBase {
             .set(EfrbsStartDatePage, date).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(KindOfTrustController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(EmployerFinancedRbsYesNoController.onPageLoad(mode, fakeDraftId).url)),
-            AnswerRow(label = "employerFinancedRbsStartDate.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(EmployerFinancedRbsStartDateController.onPageLoad(mode, fakeDraftId).url))
+            AnswerRow(label = "setUpAfterSettlorDied.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "kindOfTrust.checkYourAnswersLabel", answer = Html("A trust for the employees of a company"), changeUrl = Some(KindOfTrustController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "employerFinancedRbsYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId).url)),
+            AnswerRow(label = "employerFinancedRbsStartDate.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(EmployerFinancedRbsStartDateController.onPageLoad(fakeDraftId).url))
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)

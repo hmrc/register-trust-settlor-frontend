@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import models.Mode
 @import controllers.trust_type.routes._
 
 @this(
@@ -114,6 +113,6 @@
         )
     )
 
-    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url)
+    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(draftId).url)
 
 }

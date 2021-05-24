@@ -19,8 +19,6 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.YesNoFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
 import play.api.data.Form
@@ -30,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.trust_type.SetUpAfterSettlorDiedView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SetUpAfterSettlorDiedController @Inject()(
@@ -44,7 +43,7 @@ class SetUpAfterSettlorDiedController @Inject()(
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpAfterSettlorDied")
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SetUpAfterSettlorDiedYesNoPage) match {
@@ -52,21 +51,21 @@ class SetUpAfterSettlorDiedController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, request.userAnswers.isTaxable))
+      Ok(view(preparedForm, draftId, request.userAnswers.isTaxable))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, request.userAnswers.isTaxable))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, request.userAnswers.isTaxable))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SetUpAfterSettlorDiedYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, draftId)(updatedAnswers))
         }
       )
   }

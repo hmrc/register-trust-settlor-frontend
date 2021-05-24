@@ -20,7 +20,6 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.CountryFormProvider
-import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.mld5.CountryOfResidencyPage
@@ -53,7 +52,7 @@ class CountryOfResidencyController @Inject()(
     actions.authWithData(draftId) andThen requireName(index, draftId)
   }
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CountryOfResidencyPage(index)) match {
@@ -61,21 +60,21 @@ class CountryOfResidencyController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, index, draftId, countryOptions.options(), request.name))
+      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, index, draftId, countryOptions.options(), request.name))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencyPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidencyPage(index), draftId)(updatedAnswers))
         }
       )
   }

@@ -17,7 +17,6 @@
 package views.living_settlor.business.mld5
 
 import forms.CountryFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
@@ -40,7 +39,7 @@ class CountryOfResidenceViewSpec extends SelectCountryViewBehaviours {
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, countryOptions, fakeDraftId, index, trustName)(fakeRequest, messages)
+      view.apply(form, countryOptions, fakeDraftId, index, trustName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, trustName)
 

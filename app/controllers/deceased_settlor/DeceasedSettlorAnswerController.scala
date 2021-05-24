@@ -19,7 +19,6 @@ package controllers.deceased_settlor
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
-import models.NormalMode
 import models.pages.Status.Completed
 import navigation.Navigator
 import pages.DeceasedSettlorStatus
@@ -62,6 +61,6 @@ class DeceasedSettlorAnswerController @Inject()(
         updatedAnswers <- Future.fromTry(request.userAnswers.set(DeceasedSettlorStatus, Completed))
         _ <- registrationsRepository.set(updatedAnswers)
         _ <- draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
-      } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, NormalMode, draftId)(request.userAnswers))
+      } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
   }
 }

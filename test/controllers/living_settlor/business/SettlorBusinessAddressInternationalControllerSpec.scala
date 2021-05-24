@@ -19,8 +19,8 @@ package controllers.living_settlor.business
 import base.SpecBase
 import controllers.routes._
 import forms.InternationalAddressFormProvider
+import models.UserAnswers
 import models.pages.InternationalAddress
-import models.{NormalMode, UserAnswers}
 import pages.living_settlor.business.{SettlorBusinessAddressInternationalPage, SettlorBusinessNamePage}
 import play.api.Application
 import play.api.data.Form
@@ -42,7 +42,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
   val index = 0
   val name = "Business name"
 
-  lazy val settlorBusinessAddressInternationalRoute: String = routes.SettlorBusinessAddressInternationalController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorBusinessAddressInternationalRoute: String = routes.SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url
 
 
   "SettlorBusinessAddressInternational Controller" must {
@@ -64,7 +64,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(form, countryOptions, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -87,7 +87,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions, NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -149,7 +149,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(boundForm, countryOptions, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }

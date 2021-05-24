@@ -19,8 +19,8 @@ package controllers.deceased_settlor
 import base.SpecBase
 import controllers.routes._
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
+import models.UserAnswers
 import models.pages.FullName
-import models.{NormalMode, UserAnswers}
 import org.scalatestplus.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.data.Form
@@ -39,7 +39,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
   val validAnswer: LocalDate = LocalDate.parse("2000-02-03")
   val invalidAnswer: LocalDate = LocalDate.parse("2020-02-03")
 
-  lazy val settlorsDateOfBirthRoute: String = routes.SettlorsDateOfBirthController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val settlorsDateOfBirthRoute: String = routes.SettlorsDateOfBirthController.onPageLoad(fakeDraftId).url
 
   val name: FullName = FullName("first name", None, "Last name")
 
@@ -62,7 +62,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode,fakeDraftId, name)(request, messages).toString
+        view(form,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -83,7 +83,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode,fakeDraftId, name)(request, messages).toString
+        view(form.fill(validAnswer),fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -127,7 +127,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -159,7 +159,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -210,7 +210,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

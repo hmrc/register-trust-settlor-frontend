@@ -23,7 +23,7 @@ import sections.LivingSettlors
 
 import scala.util.Try
 
-final case class SettlorBusinessAddressUKYesNoPage(index : Int) extends QuestionPage[Boolean] {
+final case class SettlorBusinessAddressUKYesNoPage(index: Int) extends QuestionPage[Boolean] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 

@@ -16,13 +16,13 @@
 
 package controllers.actions
 
-import javax.inject.Inject
 import models.requests.{IdentifierRequest, OptionalRegistrationDataRequest}
 import play.api.mvc.ActionTransformer
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DraftIdDataRetrievalActionProviderImpl @Inject()(repository: RegistrationsRepository, executionContext: ExecutionContext)
@@ -35,12 +35,12 @@ class DraftIdDataRetrievalActionProviderImpl @Inject()(repository: Registrations
 
 trait DraftIdRetrievalActionProvider {
 
-  def apply(draftId : String) : DraftIdDataRetrievalAction
+  def apply(draftId: String): DraftIdDataRetrievalAction
 
 }
 
 class DraftIdDataRetrievalAction(
-                                  draftId : String,
+                                  draftId: String,
                                   repository: RegistrationsRepository,
                                   implicit protected val executionContext: ExecutionContext
                                 )

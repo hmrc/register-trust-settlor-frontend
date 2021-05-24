@@ -17,7 +17,6 @@
 package views.trust_type
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -36,7 +35,7 @@ class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
       val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, NormalMode, fakeDraftId, isTaxable = true)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -52,7 +51,7 @@ class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
       val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
-        view.apply(form, NormalMode, fakeDraftId, isTaxable = false)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 

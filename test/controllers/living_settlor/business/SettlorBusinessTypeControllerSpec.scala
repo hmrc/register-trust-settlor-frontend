@@ -19,7 +19,6 @@ package controllers.living_settlor.business
 import base.SpecBase
 import controllers.routes._
 import forms.living_settlor.SettlorBusinessTypeFormProvider
-import models.NormalMode
 import models.pages.KindOfBusiness
 import models.pages.KindOfTrust.Employees
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessTypePage}
@@ -32,8 +31,8 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
 
   val index = 0
 
-  lazy val settlorBusinessTypeRoute = routes.SettlorBusinessTypeController.onPageLoad(NormalMode, index, fakeDraftId).url
-  lazy val settlorBusinessTimeYesNoRoute = routes.SettlorBusinessTimeYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorBusinessTypeRoute = routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorBusinessTimeYesNoRoute = routes.SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId).url
 
   val formProvider = new SettlorBusinessTypeFormProvider()
   val form = formProvider()
@@ -56,7 +55,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -77,7 +76,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(KindOfBusiness.values.head), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(KindOfBusiness.values.head), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -122,7 +121,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

@@ -28,7 +28,7 @@ import sections.LivingSettlors
 
 import scala.util.Try
 
-final case class SettlorIndividualOrBusinessPage(index : Int) extends QuestionPage[IndividualOrBusiness] {
+final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPage[IndividualOrBusiness] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 

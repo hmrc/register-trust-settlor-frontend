@@ -6,7 +6,7 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[Set[$className$]], mode: Mode)(implicit request: Request[_], messages: Messages)
+@(form: Form[Set[$className$]])(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"\${errorPrefix(form)} \${messages("$className;format="decap"$.title")}"

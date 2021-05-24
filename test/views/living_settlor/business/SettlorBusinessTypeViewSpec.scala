@@ -17,7 +17,6 @@
 package views.living_settlor.business
 
 import forms.living_settlor.SettlorBusinessTypeFormProvider
-import models.NormalMode
 import models.pages.KindOfBusiness
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -35,7 +34,7 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
   val view = viewFor[SettlorBusinessTypeView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
   "SettlorBusinessTypeView" must {
 

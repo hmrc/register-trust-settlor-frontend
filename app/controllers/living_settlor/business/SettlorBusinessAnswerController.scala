@@ -20,7 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import controllers.living_settlor.business.routes.SettlorBusinessAnswerController
-import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
 import models.requests.SettlorBusinessNameRequest
@@ -76,7 +75,7 @@ class SettlorBusinessAnswerController @Inject()(
           }
         }
         _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
-      } yield Redirect(navigator.nextPage(SettlorBusinessAnswerPage, NormalMode, draftId)(updatedAnswers))
+      } yield Redirect(navigator.nextPage(SettlorBusinessAnswerPage, draftId)(updatedAnswers))
   }
 
 }

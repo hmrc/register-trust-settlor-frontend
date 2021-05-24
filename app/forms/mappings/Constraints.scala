@@ -131,7 +131,7 @@ trait Constraints {
         Valid
     }
 
-  protected def wholeNumber(errorKey: String) : Constraint[String] = {
+  protected def wholeNumber(errorKey: String): Constraint[String] = {
 
     val regex: Regex = Validation.decimalCheck.r
 

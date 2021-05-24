@@ -24,7 +24,7 @@ import sections.{LivingSettlors => livingSettlors}
 
 import scala.reflect.ClassTag
 
-abstract class Mapping[A, B <: Settlor : ClassTag] {
+abstract class Mapping[A, B <: Settlor: ClassTag] {
 
   def build(userAnswers: UserAnswers): Option[List[A]] = {
     settlors(userAnswers) match {

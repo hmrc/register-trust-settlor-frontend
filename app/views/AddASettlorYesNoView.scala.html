@@ -15,14 +15,13 @@
  *@
 
 @import controllers.routes._
-@import models.Mode
 
 @this(
   main_template: MainTemplate,
   formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, hint: Option[String])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, hint: Option[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
   title = s"${errorPrefix(form)}${messages("addASettlorYesNo.title")}"

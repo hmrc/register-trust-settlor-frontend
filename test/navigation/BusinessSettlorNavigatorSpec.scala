@@ -17,10 +17,10 @@
 package navigation
 
 import base.SpecBase
-import controllers.living_settlor.business.routes
 import controllers.living_settlor.business.mld5.{routes => mld5Routes}
+import controllers.living_settlor.business.routes
+import models.UserAnswers
 import models.pages.KindOfTrust.{Employees, Intervivos}
-import models.{Mode, NormalMode, UserAnswers}
 import pages.living_settlor.business._
 import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
 import pages.trust_type.KindOfTrustPage
@@ -28,7 +28,6 @@ import pages.trust_type.KindOfTrustPage
 class BusinessSettlorNavigatorSpec extends SpecBase {
 
   private val navigator: BusinessSettlorNavigator = injector.instanceOf[BusinessSettlorNavigator]
-  private val mode: Mode = NormalMode
   private val index: Int = 0
 
   "BusinessSettlor Navigator" when {
@@ -39,8 +38,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
       "SettlorBusinessNamePage" must {
         "redirect to UTR yes/no" in {
-          navigator.nextPage(SettlorBusinessNamePage(index), mode, fakeDraftId)(baseAnswers)
-            .mustBe(routes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId))
+          navigator.nextPage(SettlorBusinessNamePage(index), fakeDraftId)(baseAnswers)
+            .mustBe(routes.SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -50,8 +49,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to UTR" in {
             val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessUtrController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessUtrController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -59,8 +58,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to address yes/no" in {
             val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
-            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrYesNoPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -72,8 +71,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               .set(KindOfTrustPage, Employees).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessUtrPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -83,7 +82,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               .set(KindOfTrustPage, Intervivos).success.value
               .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
+            navigator.nextPage(SettlorBusinessUtrPage(index), fakeDraftId)(userAnswers)
               .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -95,8 +94,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to address UK yes/no" in {
             val userAnswers = baseAnswers.set(SettlorBusinessAddressYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -107,8 +106,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(KindOfTrustPage, Employees).success.value
                 .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
-              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -118,7 +117,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(KindOfTrustPage, Intervivos).success.value
                 .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
-              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -131,8 +130,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to UK address" in {
             val userAnswers = baseAnswers.set(SettlorBusinessAddressUKYesNoPage(index), true).success.value
 
-            navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessAddressUKController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressUKController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -140,8 +139,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to international address" in {
             val userAnswers = baseAnswers.set(SettlorBusinessAddressUKYesNoPage(index), false).success.value
 
-            navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessAddressInternationalController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -151,8 +150,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to kind of business" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
 
-            navigator.nextPage(SettlorBusinessAddressUKPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessAddressUKPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -160,7 +159,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to check answers" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
 
-            navigator.nextPage(SettlorBusinessAddressUKPage(index), mode, fakeDraftId)(userAnswers)
+            navigator.nextPage(SettlorBusinessAddressUKPage(index), fakeDraftId)(userAnswers)
               .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -171,8 +170,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to kind of business" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
 
-            navigator.nextPage(SettlorBusinessAddressInternationalPage(index), mode, fakeDraftId)(userAnswers)
-              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessAddressInternationalPage(index), fakeDraftId)(userAnswers)
+              .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -180,7 +179,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
           "redirect to check answers" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
 
-            navigator.nextPage(SettlorBusinessAddressInternationalPage(index), mode, fakeDraftId)(userAnswers)
+            navigator.nextPage(SettlorBusinessAddressInternationalPage(index), fakeDraftId)(userAnswers)
               .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
@@ -188,21 +187,21 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
       "SettlorBusinessTypePage" must {
         "redirect to existed for 2 years yes/no" in {
-          navigator.nextPage(SettlorBusinessTypePage(index), mode, fakeDraftId)(baseAnswers)
-            .mustBe(routes.SettlorBusinessTimeYesNoController.onPageLoad(mode, index, fakeDraftId))
+          navigator.nextPage(SettlorBusinessTypePage(index), fakeDraftId)(baseAnswers)
+            .mustBe(routes.SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "SettlorBusinessTimeYesNoPage" must {
         "redirect to check answers" in {
-          navigator.nextPage(SettlorBusinessTimeYesNoPage(index), mode, fakeDraftId)(baseAnswers)
+          navigator.nextPage(SettlorBusinessTimeYesNoPage(index), fakeDraftId)(baseAnswers)
             .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
         }
       }
 
       "SettlorBusinessAnswerPage" must {
         "redirect to add-to page" in {
-          navigator.nextPage(SettlorBusinessAnswerPage, mode, fakeDraftId)(baseAnswers)
+          navigator.nextPage(SettlorBusinessAnswerPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.routes.AddASettlorController.onPageLoad(fakeDraftId))
         }
       }
@@ -216,8 +215,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
         "SettlorBusinessNamePage" must {
           "redirect to UTR yes/no" in {
-            navigator.nextPage(SettlorBusinessNamePage(index), mode, fakeDraftId)(baseAnswers)
-              .mustBe(routes.SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessNamePage(index), fakeDraftId)(baseAnswers)
+              .mustBe(routes.SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -227,8 +226,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to UTR" in {
               val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-              navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessUtrController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessUtrYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessUtrController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -236,8 +235,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to address yes/no" in {
               val userAnswers = baseAnswers.set(SettlorBusinessUtrYesNoPage(index), false).success.value
 
-              navigator.nextPage(SettlorBusinessUtrYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessUtrYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
         }
@@ -250,8 +249,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(KindOfTrustPage, Employees).success.value
                 .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-              navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessUtrPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -261,8 +260,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(KindOfTrustPage, Intervivos).success.value
                 .set(SettlorBusinessUtrYesNoPage(index), true).success.value
 
-              navigator.nextPage(SettlorBusinessUtrPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessUtrPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
         }
@@ -274,8 +273,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceYesNoPage(index), true).success.value
 
-              navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -287,8 +286,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                   .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-                navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
               }
 
               "redirect to kind of business if a UTR was provided" in {
@@ -297,8 +296,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                   .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-                navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
               }
             }
 
@@ -309,8 +308,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                   .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-                navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
               }
 
               "redirect to check answers if a UTR was provided" in {
@@ -319,7 +318,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                   .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-                navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+                navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
                   .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
               }
             }
@@ -333,8 +332,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -346,8 +345,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                   .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
               }
 
               "redirect to kind of business if a UTR was provided" in {
@@ -356,8 +355,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                   .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
               }
             }
 
@@ -368,8 +367,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                   .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
               }
 
               "redirect to check answers if a UTR was provided" in {
@@ -378,7 +377,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                   .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+                navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
                   .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
               }
             }
@@ -394,8 +393,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                 .set(CountryOfResidencePage(index), "FR").success.value
 
-              navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
             }
 
             "redirect to kind of business if a UTR was provided" in {
@@ -404,8 +403,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                 .set(CountryOfResidencePage(index), "FR").success.value
 
-              navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -416,8 +415,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(SettlorBusinessUtrYesNoPage(index), false).success.value
                 .set(CountryOfResidencePage(index), "FR").success.value
 
-              navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId))
             }
 
             "redirect to check answers if a UTR was provided" in {
@@ -426,7 +425,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                 .set(SettlorBusinessUtrYesNoPage(index), true).success.value
                 .set(CountryOfResidencePage(index), "FR").success.value
 
-              navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(CountryOfResidencePage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -438,8 +437,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to address UK yes/no" in {
               val userAnswers = baseAnswers.set(SettlorBusinessAddressYesNoPage(index), true).success.value
 
-              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -450,8 +449,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(KindOfTrustPage, Employees).success.value
                   .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
-                navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+                navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
+                  .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
               }
             }
 
@@ -461,7 +460,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
                   .set(KindOfTrustPage, Intervivos).success.value
                   .set(SettlorBusinessAddressYesNoPage(index), false).success.value
 
-                navigator.nextPage(SettlorBusinessAddressYesNoPage(index), mode, fakeDraftId)(userAnswers)
+                navigator.nextPage(SettlorBusinessAddressYesNoPage(index), fakeDraftId)(userAnswers)
                   .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
               }
             }
@@ -474,8 +473,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to UK address" in {
               val userAnswers = baseAnswers.set(SettlorBusinessAddressUKYesNoPage(index), true).success.value
 
-              navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessAddressUKController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessAddressUKController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -483,8 +482,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to international address" in {
               val userAnswers = baseAnswers.set(SettlorBusinessAddressUKYesNoPage(index), false).success.value
 
-              navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessAddressInternationalController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId))
             }
           }
         }
@@ -494,8 +493,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to kind of business" in {
               val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
 
-              navigator.nextPage(SettlorBusinessAddressUKPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressUKPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -503,7 +502,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to check answers" in {
               val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
 
-              navigator.nextPage(SettlorBusinessAddressUKPage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(SettlorBusinessAddressUKPage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -514,8 +513,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to kind of business" in {
               val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
 
-              navigator.nextPage(SettlorBusinessAddressInternationalPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(SettlorBusinessAddressInternationalPage(index), fakeDraftId)(userAnswers)
+                .mustBe(routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -523,7 +522,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             "redirect to check answers" in {
               val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
 
-              navigator.nextPage(SettlorBusinessAddressInternationalPage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(SettlorBusinessAddressInternationalPage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -531,21 +530,21 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
         "SettlorBusinessTypePage" must {
           "redirect to existed for 2 years yes/no" in {
-            navigator.nextPage(SettlorBusinessTypePage(index), mode, fakeDraftId)(baseAnswers)
-              .mustBe(routes.SettlorBusinessTimeYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessTypePage(index), fakeDraftId)(baseAnswers)
+              .mustBe(routes.SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 
         "SettlorBusinessTimeYesNoPage" must {
           "redirect to check answers" in {
-            navigator.nextPage(SettlorBusinessTimeYesNoPage(index), mode, fakeDraftId)(baseAnswers)
+            navigator.nextPage(SettlorBusinessTimeYesNoPage(index), fakeDraftId)(baseAnswers)
               .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
 
         "SettlorBusinessAnswerPage" must {
           "redirect to add-to page" in {
-            navigator.nextPage(SettlorBusinessAnswerPage, mode, fakeDraftId)(baseAnswers)
+            navigator.nextPage(SettlorBusinessAnswerPage, fakeDraftId)(baseAnswers)
               .mustBe(controllers.routes.AddASettlorController.onPageLoad(fakeDraftId))
           }
         }
@@ -559,8 +558,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
 
         "SettlorBusinessNamePage" must {
           "redirect to CountryOfResidenceYesNoPage" in {
-            navigator.nextPage(SettlorBusinessNamePage(index), mode, fakeDraftId)(baseAnswers)
-              .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId))
+            navigator.nextPage(SettlorBusinessNamePage(index), fakeDraftId)(baseAnswers)
+              .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -571,8 +570,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceYesNoPage(index), true).success.value
 
-              navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -581,7 +580,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceYesNoPage(index), false).success.value
 
-              navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(CountryOfResidenceYesNoPage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -594,8 +593,8 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceInTheUkYesNoPage(index), false).success.value
 
-              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
-                .mustBe(mld5Routes.CountryOfResidenceController.onPageLoad(mode, index, fakeDraftId))
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
+                .mustBe(mld5Routes.CountryOfResidenceController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -604,7 +603,7 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
               val userAnswers = baseAnswers
                 .set(CountryOfResidenceInTheUkYesNoPage(index), true).success.value
 
-              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, fakeDraftId)(userAnswers)
+              navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), fakeDraftId)(userAnswers)
                 .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
@@ -615,14 +614,14 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
             val userAnswers = baseAnswers
               .set(CountryOfResidencePage(index), "FR").success.value
 
-            navigator.nextPage(CountryOfResidencePage(index), mode, fakeDraftId)(userAnswers)
+            navigator.nextPage(CountryOfResidencePage(index), fakeDraftId)(userAnswers)
               .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
 
         "SettlorBusinessAnswerPage" must {
           "redirect to add-to page" in {
-            navigator.nextPage(SettlorBusinessAnswerPage, mode, fakeDraftId)(baseAnswers)
+            navigator.nextPage(SettlorBusinessAnswerPage, fakeDraftId)(baseAnswers)
               .mustBe(controllers.routes.AddASettlorController.onPageLoad(fakeDraftId))
           }
         }

@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
-import models.NormalMode
 import models.pages.KindOfTrust.Employees
 import models.pages.Status.Completed
 import models.requests.SettlorIndividualNameRequest
@@ -75,7 +74,7 @@ class SettlorIndividualAnswerController @Inject()(
           }
         }
         _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
-      } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, NormalMode, draftId)(updatedAnswers))
+      } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
   }
 
 }

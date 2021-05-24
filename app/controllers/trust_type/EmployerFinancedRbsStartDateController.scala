@@ -19,9 +19,6 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.EfrbsStartDateFormProvider
-
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.trust_type.EfrbsStartDatePage
 import play.api.data.Form
@@ -32,6 +29,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.trust_type.EmployerFinancedRbsStartDateView
 
 import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class EmployerFinancedRbsStartDateController @Inject()(
@@ -46,7 +44,7 @@ class EmployerFinancedRbsStartDateController @Inject()(
 
   private val form: Form[LocalDate] = formProvider()
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(EfrbsStartDatePage) match {
@@ -54,21 +52,21 @@ class EmployerFinancedRbsStartDateController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(EfrbsStartDatePage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(EfrbsStartDatePage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(EfrbsStartDatePage, draftId)(updatedAnswers))
         }
       )
   }

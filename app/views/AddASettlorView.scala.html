@@ -15,7 +15,6 @@
  *@
 
 @import controllers.routes._
-@import models.Mode
 @import models.pages.AddASettlor
 @import viewmodels.AddRow
 
@@ -24,7 +23,8 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode,
+@(
+    form: Form[_],
     draftId: String,
     inProgress: Seq[AddRow],
     complete: Seq[AddRow],
@@ -34,7 +34,7 @@
 
 @main_template(
     title = s"${errorPrefix(form)}$heading"
-    ) {
+) {
 
     @formHelper(action = AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
 

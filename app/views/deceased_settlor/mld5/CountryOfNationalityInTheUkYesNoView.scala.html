@@ -17,20 +17,19 @@
 @import models.pages.FullName
 
 @import controllers.deceased_settlor.mld5.routes._
-@import models.Mode
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, name : FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("5mld.countryOfNationalityInTheUkYesNo.title")}"
     ) {
 
-    @formHelper(action = CountryOfNationalityInTheUkYesNoController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CountryOfNationalityInTheUkYesNoController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

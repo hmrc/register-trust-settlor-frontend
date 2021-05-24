@@ -18,10 +18,8 @@ package controllers.living_settlor
 
 import controllers.actions.Actions
 import forms.deceased_settlor.SettlorIndividualOrBusinessFormProvider
+import models.Enumerable
 import models.pages.IndividualOrBusiness
-
-import javax.inject.Inject
-import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import play.api.data.Form
@@ -31,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.SettlorIndividualOrBusinessView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorIndividualOrBusinessController @Inject()(
@@ -45,7 +44,7 @@ class SettlorIndividualOrBusinessController @Inject()(
 
   private val form: Form[IndividualOrBusiness] = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorIndividualOrBusinessPage(index)) match {
@@ -53,21 +52,21 @@ class SettlorIndividualOrBusinessController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), draftId)(updatedAnswers))
         }
       )
   }

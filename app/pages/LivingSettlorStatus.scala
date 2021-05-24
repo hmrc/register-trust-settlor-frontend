@@ -20,7 +20,7 @@ import models.pages.Status
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
-final case class LivingSettlorStatus(index : Int) extends QuestionPage[Status] {
+final case class LivingSettlorStatus(index: Int) extends QuestionPage[Status] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 
