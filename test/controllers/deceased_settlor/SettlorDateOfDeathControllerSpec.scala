@@ -16,12 +16,9 @@
 
 package controllers.deceased_settlor
 
-import java.time.{LocalDate, ZoneOffset}
-
 import base.SpecBase
 import controllers.routes._
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
-import models.NormalMode
 import models.pages.FullName
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -31,6 +28,7 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.deceased_settlor.SettlorDateOfDeathView
 
+import java.time.{LocalDate, ZoneOffset}
 import scala.concurrent.Future
 
 class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
@@ -42,7 +40,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
   private val fullName = FullName("first name", None, "Last name")
 
-  lazy val settlorDateOfDeathRoute = routes.SettlorDateOfDeathController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val settlorDateOfDeathRoute = routes.SettlorDateOfDeathController.onPageLoad(fakeDraftId).url
 
   "SettlorDateOfDeath Controller" must {
 
@@ -62,7 +60,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, fullName)(request, messages).toString
+        view(form, fakeDraftId, fullName)(request, messages).toString
 
       application.stop()
     }
@@ -83,7 +81,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), NormalMode, fakeDraftId, fullName)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, fullName)(request, messages).toString
 
       application.stop()
     }
@@ -128,7 +126,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }
@@ -154,7 +152,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, fullName)(request, messages).toString
+        view(boundForm, fakeDraftId, fullName)(request, messages).toString
 
       application.stop()
     }
@@ -196,7 +194,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, fakeDraftId, fullName)(request, messages).toString
+          view(boundForm, fakeDraftId, fullName)(request, messages).toString
 
         application.stop()
       }
@@ -236,7 +234,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, fakeDraftId, fullName)(request, messages).toString
+          view(boundForm, fakeDraftId, fullName)(request, messages).toString
 
         application.stop()
       }

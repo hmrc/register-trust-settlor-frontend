@@ -20,7 +20,6 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
-import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.mld5.CountryOfNationalityYesNoPage
@@ -51,7 +50,7 @@ class CountryOfNationalityYesNoController @Inject()(
     actions.authWithData(draftId) andThen requireName(index, draftId)
   }
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CountryOfNationalityYesNoPage(index)) match {
@@ -59,21 +58,21 @@ class CountryOfNationalityYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, index, draftId, request.name))
+      Ok(view(preparedForm, index, draftId, request.name))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, index, draftId, request.name))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfNationalityYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfNationalityYesNoPage(index), draftId)(updatedAnswers))
         }
       )
   }

@@ -20,8 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessAddressUKYesNoPage
 import play.api.data.Form
@@ -31,6 +29,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.business.SettlorBusinessAddressUKYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessAddressUKYesNoController @Inject()(
@@ -46,7 +45,7 @@ class SettlorBusinessAddressUKYesNoController @Inject()(
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessAddressUKYesNo")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorBusinessAddressUKYesNoPage(index)) match {
@@ -54,21 +53,21 @@ class SettlorBusinessAddressUKYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index, request.businessName))
+      Ok(view(preparedForm, draftId, index, request.businessName))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, request.businessName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessAddressUKYesNoPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessAddressUKYesNoPage(index), draftId)(updatedAnswers))
         }
       )
   }

@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import models.pages.FullName
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.living_settlor.individual.mld5.UkCountryOfNationalityYesNoPage
@@ -36,7 +36,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
   private val index: Int = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val onPageLoadRoute: String = routes.UkCountryOfNationalityYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val onPageLoadRoute: String = routes.UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url
 
   private val validAnswer: Boolean = true
 
@@ -59,7 +59,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(form, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +80,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -121,7 +121,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, index, fakeDraftId, name)(request, messages).toString
+        view(boundForm, index, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -138,7 +138,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }

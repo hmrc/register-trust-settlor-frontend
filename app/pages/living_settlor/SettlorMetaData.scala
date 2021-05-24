@@ -20,7 +20,7 @@ import pages.{MetaData, QuestionPage}
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
-final case class SettlorMetaData(index : Int) extends QuestionPage[MetaData] {
+final case class SettlorMetaData(index: Int) extends QuestionPage[MetaData] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 

@@ -20,7 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.UtrFormProvider
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessUtrPage
 import play.api.data.Form
@@ -46,7 +45,7 @@ class SettlorBusinessUtrController @Inject()(
 
   private val form: Form[String] = formProvider("settlorBusinessUtr")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorBusinessUtrPage(index)) match {
@@ -54,21 +53,21 @@ class SettlorBusinessUtrController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index, request.businessName))
+      Ok(view(preparedForm, draftId, index, request.businessName))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, request.businessName))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessUtrPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessUtrPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessUtrPage(index), draftId)(updatedAnswers))
         }
       )
   }

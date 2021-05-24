@@ -16,7 +16,6 @@
 
 @import controllers.deceased_settlor.mld5.routes._
 @import utils.InputOption
-@import models.Mode
 @import models.pages.FullName
 
 @this(
@@ -24,13 +23,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], mode:Mode, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("5mld.countryOfResidence.title")}"
 ) {
 
-    @formHelper(action = CountryOfResidenceController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CountryOfResidenceController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

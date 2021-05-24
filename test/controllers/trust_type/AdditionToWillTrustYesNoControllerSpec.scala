@@ -19,7 +19,6 @@ package controllers.trust_type
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -30,7 +29,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
   val formProvider = new YesNoFormProvider()
   val form = formProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
-  lazy val additionToWillTrustYesNoRoute = routes.AdditionToWillTrustYesNoController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val additionToWillTrustYesNoRoute = routes.AdditionToWillTrustYesNoController.onPageLoad(fakeDraftId).url
 
   "HoldoverReliefYesNo Controller" must {
 
@@ -49,7 +48,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -71,7 +70,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId)(request, messages).toString
+        view(form.fill(true), fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -115,7 +114,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

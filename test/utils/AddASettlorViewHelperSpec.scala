@@ -17,21 +17,17 @@
 package utils
 
 import base.SpecBase
-import controllers.routes.RemoveSettlorYesNoController
-import controllers.living_settlor.individual.{routes => indRoutes}
 import controllers.living_settlor.business.{routes => busRoutes}
-import models.{Mode, NormalMode}
+import controllers.living_settlor.individual.{routes => indRoutes}
+import controllers.routes.RemoveSettlorYesNoController
 import models.pages.FullName
 import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import pages.LivingSettlorStatus
-import pages.living_settlor.SettlorIndividualOrBusinessPage
-import pages.living_settlor.{business => bus, individual => ind}
+import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => bus, individual => ind}
 import viewmodels.{AddRow, AddToRows}
 
 class AddASettlorViewHelperSpec extends SpecBase {
-
-  private val mode: Mode = NormalMode
 
   private val individualName: FullName = FullName("Joe", None, "Bloggs")
   private val businessName: String = "Business Ltd."
@@ -68,7 +64,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
               AddRow(
                 name = individualName.toString,
                 typeLabel = individualLabel,
-                changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(mode, 0, fakeDraftId).url,
+                changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             ),
@@ -117,7 +113,7 @@ class AddASettlorViewHelperSpec extends SpecBase {
               AddRow(
                 name = businessName,
                 typeLabel = businessLabel,
-                changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(mode, 0, fakeDraftId).url,
+                changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(0, fakeDraftId).url,
                 removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
               )
             ),
@@ -179,13 +175,13 @@ class AddASettlorViewHelperSpec extends SpecBase {
             AddRow(
               name = individualName.toString,
               typeLabel = individualLabel,
-              changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(mode, 0, fakeDraftId).url,
+              changeUrl = indRoutes.SettlorIndividualNameController.onPageLoad(0, fakeDraftId).url,
               removeUrl = RemoveSettlorYesNoController.onPageLoad(0, fakeDraftId).url
             ),
             AddRow(
               name = businessName,
               typeLabel = businessLabel,
-              changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(mode, 2, fakeDraftId).url,
+              changeUrl = busRoutes.SettlorBusinessNameController.onPageLoad(2, fakeDraftId).url,
               removeUrl = RemoveSettlorYesNoController.onPageLoad(2, fakeDraftId).url
             )
           ),

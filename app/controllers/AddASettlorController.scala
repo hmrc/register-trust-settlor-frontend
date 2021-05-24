@@ -18,9 +18,9 @@ package controllers
 
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
+import models.Enumerable
 import models.pages.AddASettlor
 import models.requests.RegistrationDataRequest
-import models.{Enumerable, Mode}
 import navigation.Navigator
 import pages.trust_type.KindOfTrustPage
 import pages.{AddASettlorPage, AddASettlorYesNoPage}
@@ -67,36 +67,36 @@ class AddASettlorController @Inject()(
     }
   }
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val settlors = new AddASettlorViewHelper(request.userAnswers, draftId).rows
 
       settlors.count match {
         case 0 =>
-          Ok(yesNoView(yesNoForm, mode, draftId, trustHintText))
+          Ok(yesNoView(yesNoForm, draftId, trustHintText))
         case count =>
-          Ok(addAnotherView(addAnotherForm, mode, draftId, settlors.inProgress, settlors.complete, heading(count), trustHintText))
+          Ok(addAnotherView(addAnotherForm, draftId, settlors.inProgress, settlors.complete, heading(count), trustHintText))
       }
   }
 
-  def submitOne(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def submitOne(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       yesNoForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          Future.successful(BadRequest(yesNoView(formWithErrors, mode, draftId, trustHintText)))
+          Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText)))
         },
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddASettlorYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddASettlorYesNoPage, draftId)(updatedAnswers))
         }
       )
   }
 
-  def submitAnother(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId).async {
+  def submitAnother(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       addAnotherForm.bindFromRequest().fold(
@@ -107,7 +107,6 @@ class AddASettlorController @Inject()(
           Future.successful(BadRequest(
             addAnotherView(
               formWithErrors,
-              mode,
               draftId,
               settlors.inProgress,
               settlors.complete,
@@ -120,7 +119,7 @@ class AddASettlorController @Inject()(
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(AddASettlorPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(AddASettlorPage, draftId)(updatedAnswers))
         }
       )
   }

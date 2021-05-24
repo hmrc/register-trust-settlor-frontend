@@ -17,7 +17,6 @@
 package views.mld5
 
 import controllers.trust_type.routes
-import models.NormalMode
 import views.behaviours.ViewBehaviours
 import views.html.mld5.SettlorInfo5MLDView
 
@@ -71,7 +70,7 @@ class SettlorInfo5MLDViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url)
+      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)
     }
 
     "non-taxable" must {
@@ -114,7 +113,7 @@ class SettlorInfo5MLDViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, fakeDraftId).url)
+      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)
     }
   }
 }

@@ -17,7 +17,6 @@
 package views
 
 import forms.AddASettlorFormProvider
-import models.NormalMode
 import models.pages.{AddASettlor, IndividualOrBusiness}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -45,11 +44,11 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
   val hint = "This is a trust created during the settlor's lifetime to gift or transfer assets (also known as an inter vivos trust)"
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, Nil, Nil, "Add a settlor", Some(hint))(fakeRequest, messages)
+    view.apply(form, fakeDraftId, Nil, Nil, "Add a settlor", Some(hint))(fakeRequest, messages)
 
-  def applyView(form: Form[_], inProgressAssets: Seq[AddRow], completeAssets: Seq[AddRow], count : Int): HtmlFormat.Appendable = {
+  def applyView(form: Form[_], inProgressAssets: Seq[AddRow], completeAssets: Seq[AddRow], count: Int): HtmlFormat.Appendable = {
     val title = if (count > 1) s"You have added $count settlors" else "Add a settlor"
-    view.apply(form, NormalMode, fakeDraftId, inProgressAssets, completeAssets, title, Some(hint))(fakeRequest, messages)
+    view.apply(form, fakeDraftId, inProgressAssets, completeAssets, title, Some(hint))(fakeRequest, messages)
   }
 
   "AddASettlorView" when {

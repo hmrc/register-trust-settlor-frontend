@@ -17,7 +17,6 @@
 package views.living_settlor.business
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -38,7 +37,7 @@ class SettlorBusinessUtrYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[SettlorBusinessUtrYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, settlorBusinessName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, settlorBusinessName)(fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))
 

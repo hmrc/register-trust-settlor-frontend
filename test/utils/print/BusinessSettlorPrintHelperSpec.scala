@@ -20,11 +20,11 @@ import base.SpecBase
 import controllers.living_settlor.business.mld5.routes._
 import controllers.living_settlor.business.routes._
 import controllers.living_settlor.routes._
+import models.UserAnswers
 import models.pages.IndividualOrBusiness._
 import models.pages.KindOfBusiness.Investment
 import models.pages.Status.Completed
 import models.pages._
-import models.{Mode, NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -42,8 +42,6 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
   private val answerRowConverter = injector.instanceOf[AnswerRowConverter]
   private val mockTrustTypePrintHelper = mock[TrustTypePrintHelper]
   private val businessSettlorPrintHelper = new BusinessSettlorPrintHelper(answerRowConverter, mockTrustTypePrintHelper)
-
-  private val mode: Mode = NormalMode
 
   private val businessName: String = "Business Ltd."
   private val utr: String = "1234567890"
@@ -72,11 +70,11 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
           .set(LivingSettlorStatus(index), Completed).success.value
 
         val expectedAnswerRows = Seq(
-          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName)
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName)
         )
 
         assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -95,13 +93,13 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
           .set(LivingSettlorStatus(index), Completed).success.value
 
         val expectedAnswerRows = Seq(
-          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessUtr.checkYourAnswersLabel", answer = Html("1234567890"), changeUrl = Some(SettlorBusinessUtrController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessType.checkYourAnswersLabel", answer = Html("Investment"), changeUrl = Some(SettlorBusinessTypeController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-          AnswerRow(label = "settlorBusinessTimeYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessTimeYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName)
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessUtr.checkYourAnswersLabel", answer = Html("1234567890"), changeUrl = Some(SettlorBusinessUtrController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessType.checkYourAnswersLabel", answer = Html("Investment"), changeUrl = Some(SettlorBusinessTypeController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+          AnswerRow(label = "settlorBusinessTimeYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName)
         )
 
         assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -123,14 +121,14 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
             .set(LivingSettlorStatus(index), Completed).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorBusinessAddressUKController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorBusinessAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -151,15 +149,15 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
             .set(LivingSettlorStatus(index), Completed).success.value
 
           val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidenceController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorBusinessAddressInternationalController.onPageLoad(mode, index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Business"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessName.checkYourAnswersLabel", answer = Html("Business Ltd."), changeUrl = Some(SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessUtrYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)

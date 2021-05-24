@@ -18,7 +18,6 @@ package views.living_settlor.individual
 
 import controllers.living_settlor.individual.routes
 import forms.InternationalAddressFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -42,7 +41,7 @@ class SettlorIndividualAddressInternationalViewSpec extends InternationalAddress
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, NormalMode, index, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, countryOptions, index, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 
@@ -52,7 +51,7 @@ class SettlorIndividualAddressInternationalViewSpec extends InternationalAddress
       applyView,
       Some("taskList.settlors.label"),
       Some(messageKeyPrefix),
-      routes.SettlorIndividualAddressInternationalController.onSubmit(NormalMode, index, fakeDraftId).url,
+      routes.SettlorIndividualAddressInternationalController.onSubmit(index, fakeDraftId).url,
       name.toString
     )
 

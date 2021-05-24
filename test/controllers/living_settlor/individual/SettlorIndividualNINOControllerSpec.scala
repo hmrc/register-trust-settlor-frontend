@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.NinoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
@@ -34,7 +33,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
   private val index: Int = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val settlorIndividualNINORoute: String = routes.SettlorIndividualNINOController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualNINORoute: String = routes.SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualNINO Controller" must {
 
@@ -53,7 +52,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -74,7 +73,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill("answer"), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -111,7 +110,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -136,7 +135,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

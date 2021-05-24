@@ -37,9 +37,9 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
                                                  config: FrontendAppConfig
                                                 ) extends Action[A] with Logging {
 
-  private def authoriseAgent(request : Request[A],
-                             enrolments : Enrolments,
-                             internalId : String,
+  private def authoriseAgent(request: Request[A],
+                             enrolments: Enrolments,
+                             internalId: String,
                              action: Action[A]
                             ) = {
 
@@ -68,9 +68,9 @@ class AffinityGroupIdentifierAction[A] @Inject()(action: Action[A],
     }
   }
 
-  private def authoriseOrg(request : Request[A],
-                           enrolments : Enrolments,
-                           internalId : String,
+  private def authoriseOrg(request: Request[A],
+                           enrolments: Enrolments,
+                           internalId: String,
                            action: Action[A]
                           ): Future[Result] = {
 

@@ -19,7 +19,7 @@ package controllers.deceased_settlor
 import base.SpecBase
 import controllers.routes._
 import forms.InternationalAddressFormProvider
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import models.pages.{FullName, InternationalAddress}
 import pages.deceased_settlor.{SettlorsInternationalAddressPage, SettlorsNamePage}
 import play.api.Application
@@ -38,7 +38,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
   val formProvider = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
 
-  lazy val settlorsInternationalAddressRoute: String = routes.SettlorsInternationalAddressController.onPageLoad(NormalMode,fakeDraftId).url
+  lazy val settlorsInternationalAddressRoute: String = routes.SettlorsInternationalAddressController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -62,7 +62,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -86,7 +86,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1", "line 2", None, "country")), countryOptions, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form.fill(InternationalAddress("line 1", "line 2", None, "country")), countryOptions, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -134,7 +134,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -181,7 +181,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

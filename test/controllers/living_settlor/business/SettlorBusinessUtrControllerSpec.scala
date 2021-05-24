@@ -19,7 +19,6 @@ package controllers.living_settlor.business
 import base.SpecBase
 import controllers.routes._
 import forms.UtrFormProvider
-import models.NormalMode
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessUtrPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -34,7 +33,7 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
   val fakeBusinessName = "Business name"
   val fakeUtr = "1234567890"
 
-  lazy val settlorBusinessUtrRoute = routes.SettlorBusinessUtrController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorBusinessUtrRoute = routes.SettlorBusinessUtrController.onPageLoad(index, fakeDraftId).url
 
   "SettlorBusinessUtr Controller" must {
 
@@ -54,7 +53,7 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, fakeBusinessName)(request, messages).toString
+        view(form, fakeDraftId, index, fakeBusinessName)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +75,7 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(fakeUtr), NormalMode, fakeDraftId, index, fakeBusinessName)(request, messages).toString
+        view(form.fill(fakeUtr), fakeDraftId, index, fakeBusinessName)(request, messages).toString
 
       application.stop()
     }
@@ -91,7 +90,7 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -136,7 +135,7 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, fakeBusinessName)(request, messages).toString
+        view(boundForm, fakeDraftId, index, fakeBusinessName)(request, messages).toString
 
       application.stop()
     }

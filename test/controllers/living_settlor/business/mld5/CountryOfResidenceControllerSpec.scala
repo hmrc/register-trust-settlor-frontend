@@ -18,7 +18,6 @@ package controllers.living_settlor.business.mld5
 
 import base.SpecBase
 import forms.CountryFormProvider
-import models.NormalMode
 import org.scalatestplus.mockito.MockitoSugar
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.business.mld5.CountryOfResidencePage
@@ -36,7 +35,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
   val index: Int = 0
   val businessName = "Test"
 
-  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(NormalMode, index, draftId).url
+  lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
   "CountryOfResidence Controller" must {
 
@@ -58,7 +57,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, countryOptions, draftId, index, businessName)(request, messages).toString
+        view(form, countryOptions, draftId, index, businessName)(request, messages).toString
 
       application.stop()
     }
@@ -81,7 +80,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), NormalMode, countryOptions, draftId, index, businessName)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, draftId, index, businessName)(request, messages).toString
 
       application.stop()
     }
@@ -128,7 +127,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, countryOptions, draftId, index, businessName)(request, messages).toString
+        view(boundForm, countryOptions, draftId, index, businessName)(request, messages).toString
 
       application.stop()
     }

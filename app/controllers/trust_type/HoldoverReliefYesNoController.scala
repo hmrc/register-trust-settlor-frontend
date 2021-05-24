@@ -19,8 +19,6 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions._
 import forms.YesNoFormProvider
-import javax.inject.Inject
-import models.{Mode, NormalMode}
 import navigation.Navigator
 import pages.trust_type.{HoldoverReliefYesNoPage, SetUpAfterSettlorDiedYesNoPage}
 import play.api.data.Form
@@ -30,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.trust_type.HoldoverReliefYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class HoldoverReliefYesNoController @Inject()(
@@ -47,9 +46,9 @@ class HoldoverReliefYesNoController @Inject()(
 
   private def actions(draftId: String) =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SetUpAfterSettlorDiedYesNoPage, routes.SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId)))
+      requiredAnswer(RequiredAnswer(SetUpAfterSettlorDiedYesNoPage, routes.SetUpAfterSettlorDiedController.onPageLoad(draftId)))
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(HoldoverReliefYesNoPage) match {
@@ -57,21 +56,21 @@ class HoldoverReliefYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(HoldoverReliefYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HoldoverReliefYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId)(updatedAnswers))
         }
       )
   }

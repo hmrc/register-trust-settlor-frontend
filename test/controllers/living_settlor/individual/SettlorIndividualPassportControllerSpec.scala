@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.PassportOrIdCardFormProvider
-import models.NormalMode
 import models.pages.{FullName, PassportOrIdCardDetails}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -44,7 +43,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
   private val name: FullName = FullName("First", Some("Middle"), "Last")
   private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  private lazy val settlorIndividualPassportRoute: String = routes.SettlorIndividualPassportController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualPassportRoute: String = routes.SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualPassport Controller" must {
 
@@ -66,7 +65,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -92,7 +91,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(form.fill(PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)),
-          countryOptions, NormalMode, fakeDraftId, index, name)(request, messages).toString
+          countryOptions, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -139,7 +138,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -166,7 +165,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

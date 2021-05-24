@@ -15,20 +15,19 @@
  *@
 
 @import controllers.trust_type.routes._
-@import models.Mode
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("setUpInAdditionToWillTrustYesNo.title")}"
-    ) {
+) {
 
-    @formHelper(action = AdditionToWillTrustYesNoController.onSubmit(mode, draftId), 'autoComplete -> "off") {
+    @formHelper(action = AdditionToWillTrustYesNoController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

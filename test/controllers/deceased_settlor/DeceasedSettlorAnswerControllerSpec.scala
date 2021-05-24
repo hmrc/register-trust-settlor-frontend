@@ -18,8 +18,8 @@ package controllers.deceased_settlor
 
 import base.SpecBase
 import controllers.routes._
+import models.UserAnswers
 import models.pages.FullName
-import models.{NormalMode, UserAnswers}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
@@ -114,7 +114,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(NormalMode, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

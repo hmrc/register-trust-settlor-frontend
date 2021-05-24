@@ -20,7 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.mld5.CountryOfResidenceYesNoPage
 import play.api.data.Form
@@ -45,7 +44,7 @@ class CountryOfResidenceYesNoController @Inject()(
 
   private val form: Form[Boolean] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidenceYesNo")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)) {
       implicit request =>
 
@@ -54,22 +53,22 @@ class CountryOfResidenceYesNoController @Inject()(
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, mode, draftId, index, request.businessName))
+        Ok(view(preparedForm, draftId, index, request.businessName))
     }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)).async {
       implicit request =>
 
         form.bindFromRequest().fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, request.businessName))),
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
 
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceYesNoPage(index), value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), mode, draftId)(updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidenceYesNoPage(index), draftId)(updatedAnswers))
         )
     }
 }

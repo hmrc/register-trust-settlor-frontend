@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
@@ -40,7 +39,7 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
   private val index: Int = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val settlorIndividualIDCardYesNoRoute: String = routes.SettlorIndividualIDCardYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualIDCardYesNoRoute: String = routes.SettlorIndividualIDCardYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualIDCardYesNo Controller" must {
 
@@ -59,7 +58,7 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +79,7 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -129,7 +128,7 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -147,7 +146,7 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }

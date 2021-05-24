@@ -17,14 +17,13 @@
 package controllers.deceased_settlor.mld5
 
 import base.SpecBase
-import controllers.routes.SessionExpiredController
-import controllers.deceased_settlor.routes.SettlorsNameController
 import controllers.deceased_settlor.mld5.routes.CountryOfNationalityYesNoController
+import controllers.deceased_settlor.routes.SettlorsNameController
+import controllers.routes.SessionExpiredController
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
-import pages.deceased_settlor.mld5.CountryOfNationalityYesNoPage
 import pages.deceased_settlor.SettlorsNamePage
+import pages.deceased_settlor.mld5.CountryOfNationalityYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.deceased_settlor.mld5.CountryOfNationalityYesNoView
@@ -33,7 +32,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
   val form = new YesNoFormProvider().withPrefix("5mld.countryOfNationalityYesNo")
 
-  lazy val countryOfNationalityYesNoRoute = CountryOfNationalityYesNoController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val countryOfNationalityYesNoRoute = CountryOfNationalityYesNoController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -55,7 +54,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +75,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode,fakeDraftId, name)(request, messages).toString
+        view(form.fill(true),fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -122,7 +121,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode,fakeDraftId, name)(request, messages).toString
+        view(boundForm,fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -170,7 +169,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(NormalMode,fakeDraftId).url
+      redirectLocation(result).value mustEqual SettlorsNameController.onPageLoad(fakeDraftId).url
 
       application.stop()
     }

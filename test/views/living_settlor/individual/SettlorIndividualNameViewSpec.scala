@@ -17,7 +17,6 @@
 package views.living_settlor.individual
 
 import forms.living_settlor.SettlorIndividualNameFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -36,7 +35,7 @@ class SettlorIndividualNameViewSpec extends QuestionViewBehaviours[FullName] {
     val view = viewFor[SettlorIndividualNameView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

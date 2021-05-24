@@ -20,10 +20,10 @@ import base.SpecBase
 import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
+import models.UserAnswers
 import models.pages.IndividualOrBusiness.Individual
 import models.pages.KindOfTrust.Intervivos
 import models.pages.{AddASettlor, FullName}
-import models.{NormalMode, UserAnswers}
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type.KindOfTrustPage
@@ -35,9 +35,9 @@ import views.html.{AddASettlorView, AddASettlorYesNoView}
 
 class AddASettlorControllerSpec extends SpecBase {
 
-  lazy val getRoute : String = routes.AddASettlorController.onPageLoad(fakeDraftId).url
-  lazy val submitAnotherRoute : String = routes.AddASettlorController.submitAnother(fakeDraftId).url
-  lazy val submitYesNoRoute : String = routes.AddASettlorController.submitOne(fakeDraftId).url
+  lazy val getRoute: String = routes.AddASettlorController.onPageLoad(fakeDraftId).url
+  lazy val submitAnotherRoute: String = routes.AddASettlorController.submitAnother(fakeDraftId).url
+  lazy val submitYesNoRoute: String = routes.AddASettlorController.submitOne(fakeDraftId).url
 
   val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addASettlorYesNo")
   val addSettlorForm = new AddASettlorFormProvider()()
@@ -99,7 +99,7 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(yesNoForm, NormalMode, fakeDraftId, Some(hint))(request, messages).toString
+            view(yesNoForm, fakeDraftId, Some(hint))(request, messages).toString
 
           application.stop()
         }
@@ -117,7 +117,7 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(yesNoForm, NormalMode, fakeDraftId, None)(request, messages).toString
+            view(yesNoForm, fakeDraftId, None)(request, messages).toString
 
           application.stop()
         }
@@ -155,7 +155,7 @@ class AddASettlorControllerSpec extends SpecBase {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, NormalMode, fakeDraftId, Some(hint))(request, messages).toString
+          view(boundForm, fakeDraftId, Some(hint))(request, messages).toString
 
         application.stop()
       }
@@ -172,7 +172,7 @@ class AddASettlorControllerSpec extends SpecBase {
           AddRow(
             name.toString,
             "Individual Settlor",
-            SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url,
+            SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url,
             RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
           )
         )
@@ -194,7 +194,7 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(addSettlorForm, NormalMode, fakeDraftId, settlors, Nil, heading = "Add a settlor", Some(hint))(request, messages).toString
+            view(addSettlorForm, fakeDraftId, settlors, Nil, heading = "Add a settlor", Some(hint))(request, messages).toString
 
           application.stop()
         }
@@ -216,7 +216,7 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(addSettlorForm, NormalMode, fakeDraftId, settlors, Nil, heading = "Add a settlor", None)(request, messages).toString
+            view(addSettlorForm, fakeDraftId, settlors, Nil, heading = "Add a settlor", None)(request, messages).toString
 
           application.stop()
         }
@@ -256,7 +256,6 @@ class AddASettlorControllerSpec extends SpecBase {
         contentAsString(result) mustEqual
           view(
             boundForm,
-            NormalMode,
             fakeDraftId,
             Nil,
             Nil,

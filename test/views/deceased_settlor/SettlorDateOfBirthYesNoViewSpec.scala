@@ -17,7 +17,6 @@
 package views.deceased_settlor
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -37,7 +36,7 @@ class SettlorDateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
     val name = FullName("First", None, "Last")
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorIndividualNamePage}
 import play.api.test.FakeRequest
@@ -33,7 +32,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
   private val index = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val settlorIndividualAddressYesNoRoute: String = routes.SettlorIndividualAddressYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  private lazy val settlorIndividualAddressYesNoRoute: String = routes.SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualAddressYesNo Controller" must {
 
@@ -52,7 +51,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -73,7 +72,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -111,7 +110,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -136,7 +135,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

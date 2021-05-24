@@ -20,7 +20,6 @@ import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
-import models.Mode
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
@@ -49,7 +48,7 @@ class SettlorsDateOfBirthController @Inject()(
   private def form(maxDate: (LocalDate, String)): Form[LocalDate] =
     formProvider.withConfig(maxDate)
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
+  def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
@@ -59,23 +58,23 @@ class SettlorsDateOfBirthController @Inject()(
         case Some(value) => form(maxDate).fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, name))
+      Ok(view(preparedForm, draftId, name))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorsNamePage).get
 
       form(maxDate).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsDateOfBirthPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsDateOfBirthPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorsDateOfBirthPage, draftId)(updatedAnswers))
         }
       )
   }

@@ -22,24 +22,24 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @content = {
-<p>@messages("settlorIndividualMentalCapacityYesNo.p1")</p>
+    <p>@messages("settlorIndividualMentalCapacityYesNo.p1")</p>
 
-<ul class="govuk-list trust-list--bullet">
-    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint1")</li>
-    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint2")</li>
-    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint3")</li>
-    <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint4")</li>
-</ul>
+    <ul class="govuk-list trust-list--bullet">
+        <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint1")</li>
+        <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint2")</li>
+        <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint3")</li>
+        <li class="inside">@messages("settlorIndividualMentalCapacityYesNo.bulletpoint4")</li>
+    </ul>
 }
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorIndividualMentalCapacityYesNo.title")}"
 ) {
 
-    @formHelper(action = MentalCapacityYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = MentalCapacityYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

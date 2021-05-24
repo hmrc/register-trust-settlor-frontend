@@ -19,7 +19,6 @@ package controllers.living_settlor.business
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessUtrYesNoPage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
@@ -38,7 +37,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
   val emptySettlorBusinessName = ""
   val settlorBusinessName = "Business name"
 
-  lazy val settlorBusinessUtrYesNoRoute = routes.SettlorBusinessUtrYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorBusinessUtrYesNoRoute = routes.SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorBusinessUtrYesNo Controller" must {
 
@@ -58,7 +57,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(form, fakeDraftId, index, settlorBusinessName)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +79,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, settlorBusinessName)(request, messages).toString
 
       application.stop()
     }
@@ -97,7 +96,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }
@@ -144,7 +143,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(boundForm, fakeDraftId, index, settlorBusinessName)(request, messages).toString
 
       application.stop()
     }

@@ -17,7 +17,6 @@
 package views.living_settlor.individual.mld5
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -37,7 +36,7 @@ class UkCountryOfNationalityYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[UkCountryOfNationalityYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, index, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, index, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

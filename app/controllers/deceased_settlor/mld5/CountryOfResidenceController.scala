@@ -20,8 +20,6 @@ import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.CountryFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.deceased_settlor.mld5.CountryOfResidencePage
 import play.api.data.Form
@@ -32,6 +30,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.deceased_settlor.mld5.CountryOfResidenceView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class CountryOfResidenceController @Inject()(
@@ -48,7 +47,7 @@ class CountryOfResidenceController @Inject()(
 
   private val form: Form[String] = formProvider.withPrefix("5mld.countryOfResidence")
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
+  def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(CountryOfResidencePage) match {
@@ -56,21 +55,21 @@ class CountryOfResidenceController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, mode, draftId, request.name))
+      Ok(view(preparedForm, countryOptions.options, draftId, request.name))
   }
 
-  def onSubmit(mode: Mode, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
+  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, draftId, request.name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, request.name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencePage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencePage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(CountryOfResidencePage, draftId)(updatedAnswers))
         }
       )
   }

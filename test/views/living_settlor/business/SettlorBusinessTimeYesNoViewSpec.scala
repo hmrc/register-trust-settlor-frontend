@@ -17,7 +17,6 @@
 package views.living_settlor.business
 
 import forms.YesNoFormProvider
-import models.NormalMode
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
@@ -36,7 +35,7 @@ class SettlorBusinessTimeYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[SettlorBusinessTimeYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, NormalMode, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

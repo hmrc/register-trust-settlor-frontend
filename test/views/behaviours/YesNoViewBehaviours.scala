@@ -25,8 +25,8 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
   def yesNoPage(form: Form[Boolean],
                 createView: Form[Boolean] => HtmlFormat.Appendable,
                 messageKeyPrefix: String,
-                hintTextPrefix : Option[String] = None,
-                args : Seq[String] = Nil) : Unit = {
+                hintTextPrefix: Option[String] = None,
+                args: Seq[String] = Nil): Unit = {
 
     "behave like a page with a Yes/No question" when {
 

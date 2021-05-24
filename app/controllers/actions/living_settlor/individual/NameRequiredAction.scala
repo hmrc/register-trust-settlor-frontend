@@ -16,13 +16,12 @@
 
 package controllers.actions.living_settlor.individual
 
-import javax.inject.Inject
-import models.NormalMode
 import models.requests.{RegistrationDataRequest, SettlorIndividualNameRequest}
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.mvc.Results.Redirect
 import play.api.mvc.{ActionRefiner, Result}
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
@@ -33,7 +32,7 @@ class NameRequiredAction(index: Int, draftId: String)(implicit val executionCont
       Future.successful(
         request.userAnswers.get(SettlorIndividualNamePage(index)) match {
           case None =>
-            Left(Redirect(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, draftId)))
+            Left(Redirect(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(index, draftId)))
           case Some(name) =>
             Right(SettlorIndividualNameRequest(request, name))
         }

@@ -17,7 +17,6 @@
 package views.living_settlor
 
 import forms.deceased_settlor.SettlorIndividualOrBusinessFormProvider
-import models.NormalMode
 import models.pages.IndividualOrBusiness
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
@@ -34,7 +33,7 @@ class SettlorIndividualOrBusinessViewSpec extends OptionsViewBehaviours {
   val view = viewFor[SettlorIndividualOrBusinessView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
-    view.apply(form, NormalMode, fakeDraftId, index)(fakeRequest, messages)
+    view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
   "SettlorIndividualOrBusinessView" must {
 

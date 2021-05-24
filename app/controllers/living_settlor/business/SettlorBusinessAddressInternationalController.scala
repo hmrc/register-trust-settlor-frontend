@@ -20,9 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.InternationalAddressFormProvider
-
-import javax.inject.Inject
-import models.Mode
 import models.pages.InternationalAddress
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessAddressInternationalPage
@@ -34,6 +31,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.living_settlor.business.SettlorBusinessAddressInternationalView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessAddressInternationalController @Inject()(
@@ -50,7 +48,7 @@ class SettlorBusinessAddressInternationalController @Inject()(
 
   private val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorBusinessAddressInternationalPage(index)) match {
@@ -58,21 +56,21 @@ class SettlorBusinessAddressInternationalController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, mode, index, draftId, request.businessName))
+      Ok(view(preparedForm, countryOptions.options, index, draftId, request.businessName))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, mode, index, draftId, request.businessName))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.businessName))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), draftId)(updatedAnswers))
         }
       )
   }

@@ -19,7 +19,6 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorAddressUKYesNoPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage}
 import play.api.mvc.Call
@@ -36,7 +35,7 @@ class SettlorIndividualAddressUKYesNoControllerSpec extends SpecBase {
   val index = 0
   val name = FullName("First", Some("Middle"), "Last")
 
-  lazy val settlorIndividualAddressUKYesNoRoute = routes.SettlorIndividualAddressUKYesNoController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorIndividualAddressUKYesNoRoute = routes.SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualAddressUKYesNo Controller" must {
 
@@ -55,7 +54,7 @@ class SettlorIndividualAddressUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -76,7 +75,7 @@ class SettlorIndividualAddressUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -120,7 +119,7 @@ class SettlorIndividualAddressUKYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -138,7 +137,7 @@ class SettlorIndividualAddressUKYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+      redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
 
       application.stop()
     }

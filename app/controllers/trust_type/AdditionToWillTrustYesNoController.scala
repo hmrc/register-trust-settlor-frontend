@@ -19,8 +19,6 @@ package controllers.trust_type
 import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.YesNoFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.trust_type.SetUpInAdditionToWillTrustYesNoPage
 import play.api.data.Form
@@ -30,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.trust_type.AdditionToWillTrustYesNoView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class AdditionToWillTrustYesNoController @Inject()(
@@ -44,7 +43,7 @@ class AdditionToWillTrustYesNoController @Inject()(
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
-  def onPageLoad(mode: Mode, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
@@ -52,21 +51,21 @@ class AdditionToWillTrustYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId))
+      Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(mode: Mode, draftId : String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value))
             _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, draftId)(updatedAnswers))
         }
       )
   }

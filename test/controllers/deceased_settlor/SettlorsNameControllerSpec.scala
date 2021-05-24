@@ -19,7 +19,6 @@ package controllers.deceased_settlor
 import base.SpecBase
 import controllers.routes._
 import forms.deceased_settlor.SettlorsNameFormProvider
-import models.NormalMode
 import models.pages.FullName
 import pages.deceased_settlor.SettlorsNamePage
 import play.api.test.FakeRequest
@@ -32,7 +31,7 @@ class SettlorsNameControllerSpec extends SpecBase {
 
   val form = formProvider()
 
-  lazy val settlorsNameRoute = routes.SettlorsNameController.onPageLoad(NormalMode, fakeDraftId).url
+  lazy val settlorsNameRoute = routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
 
   "SettlorsName Controller" must {
@@ -50,7 +49,7 @@ class SettlorsNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -71,7 +70,7 @@ class SettlorsNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FullName("First",None, "Last")), NormalMode, fakeDraftId)(request, messages).toString
+        view(form.fill(FullName("First",None, "Last")), fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -110,7 +109,7 @@ class SettlorsNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

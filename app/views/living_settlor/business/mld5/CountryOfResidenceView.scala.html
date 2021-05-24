@@ -22,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, countryOptions: Seq[InputOption], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusiness.5mld.countryOfResidence.title")}"
 ) {
 
-    @formHelper(action = CountryOfResidenceController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = CountryOfResidenceController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

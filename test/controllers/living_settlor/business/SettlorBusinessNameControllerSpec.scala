@@ -20,7 +20,6 @@ import base.SpecBase
 import controllers.living_settlor.business.{routes => businessRoutes}
 import controllers.routes._
 import forms.living_settlor.SettlorBusinessNameFormProvider
-import models.NormalMode
 import pages.living_settlor.business.SettlorBusinessNamePage
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
@@ -32,7 +31,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
   val form = formProvider()
   val index = 0
 
-  lazy val settlorBusinesNameRoute = businessRoutes.SettlorBusinessNameController.onPageLoad(NormalMode, index, fakeDraftId).url
+  lazy val settlorBusinesNameRoute = businessRoutes.SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url
 
   "settlorBusinessName Controller" must {
 
@@ -49,7 +48,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, NormalMode, index, fakeDraftId)(request, messages).toString
+        view(form, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -69,7 +68,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), NormalMode, index, fakeDraftId)(request, messages).toString
+        view(form.fill("answer"), index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }
@@ -108,7 +107,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, NormalMode, index, fakeDraftId)(request, messages).toString
+        view(boundForm, index, fakeDraftId)(request, messages).toString
 
       application.stop()
     }

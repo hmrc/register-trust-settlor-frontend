@@ -20,7 +20,6 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
@@ -46,7 +45,7 @@ class SettlorIndividualNINOYesNoController @Inject()(
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualNINOYesNo")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
@@ -56,23 +55,23 @@ class SettlorIndividualNINOYesNoController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, name))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualNINOYesNoPage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualNINOYesNoPage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorIndividualNINOYesNoPage(index), draftId)(updatedAnswers))
         }
       )
   }

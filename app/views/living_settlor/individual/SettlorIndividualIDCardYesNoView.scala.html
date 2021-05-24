@@ -15,7 +15,6 @@
  *@
 
 @import controllers.living_settlor.individual.routes._
-@import models.Mode
 @import models.pages.FullName
 
 @this(
@@ -23,13 +22,13 @@
     formHelper: FormWithCSRF
 )
 
-@(form: Form[_], mode: Mode, draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorIndividualIDCardYesNo.title")}"
-    ) {
+) {
 
-    @formHelper(action = SettlorIndividualIDCardYesNoController.onSubmit(mode, index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = SettlorIndividualIDCardYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
         @components.back_link()
 

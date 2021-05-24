@@ -16,7 +16,7 @@
 
 package navigation
 
-import models.{Mode, UserAnswers}
+import models.UserAnswers
 import pages._
 import play.api.mvc.Call
 import uk.gov.hmrc.http.HttpVerbs.GET
@@ -28,7 +28,6 @@ class FakeNavigator(val desiredRoute: Call = Call(GET, "/foo")) extends Navigato
   }
 
   override def nextPage(page: Page,
-                        mode: Mode,
                         draftId: String): UserAnswers => Call = _ => desiredRoute
 
 }

@@ -19,8 +19,6 @@ package controllers.living_settlor.business
 import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import forms.living_settlor.SettlorBusinessNameFormProvider
-import javax.inject.Inject
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessNamePage
 import play.api.data.Form
@@ -30,6 +28,7 @@ import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.business.SettlorBusinessNameView
 
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class SettlorBusinessNameController @Inject()(
@@ -44,7 +43,7 @@ class SettlorBusinessNameController @Inject()(
 
   private val form: Form[String] = formProvider()
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorBusinessNamePage(index)) match {
@@ -52,21 +51,21 @@ class SettlorBusinessNameController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, mode, index, draftId))
+      Ok(view(preparedForm, index, draftId))
   }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, mode, index, draftId))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
 
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessNamePage(index), value))
             _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessNamePage(index), mode, draftId)(updatedAnswers))
+          } yield Redirect(navigator.nextPage(SettlorBusinessNamePage(index), draftId)(updatedAnswers))
         }
       )
   }

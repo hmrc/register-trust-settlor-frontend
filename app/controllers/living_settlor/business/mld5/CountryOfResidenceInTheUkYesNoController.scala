@@ -20,7 +20,6 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.YesNoFormProvider
-import models.Mode
 import navigation.Navigator
 import pages.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoPage
 import play.api.data.Form
@@ -45,7 +44,7 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
 
   private val form: Form[Boolean] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidenceInTheUkYesNo")
 
-  def onPageLoad(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)) {
       implicit request =>
 
@@ -54,22 +53,22 @@ class CountryOfResidenceInTheUkYesNoController @Inject()(
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, mode, draftId , index, request.businessName))
+        Ok(view(preparedForm, draftId , index, request.businessName))
     }
 
-  def onSubmit(mode: Mode, index: Int, draftId: String): Action[AnyContent] =
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     actions.authWithData(draftId).andThen(requireName(index, draftId)).async {
       implicit request =>
 
         form.bindFromRequest().fold(
           formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, mode, draftId , index, request.businessName))),
+            Future.successful(BadRequest(view(formWithErrors, draftId , index, request.businessName))),
 
           value =>
             for {
               updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidenceInTheUkYesNoPage(index), value))
               _              <- repository.set(updatedAnswers)
-            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), mode, draftId)(updatedAnswers))
+            } yield Redirect(navigator.nextPage(CountryOfResidenceInTheUkYesNoPage(index), draftId)(updatedAnswers))
         )
     }
 }

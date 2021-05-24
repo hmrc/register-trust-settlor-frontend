@@ -18,7 +18,7 @@ package utils.print
 
 import com.google.inject.Inject
 import controllers.trust_type.routes._
-import models.{NormalMode, UserAnswers}
+import models.UserAnswers
 import pages.trust_type._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
@@ -31,13 +31,13 @@ class TrustTypePrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers)
 
     Seq(
-      bound.yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDied", SetUpAfterSettlorDiedController.onPageLoad(NormalMode, draftId).url),
-      bound.enumQuestion(KindOfTrustPage, "kindOfTrust", KindOfTrustController.onPageLoad(NormalMode, draftId).url, "kindOfTrust"),
-      bound.yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", AdditionToWillTrustYesNoController.onPageLoad(NormalMode, draftId).url),
-      bound.enumQuestion(HowDeedOfVariationCreatedPage, "howDeedOfVariationCreated", HowDeedOfVariationCreatedController.onPageLoad(NormalMode, draftId).url, "howDeedOfVariationCreated"),
-      bound.yesNoQuestion(HoldoverReliefYesNoPage, "holdoverReliefYesNo", HoldoverReliefYesNoController.onPageLoad(NormalMode, draftId).url),
-      bound.yesNoQuestion(EfrbsYesNoPage, "employerFinancedRbsYesNo", EmployerFinancedRbsYesNoController.onPageLoad(NormalMode, draftId).url),
-      bound.dateQuestion(EfrbsStartDatePage, "employerFinancedRbsStartDate", EmployerFinancedRbsStartDateController.onPageLoad(NormalMode, draftId).url)
+      bound.yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDied", SetUpAfterSettlorDiedController.onPageLoad(draftId).url),
+      bound.enumQuestion(KindOfTrustPage, "kindOfTrust", KindOfTrustController.onPageLoad(draftId).url, "kindOfTrust"),
+      bound.yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", AdditionToWillTrustYesNoController.onPageLoad(draftId).url),
+      bound.enumQuestion(HowDeedOfVariationCreatedPage, "howDeedOfVariationCreated", HowDeedOfVariationCreatedController.onPageLoad(draftId).url, "howDeedOfVariationCreated"),
+      bound.yesNoQuestion(HoldoverReliefYesNoPage, "holdoverReliefYesNo", HoldoverReliefYesNoController.onPageLoad(draftId).url),
+      bound.yesNoQuestion(EfrbsYesNoPage, "employerFinancedRbsYesNo", EmployerFinancedRbsYesNoController.onPageLoad(draftId).url),
+      bound.dateQuestion(EfrbsStartDatePage, "employerFinancedRbsStartDate", EmployerFinancedRbsStartDateController.onPageLoad(draftId).url)
     ).flatten
 
   }
