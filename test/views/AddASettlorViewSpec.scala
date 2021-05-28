@@ -39,9 +39,9 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
   val form = new AddASettlorFormProvider()()
 
-  val view = viewFor[AddASettlorView](Some(emptyUserAnswers))
+  val view: AddASettlorView = viewFor[AddASettlorView](Some(emptyUserAnswers))
 
-  val hint = "This is a trust created during the settlor's lifetime to gift or transfer assets (also known as an inter vivos trust)"
+  val hint: String = messages("addASettlor.Lifetime")
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, Nil, Nil, "Add a settlor", Some(hint))(fakeRequest, messages)
@@ -67,7 +67,7 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       val viewWithData = applyView(form, inProgressSettlors, Nil, 1)
 
-      behave like dynamicTitlePage(viewWithData, "addASettlor.singular", "1")
+      behave like dynamicTitlePage(viewWithData, "addASettlor", "1")
 
       behave like pageWithBackLink(viewWithData)
 

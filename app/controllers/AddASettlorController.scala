@@ -55,9 +55,8 @@ class AddASettlorController @Inject()(
 
   private def heading(count: Int)(implicit mp: MessagesProvider): String = {
     count match {
-      case 0 => Messages("addASettlor.heading")
-      case 1 => Messages("addASettlor.singular.heading")
-      case size => Messages("addASettlor.count.heading", size)
+      case x if x <= 1 => Messages("addASettlor.heading")
+      case _ => Messages("addASettlor.count.heading", count)
     }
   }
 
