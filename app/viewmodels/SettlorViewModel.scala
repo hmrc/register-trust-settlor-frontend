@@ -22,6 +22,7 @@ import scala.language.implicitConversions
 
 trait SettlorViewModel {
   val status: Status
+  def isComplete: Boolean = status == Status.Completed
 }
 
 object SettlorViewModel {

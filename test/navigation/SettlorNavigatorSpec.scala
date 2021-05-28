@@ -20,9 +20,10 @@ import base.SpecBase
 import models.pages.AddASettlor._
 import models.pages.FullName
 import models.pages.IndividualOrBusiness._
+import models.pages.Status.Completed
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.individual.SettlorIndividualNamePage
-import pages.{AddASettlorPage, AddASettlorYesNoPage}
+import pages.{AddASettlorPage, AddASettlorYesNoPage, LivingSettlorStatus}
 import play.api.mvc.Call
 
 class SettlorNavigatorSpec extends SpecBase {
@@ -42,14 +43,32 @@ class SettlorNavigatorSpec extends SpecBase {
               .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
           }
 
-          "living settlors" in {
-            val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-              .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-              .set(AddASettlorPage, YesNow).success.value
+          "living settlors" when {
 
-            navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(1, fakeDraftId))
+            "last settlor is in progress" must {
+              "redirect to in-progress index" in {
+                val userAnswers = emptyUserAnswers
+                  .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+                  .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
+                  .set(AddASettlorPage, YesNow).success.value
+
+                navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                  .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+              }
+            }
+
+            "last settlor is complete" must {
+              "redirect to next index" in {
+                val userAnswers = emptyUserAnswers
+                  .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+                  .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
+                  .set(LivingSettlorStatus(0), Completed).success.value
+                  .set(AddASettlorPage, YesNow).success.value
+
+                navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                  .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(1, fakeDraftId))
+              }
+            }
           }
         }
       }

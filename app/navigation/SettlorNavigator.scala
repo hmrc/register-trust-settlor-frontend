@@ -49,7 +49,12 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
     def routeToSettlorIndex: Call = {
       val settlors = answers.get(LivingSettlors).getOrElse(List.empty)
-      routes.SettlorIndividualOrBusinessController.onPageLoad(settlors.size, draftId)
+      val index = settlors match {
+        case Nil => 0
+        case x if !x.last.isComplete => x.size - 1
+        case x => x.size
+      }
+      routes.SettlorIndividualOrBusinessController.onPageLoad(index, draftId)
     }
 
     answers.get(AddASettlorPage) match {

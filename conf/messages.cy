@@ -85,8 +85,6 @@ addASettlor.heading = Ychwanegu setlwr
 addASettlor.Lifetime = Mae hon yn ymddiriedolaeth a gafodd ei chreu yn ystod oes y setlwr er mwyn trosglwyddo asedion neu eu rhoi fel rhodd (a elwir hefyd yn ymddiriedolaeth inter vivos)
 addASettlor.no-complete = Na
 addASettlor.Repair = Cafodd yr ymddiriedolaeth hon ei chreu er mwyn talu am atgyweirio adeiladau hanesyddol
-addASettlor.singular.heading = Ychwanegu setlwr
-addASettlor.singular.title = Ychwanegu setlwr
 addASettlor.title = Ychwanegu setlwr
 
 addASettlorYesNo.add-them-now = Iawn
