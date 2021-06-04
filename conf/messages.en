@@ -365,6 +365,7 @@ settlorIndividualMentalCapacityYesNo.bulletpoint1 = mental illness
 settlorIndividualMentalCapacityYesNo.bulletpoint2 = learning disability
 settlorIndividualMentalCapacityYesNo.bulletpoint3 = dementia or a related condition
 settlorIndividualMentalCapacityYesNo.bulletpoint4 = being unable to communicate
+settlorIndividualMentalCapacityYesNo.p2 = If the settlor has died since the trust was created, select yes if the settlor had mental capacity at the time of their death.
 
 settlorIndividualAddressYesNo.title = Do you know the settlor’s address?
 settlorIndividualAddressYesNo.heading = Do you know {0}’s address?
