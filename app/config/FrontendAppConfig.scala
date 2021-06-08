@@ -91,4 +91,6 @@ class FrontendAppConfig @Inject() (configuration: Configuration) {
 
   def routeToSwitchLanguage: String => Call =
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
+
+  def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
 }
