@@ -22,7 +22,8 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    ukAddress: UkAddress
 )
 
 @(form: Form[_], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -36,15 +37,7 @@
 
         @error_summary(form.errors)
 
-        <fieldset>
-
-            <legend>
-                @components.heading("settlorsUKAddress.heading", Some(name.toString))
-            </legend>
-
-            @components.uk_address(form)
-
-        </fieldset>
+        @ukAddress(form, messages("settlorsUKAddress.heading", Some(name.toString)))
 
         @submitButton()
     }
