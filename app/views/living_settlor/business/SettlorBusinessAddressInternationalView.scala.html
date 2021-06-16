@@ -16,12 +16,14 @@
 
 @import controllers.living_settlor.business.routes._
 @import utils.InputOption
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    internationalAddress: InternationalAddress
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
@@ -35,15 +37,12 @@
 
         @error_summary(form.errors)
 
-        <fieldset>
-
-            <legend>
-                @components.heading("settlorBusinessAddressInternational.heading", Some(settlorBusinessName))
-            </legend>
-
-            @components.international_address(form, countryOptions)
-
-        </fieldset>
+        @internationalAddress(
+            form = form,
+            legend = messages("settlorBusinessAddressInternational.heading", Some(settlorBusinessName)),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         @submitButton(submitClass = Some("countryLookupHelper"))
     }

@@ -17,12 +17,14 @@
 @import controllers.living_settlor.individual.routes._
 @import utils.InputOption
 @import models.pages.FullName
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -47,7 +49,7 @@
             formGroupClasses = Set("form-control-3-4", "autocomplete-wrapper")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("number"),
             label = messages("settlorIndividualPassport.number"),
             hint = Some(messages(s"settlorIndividualPassport.number.hint"))

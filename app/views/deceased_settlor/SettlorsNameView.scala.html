@@ -15,12 +15,14 @@
  *@
 
 @import controllers.deceased_settlor.routes._
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_] , draftId: String)(implicit request: Request[_], messages: Messages)
@@ -40,19 +42,19 @@
             @components.heading("settlorsName.heading")
         </legend>
 
-        @components.input_text(
+        @inputText(
             field = form("firstName"),
             label = messages("settlorsName.firstName"),
             autocomplete = Some("given-name")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("middleName"),
             label = messages("settlorsName.middleName"),
             autocomplete = Some("additional-name")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("lastName"),
             label = messages("settlorsName.lastName"),
             autocomplete = Some("family-name")

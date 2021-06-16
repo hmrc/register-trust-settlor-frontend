@@ -17,12 +17,14 @@
 @import controllers.deceased_settlor.routes._
 @import models.pages.FullName
 @import utils.InputOption
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    internationalAddress: InternationalAddress
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -36,15 +38,12 @@
 
         @error_summary(form.errors)
 
-        <fieldset>
-
-            <legend>
-                @components.heading("settlorsInternationalAddress.heading", Some(name.toString))
-            </legend>
-
-            @components.international_address(form, countryOptions)
-
-        </fieldset>
+        @internationalAddress(
+            form = form,
+            legend = messages("settlorsInternationalAddress.heading", Some(name.toString)),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
         @submitButton(submitClass = Some("countryLookupHelper"))
     }

@@ -16,12 +16,14 @@
 
 @import controllers.living_settlor.individual.routes._
 @import models.pages.FullName
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -35,7 +37,7 @@
 
         @error_summary(form.errors)
 
-        @components.input_nino(
+        @inputText(
           field = form("value"),
           label = messages("settlorIndividualNINO.heading", name.toString),
           labelClass = Some("govuk-heading-l"),

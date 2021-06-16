@@ -15,10 +15,12 @@
  *@
 
 @import config.FrontendAppConfig
+@import views.html.components._
 
 @this(
         main_template: MainTemplate,
-        config: FrontendAppConfig
+        config: FrontendAppConfig,
+        bullet_list: BulletList
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -36,7 +38,7 @@
 
  <p>@messages("unauthorised.p3")</p>
 
- @components.bullet_list("unauthorised", Seq(
+ @bullet_list("unauthorised", Seq(
   "bullet1",
   "bullet2"
  ))

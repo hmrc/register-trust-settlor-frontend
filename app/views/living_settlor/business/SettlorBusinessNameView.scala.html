@@ -15,12 +15,14 @@
  *@
 
 @import controllers.living_settlor.business.routes._
+@import views.html.components._
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
@@ -36,7 +38,7 @@
 
         @components.heading("settlorBusinessName.heading")
 
-        @components.input_text(
+        @inputText(
           field = form("value"),
           label = messages("settlorBusinessName.heading"),
           labelClass = Some("visually-hidden"),

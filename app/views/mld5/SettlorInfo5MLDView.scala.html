@@ -15,9 +15,11 @@
  *@
 
 @import controllers.trust_type.routes._
+@import views.html.components._
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    bullet_list: BulletList
 )
 
 @(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
@@ -33,7 +35,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph1")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -44,7 +46,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph2")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint5",
             "bulletpoint6",
@@ -55,7 +57,7 @@
     @if(isTaxable) {
         <p>@messages("5mld.settlorInfo.paragraph3")</p>
 
-        @components.bullet_list(
+        @bullet_list(
             "5mld.settlorInfo",
             List(
                 "bulletpoint8",
@@ -70,7 +72,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph5")</p>
 
-    @components.bullet_list(
+    @bullet_list(
         "5mld.settlorInfo",
         List(
             "bulletpoint12",
@@ -104,7 +106,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph8")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint16",
             "bulletpoint17",

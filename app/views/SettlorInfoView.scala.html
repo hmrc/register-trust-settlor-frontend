@@ -15,9 +15,11 @@
  *@
 
 @import controllers.trust_type.routes._
+@import views.html.components._
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    bullet_list: BulletList
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
@@ -33,7 +35,7 @@
 
     <p>@messages("settlorInfo.paragraph1")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint1",
             "bulletpoint2"
@@ -42,7 +44,7 @@
 
     <p>@messages("settlorInfo.paragraph2")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint2",
         )
@@ -50,7 +52,7 @@
 
     <p>@messages("settlorInfo.paragraph3")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint4",
             "bulletpoint5",
@@ -69,7 +71,7 @@
 
     <p>@messages("settlorInfo.paragraph6")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint8",
             "bulletpoint9",
