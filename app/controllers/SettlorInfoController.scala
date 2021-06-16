@@ -42,4 +42,10 @@ class SettlorInfoController @Inject()(
         Ok(view(draftId))
       }
   }
+
+  def onSubmit(draftId: String) = actions.authWithData(draftId) {
+    implicit request =>
+      Redirect(controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(draftId))
+  }
+
 }

@@ -21,7 +21,8 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    input_date: InputDate
 )
 
 @(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
@@ -35,7 +36,7 @@
 
         @error_summary(form.errors)
 
-        @components.input_date(
+        @input_date(
             field = form("value"),
             legend = messages("employerFinancedRbsStartDate.heading"),
             legendClass = "govuk-heading-l",

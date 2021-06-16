@@ -10,6 +10,7 @@ GET        /assets/*file                                                        
 GET        /language/:lang                                                                  controllers.LanguageSwitchController.switchToLanguage(lang: String)
 
 GET        /this-service-has-been-reset                                                     controllers.SessionExpiredController.onPageLoad
+POST       /this-service-has-been-reset                                                     controllers.SessionExpiredController.onSubmit
 
 GET        /unauthorised                                                                    controllers.UnauthorisedController.onPageLoad
 
@@ -19,6 +20,7 @@ GET        /keep-alive                                                          
 GET        /timeout                                                                         controllers.SessionTimeoutController.timeout
 
 GET        /:draftId/information-you-need                                                   controllers.SettlorInfoController.onPageLoad(draftId: String)
+POST       /:draftId/information-you-need                                                   controllers.SettlorInfoController.onSubmit(draftId: String)
 
 GET        /:draftId/add                                                                    controllers.AddASettlorController.onPageLoad(draftId: String)
 POST       /:draftId/add                                                                    controllers.AddASettlorController.submitOne(draftId: String)

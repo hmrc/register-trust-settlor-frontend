@@ -18,9 +18,11 @@
 @import views.html.components._
 
 @this(
-        main_template: MainTemplate,
-        config: FrontendAppConfig,
-        bullet_list: BulletList
+    main_template: MainTemplate,
+    config: FrontendAppConfig,
+    bullet_list: BulletList,
+    heading: Heading,
+    link: Link
 )
 
 @()(implicit request: Request[_], messages: Messages)
@@ -30,11 +32,11 @@
  canSignOut = false
 ) {
 
- @components.heading("unauthorised.heading")
+ @heading("unauthorised.heading")
 
  <p>@messages("unauthorised.p1")</p>
 
- <p>@messages("unauthorised.p2") @components.link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true).</p>
+ <p>@messages("unauthorised.p2") @link(config.registerTrustAsTrusteeUrl, "help-link", messages("unauthorised.link"), openInNewWindow = true).</p>
 
  <p>@messages("unauthorised.p3")</p>
 

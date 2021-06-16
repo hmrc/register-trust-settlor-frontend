@@ -14,12 +14,13 @@
  * limitations under the License.
  *@
 
-@import controllers.trust_type.routes._
+@import controllers.routes._
 @import views.html.components._
 
 @this(
     main_template: MainTemplate,
-    bullet_list: BulletList
+    bullet_list: BulletList,
+    heading_with_caption: HeadingWithCaption
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
@@ -29,7 +30,7 @@
     showBackLink = true
     ) {
 
-    @components.heading_with_caption("settlorInfo")
+    @heading_with_caption("settlorInfo")
 
     <h2>@messages("settlorInfo.subheading1")</h2>
 
@@ -79,6 +80,7 @@
         )
     )
 
-    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(draftId).url)
-
+    @formHelper(action = SettlorInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @submit_button(Some(messages("site.onlyContinue")))
+    }
 }

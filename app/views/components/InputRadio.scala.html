@@ -21,7 +21,7 @@
     legend: String,
     legendClass: Option[String] = None,
     hint: Option[String] = None,
-    headingIsLegend: Boolean = false,
+    legendAsHeading: Boolean = false,
     inputs: Seq[RadioItem],
     inline: Boolean = true
 )(implicit messages: Messages)
@@ -38,7 +38,7 @@
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(legend),
-            isPageHeading = headingIsLegend,
+            isPageHeading = legendAsHeading,
             classes = legendClass.getOrElse("govuk-fieldset__legend--l")
         ))
     )),

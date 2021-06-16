@@ -22,7 +22,8 @@
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputText: InputText
+    inputText: InputText,
+    heading: Heading
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
@@ -36,7 +37,7 @@
 
         @error_summary(form.errors)
 
-        @components.heading("settlorBusinessName.heading")
+        @heading("settlorBusinessName.heading")
 
         @inputText(
           field = form("value"),

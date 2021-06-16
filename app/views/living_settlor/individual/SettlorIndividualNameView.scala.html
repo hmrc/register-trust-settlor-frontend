@@ -22,7 +22,8 @@
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputText: InputText
+    inputText: InputText,
+    heading: Heading
 )
 
 @(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
@@ -39,7 +40,7 @@
     <fieldset>
 
         <legend>
-            @components.heading("settlorIndividualName.heading")
+            @heading("settlorIndividualName.heading")
         </legend>
 
         @inputText(

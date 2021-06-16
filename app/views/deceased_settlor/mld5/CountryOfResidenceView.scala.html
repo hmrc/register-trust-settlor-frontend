@@ -23,7 +23,8 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    select: InputSelect
 )
 
 @(form: Form[_], countryOptions: Seq[InputOption], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -37,7 +38,7 @@
 
         @error_summary(form.errors)
 
-        @components.select(field = form("value"),
+        @select(field = form("value"),
             label = messages("5mld.countryOfResidence.heading", name.toString),
             labelClasses = Set("govuk-heading-l"),
             labelAsHeading = true,

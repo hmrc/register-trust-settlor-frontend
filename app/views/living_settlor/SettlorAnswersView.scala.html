@@ -21,7 +21,8 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    heading: Heading
 )
 
 @(onSubmit: Call, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
@@ -31,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @components.heading("settlorAnswers.heading")
+    @heading("settlorAnswers.heading")
 
     @for(section <- answerSections){
         @{section match {

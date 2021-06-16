@@ -24,7 +24,10 @@
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputText: InputText
+    inputText: InputText,
+    heading: Heading,
+    input_date: InputDate,
+    select: InputSelect
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -38,9 +41,9 @@
 
         @error_summary(form.errors)
 
-        @components.heading("settlorIndividualIDCard.heading", Some(name.toString))
+        @heading("settlorIndividualIDCard.heading", Some(name.toString))
 
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("settlorIndividualIDCard.country"),
             labelClasses = Set("bold"),
             options = countryOptions,
@@ -54,7 +57,7 @@
             label = messages("settlorIndividualIDCard.number")
         )
 
-        @components.input_date(
+        @input_date(
             field = form("expiryDate"),
             legend = messages("settlorIndividualIDCard.expiryDate.title"),
             legendClass = "bold",
