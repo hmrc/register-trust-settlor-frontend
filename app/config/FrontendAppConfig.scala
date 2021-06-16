@@ -62,8 +62,8 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
   lazy val locationCanonicalList: String = configuration.get[String]("location.canonical.list.all")
   lazy val locationCanonicalListCY: String = configuration.get[String]("location.canonical.list.allCY")
 
-  lazy val countdownLength: String = configuration.get[String]("timeout.countdown")
-  lazy val timeoutLength: String = configuration.get[String]("timeout.length")
+  lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
+  lazy val timeoutLength: Int = configuration.get[Int]("timeout.length")
 
   private val day: Int = configuration.get[Int]("minimumDate.day")
   private val month: Int = configuration.get[Int]("minimumDate.month")

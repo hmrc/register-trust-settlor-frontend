@@ -17,6 +17,7 @@
 @import controllers.trust_type.routes._
 @import models.pages.DeedOfVariation
 @import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
+@import views.ViewUtils.mapRadioOptionsToRadioItems
 
 @this(
     main_template: MainTemplate,
@@ -41,7 +42,7 @@
             field = form("value"),
             legend = messages("howDeedOfVariationCreated.heading"),
             legendClass = Some("govuk-heading-l"),
-            inputs = DeedOfVariation.options,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, DeedOfVariation.options),
             legendAsHeading = true
         )
 

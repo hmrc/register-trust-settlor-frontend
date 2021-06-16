@@ -16,14 +16,15 @@
 
 @import controllers.living_settlor.individual.mld5.routes._
 @import models.pages.FullName
-@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo, Heading}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputYesNo: InputYesNo
+    inputYesNo: InputYesNo,
+    headingI: Heading
 )
 
 @(form: Form[_], index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -50,11 +51,15 @@
 
         @error_summary(form.errors)
 
+        @headingI("settlorIndividualMentalCapacityYesNo.heading", Some(name.toString))
+
+        @content
+
         @inputYesNo(
             field = form("value"),
             label = messages("settlorIndividualMentalCapacityYesNo.heading", name.toString),
-            legendClass = Some("govuk-heading-l"),
-            additionalContent = Some(content)
+            legendAsHeading = false,
+            legendClass = Some("govuk-visually-hidden")
         )
 
         @submitButton()

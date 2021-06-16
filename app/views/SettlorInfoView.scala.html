@@ -15,12 +15,14 @@
  *@
 
 @import controllers.routes._
-@import views.html.components.{BulletList, HeadingWithCaption}
+@import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
 
 @this(
     main_template: MainTemplate,
     bullet_list: BulletList,
-    heading_with_caption: HeadingWithCaption
+    heading_with_caption: HeadingWithCaption,
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
@@ -81,6 +83,6 @@
     )
 
     @formHelper(action = SettlorInfoController.onSubmit(draftId), 'autoComplete -> "off") {
-        @submit_button(Some(messages("site.onlyContinue")))
+        @submitButton(Some(messages("site.onlyContinue")))
     }
 }

@@ -34,6 +34,7 @@
 
     @heading("settlorAnswers.heading")
 
+@govukSummaryList(SummaryList(rows = formatSections(answerSection)))
     @for(section <- answerSections){
         @{section match {
             case a: AnswerSection => components.answer_section(a)

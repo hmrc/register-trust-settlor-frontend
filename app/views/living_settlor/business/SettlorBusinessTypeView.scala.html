@@ -17,6 +17,7 @@
 @import controllers.living_settlor.business.routes._
 @import models.pages.KindOfBusiness
 @import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
+@import views.ViewUtils.mapRadioOptionsToRadioItems
 
 @this(
     main_template: MainTemplate,
@@ -41,7 +42,7 @@
             field = form("value"),
             legend = messages("settlorBusinessType.heading", settlorBusinessName),
             legendClass = Some("govuk-heading-l"),
-            inputs = KindOfBusiness.options,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, KindOfBusiness.options),
             legendAsHeading = true
         )
 

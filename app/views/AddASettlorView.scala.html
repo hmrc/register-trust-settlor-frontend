@@ -18,13 +18,14 @@
 @import models.pages.AddASettlor
 @import viewmodels.AddRow
 @import views.html.components.{SubmitButton, ErrorSummary, Heading, AddToList, InputRadio}
+@import views.ViewUtils.mapRadioOptionsToRadioItems
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    heading: Heading,
+    headingI: Heading,
     addToList: AddToList,
     input_radio: InputRadio
 )
@@ -47,7 +48,7 @@
 
         @error_summary(form.errors)
 
-        @heading(heading)
+        @headingI(heading)
 
         @hint.map{ text =>
             <p>@messages(text)</p>
@@ -61,7 +62,7 @@
             field = form("value"),
             legend = messages("addASettlor.additional-content"),
             legendClass = Some("govuk-heading-m"),
-            inputs = AddASettlor.options,
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddASettlor.options),
             legendAsHeading = true
         )
 
