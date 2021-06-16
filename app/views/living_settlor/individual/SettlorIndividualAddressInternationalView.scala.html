@@ -26,12 +26,11 @@
 @(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressInternational.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressInternational.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualAddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @components.error_summary(form.errors)
 

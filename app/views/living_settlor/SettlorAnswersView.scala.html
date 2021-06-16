@@ -24,10 +24,9 @@
 @(onSubmit: Call, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("settlorAnswers.title")}"
+    title = s"${messages("settlorAnswers.title")}",
+    showBackLink = true
 ) {
-
-    @components.back_link()
 
     @components.heading("settlorAnswers.heading")
 

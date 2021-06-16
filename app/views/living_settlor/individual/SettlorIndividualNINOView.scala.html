@@ -25,12 +25,11 @@
 @(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualNINO.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualNINO.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualNINOController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @components.error_summary(form.errors)
 

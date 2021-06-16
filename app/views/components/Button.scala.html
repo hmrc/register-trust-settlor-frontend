@@ -14,13 +14,16 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.govukfrontend.views.html.components._
+
+@this(govukButton : GovukButton)
+
 @(
-  prefix: String,
-  keys: Seq[String]
+messageKey: String = "site.continue",
+isStartButton:Boolean = false,
 )(implicit messages: Messages)
 
-<ul class="list list-bullet">
- @keys.map { key =>
- <li>@messages(s"$prefix.$key")</li>
- }
-</ul>
+@govukButton(Button(
+ isStartButton = isStartButton,
+ content = Text(messages(messageKey))
+))

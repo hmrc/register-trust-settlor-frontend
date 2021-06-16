@@ -14,23 +14,23 @@
  * limitations under the License.
  *@
 
-@import viewmodels.AnswerSection
-@import views.html._
+@import viewmodels.AddRow
+@import views.html.components.AddToRow
 
-@(answerSection: AnswerSection)(implicit messages: Messages)
+@this(
+ addToRow: AddToRow
+)
 
-@if(answerSection.sectionKey.isDefined){
-<h2 class="heading-large">@messages(answerSection.sectionKey.get)</h2>
-}
+@(data: Seq[AddRow], id: String, entity : String)(implicit messages: Messages)
 
-@if(answerSection.headingKey.isDefined){
-<h3 class="heading-medium">@messages(answerSection.headingKey.get)</h3>
-}
+@if(data.nonEmpty){
+<h2 class="govuk-heading-m" id="data-list-heading--@id">@messages(s"site.$id")</h2>
 
-@if(answerSection.rows) {
-<ul role="list" class="govuk-check-your-answers cya-questions-long section">
-    @for(row <- answerSection.rows){
-    @components.answer_row(row)
-    }
-</ul>
+<div class="govuk-form-group">
+ <dl id="data-list--@id" class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
+  @for(item <- data) {
+   @addToRow(item)
+  }
+ </dl>
+</div>
 }

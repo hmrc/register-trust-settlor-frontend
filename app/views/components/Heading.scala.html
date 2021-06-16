@@ -14,11 +14,8 @@
  * limitations under the License.
  *@
 
-@(
-  messageKey: String = "",
-  href: String
-)(implicit messages: Messages)
+@this()
 
-<div class="section">
- <a id="button" href="@href" role="button" class="button">@messages(messageKey)</a>
-</div>
+@(headingKey: String, optionalParam: Option[String] = None, headingSize: String = "govuk-heading-l")(implicit messages: Messages)
+
+<h1 class="@headingSize">@messages(headingKey, optionalParam.getOrElse(""))</h1>

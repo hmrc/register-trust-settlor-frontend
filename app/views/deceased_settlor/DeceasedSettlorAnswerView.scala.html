@@ -25,10 +25,9 @@ formHelper: FormWithCSRF
 @(draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-title = s"${messages("deceasedSettlorAnswer.title")}"
+title = s"${messages("deceasedSettlorAnswer.title")}",
+showBackLink = true
 ) {
-
-@components.back_link()
 
 @components.heading("deceasedSettlorAnswer.heading")
 

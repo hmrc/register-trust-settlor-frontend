@@ -26,12 +26,11 @@
 
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualOrBusiness.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualOrBusiness.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
-
-        @components.back_link()
 
         @components.error_summary(form.errors)
 

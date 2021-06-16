@@ -14,11 +14,15 @@
  * limitations under the License.
  *@
 
+@this()
+
 @(
-messageKey: String = "",
-inputType: String = "button"
+ prefix : String,
+ keys : Seq[String]
 )(implicit messages: Messages)
 
-<div class="section">
-    <input type="@inputType" class="button" value="@messages(messageKey)" />
-</div>
+<ul class="govuk-list govuk-list--bullet">
+ @keys.map { key =>
+ <li>@messages(s"$prefix.$key")</li>
+ }
+</ul>

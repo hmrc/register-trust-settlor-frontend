@@ -24,12 +24,11 @@
 @(form: Form[_], draftId: String, hint: Option[String])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-  title = s"${errorPrefix(form)}${messages("addASettlorYesNo.title")}"
+  title = s"${errorPrefix(form)}${messages("addASettlorYesNo.title")}",
+  showBackLink = true
 ) {
 
 @formHelper(action = AddASettlorController.submitOne(draftId), 'autoComplete -> "off") {
-
-    @components.back_link()
 
     @components.error_summary(form.errors)
 
