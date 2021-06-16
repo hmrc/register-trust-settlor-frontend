@@ -20,7 +20,8 @@
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    error_summary: ErrorSummary
 )
 
 @(form: Form[_], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
@@ -32,7 +33,7 @@
 
     @formHelper(action = CountryOfNationalityInTheUkYesNoController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
         @components.input_yes_no(
             field = form("value"),

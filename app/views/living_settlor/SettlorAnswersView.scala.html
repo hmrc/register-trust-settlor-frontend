@@ -18,7 +18,8 @@
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    error_summary: ErrorSummary
 )
 
 @(onSubmit: Call, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)

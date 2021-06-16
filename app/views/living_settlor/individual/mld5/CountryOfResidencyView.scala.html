@@ -20,7 +20,8 @@
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    error_summary: ErrorSummary
 )
 
 @(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName)(implicit request: Request[_], messages: Messages)
@@ -32,7 +33,7 @@
 
     @formHelper(action = CountryOfResidencyController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
         @components.select(field = form("value"),
             label = messages("settlorIndividualCountryOfResidency.heading", name.toString),

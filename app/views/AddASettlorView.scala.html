@@ -20,7 +20,8 @@
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    error_summary: ErrorSummary
 )
 
 @(
@@ -39,7 +40,7 @@
 
     @formHelper(action = AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
         @components.heading(heading)
 

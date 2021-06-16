@@ -18,7 +18,8 @@
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    error_summary: ErrorSummary
 )
 
 @(form: Form[_], draftId: String, index: Int, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
@@ -30,7 +31,7 @@
 
     @formHelper(action = SettlorBusinessAddressUKController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
         <fieldset>
 
