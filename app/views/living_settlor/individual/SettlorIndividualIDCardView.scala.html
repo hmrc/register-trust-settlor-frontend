@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary
 )
 
@@ -59,6 +60,6 @@
             hint = Some(messages(s"settlorIndividualIDCard.expiryDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

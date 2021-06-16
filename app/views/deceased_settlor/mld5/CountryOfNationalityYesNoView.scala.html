@@ -21,6 +21,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary,
         inputYesNo: InputYesNo
 )
@@ -44,6 +45,6 @@
             hint = Some(messages("5mld.countryOfNationalityYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

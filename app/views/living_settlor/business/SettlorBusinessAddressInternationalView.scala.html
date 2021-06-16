@@ -20,6 +20,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary
 )
 
@@ -44,6 +45,6 @@
 
         </fieldset>
 
-        @components.submit_button(submitClass = Some("countryLookupHelper"))
+        @submitButton(submitClass = Some("countryLookupHelper"))
     }
 }

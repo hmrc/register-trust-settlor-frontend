@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary
 )
 
@@ -41,6 +42,6 @@
             hint = Some(messages(s"site.date.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

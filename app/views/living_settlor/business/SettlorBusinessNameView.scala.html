@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary
 )
 
@@ -42,6 +43,6 @@
           autocomplete = Some("name")
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

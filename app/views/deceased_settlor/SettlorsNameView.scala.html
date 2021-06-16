@@ -19,6 +19,7 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
     error_summary: ErrorSummary
 )
 
@@ -57,6 +58,6 @@
             autocomplete = Some("family-name")
         )
     </fieldset>
-        @components.submit_button()
+        @submitButton()
     }
 }
