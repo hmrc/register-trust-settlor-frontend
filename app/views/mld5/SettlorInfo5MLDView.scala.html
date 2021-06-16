@@ -15,12 +15,13 @@
  *@
 
 @import controllers.routes._
-@import views.html.components._
+@import views.html.components.{BulletList, HeadingWithCaption}
 
 @this(
     main_template: MainTemplate,
     bullet_list: BulletList,
-    heading_with_caption: HeadingWithCaption
+    heading_with_caption: HeadingWithCaption,
+    submit_button: SubmitButton
 )
 
 @(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
