@@ -17,14 +17,14 @@
 @import models.pages.FullName
 
 @import controllers.deceased_settlor.routes._
-@import views.html.components._
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-        inputYesNo: InputYesNo
+    inputYesNo: InputYesNo
 )
 
 @(form: Form[_], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
