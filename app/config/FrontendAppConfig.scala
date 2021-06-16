@@ -21,28 +21,24 @@ import controllers.routes
 import play.api.Configuration
 import play.api.i18n.Lang
 import play.api.mvc.{Call, Request}
+import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
 import java.net.{URI, URLEncoder}
 import java.time.LocalDate
 
 @Singleton
-class FrontendAppConfig @Inject() (configuration: Configuration) {
+class FrontendAppConfig @Inject() (configuration: Configuration,
+                                   contactFrontendConfig: ContactFrontendConfig) {
 
   final val ENGLISH = "en"
   final val WELSH = "cy"
-
-  private val contactHost = configuration.get[String]("contact-frontend.host")
-  private val contactFormServiceIdentifier = "trusts"
 
   val repositoryKey: String = "settlors"
 
   val appName: String = configuration.get[String]("appName")
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")
 
-  val reportAProblemPartialUrl = s"$contactHost/contact/problem_reports_ajax?service=$contactFormServiceIdentifier"
-  val reportAProblemNonJSUrl = s"$contactHost/contact/problem_reports_nonjs?service=$contactFormServiceIdentifier"
-  val betaFeedbackUrl = s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
-  val betaFeedbackUnauthenticatedUrl = s"$contactHost/contact/beta-feedback-unauthenticated?service=$contactFormServiceIdentifier"
+  val betaFeedbackUrl = s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
 
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
   lazy val authUrl: String = configuration.get[Service]("auth").baseUrl
