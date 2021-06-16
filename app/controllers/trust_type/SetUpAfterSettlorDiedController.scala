@@ -41,7 +41,7 @@ class SetUpAfterSettlorDiedController @Inject()(
                                                  view: SetUpAfterSettlorDiedView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpAfterSettlorDied")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpAfterSettlorDiedYesNo")
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>

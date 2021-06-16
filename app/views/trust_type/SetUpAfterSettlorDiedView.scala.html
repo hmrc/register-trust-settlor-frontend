@@ -19,13 +19,14 @@
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
-    error_summary: ErrorSummary
+    error_summary: ErrorSummary,
+    inputYesNo: InputYesNo
 )
 
 @(form: Form[_], draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("setUpAfterSettlorDied.title")}",
+    title = s"${errorPrefix(form)}${messages("setUpAfterSettlorDiedYesNo.title")}",
     showBackLink = true
 ) {
 
@@ -33,12 +34,12 @@
 
         @error_summary(form.errors)
 
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
-            label = messages("setUpAfterSettlorDied.heading"),
-            legendClass = Some("heading-large"),
+            label = messages("setUpAfterSettlorDiedYesNo.heading"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true,
-            hint = if(isTaxable) Some(messages("setUpAfterSettlorDied.hint")) else None
+            hint = if(isTaxable) Some(messages("setUpAfterSettlorDiedYesNo.hint")) else None
         )
 
         @components.submit_button()

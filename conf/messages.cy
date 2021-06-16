@@ -547,11 +547,11 @@ settlorsUKAddress.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
 
-setUpAfterSettlorDied.checkYourAnswersLabel = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
-setUpAfterSettlorDied.error.required = Dewiswch ‘Iawn’ os cafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw
-setUpAfterSettlorDied.heading = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
-setUpAfterSettlorDied.hint = Gelwir hyn hefyd yn ymddiriedolaeth ewyllys.
-setUpAfterSettlorDied.title = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
+setUpAfterSettlorDiedYesNo.checkYourAnswersLabel = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
+setUpAfterSettlorDiedYesNo.error.required = Dewiswch ‘Iawn’ os cafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw
+setUpAfterSettlorDiedYesNo.heading = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
+setUpAfterSettlorDiedYesNo.hint = Gelwir hyn hefyd yn ymddiriedolaeth ewyllys.
+setUpAfterSettlorDiedYesNo.title = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
 
 setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel = A yw hyn yn ychwanegol at ymddiriedolaeth ewyllys?
 setUpInAdditionToWillTrustYesNo.error.required = Dewiswch ‘Iawn’ os yw’r ymddiriedolaeth yn ychwanegol at ymddiriedolaeth ewyllys
