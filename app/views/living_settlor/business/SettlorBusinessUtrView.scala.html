@@ -42,10 +42,11 @@
             labelAsHeading = true,
             hint = Some(messages("settlorBusinessUtr.hint")),
             labelClass = Some("govuk-heading-l"),
+            inputClass = Some("govuk-input--width-20"),
             inputMode = Some("numeric")
         )
 
-        <p>@messages("settlorBusinessUtr.p1") <a target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("settlorBusinessUtr.link")</a>.</p>
+        <p>@messages("settlorBusinessUtr.p1") <a class="govuk-link" target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("settlorBusinessUtr.link")</a>.</p>
 
         @submitButton()
     }
