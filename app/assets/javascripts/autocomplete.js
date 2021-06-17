@@ -10,7 +10,7 @@ $(document).ready(function() {
     // need to invoke new enhanceSelectElement()
     //======================================================
 
-    if(document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
+    if(document.querySelectorAll('select[data-non-uk-countries]').length) {
        accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-non-uk-countries]"),
             showAllValues: true,
@@ -18,7 +18,7 @@ $(document).ready(function() {
         });
     }
 
-     if(document.querySelectorAll('select[data-all-countries]').length > 0) {
+     if(document.querySelectorAll('select[data-all-countries]').length) {
        accessibleAutocomplete.enhanceSelectElement({
             selectElement: document.querySelector("select[data-all-countries]"),
             showAllValues: true,
@@ -31,11 +31,12 @@ $(document).ready(function() {
     // Takes the aria-described by value from the select element and
     // allocates this to the created text input
     //======================================================
-    if (document.querySelectorAll('select[data-all-countries]').length > 0) {
+    if (document.querySelectorAll('select[data-all-countries]').length) {
        var selectDescribedByValues = $('select[data-all-countries]').attr('aria-describedby');
        $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
-    if (document.querySelectorAll('select[data-non-uk-countries]').length > 0) {
+
+    if (document.querySelectorAll('select[data-non-uk-countries]').length) {
        var selectDescribedByValues = $('select[data-non-uk-countries]').attr('aria-describedby');
        $(".autocomplete__wrapper #value").attr('aria-describedby', selectDescribedByValues);
     }
@@ -45,20 +46,15 @@ $(document).ready(function() {
     // Fix CSS styling of errors (red outline) around the country input dropdown
     //======================================================
 
-    // Override autocomplete styles to apply correct error component design pattern
-    if ($(".autocomplete-wrapper .error-message").length) $(".autocomplete__wrapper input").addClass('field-error');
     // Set the border colour to black with orange border when clicking into the input field
     $('.autocomplete__wrapper input').focus(function(e){
-        if ($(".autocomplete-wrapper .error-message").length) {
-            $(".autocomplete__wrapper input")
-            .css({"border" : "4px solid #0b0c0c", "-webkit-box-shadow" : "none", "box-shadow" : "none"});
-        }
-    });
+        if ($(".govuk-form-group--error .autocomplete__wrapper").length > 0) $(".autocomplete__wrapper input").css({"border" : "2px solid #0b0c0c", "-webkit-box-shadow" : "none", "box-shadow" : "none"});
+    })
+
     // Set the border colour back to red when clicking out of the input field
+    // Set the gov.uk error colour https://design-system.service.gov.uk/styles/colour/
     $('.autocomplete__wrapper input').focusout(function(e){
-        if ($(".autocomplete-wrapper .error-message").length) {
-            $(".autocomplete__wrapper input").css("border", "4px solid #d4351c");
-        }
+        if ($(".govuk-form-group--error .autocomplete__wrapper").length > 0) $(".autocomplete__wrapper input").css("border", "2px solid #d4351c");
     });
 
 
