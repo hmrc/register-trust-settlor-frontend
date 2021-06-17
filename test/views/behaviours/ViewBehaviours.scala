@@ -34,7 +34,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          span.text mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -58,7 +58,7 @@ trait ViewBehaviours extends ViewSpecBase {
         "display language toggles" in {
 
           val doc = asDocument(view)
-          assertRenderedById(doc, "cymraeg-switch")
+          assertRenderedByCssSelector(doc, "a[lang=cy]")
         }
 
       }
@@ -79,7 +79,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          span.text mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -123,7 +123,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          span.text mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
@@ -168,7 +168,7 @@ trait ViewBehaviours extends ViewSpecBase {
           val doc = asDocument(view)
           val nav = doc.getElementById("proposition-menu")
           val span = nav.children.first
-          span.text mustBe messages("site.service_name")
+          span.text mustBe messages("service.name")
         }
 
         "display the correct browser title" in {
