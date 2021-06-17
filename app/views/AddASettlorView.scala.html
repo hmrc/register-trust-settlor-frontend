@@ -46,7 +46,7 @@
 
     @formHelper(action = AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
 
-        @error_summary(form.errors)
+        @error_summary(form.errors, AddASettlor.options)
 
         @headingI(heading)
 

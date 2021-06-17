@@ -37,7 +37,7 @@
 
     @formHelper(action = SettlorIndividualOrBusinessController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @error_summary(form.errors)
+        @error_summary(form.errors, IndividualOrBusiness.options.toSeq)
 
         @input_radio(
             field = form("value"),
