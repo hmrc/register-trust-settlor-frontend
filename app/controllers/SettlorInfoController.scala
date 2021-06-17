@@ -43,8 +43,7 @@ class SettlorInfoController @Inject()(
       }
   }
 
-  def onSubmit(draftId: String) = actions.authWithData(draftId) {
-    implicit request =>
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
       Redirect(controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(draftId))
   }
 
