@@ -17,13 +17,16 @@
 @import controllers.deceased_settlor.routes._
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 @import views.html.components.{SubmitButton, ErrorSummary, Heading}
+@import utils.SectionFormatter.formatSections
+@import viewmodels.Section
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    heading: Heading
+    heading: Heading,
+    govukSummaryList: GovukSummaryList,
 )
 
 @(draftId: String, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
@@ -35,14 +38,8 @@
 
 @heading("deceasedSettlorAnswer.heading")
 
-@for(section <- answerSections){
-   @{
-       section match {
-           case a: AnswerSection => components.answer_section(a)
-           case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-       }
-   }
-}
+@govukSummaryList(SummaryList(rows = formatSections(answerSections)))
+
 
 @formHelper(action = DeceasedSettlorAnswerController.onSubmit(draftId), 'autoComplete -> "off") {
    @submitButton()
