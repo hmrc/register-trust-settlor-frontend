@@ -15,15 +15,14 @@
  *@
 
 @import controllers.living_settlor.business.routes._
-@import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading}
+@import views.html.components.{SubmitButton, ErrorSummary, InputText}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputText: InputText,
-    heading: Heading
+    inputText: InputText
 )
 
 @(form: Form[_], index: Int, draftId: String)(implicit request: Request[_], messages: Messages)
@@ -37,13 +36,12 @@
 
         @error_summary(form.errors)
 
-        @heading("settlorBusinessName.heading")
-
         @inputText(
-          field = form("value"),
-          label = messages("settlorBusinessName.heading"),
-          labelClass = Some("visually-hidden"),
-          autocomplete = Some("name")
+            field = form("value"),
+            label = messages("settlorBusinessName.heading"),
+            labelClass = Some("govuk-heading-l"),
+            labelAsHeading = true,
+            autocomplete = Some("name")
         )
 
         @submitButton()
