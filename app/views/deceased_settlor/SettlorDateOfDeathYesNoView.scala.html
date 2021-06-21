@@ -16,31 +16,34 @@
 
 @import controllers.deceased_settlor.routes._
 @import models.pages.FullName
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputYesNo: InputYesNo
 )
 
 @(form: Form[_], draftId: String,  name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorDateOfDeathYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorDateOfDeathYesNo.title")}",
+    showBackLink = true
     ) {
 
     @formHelper(action = SettlorDateOfDeathYesNoController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("settlorDateOfDeathYesNo.heading", name.toString),
-            legendClass = Some("heading-large"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

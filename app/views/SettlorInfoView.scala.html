@@ -14,27 +14,31 @@
  * limitations under the License.
  *@
 
-@import controllers.trust_type.routes._
+@import controllers.routes._
+@import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    bullet_list: BulletList,
+    heading_with_caption: HeadingWithCaption,
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
 )
 
 @(draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("settlorInfo.title")}"
+    title = s"${messages("settlorInfo.title")}",
+    showBackLink = true
     ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption("settlorInfo")
+    @heading_with_caption("settlorInfo")
 
     <h2>@messages("settlorInfo.subheading1")</h2>
 
     <p>@messages("settlorInfo.paragraph1")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint1",
             "bulletpoint2"
@@ -43,7 +47,7 @@
 
     <p>@messages("settlorInfo.paragraph2")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint2",
         )
@@ -51,7 +55,7 @@
 
     <p>@messages("settlorInfo.paragraph3")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint4",
             "bulletpoint5",
@@ -70,7 +74,7 @@
 
     <p>@messages("settlorInfo.paragraph6")</p>
 
-    @components.bullet_list("settlorInfo",
+    @bullet_list("settlorInfo",
         List(
             "bulletpoint8",
             "bulletpoint9",
@@ -78,6 +82,7 @@
         )
     )
 
-    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(draftId).url)
-
+    @formHelper(action = SettlorInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @submitButton(Some(messages("site.onlyContinue")))
+    }
 }

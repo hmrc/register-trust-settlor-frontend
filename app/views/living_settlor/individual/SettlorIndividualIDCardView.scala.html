@@ -17,41 +17,47 @@
 @import controllers.living_settlor.individual.routes._
 @import utils.InputOption
 @import models.pages.FullName
+@import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading, InputDate, InputSelect}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputText: InputText,
+    heading: Heading,
+    input_date: InputDate,
+    select: InputSelect
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualIDCard.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualIDCard.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualIDCardController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
+        @heading("settlorIndividualIDCard.heading", Some(name.toString))
 
-        @components.heading("settlorIndividualIDCard.heading", Some(name.toString))
-
-        @components.select(field = form("country"),
+        @select(field = form("country"),
             label = messages("settlorIndividualIDCard.country"),
             labelClasses = Set("bold"),
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
-            selectAttribute = Set("data-non-uk-countries"),
+            selectAttribute = Map("data-non-uk-countries" -> ""),
             formGroupClasses = Set("form-control-3-4", "autocomplete-wrapper")
         )
 
-        @components.input_text(
+        @inputText(
             field = form("number"),
             label = messages("settlorIndividualIDCard.number")
         )
 
-        @components.input_date(
+        @input_date(
             field = form("expiryDate"),
             legend = messages("settlorIndividualIDCard.expiryDate.title"),
             legendClass = "bold",
@@ -59,6 +65,6 @@
             hint = Some(messages(s"settlorIndividualIDCard.expiryDate.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

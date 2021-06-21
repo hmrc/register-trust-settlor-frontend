@@ -24,10 +24,10 @@ import views.html.trust_type.SetUpAfterSettlorDiedView
 
 class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "setUpAfterSettlorDied"
+  val messageKeyPrefix = "setUpAfterSettlorDiedYesNo"
 
 
-  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDied")
+  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDiedYesNo")
 
   "SetUpAfterSettlorDied view" when {
 

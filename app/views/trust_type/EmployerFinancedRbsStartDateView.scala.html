@@ -15,32 +15,35 @@
  *@
 
 @import controllers.trust_type.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputDate}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    input_date: InputDate
 )
 
 @(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("employerFinancedRbsStartDate.title")}"
+    title = s"${errorPrefix(form)}${messages("employerFinancedRbsStartDate.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = EmployerFinancedRbsStartDateController.onSubmit(draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_date(
+        @input_date(
             field = form("value"),
             legend = messages("employerFinancedRbsStartDate.heading"),
-            legendClass = "heading-large",
+            legendClass = "govuk-heading-l",
             legendAsHeading = true,
             hint = Some(messages(s"site.date.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

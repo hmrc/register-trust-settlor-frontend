@@ -26,7 +26,7 @@ import views.html.trust_type.SetUpAfterSettlorDiedView
 
 class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
-  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDied")
+  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDiedYesNo")
 
   lazy val setUpAfterSettlorDiedRoute = routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url
 

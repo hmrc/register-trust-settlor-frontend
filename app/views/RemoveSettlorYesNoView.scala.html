@@ -15,31 +15,34 @@
  *@
 
 @import controllers.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputYesNo: InputYesNo
 )
 
 @(form: Form[_], index: Int, draftId: String, settlor: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlors.removeYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("settlors.removeYesNo.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = RemoveSettlorYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("settlors.removeYesNo.heading", settlor),
-            legendClass = Some("heading-large"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

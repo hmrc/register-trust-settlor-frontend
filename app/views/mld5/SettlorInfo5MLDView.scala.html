@@ -14,27 +14,31 @@
  * limitations under the License.
  *@
 
-@import controllers.trust_type.routes._
+@import controllers.routes._
+@import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
 
 @this(
-    main_template: MainTemplate
+    main_template: MainTemplate,
+    bullet_list: BulletList,
+    heading_with_caption: HeadingWithCaption,
+    formHelper: FormWithCSRF,
+    submit_button: SubmitButton
 )
 
 @(draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("5mld.settlorInfo.title")}"
+    title = s"${messages("5mld.settlorInfo.title")}",
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading_with_caption("5mld.settlorInfo")
+    @heading_with_caption("5mld.settlorInfo")
 
     <h2>@messages("5mld.settlorInfo.subheading1")</h2>
 
     <p>@messages("5mld.settlorInfo.paragraph1")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint1",
             "bulletpoint2",
@@ -45,7 +49,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph2")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint5",
             "bulletpoint6",
@@ -56,7 +60,7 @@
     @if(isTaxable) {
         <p>@messages("5mld.settlorInfo.paragraph3")</p>
 
-        @components.bullet_list(
+        @bullet_list(
             "5mld.settlorInfo",
             List(
                 "bulletpoint8",
@@ -71,7 +75,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph5")</p>
 
-    @components.bullet_list(
+    @bullet_list(
         "5mld.settlorInfo",
         List(
             "bulletpoint12",
@@ -105,7 +109,7 @@
 
     <p>@messages("5mld.settlorInfo.paragraph8")</p>
 
-    @components.bullet_list("5mld.settlorInfo",
+    @bullet_list("5mld.settlorInfo",
         List(
             "bulletpoint16",
             "bulletpoint17",
@@ -113,6 +117,7 @@
         )
     )
 
-    @components.button_link(messages("site.onlyContinue"), SetUpAfterSettlorDiedController.onPageLoad(draftId).url)
-
+    @formHelper(action = SettlorInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+        @submit_button(Some(messages("site.onlyContinue")))
+    }
 }

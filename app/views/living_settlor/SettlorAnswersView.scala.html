@@ -15,30 +15,31 @@
  *@
 
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
+@import views.html.components.{SubmitButton, ErrorSummary, Heading}
+@import utils.SectionFormatter.formatSections
+@import viewmodels.Section
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    heading: Heading,
+    govukSummaryList: GovukSummaryList,
 )
 
 @(onSubmit: Call, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${messages("settlorAnswers.title")}"
+    title = s"${messages("settlorAnswers.title")}",
+    showBackLink = true
 ) {
 
-    @components.back_link()
-
-    @components.heading("settlorAnswers.heading")
-
-    @for(section <- answerSections){
-        @{section match {
-            case a: AnswerSection => components.answer_section(a)
-            case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-        }}
-    }
-
     @formHelper(action = onSubmit, 'autoComplete -> "off") {
-        @components.submit_button()
+
+        @heading("settlorAnswers.heading")
+
+        @govukSummaryList(SummaryList(rows = formatSections(answerSections)))
+        @submitButton()
     }
 }

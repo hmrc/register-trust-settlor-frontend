@@ -1,3 +1,5 @@
+service.name = Register and Maintain a Trust
+
 checkYourAnswers.title = Check Your Answers
 checkYourAnswers.heading = Check Your Answers
 checkYourAnswers.guidance = Guidance for check your answers
@@ -50,7 +52,6 @@ site.yes = Yes
 site.save.continue = Save and continue
 site.continue = Continue
 site.onlyContinue = Continue
-site.service_name = Register and Maintain a Trust
 site.service_section = Settlors
 site.textarea.char_limit = (Limit is {0} characters)
 site.inprogress = In Progress
@@ -268,11 +269,11 @@ settlorsUKAddress.title = What is the settlor’s last known address?
 settlorsUKAddress.heading = What is {0}’s last known address?
 settlorsUKAddress.checkYourAnswersLabel = What is {0}’s last known address?
 
-setUpAfterSettlorDied.title = Was the trust set up after the settlor died?
-setUpAfterSettlorDied.heading = Was the trust set up after the settlor died?
-setUpAfterSettlorDied.checkYourAnswersLabel = Was the trust set up after the settlor died?
-setUpAfterSettlorDied.error.required = Select yes if the trust was set up after the settlor died
-setUpAfterSettlorDied.hint = This is also known as a will trust.
+setUpAfterSettlorDiedYesNo.title = Was the trust set up after the settlor died?
+setUpAfterSettlorDiedYesNo.heading = Was the trust set up after the settlor died?
+setUpAfterSettlorDiedYesNo.checkYourAnswersLabel = Was the trust set up after the settlor died?
+setUpAfterSettlorDiedYesNo.error.required = Select yes if the trust was set up after the settlor died
+setUpAfterSettlorDiedYesNo.hint = This is also known as a will trust.
 
 setUpInAdditionToWillTrustYesNo.title = Is this in addition to a will trust?
 setUpInAdditionToWillTrustYesNo.heading = Is this in addition to a will trust?

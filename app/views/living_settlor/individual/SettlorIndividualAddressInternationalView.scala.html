@@ -17,34 +17,34 @@
 @import controllers.living_settlor.individual.routes._
 @import utils.InputOption
 @import models.pages.FullName
+@import views.html.components.{SubmitButton, ErrorSummary, InternationalAddress}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    internationalAddress: InternationalAddress
 )
 
 @(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressInternational.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressInternational.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualAddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
+        @internationalAddress(
+            form = form,
+            legend = messages("settlorIndividualAddressInternational.heading", name.toString),
+            legendAsHeading = true,
+            countryOptions = countryOptions
+        )
 
-        <fieldset>
-
-            <legend>
-                @components.heading("settlorIndividualAddressInternational.heading", Some(name.toString))
-            </legend>
-
-            @components.international_address(form, countryOptions)
-
-        </fieldset>
-
-        @components.submit_button(submitClass = Some("countryLookupHelper"))
+        @submitButton(submitClass = Some("countryLookupHelper"))
     }
 }

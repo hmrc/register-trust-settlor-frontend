@@ -16,32 +16,36 @@
 
 @import controllers.living_settlor.business.routes._
 @import models.pages.KindOfBusiness
+@import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
+@import views.ViewUtils.mapRadioOptionsToRadioItems
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    input_radio: InputRadio
 )
 
 @(form: Form[_], draftId: String, index: Int, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorBusinessType.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorBusinessType.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorBusinessTypeController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors, KindOfBusiness.options)
 
-        @components.error_summary(form.errors)
-
-        @components.input_radio(
+        @input_radio(
             field = form("value"),
             legend = messages("settlorBusinessType.heading", settlorBusinessName),
-            legendClass = Some("heading-large"),
-            inputs = KindOfBusiness.options,
+            legendClass = Some("govuk-heading-l"),
+            inputs = mapRadioOptionsToRadioItems(form("value"), false, KindOfBusiness.options),
             legendAsHeading = true
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

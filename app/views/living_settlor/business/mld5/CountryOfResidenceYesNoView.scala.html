@@ -15,32 +15,35 @@
  *@
 
 @import controllers.living_settlor.business.mld5.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputYesNo: InputYesNo
 )
 
 @(form: Form[_], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorBusiness.5mld.countryOfResidenceYesNo.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorBusiness.5mld.countryOfResidenceYesNo.title")}",
+    showBackLink = true
 ) {
 
         @formHelper(action = CountryOfResidenceYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_yes_no(
+        @inputYesNo(
             field = form("value"),
             label = messages("settlorBusiness.5mld.countryOfResidenceYesNo.heading", businessName),
-            legendClass = Some("heading-large"),
+            legendClass = Some("govuk-heading-l"),
             legendAsHeading = true,
             hint = Some(messages("settlorBusiness.5mld.countryOfResidenceYesNo.hint"))
         )
 
-        @components.submit_button()
+        @submitButton()
     }
 }

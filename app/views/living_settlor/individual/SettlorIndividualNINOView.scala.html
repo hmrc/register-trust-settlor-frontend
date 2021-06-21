@@ -16,32 +16,36 @@
 
 @import controllers.living_settlor.individual.routes._
 @import models.pages.FullName
+@import views.html.components.{SubmitButton, ErrorSummary, InputText}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualNINO.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorIndividualNINO.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorIndividualNINOController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
+        @inputText(
+            field = form("value"),
+            label = messages("settlorIndividualNINO.heading", name.toString),
+            labelClass = Some("govuk-heading-l"),
+            inputClass = Some("govuk-input govuk-input--width-10"),
+            labelAsHeading = true,
+            hint = Some(messages("settlorIndividualNINO.hint"))
+        )
 
-        @components.input_nino(
-          field = form("value"),
-          label = messages("settlorIndividualNINO.heading", name.toString),
-          labelClass = Some("heading-large"),
-          labelAsHeading = true,
-          hint = Some(messages("settlorIndividualNINO.hint"))
-)
-
-        @components.submit_button()
+        @submitButton()
     }
 }

@@ -15,35 +15,39 @@
  *@
 
 @import controllers.living_settlor.business.routes._
+@import views.html.components.{SubmitButton, ErrorSummary, InputText}
 
 @this(
     main_template: MainTemplate,
-    formHelper: FormWithCSRF
+    formHelper: FormWithCSRF,
+    submitButton: SubmitButton,
+    error_summary: ErrorSummary,
+    inputText: InputText
 )
 
 @(form: Form[_], draftId: String, index: Int, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorBusinessUtr.title")}"
+    title = s"${errorPrefix(form)}${messages("settlorBusinessUtr.title")}",
+    showBackLink = true
 ) {
 
     @formHelper(action = SettlorBusinessUtrController.onSubmit(index, draftId), 'autoComplete -> "off") {
 
-        @components.back_link()
+        @error_summary(form.errors)
 
-        @components.error_summary(form.errors)
-
-        @components.input_text(
+        @inputText(
             field = form("value"),
             label = messages("settlorBusinessUtr.heading", settlorBusinessName),
             labelAsHeading = true,
             hint = Some(messages("settlorBusinessUtr.hint")),
-            labelClass = Some("heading-large"),
+            labelClass = Some("govuk-heading-l"),
+            inputClass = Some("govuk-input--width-20"),
             inputMode = Some("numeric")
         )
 
-        <p>@messages("settlorBusinessUtr.p1") <a target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("settlorBusinessUtr.link")</a>.</p>
+        <p>@messages("settlorBusinessUtr.p1") <a class="govuk-link" target="_blank" href="https://www.gov.uk/find-lost-utr-number">@messages("settlorBusinessUtr.link")</a>.</p>
 
-        @components.submit_button()
+        @submitButton()
     }
 }
