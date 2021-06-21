@@ -36,12 +36,13 @@
     showBackLink = true
 ) {
 
-@heading("deceasedSettlorAnswer.heading")
-
-@govukSummaryList(SummaryList(rows = formatSections(answerSections)))
-
-
 @formHelper(action = DeceasedSettlorAnswerController.onSubmit(draftId), 'autoComplete -> "off") {
-   @submitButton()
+
+    @heading("deceasedSettlorAnswer.heading")
+
+    @govukSummaryList(SummaryList(rows = formatSections(answerSections)))
+
+    @submitButton()
+
    }
 }

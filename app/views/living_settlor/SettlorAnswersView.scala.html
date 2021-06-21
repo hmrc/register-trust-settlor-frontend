@@ -35,11 +35,11 @@
     showBackLink = true
 ) {
 
-    @heading("settlorAnswers.heading")
-
-    @govukSummaryList(SummaryList(rows = formatSections(answerSections)))
-
     @formHelper(action = onSubmit, 'autoComplete -> "off") {
+
+        @heading("settlorAnswers.heading")
+
+        @govukSummaryList(SummaryList(rows = formatSections(answerSections)))
         @submitButton()
     }
 }
