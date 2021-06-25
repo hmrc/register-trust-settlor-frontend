@@ -69,13 +69,22 @@ class AddASettlorController @Inject()(
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>
 
-      val settlors = new AddASettlorViewHelper(request.userAnswers, draftId).rows
+      val rows = new AddASettlorViewHelper(request.userAnswers, draftId).rows
 
-      settlors.count match {
+      rows.count match {
         case 0 =>
           Ok(yesNoView(yesNoForm, draftId, trustHintText))
         case count =>
-          Ok(addAnotherView(addAnotherForm, draftId, settlors.inProgress, settlors.complete, heading(count), trustHintText))
+          val maxedOut = request.userAnswers.settlors.maxedOutOptions.map(_.messageKey)
+          Ok(addAnotherView(
+            form = addAnotherForm,
+            draftId = draftId,
+            inProgress = rows.inProgress,
+            complete = rows.complete,
+            heading = heading(count),
+            hint = trustHintText,
+            maxedOut = maxedOut
+          ))
       }
   }
 
@@ -101,16 +110,18 @@ class AddASettlorController @Inject()(
       addAnotherForm.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
 
-          val settlors = new AddASettlorViewHelper(request.userAnswers, draftId).rows
+          val rows = new AddASettlorViewHelper(request.userAnswers, draftId).rows
+          val maxedOut = request.userAnswers.settlors.maxedOutOptions.map(_.messageKey)
 
           Future.successful(BadRequest(
             addAnotherView(
-              formWithErrors,
-              draftId,
-              settlors.inProgress,
-              settlors.complete,
-              heading(settlors.count),
-              trustHintText
+              form = formWithErrors,
+              draftId = draftId,
+              inProgress = rows.inProgress,
+              complete = rows.complete,
+              heading = heading(rows.count),
+              hint = trustHintText,
+              maxedOut = maxedOut
             )
           ))
         },

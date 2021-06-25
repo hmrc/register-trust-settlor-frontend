@@ -148,6 +148,11 @@ addASettlor.add-them-later = Yes, I want to add them later
 addASettlor.no-complete = No, I have added all of the settlors
 addASettlor.error.required = Select yes if you want to add another settlor
 
+addASettlor.maxedOut = You cannot add another {0} as you have entered a maximum of 25.
+addASettlor.maxedOut.paragraph = Check the settlors you have added. If you have further settlors to add, write to HMRC with their details.
+addASettlor.maxedOut.all = You cannot enter another settlor as you have entered a maximum of 50.
+addASettlor.maxedOut.all.paragraph = Check the settlors you have added. If you have further settlors to add, write to HMRC with their details.
+
 removeSettlor.title = Are you sure you want to remove the settlor?
 removeSettlor.default = the settlor
 removeSettlor.heading = Are you sure you want to remove {0}?

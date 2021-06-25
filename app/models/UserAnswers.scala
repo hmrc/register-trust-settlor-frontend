@@ -17,8 +17,10 @@
 package models
 
 import play.api.Logging
+import play.api.libs.functional.syntax._
 import play.api.libs.json._
 import queries.{Gettable, Settable}
+import viewmodels.{SettlorBusinessViewModel, SettlorIndividualViewModel}
 
 import scala.util.{Failure, Success, Try}
 
@@ -98,33 +100,31 @@ final case class UserAnswers(draftId: String,
       result => Success(result)
     )
   }
+
+  val settlors: LivingSettlors = {
+    val living = this.get(sections.LivingSettlors).getOrElse(List.empty)
+    LivingSettlors(
+      living.collect { case x: SettlorIndividualViewModel => x },
+      living.collect { case x: SettlorBusinessViewModel => x }
+    )
+  }
 }
 
 object UserAnswers {
 
-  implicit lazy val reads: Reads[UserAnswers] = {
+  implicit lazy val reads: Reads[UserAnswers] = (
+    (__ \ "_id").read[String] and
+      (__ \ "data").read[JsObject] and
+      (__ \ "internalId").read[String] and
+      (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
+      (__ \ "isTaxable").readWithDefault[Boolean](true)
+    )(UserAnswers.apply _)
 
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "_id").read[String] and
-        (__ \ "data").read[JsObject] and
-        (__ \ "internalId").read[String] and
-        (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
-        (__ \ "isTaxable").readWithDefault[Boolean](true)
-      ) (UserAnswers.apply _)
-  }
-
-  implicit lazy val writes: OWrites[UserAnswers] = {
-
-    import play.api.libs.functional.syntax._
-
-    (
-      (__ \ "_id").write[String] and
-        (__ \ "data").write[JsObject] and
-        (__ \ "internalId").write[String] and
-        (__ \ "is5mldEnabled").write[Boolean] and
-        (__ \ "isTaxable").write[Boolean]
-      ) (unlift(UserAnswers.unapply))
-  }
+  implicit lazy val writes: OWrites[UserAnswers] = (
+    (__ \ "_id").write[String] and
+      (__ \ "data").write[JsObject] and
+      (__ \ "internalId").write[String] and
+      (__ \ "is5mldEnabled").write[Boolean] and
+      (__ \ "isTaxable").write[Boolean]
+    )(unlift(UserAnswers.unapply))
 }

@@ -36,7 +36,8 @@
     inProgress: Seq[AddRow],
     complete: Seq[AddRow],
     heading: String,
-    hint: Option[String]
+    hint: Option[String],
+    maxedOut: List[String]
 )(implicit request: Request[_], messages: Messages)
 
 @main_template(
@@ -58,13 +59,31 @@
 
         @addToList(complete, "complete", "settlor")
 
-        @input_radio(
-            field = form("value"),
-            legend = messages("addASettlor.additional-content"),
-            legendClass = Some("govuk-heading-m"),
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, AddASettlor.options),
-            legendAsHeading = false
-        )
+        @if(maxedOut.size == 2) {
+            <div class="govuk-inset-text">
+                <ul class="govuk-list">
+                    <li>@messages("addASettlor.maxedOut.all")</li>
+                    <li>@messages("addASettlor.maxedOut.all.paragraph")</li>
+                </ul>
+            </div>
+        } else {
+            @if(maxedOut.size == 1) {
+                <div class="govuk-inset-text">
+                    <ul class="govuk-list">
+                        <li>@messages("addASettlor.maxedOut", messages(maxedOut.head).toLowerCase)</li>
+                        <li>@messages("addASettlor.maxedOut.paragraph")</li>
+                    </ul>
+                </div>
+            }
+
+            @input_radio(
+                field = form("value"),
+                legend = messages("addASettlor.additional-content"),
+                legendClass = Some("govuk-heading-m"),
+                inputs = mapRadioOptionsToRadioItems(form("value"), false, AddASettlor.options),
+                legendAsHeading = false
+            )
+        }
 
         @submitButton()
     }

@@ -17,19 +17,22 @@
 package controllers
 
 import base.SpecBase
+import controllers.living_settlor.business.routes._
 import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import models.UserAnswers
-import models.pages.IndividualOrBusiness.Individual
+import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.KindOfTrust.Intervivos
 import models.pages.{AddASettlor, FullName}
 import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type.KindOfTrustPage
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import utils.Constants.MAX
 import viewmodels.AddRow
 import views.html.{AddASettlorView, AddASettlorYesNoView}
 
@@ -165,23 +168,84 @@ class AddASettlorControllerSpec extends SpecBase {
 
       "return OK and the correct view for a GET" when {
 
-        val name = FullName("Joe", None, "Bloggs")
+        val indName = FullName("Joe", None, "Bloggs")
+        val busName = "Amazon"
         val index = 0
 
-        val settlors = List(
-          AddRow(
-            name.toString,
-            "Individual Settlor",
-            SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url,
-            RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
-          )
+        def indRow(i: Int) = AddRow(
+          indName.toString,
+          "Individual Settlor",
+          SettlorIndividualNameController.onPageLoad(i, fakeDraftId).url,
+          RemoveSettlorYesNoController.onPageLoad(i, fakeDraftId).url
         )
 
-        "taxable" in {
+        def busRow(i: Int) = AddRow(
+          busName,
+          "Business Settlor",
+          SettlorBusinessNameController.onPageLoad(i, fakeDraftId).url,
+          RemoveSettlorYesNoController.onPageLoad(i, fakeDraftId).url
+        )
 
-          val answers = userAnswersWithSettlorsComplete
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
+        "no types maxed out" when {
+
+          val settlors = List(indRow(index))
+
+          "taxable" in {
+
+            val answers = userAnswersWithSettlorsComplete
+              .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+              .set(SettlorIndividualNamePage(index), indName).success.value
+
+            val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", Some(hint), Nil)(request, messages).toString
+
+            application.stop()
+          }
+
+          "non-taxable" in {
+
+            val answers = emptyUserAnswers
+              .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+              .set(SettlorIndividualNamePage(index), indName).success.value
+
+            val application = applicationBuilder(userAnswers = Some(answers)).build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", None, Nil)(request, messages).toString
+
+            application.stop()
+          }
+        }
+
+        "one type maxed out" in {
+
+          val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            acc :+ indRow(i)
+          })
+
+          val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+            acc
+              .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
+              .set(SettlorIndividualNamePage(i), indName).success.value
+          })
 
           val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -194,16 +258,32 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(addSettlorForm, fakeDraftId, settlors, Nil, heading = "Add a settlor", Some(hint))(request, messages).toString
+            view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(request, messages).toString
 
           application.stop()
         }
 
-        "non-taxable" in {
+        "both types maxed out" in {
 
-          val answers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
+          val settlors = (0 until MAX*2).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            if (i < MAX) {
+              acc :+ indRow(i)
+            } else {
+              acc :+ busRow(i)
+            }
+          })
+
+          val answers = (0 until MAX*2).foldLeft(emptyUserAnswers)((acc, i) => {
+            if (i < MAX) {
+              acc
+                .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
+                .set(SettlorIndividualNamePage(i), indName).success.value
+            } else {
+              acc
+                .set(SettlorIndividualOrBusinessPage(i), Business).success.value
+                .set(SettlorBusinessNamePage(i), busName).success.value
+            }
+          })
 
           val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -216,7 +296,7 @@ class AddASettlorControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(addSettlorForm, fakeDraftId, settlors, Nil, heading = "Add a settlor", None)(request, messages).toString
+            view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 50 settlors", None, List("Individual", "Business"))(request, messages).toString
 
           application.stop()
         }
@@ -259,8 +339,9 @@ class AddASettlorControllerSpec extends SpecBase {
             fakeDraftId,
             Nil,
             Nil,
-            heading = "Add a settlor",
-            Some(hint)
+            "Add a settlor",
+            Some(hint),
+            Nil
           )(request, messages).toString
 
         application.stop()

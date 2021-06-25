@@ -23,6 +23,8 @@ sealed trait IndividualOrBusiness
 
 object IndividualOrBusiness extends Enumerable.Implicits {
 
+  val prefix = "individualOrBusiness"
+
   case object Individual extends WithName("individual") with IndividualOrBusiness
   case object Business extends WithName("business") with IndividualOrBusiness
 
@@ -32,7 +34,7 @@ object IndividualOrBusiness extends Enumerable.Implicits {
 
   val options: Set[RadioOption] = values.map {
     value =>
-      RadioOption("individualOrBusiness", value.toString)
+      RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[IndividualOrBusiness] =

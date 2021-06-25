@@ -92,6 +92,11 @@ addASettlor.no-complete = Na
 addASettlor.Repair = Cafodd yr ymddiriedolaeth hon ei chreu er mwyn talu am atgyweirio adeiladau hanesyddol
 addASettlor.title = Ychwanegu setlwr
 
+addASettlor.maxedOut=Ni allwch ychwanegu {0} arall gan eich bod wedi nodi uchafswm o 25.
+addASettlor.maxedOut.all=Ni allwch nodi setlwyr arall gan eich bod wedi nodi uchafswm o 50.
+addASettlor.maxedOut.all.paragraph=Gwiriwch yr setlwyr yr ydych wedi’u hychwanegu. Os oes gennych ragor o setlwyr i’w hychwanegu
+addASettlor.maxedOut.paragraph=Gwiriwch yr setlwyr yr ydych wedi’u hychwanegu. Os oes gennych ragor o setlwyr i’w hychwanegu
+
 addASettlorYesNo.add-them-now = Iawn
 addASettlorYesNo.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu setlwr
 addASettlorYesNo.heading = A hoffech ychwanegu setlwr?

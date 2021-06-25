@@ -22,9 +22,11 @@ import models.pages.FullName
 import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.{AddASettlorPage, AddASettlorYesNoPage, LivingSettlorStatus}
 import play.api.mvc.Call
+import utils.Constants.MAX
 
 class SettlorNavigatorSpec extends SpecBase {
 
@@ -68,6 +70,34 @@ class SettlorNavigatorSpec extends SpecBase {
                 navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
                   .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(1, fakeDraftId))
               }
+            }
+          }
+
+          "individuals maxed out" must {
+            "redirect to business journey" in {
+              val userAnswers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, index) => {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+                  .set(SettlorIndividualNamePage(index), FullName("Joe", None, "Bloggs")).success.value
+                  .set(LivingSettlorStatus(index), Completed).success.value
+              }).set(AddASettlorPage, YesNow).success.value
+
+              navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                .mustBe(controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad(MAX, fakeDraftId))
+            }
+          }
+
+          "businesses maxed out" must {
+            "redirect to individual journey" in {
+              val userAnswers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, index) => {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(index), Business).success.value
+                  .set(SettlorBusinessNamePage(index), "Amazon").success.value
+                  .set(LivingSettlorStatus(index), Completed).success.value
+              }).set(AddASettlorPage, YesNow).success.value
+
+              navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                .mustBe(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(MAX, fakeDraftId))
             }
           }
         }
