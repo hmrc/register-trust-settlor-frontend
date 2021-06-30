@@ -77,8 +77,8 @@ addAnotherSettlorYesNo.error.required = Dewiswch ‘Iawn’ os ydych am ychwaneg
 addAnotherSettlorYesNo.heading = A oes unrhyw setlwyr ychwanegol ar gyfer yr ymddiriedolaeth?
 addAnotherSettlorYesNo.title = A oes unrhyw setlwyr ychwanegol ar gyfer yr ymddiriedolaeth?
 
-addASettlor.add-them-later = Iawn
-addASettlor.add-them-now = Iawn
+addASettlor.add-them-later = Iawn, rwyf am ei ychwanegu yn nes ymlaen
+addASettlor.add-them-now = Iawn, rwyf am ei ychwanegu nawr
 addASettlor.additional-content = A oes angen i chi ychwanegu setlwr arall?
 addASettlor.Building = Cafodd yr ymddiriedolaeth hon ei chreu ar gyfer adeilad neu adeilad gyda llawer o denantiaid.
 addASettlor.count.heading = Rydych wedi ychwanegu {0} o setlwyr
@@ -88,7 +88,7 @@ addASettlor.Employees = Cafodd yr ymddiriedolaeth hon ei chreu ar gyfer cyflogei
 addASettlor.error.required = Dewiswch ‘Iawn’ os ydych am ychwanegu setlwr arall
 addASettlor.heading = Ychwanegu setlwr
 addASettlor.Lifetime = Mae hon yn ymddiriedolaeth a gafodd ei chreu yn ystod oes y setlwr er mwyn trosglwyddo asedion neu eu rhoi fel rhodd (a elwir hefyd yn ymddiriedolaeth inter vivos)
-addASettlor.no-complete = Na
+addASettlor.no-complete = Na, rwyf wedi ychwanegu’r holl setlwyr
 addASettlor.Repair = Cafodd yr ymddiriedolaeth hon ei chreu er mwyn talu am atgyweirio adeiladau hanesyddol
 addASettlor.title = Ychwanegu setlwr
 
