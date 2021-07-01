@@ -82,5 +82,12 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
 
   def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
 
+  /**
+   * The schema allows up to 25 individuals AND 25 businesses when submitting a registration.
+   * However, it is very unlikely that a trust will have this many settlors.
+   * Therefore, it has been decided to only allow a maximum of 25 COMBINED settlors (i.e. individuals + businesses <= 25).
+   * Toggle count-max-as-combined in application.conf to change this as required.
+   * @return either true or false
+   */
   def countMaxAsCombined: Boolean = configuration.get[Boolean]("microservice.services.features.count-max-as-combined")
 }
