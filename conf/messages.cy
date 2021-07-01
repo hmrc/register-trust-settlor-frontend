@@ -93,7 +93,7 @@ addASettlor.Repair = Cafodd yr ymddiriedolaeth hon ei chreu er mwyn talu am atgy
 addASettlor.title = Ychwanegu setlwr
 
 addASettlor.maxedOut=Ni allwch ychwanegu {0} arall gan eich bod wedi nodi uchafswm o 25.
-addASettlor.maxedOut.all=Ni allwch nodi setlwyr arall gan eich bod wedi nodi uchafswm o 50.
+addASettlor.maxedOut.all=Ni allwch nodi setlwyr arall gan eich bod wedi nodi uchafswm o {0}.
 addASettlor.maxedOut.all.paragraph=Gwiriwch yr setlwyr yr ydych wedi’u hychwanegu. Os oes gennych ragor o setlwyr i’w hychwanegu
 addASettlor.maxedOut.paragraph=Gwiriwch yr setlwyr yr ydych wedi’u hychwanegu. Os oes gennych ragor o setlwyr i’w hychwanegu
 

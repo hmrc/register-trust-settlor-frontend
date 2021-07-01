@@ -16,6 +16,7 @@
 
 package models
 
+import config.FrontendAppConfig
 import models.pages.IndividualOrBusiness
 import utils.Constants.MAX
 import viewmodels.{RadioOption, SettlorBusinessViewModel, SettlorIndividualViewModel}
@@ -31,8 +32,14 @@ case class LivingSettlors(individuals: List[SettlorIndividualViewModel] = Nil,
     (businesses.size, IndividualOrBusiness.Business)
   )
 
-  val maxedOutOptions: List[RadioOption] = {
-    options.filter(_._1 >= MAX).map {
+  def maxedOutOptions(implicit config: FrontendAppConfig): List[RadioOption] = {
+    val filteredOptions = if (config.countMaxAsCombined) {
+      if (individuals.size + businesses.size >= MAX) options else Nil
+    } else {
+      options.filter(_._1 >= MAX)
+    }
+
+    filteredOptions.map {
       x => RadioOption(IndividualOrBusiness.prefix, x._2.toString)
     }
   }

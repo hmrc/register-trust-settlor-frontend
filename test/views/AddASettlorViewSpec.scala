@@ -128,7 +128,7 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
       "render content" in {
         val doc = asDocument(viewWithData)
-        assertContainsText(doc, "You cannot enter another settlor as you have entered a maximum of 50.")
+        assertContainsText(doc, "You cannot enter another settlor as you have entered a maximum of 25.")
         assertContainsText(doc, "Check the settlors you have added. If you have further settlors to add, write to HMRC with their details.")
       }
     }
