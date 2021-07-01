@@ -235,70 +235,180 @@ class AddASettlorControllerSpec extends SpecBase {
           }
         }
 
-        "one type maxed out" in {
+        "counting max as combined" when {
 
-          val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
-            acc :+ indRow(i)
-          })
+          "25 individuals" in {
 
-          val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
-            acc
-              .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
-              .set(SettlorIndividualNamePage(i), indName).success.value
-          })
-
-          val application = applicationBuilder(userAnswers = Some(answers)).build()
-
-          val request = FakeRequest(GET, getRoute)
-
-          val result = route(application, request).value
-
-          val view = application.injector.instanceOf[AddASettlorView]
-
-          status(result) mustEqual OK
-
-          contentAsString(result) mustEqual
-            view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(request, messages).toString
-
-          application.stop()
-        }
-
-        "both types maxed out" in {
-
-          val settlors = (0 until MAX*2).foldLeft[List[AddRow]](Nil)((acc, i) => {
-            if (i < MAX) {
+            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ indRow(i)
-            } else {
-              acc :+ busRow(i)
-            }
-          })
+            })
 
-          val answers = (0 until MAX*2).foldLeft(emptyUserAnswers)((acc, i) => {
-            if (i < MAX) {
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
               acc
                 .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
                 .set(SettlorIndividualNamePage(i), indName).success.value
-            } else {
+            })
+
+            val application = applicationBuilder(userAnswers = Some(answers))
+              .configure("microservice.services.features.count-max-as-combined" -> true)
+              .build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            application.stop()
+          }
+
+          "25 businesses" in {
+
+            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+              acc :+ busRow(i)
+            })
+
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
               acc
                 .set(SettlorIndividualOrBusinessPage(i), Business).success.value
                 .set(SettlorBusinessNamePage(i), busName).success.value
-            }
-          })
+            })
 
-          val application = applicationBuilder(userAnswers = Some(answers)).build()
+            val application = applicationBuilder(userAnswers = Some(answers))
+              .configure("microservice.services.features.count-max-as-combined" -> true)
+              .build()
 
-          val request = FakeRequest(GET, getRoute)
+            val request = FakeRequest(GET, getRoute)
 
-          val result = route(application, request).value
+            val result = route(application, request).value
 
-          val view = application.injector.instanceOf[AddASettlorView]
+            val view = application.injector.instanceOf[AddASettlorView]
 
-          status(result) mustEqual OK
+            status(result) mustEqual OK
 
-          contentAsString(result) mustEqual
-            view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 50 settlors", None, List("Individual", "Business"))(request, messages).toString
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
 
-          application.stop()
+            application.stop()
+          }
+
+          "25 combined" in {
+
+            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+              if (i < (MAX /2).floor) {
+                acc :+ indRow(i)
+              } else {
+                acc :+ busRow(i)
+              }
+            })
+
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+              if (i < (MAX /2).floor) {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
+                  .set(SettlorIndividualNamePage(i), indName).success.value
+              } else {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(i), Business).success.value
+                  .set(SettlorBusinessNamePage(i), busName).success.value
+              }
+            })
+
+            val application = applicationBuilder(userAnswers = Some(answers))
+              .configure("microservice.services.features.count-max-as-combined" -> true)
+              .build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            application.stop()
+          }
+        }
+
+        "not counting max as combined" when {
+
+          "one type maxed out" in {
+
+            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+              acc :+ indRow(i)
+            })
+
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+              acc
+                .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
+                .set(SettlorIndividualNamePage(i), indName).success.value
+            })
+
+            val application = applicationBuilder(userAnswers = Some(answers))
+              .configure("microservice.services.features.count-max-as-combined" -> false)
+              .build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(request, messages).toString
+
+            application.stop()
+          }
+
+          "both types maxed out" in {
+
+            val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil)((acc, i) => {
+              if (i < MAX) {
+                acc :+ indRow(i)
+              } else {
+                acc :+ busRow(i)
+              }
+            })
+
+            val answers = (0 until MAX * 2).foldLeft(emptyUserAnswers)((acc, i) => {
+              if (i < MAX) {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
+                  .set(SettlorIndividualNamePage(i), indName).success.value
+              } else {
+                acc
+                  .set(SettlorIndividualOrBusinessPage(i), Business).success.value
+                  .set(SettlorBusinessNamePage(i), busName).success.value
+              }
+            })
+
+            val application = applicationBuilder(userAnswers = Some(answers))
+              .configure("microservice.services.features.count-max-as-combined" -> false)
+              .build()
+
+            val request = FakeRequest(GET, getRoute)
+
+            val result = route(application, request).value
+
+            val view = application.injector.instanceOf[AddASettlorView]
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 50 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            application.stop()
+          }
         }
       }
 

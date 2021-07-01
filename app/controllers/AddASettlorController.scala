@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import models.Enumerable
@@ -45,7 +46,8 @@ class AddASettlorController @Inject()(
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddASettlorView,
                                        yesNoView: AddASettlorYesNoView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                     )(implicit ec: ExecutionContext, config: FrontendAppConfig)
+  extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
   private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
   private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
