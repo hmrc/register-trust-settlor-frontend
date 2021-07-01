@@ -300,15 +300,11 @@ class AddASettlorControllerSpec extends SpecBase {
           "25 combined" in {
 
             val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
-              if (i < (MAX /2).floor) {
-                acc :+ indRow(i)
-              } else {
-                acc :+ busRow(i)
-              }
+              acc :+ (if (i < (MAX / 2).floor) indRow(i) else busRow(i))
             })
 
             val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
-              if (i < (MAX /2).floor) {
+              if (i < (MAX / 2).floor) {
                 acc
                   .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
                   .set(SettlorIndividualNamePage(i), indName).success.value
@@ -373,11 +369,7 @@ class AddASettlorControllerSpec extends SpecBase {
           "both types maxed out" in {
 
             val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil)((acc, i) => {
-              if (i < MAX) {
-                acc :+ indRow(i)
-              } else {
-                acc :+ busRow(i)
-              }
+              acc :+ (if (i < MAX) indRow(i) else busRow(i))
             })
 
             val answers = (0 until MAX * 2).foldLeft(emptyUserAnswers)((acc, i) => {
