@@ -261,8 +261,12 @@ class AddASettlorControllerSpec extends SpecBase {
 
             status(result) mustEqual OK
 
-            contentAsString(result) mustEqual
+            val content = contentAsString(result)
+
+            content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
             application.stop()
           }
@@ -291,8 +295,12 @@ class AddASettlorControllerSpec extends SpecBase {
 
             status(result) mustEqual OK
 
-            contentAsString(result) mustEqual
+            val content = contentAsString(result)
+
+            content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
             application.stop()
           }
@@ -327,8 +335,12 @@ class AddASettlorControllerSpec extends SpecBase {
 
             status(result) mustEqual OK
 
-            contentAsString(result) mustEqual
+            val content = contentAsString(result)
+
+            content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
             application.stop()
           }
@@ -360,8 +372,12 @@ class AddASettlorControllerSpec extends SpecBase {
 
             status(result) mustEqual OK
 
-            contentAsString(result) mustEqual
+            val content = contentAsString(result)
+
+            content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(request, messages).toString
+
+            content must include("You cannot add another individual as you have entered a maximum of 25.")
 
             application.stop()
           }
@@ -396,8 +412,12 @@ class AddASettlorControllerSpec extends SpecBase {
 
             status(result) mustEqual OK
 
-            contentAsString(result) mustEqual
+            val content = contentAsString(result)
+
+            content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 50 settlors", None, List("Individual", "Business"))(request, messages).toString
+
+            content must include("You cannot enter another settlor as you have entered a maximum of 50.")
 
             application.stop()
           }
