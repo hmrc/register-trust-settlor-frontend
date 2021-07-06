@@ -82,7 +82,7 @@
         headBlock = Some(headScripts)
     )),
     headerBlock = Some(hmrcStandardHeader(
-        serviceUrl = Some(appConfig.trustsUrl),
+        serviceUrl = Some(appConfig.registrationStartUrl),
         signOutUrl = if(canSignOut) Some(controllers.routes.LogoutController.logout().url) else None,
         phaseBanner = Some(standardBetaBanner(url = appConfig.betaFeedbackUrl))
     )),
