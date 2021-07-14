@@ -27,9 +27,9 @@ class SettlorBusinessUtrViewSpec extends StringViewBehaviours {
   val messageKeyPrefix = "settlorBusinessUtr"
   val index = 0
   val settlorBusinessBusinessName = "BusinessName"
-  val hintKey = "settlorBusinessUtr.hint"
+  val hintKey = s"$messageKeyPrefix.hint"
 
-  val form = new UtrFormProvider()(messageKeyPrefix)
+  val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers)
 
   "SettlorBusinessUtrView view" must {
 

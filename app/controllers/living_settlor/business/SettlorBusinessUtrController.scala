@@ -20,6 +20,7 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.UtrFormProvider
+import models.requests.SettlorBusinessNameRequest
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessUtrPage
 import play.api.data.Form
@@ -43,7 +44,8 @@ class SettlorBusinessUtrController @Inject()(
                                               view: SettlorBusinessUtrView
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider("settlorBusinessUtr")
+  private def form(implicit request: SettlorBusinessNameRequest[AnyContent]): Form[String] =
+    formProvider("settlorBusinessUtr", request.userAnswers)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>

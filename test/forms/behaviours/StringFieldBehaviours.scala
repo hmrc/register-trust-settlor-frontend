@@ -16,11 +16,13 @@
 
 package forms.behaviours
 
-import forms.Validation
 import forms.mappings.TelephoneNumber
+import forms.{UtrFormProvider, Validation}
 import org.scalacheck.Gen
+import pages.living_settlor.business.SettlorBusinessUtrPage
 import play.api.data.{Form, FormError}
 import uk.gov.hmrc.domain.Nino
+import utils.Constants.MAX
 import wolfendale.scalacheck.regexp.RegexpGen
 
 trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours {
@@ -37,7 +39,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
       forAll(stringsWithMaxLength(length) -> "shortString") {
         string =>
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors shouldEqual Seq(lengthError)
+          result.errors mustEqual Seq(lengthError)
       }
     }
 
@@ -54,7 +56,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
       forAll(stringsLongerThan(maxLength) -> "longString") {
         string =>
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-          result.errors shouldEqual Seq(lengthError)
+          result.errors mustEqual Seq(lengthError)
       }
     }
   }
@@ -70,7 +72,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
         string =>
           whenever(!string.matches(regexp) && string.nonEmpty) {
             val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(error)
+            result.errors mustEqual Seq(error)
           }
       }
     }
@@ -83,7 +85,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
     "not bind spaces" in {
 
       val result = form.bind(Map(fieldName -> "    ")).apply(fieldName)
-      result.errors shouldBe Seq(requiredError)
+      result.errors mustBe Seq(requiredError)
     }
   }
 
@@ -97,7 +99,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
         string =>
           whenever(!Nino.isValid(string)) {
             val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(requiredError)
+            result.errors mustEqual Seq(requiredError)
           }
       }
     }
@@ -113,8 +115,38 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
         string =>
           whenever(!TelephoneNumber.isValid(string)) {
             val result = form.bind(Map(fieldName -> string)).apply(fieldName)
-            result.errors shouldEqual Seq(requiredError)
+            result.errors mustEqual Seq(requiredError)
           }
+      }
+    }
+  }
+
+  def utrField(form: UtrFormProvider,
+               prefix: String,
+               fieldName: String,
+               length: Int,
+               notUniqueError: FormError,
+               sameAsTrustUtrError: FormError): Unit = {
+
+    "not bind UTRs that have been used for other businesses" in {
+      val regex = Validation.utrRegex.replace("*", s"{$length}")
+      val utrGenerator = RegexpGen.from(regex)
+      val intGenerator = Gen.choose(1, MAX)
+      forAll(utrGenerator, intGenerator) {
+        (utr, size) =>
+          val updatedUserAnswers = (0 until size).foldLeft(emptyUserAnswers)((acc, i) => acc.set(SettlorBusinessUtrPage(i), utr).success.value)
+          val result = form.apply(prefix, updatedUserAnswers).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Seq(notUniqueError)
+      }
+    }
+
+    "not bind UTR if it is the same as the trust UTR" in {
+      val regex = Validation.utrRegex.replace("*", s"{$length}")
+      val utrGenerator = RegexpGen.from(regex)
+      forAll(utrGenerator) {
+        utr =>
+          val result = form.apply(prefix, emptyUserAnswers.copy(utr = Some(utr))).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Seq(sameAsTrustUtrError)
       }
     }
   }

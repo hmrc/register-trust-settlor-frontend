@@ -17,10 +17,11 @@
 package connectors
 
 import config.FrontendAppConfig
+import controllers.Assets.NOT_FOUND
 import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
 
 import java.time.LocalDate
 import javax.inject.Inject
@@ -87,4 +88,13 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/living-settlors"
     http.POSTEmpty[HttpResponse](url)
   }
+
+  def getTrustUtr(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] = {
+    http.GET[String](s"$submissionsBaseUrl/$draftId/trust-utr")
+      .map(Some(_))
+      .recover {
+        case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => None
+      }
+  }
+
 }

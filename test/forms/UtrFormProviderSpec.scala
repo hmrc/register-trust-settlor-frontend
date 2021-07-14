@@ -17,45 +17,57 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 
 class UtrFormProviderSpec extends StringFieldBehaviours {
 
   val messageKeyPrefix = "trusteeUtr"
-  val requiredKey = "trusteeUtr.error.required"
-  val lengthKey = "trusteeUtr.error.length"
-  val maxLength = 10
+  val requiredKey = s"$messageKeyPrefix.error.required"
+  val lengthKey = s"$messageKeyPrefix.error.length"
+  val notUniqueKey = s"$messageKeyPrefix.error.notUnique"
+  val sameAsTrustUtrKey = s"$messageKeyPrefix.error.sameAsTrustUtr"
+  val utrLength = 10
 
-  val form = new UtrFormProvider()(messageKeyPrefix)
+  val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers)
 
   ".value" must {
 
     val fieldName = "value"
 
     behave like fieldThatBindsValidData(
-      form,
-      fieldName,
-      stringsWithMaxLength(maxLength)
+      form = form,
+      fieldName = fieldName,
+      validDataGenerator = stringsWithMaxLength(utrLength)
     )
 
     behave like fieldWithMinLength(
-      form,
-      fieldName,
-      minLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      form = form,
+      fieldName = fieldName,
+      minLength = utrLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(utrLength))
     )
 
     behave like fieldWithMaxLength(
-      form,
-      fieldName,
-      maxLength = maxLength,
-      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+      form = form,
+      fieldName = fieldName,
+      maxLength = utrLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(utrLength))
     )
 
     behave like mandatoryField(
-      form,
-      fieldName,
+      form = form,
+      fieldName = fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+
+    behave like utrField(
+      form = new UtrFormProvider(),
+      prefix = messageKeyPrefix,
+      fieldName = fieldName,
+      length = utrLength,
+      notUniqueError = FormError(fieldName, notUniqueKey),
+      sameAsTrustUtrError = FormError(fieldName, sameAsTrustUtrKey)
+    )
+
   }
 }

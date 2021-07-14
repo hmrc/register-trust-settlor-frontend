@@ -30,7 +30,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(decimals(maxLength) -> "decimal") {
         decimal =>
           val result = form.bind(Map(fieldName -> decimal)).apply(fieldName)
-          result.errors shouldEqual Seq(wholeNumberError)
+          result.errors mustEqual Seq(wholeNumberError)
       }
     }
   }
@@ -46,7 +46,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(nonNumerics -> "nonNumeric") {
         nonNumeric =>
           val result = form.bind(Map(fieldName -> nonNumeric)).apply(fieldName)
-          result.errors shouldEqual Seq(nonNumericError)
+          result.errors mustEqual Seq(nonNumericError)
       }
     }
 
@@ -55,7 +55,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(decimals(None) -> "decimal") {
         decimal =>
           val result = form.bind(Map(fieldName -> decimal)).apply(fieldName)
-          result.errors shouldEqual Seq(wholeNumberError)
+          result.errors mustEqual Seq(wholeNumberError)
       }
     }
 
@@ -64,7 +64,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(intsLargerThanMaxValue -> "massiveInt") {
         num: BigInt =>
           val result = form.bind(Map(fieldName -> num.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(nonNumericError)
+          result.errors mustEqual Seq(nonNumericError)
       }
     }
 
@@ -73,7 +73,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(intsSmallerThanMinValue -> "massivelySmallInt") {
         num: BigInt =>
           val result = form.bind(Map(fieldName -> num.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(nonNumericError)
+          result.errors mustEqual Seq(nonNumericError)
       }
     }
   }
@@ -88,7 +88,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(intsBelowValue(minimum) -> "intBelowMin") {
         number: Int =>
           val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(expectedError)
+          result.errors mustEqual Seq(expectedError)
       }
     }
   }
@@ -104,7 +104,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(generator -> "intBelowMin") {
         number: Int =>
           val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(expectedError)
+          result.errors mustEqual Seq(expectedError)
       }
     }
   }
@@ -119,7 +119,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(intsAboveValue(maximum) -> "intAboveMax") {
         number: Int =>
           val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(expectedError)
+          result.errors mustEqual Seq(expectedError)
       }
     }
   }
@@ -135,7 +135,7 @@ trait IntFieldBehaviours extends FieldBehaviours {
       forAll(intsOutsideRange(minimum, maximum) -> "intOutsideRange") {
         number =>
           val result = form.bind(Map(fieldName -> number.toString)).apply(fieldName)
-          result.errors shouldEqual Seq(expectedError)
+          result.errors mustEqual Seq(expectedError)
       }
     }
   }
