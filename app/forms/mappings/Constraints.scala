@@ -155,7 +155,7 @@ trait Constraints {
   protected def uniqueUtr(userAnswers: UserAnswers, notUniqueKey: String, sameAsTrustUtrKey: String): Constraint[String] =
     Constraint {
       utr =>
-        if (userAnswers.utr.contains(utr)) {
+        if (userAnswers.existingTrustUtr.contains(utr)) {
           Invalid(sameAsTrustUtrKey)
         } else {
           userAnswers.data.transform(LivingSettlors.path.json.pick) match {

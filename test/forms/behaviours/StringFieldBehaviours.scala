@@ -144,7 +144,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
     "not bind valid UTR if it is the same as the trust UTR" in {
       forAll(utrGenerator) {
         utr =>
-          val result = form.apply(prefix, emptyUserAnswers.copy(utr = Some(utr))).bind(Map(fieldName -> utr)).apply(fieldName)
+          val result = form.apply(prefix, emptyUserAnswers.copy(existingTrustUtr = Some(utr))).bind(Map(fieldName -> utr)).apply(fieldName)
           result.errors mustEqual Seq(sameAsTrustUtrError)
       }
     }

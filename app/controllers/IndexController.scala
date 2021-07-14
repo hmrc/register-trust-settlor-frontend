@@ -62,7 +62,7 @@ class IndexController @Inject()(
       utr <- submissionDraftConnector.getTrustUtr(draftId)
       userAnswers <- repository.get(draftId)
       ua = userAnswers match {
-        case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable, utr = utr)
+        case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable, existingTrustUtr = utr)
         case None => UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable, utr)
       }
       result <- redirect(ua)

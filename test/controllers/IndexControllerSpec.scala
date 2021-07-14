@@ -151,7 +151,7 @@ class IndexControllerSpec extends SpecBase {
 
           uaCaptor.getValue.is5mldEnabled mustBe true
           uaCaptor.getValue.isTaxable mustBe true
-          uaCaptor.getValue.utr.get mustBe utr
+          uaCaptor.getValue.existingTrustUtr.get mustBe utr
 
           application.stop()
         }
@@ -187,7 +187,7 @@ class IndexControllerSpec extends SpecBase {
 
                 uaCaptor.getValue.is5mldEnabled mustBe true
                 uaCaptor.getValue.isTaxable mustBe true
-                uaCaptor.getValue.utr.get mustBe utr
+                uaCaptor.getValue.existingTrustUtr.get mustBe utr
                 uaCaptor.getValue.draftId mustBe fakeDraftId
                 uaCaptor.getValue.internalAuthId mustBe "id"
 
@@ -220,7 +220,7 @@ class IndexControllerSpec extends SpecBase {
 
                 uaCaptor.getValue.is5mldEnabled mustBe true
                 uaCaptor.getValue.isTaxable mustBe false
-                uaCaptor.getValue.utr.get mustBe utr
+                uaCaptor.getValue.existingTrustUtr.get mustBe utr
                 uaCaptor.getValue.draftId mustBe fakeDraftId
                 uaCaptor.getValue.internalAuthId mustBe "id"
 
@@ -256,7 +256,7 @@ class IndexControllerSpec extends SpecBase {
 
                 uaCaptor.getValue.is5mldEnabled mustBe false
                 uaCaptor.getValue.isTaxable mustBe true
-                uaCaptor.getValue.utr.get mustBe utr
+                uaCaptor.getValue.existingTrustUtr.get mustBe utr
                 uaCaptor.getValue.draftId mustBe fakeDraftId
                 uaCaptor.getValue.internalAuthId mustBe "id"
 
@@ -289,7 +289,7 @@ class IndexControllerSpec extends SpecBase {
 
                 uaCaptor.getValue.is5mldEnabled mustBe false
                 uaCaptor.getValue.isTaxable mustBe false
-                uaCaptor.getValue.utr.get mustBe utr
+                uaCaptor.getValue.existingTrustUtr.get mustBe utr
                 uaCaptor.getValue.draftId mustBe fakeDraftId
                 uaCaptor.getValue.internalAuthId mustBe "id"
 
