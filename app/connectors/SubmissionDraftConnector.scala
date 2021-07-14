@@ -29,7 +29,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
-  val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
+  private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
   private val beneficiariesSection = "beneficiaries"
   private val statusSection = "status"
 

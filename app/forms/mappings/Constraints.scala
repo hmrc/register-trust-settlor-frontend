@@ -159,7 +159,7 @@ trait Constraints {
           Invalid(sameAsTrustUtrKey)
         } else {
           userAnswers.data.transform(LivingSettlors.path.json.pick) match {
-            case JsSuccess(businesses, _) => if ((businesses \\ SettlorBusinessUtrPage.key).contains(JsString(utr))) Invalid(notUniqueKey) else Valid
+            case JsSuccess(settlors, _) => if ((settlors \\ SettlorBusinessUtrPage.key).contains(JsString(utr))) Invalid(notUniqueKey) else Valid
             case _ => Valid
           }
         }
