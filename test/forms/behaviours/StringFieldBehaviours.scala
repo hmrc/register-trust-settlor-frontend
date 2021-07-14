@@ -128,9 +128,10 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
                notUniqueError: FormError,
                sameAsTrustUtrError: FormError): Unit = {
 
-    "not bind UTRs that have been used for other businesses" in {
-      val regex = Validation.utrRegex.replace("*", s"{$length}")
-      val utrGenerator = RegexpGen.from(regex)
+    val regex = Validation.utrRegex.replace("*", s"{$length}")
+    val utrGenerator = RegexpGen.from(regex)
+
+    "not bind valid UTRs that have been used for other businesses" in {
       val intGenerator = Gen.choose(1, MAX)
       forAll(utrGenerator, intGenerator) {
         (utr, size) =>
@@ -140,13 +141,31 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
       }
     }
 
-    "not bind UTR if it is the same as the trust UTR" in {
-      val regex = Validation.utrRegex.replace("*", s"{$length}")
-      val utrGenerator = RegexpGen.from(regex)
+    "not bind valid UTR if it is the same as the trust UTR" in {
       forAll(utrGenerator) {
         utr =>
           val result = form.apply(prefix, emptyUserAnswers.copy(utr = Some(utr))).bind(Map(fieldName -> utr)).apply(fieldName)
           result.errors mustEqual Seq(sameAsTrustUtrError)
+      }
+    }
+
+    "bind valid UTRs when no businesses" in {
+      forAll(utrGenerator) {
+        utr =>
+          val result = form.apply(prefix, emptyUserAnswers).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Nil
+          result.value.value mustBe utr
+      }
+    }
+
+    "bind valid UTRs when no other businesses have that UTR" in {
+      val value: String = "1234567890"
+      val updatedUserAnswers = emptyUserAnswers.set(SettlorBusinessUtrPage(0), value).success.value
+      forAll(utrGenerator.suchThat(_ != value)) {
+        utr =>
+          val result = form.apply(prefix, updatedUserAnswers).bind(Map(fieldName -> utr)).apply(fieldName)
+          result.errors mustEqual Nil
+          result.value.value mustBe utr
       }
     }
   }
