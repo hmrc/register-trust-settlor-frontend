@@ -184,14 +184,16 @@ class DeceasedSettlorPrintHelperSpec extends SpecBase {
     printSection mustEqual AnswerSection(
       headingKey = None,
       rows = expectedAnswerRows,
-      sectionKey = Some(messages("answerPage.section.deceasedSettlor.heading"))
+      sectionKey = Some("answerPage.section.deceasedSettlor.heading"),
+      headingArgs = Seq(1)
     )
 
     val checkDetailsSection = deceasedSettlorPrintHelper.checkDetailsSection(userAnswers, name.toString, fakeDraftId)
     checkDetailsSection mustEqual AnswerSection(
       headingKey = None,
       rows = expectedAnswerRows,
-      sectionKey = None
+      sectionKey = None,
+      headingArgs = Seq(1)
     )
   }
 }

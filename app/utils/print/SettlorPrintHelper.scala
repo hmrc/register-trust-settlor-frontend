@@ -23,15 +23,13 @@ import viewmodels.{AnswerRow, AnswerSection}
 abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper,
                                   answerRowConverter: AnswerRowConverter) {
 
-  def headingKey(index: Int)(implicit messages: Messages): Option[String] =
-    Some(messages("answerPage.section.settlor.subheading", index + 1))
+  def headingKey: Option[String] = Some("answerPage.section.settlor.subheading")
 
-  def sectionKey(index: Int)(implicit messages: Messages): Option[String] =
-    if (index == 0) Some(messages("answerPage.section.settlors.heading")) else None
+  def sectionKey(index: Int): Option[String] = if (index == 0) Some("answerPage.section.settlors.heading") else None
 
   def printSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0)
                   (implicit messages: Messages): AnswerSection = {
-    answerSection(userAnswers, name, index, draftId)(headingKey(index), sectionKey(index))
+    answerSection(userAnswers, name, index, draftId)(headingKey, sectionKey(index))
   }
 
   def checkDetailsSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0)
@@ -45,7 +43,8 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper,
     AnswerSection(
       headingKey = heading,
       rows = answerRows(userAnswers, name, index, draftId),
-      sectionKey = section
+      sectionKey = section,
+      headingArgs = Seq(index + 1)
     )
   }
 
