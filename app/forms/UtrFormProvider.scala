@@ -17,12 +17,14 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
+import models.UserAnswers
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class UtrFormProvider @Inject() extends Mappings {
 
-  def apply(messagePrefix: String): Form[String] =
+  def apply(messagePrefix: String, userAnswers: UserAnswers, index: Int): Form[String] =
     Form(
       "value" -> text(s"$messagePrefix.error.required")
         .verifying(
@@ -30,8 +32,10 @@ class UtrFormProvider @Inject() extends Mappings {
             maxLength(10, s"$messagePrefix.error.length"),
             minLength(10, s"$messagePrefix.error.length"),
             regexp(Validation.utrRegex, s"$messagePrefix.error.invalidCharacters"),
-            isNotEmpty("value", s"$messagePrefix.error.required")
-          ))
+            isNotEmpty("value", s"$messagePrefix.error.required"),
+            uniqueUtr(userAnswers, index, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
+          )
+        )
     )
 }
 

@@ -56,18 +56,16 @@ class IndexController @Inject()(
       }
     }
 
-    featureFlagService.is5mldEnabled().flatMap {
-      is5mldEnabled =>
-        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
-          isTaxable =>
-            repository.get(draftId) flatMap {
-              case Some(userAnswers) =>
-                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
-              case _ =>
-                val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable)
-                redirect(userAnswers)
-            }
-        }
-    }
+    for {
+      is5mldEnabled <- featureFlagService.is5mldEnabled()
+      isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
+      utr <- submissionDraftConnector.getTrustUtr(draftId)
+      userAnswers <- repository.get(draftId)
+      ua = userAnswers match {
+        case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable, existingTrustUtr = utr)
+        case None => UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable, utr)
+      }
+      result <- redirect(ua)
+    } yield result
   }
 }

@@ -20,6 +20,7 @@ import config.annotations.BusinessSettlor
 import controllers.actions.Actions
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import forms.UtrFormProvider
+import models.requests.SettlorBusinessNameRequest
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessUtrPage
 import play.api.data.Form
@@ -43,14 +44,15 @@ class SettlorBusinessUtrController @Inject()(
                                               view: SettlorBusinessUtrView
                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider("settlorBusinessUtr")
+  private def form(index: Int)(implicit request: SettlorBusinessNameRequest[AnyContent]): Form[String] =
+    formProvider("settlorBusinessUtr", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val preparedForm = request.userAnswers.get(SettlorBusinessUtrPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.businessName))
@@ -59,7 +61,7 @@ class SettlorBusinessUtrController @Inject()(
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
 
