@@ -27,10 +27,10 @@ import views.html.living_settlor.business.SettlorBusinessUtrView
 
 class SettlorBusinessUtrControllerSpec extends SpecBase {
 
-  val formProvider = new UtrFormProvider()
-  val form: Form[String] = formProvider("settlorBusinessUtr", emptyUserAnswers)
-
   val index = 0
+  val formProvider = new UtrFormProvider()
+  val form: Form[String] = formProvider("settlorBusinessUtr", emptyUserAnswers, index)
+
   val fakeBusinessName = "Business name"
   val fakeUtr = "1234567890"
 

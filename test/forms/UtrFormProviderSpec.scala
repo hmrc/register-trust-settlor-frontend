@@ -28,7 +28,7 @@ class UtrFormProviderSpec extends StringFieldBehaviours {
   val sameAsTrustUtrKey = s"$messageKeyPrefix.error.sameAsTrustUtr"
   val utrLength = 10
 
-  val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers)
+  val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers, 0)
 
   ".value" must {
 
