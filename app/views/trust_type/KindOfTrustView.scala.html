@@ -42,7 +42,7 @@
             field = form("value"),
             legend = messages("kindOfTrust.heading"),
             legendClass = Some("govuk-heading-l"),
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, KindOfTrust.options),
+            inputs = mapRadioOptionsToRadioItems(form("value"), KindOfTrust.options),
             legendAsHeading = true,
             inline = false
         )
