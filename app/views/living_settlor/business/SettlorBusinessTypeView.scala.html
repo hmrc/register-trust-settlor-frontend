@@ -42,7 +42,7 @@
             field = form("value"),
             legend = messages("settlorBusinessType.heading", settlorBusinessName),
             legendClass = Some("govuk-heading-l"),
-            inputs = mapRadioOptionsToRadioItems(form("value"), false, KindOfBusiness.options),
+            inputs = mapRadioOptionsToRadioItems(form("value"), KindOfBusiness.options),
             legendAsHeading = true
         )
 
