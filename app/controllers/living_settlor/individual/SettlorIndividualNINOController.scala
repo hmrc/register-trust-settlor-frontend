@@ -20,6 +20,7 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.NinoFormProvider
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNINOPage, SettlorIndividualNamePage}
 import play.api.data.Form
@@ -43,7 +44,8 @@ class SettlorIndividualNINOController @Inject()(
                                                  view: SettlorIndividualNINOView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[String] = formProvider("settlorIndividualNINO")
+  private def form(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
+    formProvider("settlorIndividualNINO", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
@@ -51,8 +53,8 @@ class SettlorIndividualNINOController @Inject()(
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(SettlorIndividualNINOPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(index)
+        case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, name))
@@ -63,7 +65,7 @@ class SettlorIndividualNINOController @Inject()(
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
-      form.bindFromRequest().fold(
+      form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
 
