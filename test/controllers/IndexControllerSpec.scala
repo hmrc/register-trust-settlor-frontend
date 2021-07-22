@@ -163,7 +163,7 @@ class IndexControllerSpec extends SpecBase {
           application.stop()
         }
 
-        "there are no completed settlors" in {
+        "there are no settlors" in {
 
           val userAnswers = emptyUserAnswers
 
