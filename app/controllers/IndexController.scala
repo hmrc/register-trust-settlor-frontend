@@ -19,6 +19,7 @@ package controllers
 import connectors.SubmissionDraftConnector
 import controllers.actions.RegistrationIdentifierAction
 import models.UserAnswers
+import models.pages.Status.Completed
 import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -48,7 +49,7 @@ class IndexController @Inject()(
 
         if (livingSettlors.nonEmpty) {
           Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
-        } else if (deceasedSettlor.isDefined) {
+        } else if (deceasedSettlor.map(_.status).contains(Completed)) {
           Redirect(controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
         } else {
           Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
