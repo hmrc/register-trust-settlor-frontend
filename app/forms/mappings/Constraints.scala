@@ -19,6 +19,7 @@ package forms.mappings
 import forms.Validation
 import models.UserAnswers
 import pages.living_settlor.business.SettlorBusinessUtrPage
+import pages.living_settlor.individual.SettlorIndividualNINOPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.LivingSettlors
@@ -108,6 +109,7 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
+
   protected def isNinoValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if Nino.isValid(str)=>
@@ -115,8 +117,6 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
-
-
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
@@ -174,4 +174,25 @@ trait Constraints {
           }
         }
     }
+
+  protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      nino =>
+          userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
+            case JsSuccess(settlors, _) =>
+
+              val uniqueNino = settlors.value.zipWithIndex.forall( settlor =>
+                !((settlor._1 \\ SettlorIndividualNINOPage.key).contains(JsString(nino)) && settlor._2 != index)
+              )
+
+              if (uniqueNino) {
+                Valid
+              } else {
+                Invalid(errorKey)
+              }
+            case _ =>
+              Valid
+          }
+    }
+
 }
