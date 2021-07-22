@@ -283,7 +283,8 @@ settlorBusinessUtr.error.required = Nodwch Gyfeirnod Unigryw y Trethdalwr ar gyf
 #settlorBusinessUtr.error.notUnique =
 settlorBusinessUtr.error.sameAsTrustUtr = Nodwch UTR nad yw’n UTR a ddefnyddir i adnabod yr ymddiriedolaeth hon
 settlorBusinessUtr.heading = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer {0}?
-settlorBusinessUtr.hint = Mae’n 10 rhif
+settlorBusinessUtr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+
 settlorBusinessUtr.link = ddod o hyd i UTR coll (yn agor ffenestr neu dab newydd)
 settlorBusinessUtr.p1 = Gallwch
 settlorBusinessUtr.title = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer y busnes?
@@ -423,7 +424,8 @@ settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
 settlorIndividualNINO.error.required = Nodwch rif Yswiriant Gwladol y setlwr
 settlorIndividualNINO.heading = Beth yw rhif Yswiriant Gwladol {0}?
-settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol
+settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
+
 settlorIndividualNINO.title = Beth yw rhif Yswiriant Gwladol y setlwr?
 
 settlorIndividualNINOYesNo.checkYourAnswersLabel = A ydych yn gwybod rhif Yswiriant Gwladol {0}?
@@ -502,7 +504,8 @@ settlorNationalInsuranceNumber.error.invalid = Nodwch rif Yswiriant Gwladol dily
 settlorNationalInsuranceNumber.error.length = Mae’n rhaid i rif Yswiriant Gwladol y setlwr fod yn 9 o gymeriadau neu lai
 settlorNationalInsuranceNumber.error.required = Nodwch rif Yswiriant Gwladol y setlwr
 settlorNationalInsuranceNumber.heading = Beth yw rhif Yswiriant Gwladol {0}?
-settlorNationalInsuranceNumber.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol
+settlorNationalInsuranceNumber.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
+
 settlorNationalInsuranceNumber.title = Beth yw rhif Yswiriant Gwladol y setlwr?
 
 settlors.defaultText = y setlwr
