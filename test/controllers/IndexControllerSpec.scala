@@ -46,7 +46,7 @@ class IndexControllerSpec extends SpecBase {
 
     "pre-existing user answers" must {
 
-      "redirect to add to page if there is at least one Completed living settlor" when {
+      "redirect to add to page" when {
         "there is at least one settlor" when {
 
           "in progress" in {
