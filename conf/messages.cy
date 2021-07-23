@@ -266,10 +266,10 @@ settlorBusinessName.error.required = Nodwch enw’r busnes
 settlorBusinessName.heading = Beth yw enw’r busnes?
 settlorBusinessName.title = Beth yw enw’r busnes?
 
-settlorBusinessTimeYesNo.checkYourAnswersLabel = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
+settlorBusinessTimeYesNo.checkYourAnswersLabel = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
 settlorBusinessTimeYesNo.error.required = Dewiswch ‘Iawn’ os oedd y busnes wedi bodoli am o leiaf 2 flynedd
-settlorBusinessTimeYesNo.heading = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
-settlorBusinessTimeYesNo.title = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
+settlorBusinessTimeYesNo.heading = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
+settlorBusinessTimeYesNo.title = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
 
 settlorBusinessType.checkYourAnswersLabel = Pa fath o fusnes yw {0}?
 settlorBusinessType.error.required = Dewiswch ba fath o fusnes yw’r setlwr
