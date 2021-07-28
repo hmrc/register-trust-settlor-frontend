@@ -21,7 +21,7 @@ import connectors.SubmissionDraftConnector
 import models.UserAnswers
 import models.pages.FullName
 import models.pages.IndividualOrBusiness.Individual
-import models.pages.Status.Completed
+import models.pages.Status.{Completed, InProgress}
 import org.mockito.ArgumentCaptor
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, verify, when}
@@ -46,32 +46,65 @@ class IndexControllerSpec extends SpecBase {
 
     "pre-existing user answers" must {
 
-      "redirect to add to page if there is at least one Completed living settlor" in {
+      "redirect to add to page" when {
+        "there is at least one settlor" when {
 
-        val userAnswers = emptyUserAnswers
-          .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-          .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-          .set(LivingSettlorStatus(0), Completed).success.value
+          "in progress" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-          .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
-          .build()
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+              .set(individualPages.SettlorIndividualNamePage(0), name).success.value
+              .set(LivingSettlorStatus(0), InProgress).success.value
 
-        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-        when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
-        when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
+            val application = applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+              .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
+              .build()
 
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+            when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+            when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+            when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
 
-        val result = route(application, request).value
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-        status(result) mustEqual SEE_OTHER
+            val result = route(application, request).value
 
-        redirectLocation(result).get mustBe controllers.routes.AddASettlorController.onPageLoad(fakeDraftId).url
+            status(result) mustEqual SEE_OTHER
 
-        application.stop()
+            redirectLocation(result).get mustBe controllers.routes.AddASettlorController.onPageLoad(fakeDraftId).url
+
+            application.stop()
+          }
+
+          "completed" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+              .set(individualPages.SettlorIndividualNamePage(0), name).success.value
+              .set(LivingSettlorStatus(0), Completed).success.value
+
+            val application = applicationBuilder(userAnswers = Some(userAnswers))
+              .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+              .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
+              .build()
+
+            when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+            when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+            when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+            when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
+
+            val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).get mustBe controllers.routes.AddASettlorController.onPageLoad(fakeDraftId).url
+
+            application.stop()
+          }
+        }
       }
 
       "redirect to deceased settlor check answers if there is a Completed deceased settlor" in {
@@ -101,29 +134,59 @@ class IndexControllerSpec extends SpecBase {
         application.stop()
       }
 
-      "redirect to info page if there are no completed settlors" in {
+      "redirect to info page" when {
 
-        val userAnswers = emptyUserAnswers
+        "there is an in-progress deceased settlor" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswers))
-          .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
-          .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
-          .build()
+          val userAnswers = emptyUserAnswers
+            .set(deceasedPages.SettlorsNamePage, name).success.value
+            .set(DeceasedSettlorStatus, InProgress).success.value
 
-        when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
-        when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
-        when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
-        when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+            .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
+            .build()
 
-        val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+          when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+          when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
 
-        val result = route(application, request).value
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
-        status(result) mustEqual SEE_OTHER
+          val result = route(application, request).value
 
-        redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+          status(result) mustEqual SEE_OTHER
 
-        application.stop()
+          redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+
+          application.stop()
+        }
+
+        "there are no settlors" in {
+
+          val userAnswers = emptyUserAnswers
+
+          val application = applicationBuilder(userAnswers = Some(userAnswers))
+            .overrides(bind[FeatureFlagService].toInstance(featureFlagService))
+            .overrides(bind[SubmissionDraftConnector].toInstance(submissionDraftConnector))
+            .build()
+
+          when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(Some(userAnswers)))
+          when(featureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
+          when(submissionDraftConnector.getIsTrustTaxable(any())(any(), any())).thenReturn(Future.successful(true))
+          when(submissionDraftConnector.getTrustUtr(any())(any(), any())).thenReturn(Future.successful(None))
+
+          val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).get mustBe controllers.routes.SettlorInfoController.onPageLoad(fakeDraftId).url
+
+          application.stop()
+        }
       }
 
       "update value of is5mldEnabled and isTaxable in user answers" in {
