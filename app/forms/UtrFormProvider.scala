@@ -26,16 +26,14 @@ class UtrFormProvider @Inject() extends Mappings {
 
   def apply(messagePrefix: String, userAnswers: UserAnswers, index: Int): Form[String] =
     Form(
-      "value" -> text(s"$messagePrefix.error.required")
-        .verifying(
-          firstError(
-            maxLength(10, s"$messagePrefix.error.length"),
-            minLength(10, s"$messagePrefix.error.length"),
-            regexp(Validation.utrRegex, s"$messagePrefix.error.invalidCharacters"),
-            isNotEmpty("value", s"$messagePrefix.error.required"),
-            uniqueUtr(userAnswers, index, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
-          )
-        )
+      "value" -> utr(
+        requiredKey = s"$messagePrefix.error.required",
+        invalidKey  = s"$messagePrefix.error.invalidCharacters",
+        lengthKey   = s"$messagePrefix.error.length"
+      ).verifying(
+        isNotEmpty("value", s"$messagePrefix.error.required"),
+        uniqueUtr(userAnswers, index, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
+      )
     )
 }
 
