@@ -20,16 +20,17 @@ import base.SpecBase
 import controllers.routes._
 import forms.UtrFormProvider
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessUtrPage}
+import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.living_settlor.business.SettlorBusinessUtrView
 
 class SettlorBusinessUtrControllerSpec extends SpecBase {
 
-  val formProvider = new UtrFormProvider()
-  val form = formProvider("settlorBusinessUtr")
-
   val index = 0
+  val formProvider = new UtrFormProvider()
+  val form: Form[String] = formProvider("settlorBusinessUtr", emptyUserAnswers, index)
+
   val fakeBusinessName = "Business name"
   val fakeUtr = "1234567890"
 

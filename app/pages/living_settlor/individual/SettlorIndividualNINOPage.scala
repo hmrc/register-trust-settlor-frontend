@@ -24,5 +24,9 @@ final case class SettlorIndividualNINOPage(index: Int) extends QuestionPage[Stri
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 
-  override def toString: String = "nino"
+  override def toString: String = SettlorIndividualNINOPage.key
+}
+
+object SettlorIndividualNINOPage {
+  val key = "nino"
 }

@@ -17,18 +17,21 @@
 package forms
 
 import forms.mappings.Mappings
+import models.UserAnswers
+
 import javax.inject.Inject
 import play.api.data.Form
 
 class NinoFormProvider @Inject() extends Mappings {
 
-  def apply(messagePrefix: String): Form[String] =
+  def apply(messagePrefix: String, userAnswers: UserAnswers, index: Int): Form[String] =
     Form(
       "value" -> nino(s"$messagePrefix.error.required")
         .verifying(
           firstError(
             isNotEmpty("value", s"$messagePrefix.error.required"),
-            isNinoValid("value", s"$messagePrefix.error.invalidFormat")
+            isNinoValid("value", s"$messagePrefix.error.invalidFormat"),
+            isNinoDuplicated(userAnswers, index, s"$messagePrefix.error.duplicate")
           ))
     )
 }

@@ -16,12 +16,16 @@
 
 package forms.mappings
 
-import java.time.LocalDate
-
 import forms.Validation
+import models.UserAnswers
+import pages.living_settlor.business.SettlorBusinessUtrPage
+import pages.living_settlor.individual.SettlorIndividualNINOPage
 import play.api.data.validation.{Constraint, Invalid, Valid}
+import play.api.libs.json.{JsArray, JsString, JsSuccess}
+import sections.LivingSettlors
 import uk.gov.hmrc.domain.Nino
 
+import java.time.LocalDate
 import scala.util.matching.Regex
 
 trait Constraints {
@@ -105,6 +109,7 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
+
   protected def isNinoValid(value: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if Nino.isValid(str)=>
@@ -112,8 +117,6 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
-
-
 
   protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
     Constraint {
@@ -148,4 +151,48 @@ trait Constraints {
       case _ =>
         Invalid(errorKey, value)
     }
+
+  protected def uniqueUtr(userAnswers: UserAnswers, index: Int, notUniqueKey: String, sameAsTrustUtrKey: String): Constraint[String] =
+    Constraint {
+      utr =>
+        if (userAnswers.existingTrustUtr.contains(utr)) {
+          Invalid(sameAsTrustUtrKey)
+        } else {
+          userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
+            case JsSuccess(settlors, _) =>
+              val utrIsUnique = settlors.value.zipWithIndex.forall(settlor =>
+                !((settlor._1 \\ SettlorBusinessUtrPage.key).contains(JsString(utr)) && settlor._2 != index)
+              )
+
+              if (utrIsUnique) {
+                Valid
+              } else {
+                Invalid(notUniqueKey)
+              }
+            case _ =>
+              Valid
+          }
+        }
+    }
+
+  protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint {
+      nino =>
+          userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
+            case JsSuccess(settlors, _) =>
+
+              val uniqueNino = settlors.value.zipWithIndex.forall( settlor =>
+                !((settlor._1 \\ SettlorIndividualNINOPage.key).contains(JsString(nino)) && settlor._2 != index)
+              )
+
+              if (uniqueNino) {
+                Valid
+              } else {
+                Invalid(errorKey)
+              }
+            case _ =>
+              Valid
+          }
+    }
+
 }

@@ -45,7 +45,8 @@ final case class UserAnswers(draftId: String,
                              data: JsObject = Json.obj(),
                              internalAuthId: String,
                              is5mldEnabled: Boolean = false,
-                             isTaxable: Boolean = true) extends Logging {
+                             isTaxable: Boolean = true,
+                             existingTrustUtr: Option[String] = None) extends Logging {
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] = {
     getAtPath(page.path)
@@ -117,7 +118,8 @@ object UserAnswers {
       (__ \ "data").read[JsObject] and
       (__ \ "internalId").read[String] and
       (__ \ "is5mldEnabled").readWithDefault[Boolean](false) and
-      (__ \ "isTaxable").readWithDefault[Boolean](true)
+      (__ \ "isTaxable").readWithDefault[Boolean](true) and
+      (__ \ "existingTrustUtr").readNullable[String]
     )(UserAnswers.apply _)
 
   implicit lazy val writes: OWrites[UserAnswers] = (
@@ -125,6 +127,7 @@ object UserAnswers {
       (__ \ "data").write[JsObject] and
       (__ \ "internalId").write[String] and
       (__ \ "is5mldEnabled").write[Boolean] and
-      (__ \ "isTaxable").write[Boolean]
+      (__ \ "isTaxable").write[Boolean] and
+      (__ \ "existingTrustUtr").writeNullable[String]
     )(unlift(UserAnswers.unapply))
 }

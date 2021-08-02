@@ -29,8 +29,8 @@ import views.html.living_settlor.individual.SettlorIndividualNINOView
 class SettlorIndividualNINOControllerSpec extends SpecBase {
 
   private val formProvider: NinoFormProvider = new NinoFormProvider()
-  private val form: Form[String] = formProvider("settlorIndividualNINO")
   private val index: Int = 0
+  private val form: Form[String] = formProvider("settlorIndividualNINO", emptyUserAnswers, index)
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
   private lazy val settlorIndividualNINORoute: String = routes.SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url
@@ -115,29 +115,59 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
       application.stop()
     }
 
-    "return a Bad Request and errors when invalid data is submitted" in {
+    "return a Bad Request and errors" when {
+      "invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index),
-        name).success.value
+        val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index),
+          name).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request =
-        FakeRequest(POST, settlorIndividualNINORoute)
-          .withFormUrlEncodedBody(("value", ""))
+        val request =
+          FakeRequest(POST, settlorIndividualNINORoute)
+            .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> ""))
+        val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SettlorIndividualNINOView]
+        val view = application.injector.instanceOf[SettlorIndividualNINOView]
 
-      val result = route(application, request).value
+        val result = route(application, request).value
 
-      status(result) mustEqual BAD_REQUEST
+        status(result) mustEqual BAD_REQUEST
 
-      contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
-      application.stop()
+        application.stop()
+      }
+
+      "duplicate nino is submitted" in {
+
+        val nino = "JH123456C"
+
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualNINOPage(index + 1), nino).success.value
+
+        val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+        val request =
+          FakeRequest(POST, settlorIndividualNINORoute)
+            .withFormUrlEncodedBody(("value", nino))
+
+        val boundForm = form.bind(Map("value" -> nino)).withError("value", "settlorIndividualNINO.error.duplicate")
+
+        val view = application.injector.instanceOf[SettlorIndividualNINOView]
+
+        val result = route(application, request).value
+
+        status(result) mustEqual BAD_REQUEST
+
+        contentAsString(result) mustEqual
+          view(boundForm, fakeDraftId, index, name)(request, messages).toString
+
+        application.stop()
+      }
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {

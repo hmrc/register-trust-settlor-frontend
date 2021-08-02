@@ -37,13 +37,12 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
 
   def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     val status = registrationProgress.settlorsStatus(userAnswers)
-    val registrationPieces = mappedDataIfCompleted(userAnswers, status)
 
     RegistrationSubmission.DataSet(
-      Json.toJson(userAnswers),
-      status,
-      registrationPieces,
-      answerSectionsIfCompleted(userAnswers, status)
+      data = Json.toJson(userAnswers),
+      status = status,
+      registrationPieces = mappedDataIfCompleted(userAnswers, status),
+      answerSections = answerSectionsIfCompleted(userAnswers, status)
     )
   }
 
@@ -95,11 +94,16 @@ class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
     }
   }
 
-  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
-    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+    RegistrationSubmission.AnswerSection(
+      headingKey = section.headingKey,
+      rows = section.rows.map(convertForSubmission),
+      sectionKey = section.sectionKey,
+      headingArgs = section.headingArgs.map(_.toString)
+    )
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
-    RegistrationSubmission.AnswerSection(section.headingKey, section.rows.map(convertForSubmission), section.sectionKey)
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+    RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
   }
 }

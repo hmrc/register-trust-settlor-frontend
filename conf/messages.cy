@@ -133,7 +133,7 @@ employerFinancedRbsStartDate.error.required = Mae’n rhaid i ddyddiad dechrau�
 employerFinancedRbsStartDate.error.required.all = Nodwch ddyddiad dechrau’r cynllun buddiannau ymddeol a ariannwyd gan y cyflogwr
 employerFinancedRbsStartDate.error.required.two = Mae’n rhaid i ddyddiad dechrau’r cynllun buddiannau ymddeol a ariannwyd gan y cyflogwr gynnwys {0} a {1}
 employerFinancedRbsStartDate.heading = Pryd dechreuodd y cynllun buddiannau ymddeol a ariannwyd gan y cyflogwr?
-employerFinancedRbsStartDate.hint = Er enghraifft,
+employerFinancedRbsStartDate.hint = Er enghraifft, 31 3 1980.
 employerFinancedRbsStartDate.title = Pryd dechreuodd y cynllun buddiannau ymddeol a ariannwyd gan y cyflogwr?
 
 employerFinancedRbsYesNo.checkYourAnswersLabel = A yw hwn yn gynllun buddiannau ymddeol a ariannwyd gan y cyflogwr?
@@ -266,10 +266,10 @@ settlorBusinessName.error.required = Nodwch enw’r busnes
 settlorBusinessName.heading = Beth yw enw’r busnes?
 settlorBusinessName.title = Beth yw enw’r busnes?
 
-settlorBusinessTimeYesNo.checkYourAnswersLabel = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
+settlorBusinessTimeYesNo.checkYourAnswersLabel = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
 settlorBusinessTimeYesNo.error.required = Dewiswch ‘Iawn’ os oedd y busnes wedi bodoli am o leiaf 2 flynedd
-settlorBusinessTimeYesNo.heading = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
-settlorBusinessTimeYesNo.title = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth
+settlorBusinessTimeYesNo.heading = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
+settlorBusinessTimeYesNo.title = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
 
 settlorBusinessType.checkYourAnswersLabel = Pa fath o fusnes yw {0}?
 settlorBusinessType.error.required = Dewiswch ba fath o fusnes yw’r setlwr
@@ -280,8 +280,11 @@ settlorBusinessUtr.checkYourAnswersLabel = Beth yw Cyfeirnod Unigryw y Trethdalw
 settlorBusinessUtr.error.invalidCharacters = Nodwch Gyfeirnod Unigryw y Trethdalwr ar gyfer y busnes yn y fformat cywir
 settlorBusinessUtr.error.length = Mae’n rhaid i Gyfeirnod Unigryw y Trethdalwr fod yn rhif 10 digid
 settlorBusinessUtr.error.required = Nodwch Gyfeirnod Unigryw y Trethdalwr ar gyfer y busnes
+#settlorBusinessUtr.error.notUnique =
+settlorBusinessUtr.error.sameAsTrustUtr = Nodwch UTR nad yw’n UTR a ddefnyddir i adnabod yr ymddiriedolaeth hon
 settlorBusinessUtr.heading = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer {0}?
-settlorBusinessUtr.hint = Mae’n 10 rhif
+settlorBusinessUtr.hint = Rhif 10 digid yw hwn, er enghraifft 1234567890. Bydd i’w weld ar Ffurflenni Treth a llythyrau eraill ynghylch Hunanasesiad. Efallai y cyfeirir ato gan ddefnyddio’r geiriau ‘cyfeirnod’, ‘UTR’ neu ‘defnydd swyddogol’.
+
 settlorBusinessUtr.link = ddod o hyd i UTR coll (yn agor ffenestr neu dab newydd)
 settlorBusinessUtr.p1 = Gallwch
 settlorBusinessUtr.title = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer y busnes?
@@ -305,7 +308,7 @@ settlorDateOfDeath.error.required = Mae’n rhaid i ddyddiad y farwolaeth gynnwy
 settlorDateOfDeath.error.required.all = Nodwch ddyddiad y farwolaeth
 settlorDateOfDeath.error.required.two = Mae’n rhaid i ddyddiad y farwolaeth gynnwys {0} a {1}
 settlorDateOfDeath.heading = Beth yw dyddiad marwolaeth {0}?
-settlorDateOfDeath.hint = Er enghraifft,
+settlorDateOfDeath.hint = Er enghraifft, 31 3 1980.
 settlorDateOfDeath.title = Beth yw dyddiad marwolaeth y setlwr?
 
 settlorDateOfDeathYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad marwolaeth {0}?
@@ -359,7 +362,7 @@ settlorIndividualCountryOfResidencyYesNo.title = A ydych yn gwybod gwlad breswyl
 
 settlorIndividualDateOfBirth.checkYourAnswersLabel = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
-settlorIndividualDateOfBirth.hint = Er enghraifft,
+settlorIndividualDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorIndividualDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
 
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad geni {0}?
@@ -378,7 +381,7 @@ settlorIndividualIDCard.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i b
 settlorIndividualIDCard.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0}
 settlorIndividualIDCard.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y cerdyn adnabod
 settlorIndividualIDCard.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0} a {1}
-settlorIndividualIDCard.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft,
+settlorIndividualIDCard.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
 settlorIndividualIDCard.expiryDate.title = Dyddiad dod i ben
 settlorIndividualIDCard.heading = Beth yw manylion cerdyn adnabod {0}?
 settlorIndividualIDCard.number = Rhif y cerdyn adnabod
@@ -421,7 +424,8 @@ settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
 settlorIndividualNINO.error.required = Nodwch rif Yswiriant Gwladol y setlwr
 settlorIndividualNINO.heading = Beth yw rhif Yswiriant Gwladol {0}?
-settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol
+settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
+
 settlorIndividualNINO.title = Beth yw rhif Yswiriant Gwladol y setlwr?
 
 settlorIndividualNINOYesNo.checkYourAnswersLabel = A ydych yn gwybod rhif Yswiriant Gwladol {0}?
@@ -446,14 +450,14 @@ settlorIndividualPassport.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i
 settlorIndividualPassport.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0}
 settlorIndividualPassport.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y pasbort
 settlorIndividualPassport.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0} a {1}
-settlorIndividualPassport.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft,
+settlorIndividualPassport.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
 settlorIndividualPassport.expiryDate.title = Dyddiad dod i ben
 settlorIndividualPassport.heading = Beth yw manylion pasbort {0}?
 settlorIndividualPassport.number = Rhif pasbort
 settlorIndividualPassport.number.error.invalid = Gall y rhif pasbort gynnwys llythrennau a rhifau yn unig
 settlorIndividualPassport.number.error.length = Mae’n rhaid i’r rhif pasbort fod yn 30 o gymeriadau neu lai
 settlorIndividualPassport.number.error.required = Nodwch rif pasbort y setlwr
-settlorIndividualPassport.number.hint = Er enghraifft,
+settlorIndividualPassport.number.hint = Er enghraifft, 502135326.
 settlorIndividualPassport.title = Beth yw manylion pasbort y setlwr?
 
 settlorIndividualPassportYesNo.checkYourAnswersLabel = A ydych yn gwybod manylion pasbort {0}?
@@ -500,7 +504,8 @@ settlorNationalInsuranceNumber.error.invalid = Nodwch rif Yswiriant Gwladol dily
 settlorNationalInsuranceNumber.error.length = Mae’n rhaid i rif Yswiriant Gwladol y setlwr fod yn 9 o gymeriadau neu lai
 settlorNationalInsuranceNumber.error.required = Nodwch rif Yswiriant Gwladol y setlwr
 settlorNationalInsuranceNumber.heading = Beth yw rhif Yswiriant Gwladol {0}?
-settlorNationalInsuranceNumber.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol
+settlorNationalInsuranceNumber.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
+
 settlorNationalInsuranceNumber.title = Beth yw rhif Yswiriant Gwladol y setlwr?
 
 settlors.defaultText = y setlwr
@@ -522,7 +527,7 @@ settlorsDateOfBirth.error.required = Mae’n rhaid i’r dyddiad geni gynnwys {0
 settlorsDateOfBirth.error.required.all = Nodwch ddyddiad geni
 settlorsDateOfBirth.error.required.two = Mae’n rhaid i’r dyddiad geni gynnwys {0} a {1}
 settlorsDateOfBirth.heading = Beth yw dyddiad geni {0}?
-settlorsDateOfBirth.hint = Er enghraifft,
+settlorsDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorsDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
 
 settlorsInternationalAddress.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
@@ -596,7 +601,7 @@ site.back = Yn ôl
 site.cancel = Canslo
 site.complete = Wedi’i gwblhau
 site.continue = Yn eich blaen
-site.date.hint = Er enghraifft,
+site.date.hint = Er enghraifft, 31 3 1980.
 site.delete = Tynnu
 site.edit = Newid
 site.error = Gwall:

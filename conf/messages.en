@@ -389,6 +389,7 @@ settlorIndividualNINO.checkYourAnswersLabel = What is {0}’s National Insurance
 settlorIndividualNINO.hint = It is on their National Insurance card, benefit letter, payslip or P60. For example, ‘QQ 12 34 56 C’.
 settlorIndividualNINO.error.required = Enter the settlor’s National Insurance number
 settlorIndividualNINO.error.invalidFormat = Enter the settlor’s National Insurance number in the correct format
+settlorIndividualNINO.error.duplicate = Enter a National Insurance number that has not already been used to add a settlor
 
 settlorIndividualNINOYesNo.title = Do you know the settlor’s National Insurance number?
 settlorIndividualNINOYesNo.heading = Do you know {0}’s National Insurance number?
@@ -479,6 +480,8 @@ settlorBusinessUtr.heading = What is {0}’s Unique Taxpayer Reference (UTR) num
 settlorBusinessUtr.error.required = Enter the business’s Unique Taxpayer Reference
 settlorBusinessUtr.error.length = Unique Taxpayer Reference must be a 10 digit number
 settlorBusinessUtr.error.invalidCharacters = Enter the business’s Unique Taxpayer Reference in the correct format
+settlorBusinessUtr.error.notUnique = Enter a UTR that has not already been used to add a business settlor
+settlorBusinessUtr.error.sameAsTrustUtr = Enter a UTR that is not the UTR used to identify this trust
 settlorBusinessUtr.hint = This is 10 numbers, for example 1234567890. It will be on tax returns and other letters about Corporation Tax. It may be called ‘reference’, ‘UTR’ or ‘official use’.
 settlorBusinessUtr.p1 = You can
 settlorBusinessUtr.link = find a lost UTR number (opens in a new window or tab)

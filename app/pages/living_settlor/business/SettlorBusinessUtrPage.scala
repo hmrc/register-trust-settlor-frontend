@@ -17,6 +17,7 @@
 package pages.living_settlor.business
 
 import pages.QuestionPage
+import pages.living_settlor.business.SettlorBusinessUtrPage.key
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
@@ -24,5 +25,9 @@ case class SettlorBusinessUtrPage(index: Int) extends QuestionPage[String] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 
-  override def toString: String = "utr"
+  override def toString: String = key
+}
+
+object SettlorBusinessUtrPage {
+  val key: String = "utr"
 }

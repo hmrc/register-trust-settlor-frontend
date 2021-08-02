@@ -19,6 +19,7 @@ package controllers
 import connectors.SubmissionDraftConnector
 import controllers.actions.RegistrationIdentifierAction
 import models.UserAnswers
+import models.pages.Status.Completed
 import models.requests.IdentifierRequest
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Json
@@ -48,7 +49,7 @@ class IndexController @Inject()(
 
         if (livingSettlors.nonEmpty) {
           Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
-        } else if (deceasedSettlor.isDefined) {
+        } else if (deceasedSettlor.map(_.status).contains(Completed)) {
           Redirect(controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
         } else {
           Redirect(controllers.routes.SettlorInfoController.onPageLoad(draftId))
@@ -56,18 +57,16 @@ class IndexController @Inject()(
       }
     }
 
-    featureFlagService.is5mldEnabled().flatMap {
-      is5mldEnabled =>
-        submissionDraftConnector.getIsTrustTaxable(draftId) flatMap {
-          isTaxable =>
-            repository.get(draftId) flatMap {
-              case Some(userAnswers) =>
-                redirect(userAnswers.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable))
-              case _ =>
-                val userAnswers = UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable)
-                redirect(userAnswers)
-            }
-        }
-    }
+    for {
+      is5mldEnabled <- featureFlagService.is5mldEnabled()
+      isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
+      utr <- submissionDraftConnector.getTrustUtr(draftId)
+      userAnswers <- repository.get(draftId)
+      ua = userAnswers match {
+        case Some(value) => value.copy(is5mldEnabled = is5mldEnabled, isTaxable = isTaxable, existingTrustUtr = utr)
+        case None => UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable, utr)
+      }
+      result <- redirect(ua)
+    } yield result
   }
 }

@@ -50,10 +50,10 @@ class DeceasedSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverte
     bound.addressQuestion(SettlorsInternationalAddressPage, "settlorsInternationalAddress", SettlorsInternationalAddressController.onPageLoad(draftId).url)
   )
 
-  override def headingKey(index: Int)(implicit messages: Messages): Option[String] =
+  override def headingKey: Option[String] =
     None
 
-  override def sectionKey(index: Int)(implicit messages: Messages): Option[String] =
-    Some(messages("answerPage.section.deceasedSettlor.heading"))
+  override def sectionKey(index: Int): Option[String] =
+    Some("answerPage.section.deceasedSettlor.heading")
 
 }

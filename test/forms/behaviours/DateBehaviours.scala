@@ -40,7 +40,7 @@ trait DateBehaviours extends FieldBehaviours {
 
           val result = form.bind(data)
 
-          result.value.value shouldEqual date
+          result.value.value mustEqual date
       }
     }
   }
@@ -62,7 +62,7 @@ trait DateBehaviours extends FieldBehaviours {
 
           val result = form.bind(data)
 
-          result.value.value.expiryDate shouldEqual date
+          result.value.value.expiryDate mustEqual date
       }
     }
   }
@@ -85,7 +85,7 @@ trait DateBehaviours extends FieldBehaviours {
 
           val result = form.bind(data).apply(key)
 
-          result.errors shouldEqual Seq(formError)
+          result.errors mustEqual Seq(formError)
       }
     }
   }
@@ -107,7 +107,7 @@ trait DateBehaviours extends FieldBehaviours {
 
           val result = form.bind(data).apply(key)
 
-          result.errors shouldEqual Seq(formError)
+          result.errors mustEqual Seq(formError)
       }
     }
   }
@@ -119,7 +119,7 @@ trait DateBehaviours extends FieldBehaviours {
 
       val result = form.bind(Map.empty[String, String]).apply(key)
 
-      result.errors should contain only FormError(key, requiredAllKey, List("day", "month", "year"))
+      result.errors must contain only FormError(key, requiredAllKey, List("day", "month", "year"))
     }
   }
 }
