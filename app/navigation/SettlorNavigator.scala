@@ -17,7 +17,6 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.living_settlor.routes
 import models.UserAnswers
 import models.pages.AddASettlor._
 import models.pages.IndividualOrBusiness
@@ -42,7 +41,7 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
     case AddASettlorPage => addSettlorRoute(draftId)
     case AddASettlorYesNoPage => yesNoNav(
       fromPage = AddASettlorYesNoPage,
-      yesCall = routes.SettlorIndividualOrBusinessController.onPageLoad(0, draftId),
+      yesCall = controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(draftId),
       noCall = settlorsCompletedRoute(draftId)
     )
     case SettlorIndividualOrBusinessPage(index) => settlorIndividualOrBusinessPage(index, draftId)
