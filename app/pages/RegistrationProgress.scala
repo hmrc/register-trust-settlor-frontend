@@ -16,12 +16,13 @@
 
 package pages
 
-import javax.inject.Inject
-import models.pages.Status.{Completed, InProgress}
 import models.UserAnswers
+import models.pages.Status.{Completed, InProgress}
 import models.pages.{AddASettlor, Status}
 import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import sections.LivingSettlors
+
+import javax.inject.Inject
 
 class RegistrationProgress @Inject()() {
 
@@ -33,15 +34,13 @@ class RegistrationProgress @Inject()() {
       case Some(setUpAfterSettlorDied) =>
         if (setUpAfterSettlorDied) {
           determineStatus(isDeceasedSettlorComplete)
-        }
-        else {
+        } else {
           userAnswers.get(LivingSettlors).getOrElse(Nil) match {
             case Nil =>
               val inAdditionToWillTrust = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage).getOrElse(false)
               if (!inAdditionToWillTrust) {
                 Some(Status.InProgress)
-              }
-              else {
+              } else {
                 determineStatus(isDeceasedSettlorComplete)
               }
             case living =>

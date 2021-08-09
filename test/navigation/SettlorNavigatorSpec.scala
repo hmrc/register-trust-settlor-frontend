@@ -124,11 +124,11 @@ class SettlorNavigatorSpec extends SpecBase {
 
     "AddASettlorYesNoPage" when {
       "yes" must {
-        "redirect to Individual or Business" in {
+        "redirect to set up after settlor died" in {
           val userAnswers = emptyUserAnswers.set(AddASettlorYesNoPage, true).success.value
 
           navigator.nextPage(AddASettlorYesNoPage, fakeDraftId)(userAnswers)
-            .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            .mustBe(controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId))
         }
       }
 
