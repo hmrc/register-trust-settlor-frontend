@@ -17,7 +17,7 @@
 package connectors
 
 import config.FrontendAppConfig
-import controllers.Assets.NOT_FOUND
+import play.api.http.Status.NOT_FOUND
 import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
