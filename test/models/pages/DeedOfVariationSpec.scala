@@ -43,11 +43,10 @@ class DeedOfVariationSpec extends WordSpec with MustMatchers with ScalaCheckProp
     }
 
     "serialise" in {
-      Json.toJson(ReplacedWill) mustEqual JsString("Replaced the will trust")
-      Json.toJson(AdditionToWill) mustEqual JsString("Addition to the will trust")
-      Json.toJson(ReplaceAbsolute) mustEqual JsString("Previously there was only an absolute interest under the will")
+      Json.toJson(ReplacedWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Replaced the will trust")
+      Json.toJson(AdditionToWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Addition to the will trust")
+      Json.toJson(ReplaceAbsolute: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Previously there was only an absolute interest under the will")
     }
-
   }
 
 }
