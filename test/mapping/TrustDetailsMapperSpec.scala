@@ -102,7 +102,7 @@ class TrustDetailsMapperSpec extends SpecBase {
               val result = mapper.build(userAnswers).get
 
               result mustBe models.TrustDetailsType(
-                typeOfTrust = TypeOfTrust.WillTrustOrIntestacyTrust,
+                typeOfTrust = TypeOfTrust.DeedOfVariation,
                 deedOfVariation = Some(AdditionToWill),
                 interVivos = None,
                 efrbsStartDate = None
