@@ -30,9 +30,10 @@ import pages.trust_type.KindOfTrustPage
 import pages.{AddASettlorPage, AddASettlorYesNoPage, RegistrationProgress}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
+import play.api.mvc._
 import repositories.RegistrationsRepository
 import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpVerbs.GET
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddASettlorViewHelper
@@ -143,6 +144,18 @@ class AddASettlorController @Inject()(
           } yield Redirect(navigator.nextPage(AddASettlorPage, draftId)(updatedAnswers))
         }
       )
+  }
+
+  def submitComplete(draftId: String): Action[AnyContent] = actions(draftId).async {
+    implicit request =>
+
+      val status = NoComplete
+
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorPage, status))
+        _ <- registrationsRepository.set(updatedAnswers)
+        _ <- setTaskStatus(updatedAnswers, draftId, status)
+      } yield Redirect(Call(GET, config.registrationProgressUrl(draftId)))
   }
 
   private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)

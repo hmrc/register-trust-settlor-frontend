@@ -54,6 +54,7 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
   lazy val getRoute: String = routes.AddASettlorController.onPageLoad(fakeDraftId).url
   lazy val submitAnotherRoute: String = routes.AddASettlorController.submitAnother(fakeDraftId).url
   lazy val submitYesNoRoute: String = routes.AddASettlorController.submitOne(fakeDraftId).url
+  lazy val submitCompleteRoute: String = routes.AddASettlorController.submitComplete(fakeDraftId).url
 
   val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addASettlorYesNo")
   val addSettlorForm = new AddASettlorFormProvider()()
@@ -592,6 +593,62 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
         application.stop()
       }
 
+    }
+
+    "there are maxed out settlors" must {
+
+      "redirect to registration progress when user clicks continue" when {
+
+        "registration progress is completed" in {
+
+          when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(Completed))
+
+          val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+            .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+            .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+            .build()
+
+          val request = FakeRequest(POST, submitCompleteRoute)
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value))
+
+          application.stop()
+        }
+
+        "registration progress is not completed" in {
+
+          forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
+            beforeEach()
+
+            when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(regProgressStatus)
+
+            val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+              .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+              .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+              .build()
+
+            val request = FakeRequest(POST, submitCompleteRoute)
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+            verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value))
+
+            application.stop()
+          }
+        }
+      }
     }
 
   }
