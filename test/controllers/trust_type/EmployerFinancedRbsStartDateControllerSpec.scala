@@ -30,7 +30,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
 
-  val formProvider = new EfrbsStartDateFormProvider(appConfig)
+  val formProvider = new EfrbsStartDateFormProvider(frontendAppConfig)
   val form = formProvider()
 
   val name = FullName("First", Some("Middle"), "Last")

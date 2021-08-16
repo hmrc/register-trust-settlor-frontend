@@ -25,7 +25,7 @@ import play.api.data.FormError
 class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
 
   val messagePrefix = "dateOfBirth"
-  val form = new DateOfBirthFormProvider(appConfig)()
+  val form = new DateOfBirthFormProvider(frontendAppConfig)()
 
   private val min = LocalDate.of(1500, 1, 1)
   private val max = LocalDate.now(ZoneOffset.UTC)
