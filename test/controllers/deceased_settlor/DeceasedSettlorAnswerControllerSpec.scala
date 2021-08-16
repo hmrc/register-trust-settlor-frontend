@@ -18,9 +18,10 @@ package controllers.deceased_settlor
 
 import base.SpecBase
 import controllers.routes._
+import models.TaskStatus.Completed
 import models.UserAnswers
 import models.pages.FullName
-import org.mockito.Matchers.any
+import org.mockito.Matchers.{any, eq => eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.deceased_settlor._
@@ -29,6 +30,7 @@ import play.api.inject.bind
 import play.api.mvc.Result
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.DeceasedSettlorPrintHelper
 import viewmodels.AnswerSection
@@ -39,6 +41,18 @@ import scala.concurrent.Future
 class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   private val name: FullName = FullName("First", None, "Last")
+
+  private val trustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+
+  override def beforeEach(): Unit = {
+    reset(mockCreateDraftRegistrationService, trustsStoreService)
+
+    when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+
+    when(trustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+  }
 
   "DeceasedSettlorAnswer Controller" must {
 
@@ -121,15 +135,12 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
     "remove living settlors mapped piece for a POST" in {
 
-      reset(mockCreateDraftRegistrationService)
-
       val userAnswers: UserAnswers = emptyUserAnswers
         .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
 
-      when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK, "")))
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))
+        .build()
 
       val request = FakeRequest(POST, deceasedSettlorsAnswerRoute)
 
@@ -139,6 +150,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
       verify(mockCreateDraftRegistrationService).removeLivingSettlorsMappedPiece(any())(any())
+      verify(trustsStoreService).updateTaskStatus(any(), eqTo(Completed))(any(), any())
 
       application.stop()
     }

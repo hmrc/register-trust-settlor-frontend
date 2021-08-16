@@ -19,16 +19,21 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
-import models.Enumerable
+import models.TaskStatus.TaskStatus
 import models.pages.AddASettlor
+import models.pages.AddASettlor.NoComplete
+import models.pages.Status.Completed
 import models.requests.RegistrationDataRequest
+import models.{Enumerable, TaskStatus, UserAnswers}
 import navigation.Navigator
 import pages.trust_type.KindOfTrustPage
-import pages.{AddASettlorPage, AddASettlorYesNoPage}
+import pages.{AddASettlorPage, AddASettlorYesNoPage, RegistrationProgress}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.TrustsStoreService
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddASettlorViewHelper
 import views.html.{AddASettlorView, AddASettlorYesNoView}
@@ -45,7 +50,9 @@ class AddASettlorController @Inject()(
                                        addAnotherFormProvider: AddASettlorFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        addAnotherView: AddASettlorView,
-                                       yesNoView: AddASettlorYesNoView
+                                       yesNoView: AddASettlorYesNoView,
+                                       trustsStoreService: TrustsStoreService,
+                                       registrationProgress: RegistrationProgress
                                      )(implicit ec: ExecutionContext, config: FrontendAppConfig)
   extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
 
@@ -100,7 +107,8 @@ class AddASettlorController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorYesNoPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- setTaskStatus(draftId, TaskStatus.InProgress)
           } yield Redirect(navigator.nextPage(AddASettlorYesNoPage, draftId)(updatedAnswers))
         }
       )
@@ -130,9 +138,25 @@ class AddASettlorController @Inject()(
         value => {
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
+            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- setTaskStatus(updatedAnswers, draftId, value)
           } yield Redirect(navigator.nextPage(AddASettlorPage, draftId)(updatedAnswers))
         }
       )
+  }
+
+  private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    val status = (selection, registrationProgress.settlorsStatus(userAnswers)) match {
+      case (NoComplete, Some(Completed)) => TaskStatus.Completed
+      case _ => TaskStatus.InProgress
+    }
+
+    setTaskStatus(draftId, status)
+  }
+
+  private def setTaskStatus(draftId: String, taskStatus: TaskStatus)
+                           (implicit hc: HeaderCarrier): Future[HttpResponse] = {
+    trustsStoreService.updateTaskStatus(draftId, taskStatus)
   }
 }

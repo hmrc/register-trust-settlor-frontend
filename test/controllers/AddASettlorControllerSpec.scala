@@ -21,22 +21,35 @@ import controllers.living_settlor.business.routes._
 import controllers.living_settlor.individual.routes._
 import controllers.routes._
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
-import models.UserAnswers
+import generators.ModelGenerators
 import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.KindOfTrust.Intervivos
-import models.pages.{AddASettlor, FullName}
+import models.pages.Status._
+import models.pages.{AddASettlor, FullName, Status}
+import models.{TaskStatus, UserAnswers}
+import org.mockito.Matchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
+import org.scalacheck.Arbitrary.arbitrary
+import org.scalatest.BeforeAndAfterEach
+import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.trust_type.KindOfTrustPage
+import pages.{AddASettlorPage, RegistrationProgress}
 import play.api.data.Form
+import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.TrustsStoreService
+import uk.gov.hmrc.http.HttpResponse
 import utils.Constants.MAX
 import viewmodels.AddRow
 import views.html.{AddASettlorView, AddASettlorYesNoView}
 
-class AddASettlorControllerSpec extends SpecBase {
+import scala.concurrent.Future
+
+class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
 
   lazy val getRoute: String = routes.AddASettlorController.onPageLoad(fakeDraftId).url
   lazy val submitAnotherRoute: String = routes.AddASettlorController.submitAnother(fakeDraftId).url
@@ -49,6 +62,16 @@ class AddASettlorControllerSpec extends SpecBase {
 
   val userAnswersWithSettlorsComplete: UserAnswers = emptyUserAnswers
     .set(KindOfTrustPage, Intervivos).success.value
+
+  private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+  private val mockRegistrationProgress: RegistrationProgress = mock[RegistrationProgress]
+
+  override def beforeEach(): Unit = {
+    reset(mockTrustsStoreService, mockRegistrationProgress)
+
+    when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+      .thenReturn(Future.successful(HttpResponse(OK, "")))
+  }
 
   "AddASettlor Controller" when {
 
@@ -128,7 +151,9 @@ class AddASettlorControllerSpec extends SpecBase {
 
       "redirect to the next page when valid data is submitted" in {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
+        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+          .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+          .build()
 
         val request = FakeRequest(POST, submitYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
@@ -138,6 +163,8 @@ class AddASettlorControllerSpec extends SpecBase {
         status(result) mustEqual SEE_OTHER
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+        verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
 
         application.stop()
       }
@@ -188,7 +215,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
         "no types maxed out" when {
 
-          val settlors = List(indRow(index))
+          lazy val settlors = List(indRow(index))
 
           "taxable" in {
 
@@ -239,7 +266,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
           "25 individuals" in {
 
-            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ indRow(i)
             })
 
@@ -273,7 +300,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
           "25 businesses" in {
 
-            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ busRow(i)
             })
 
@@ -307,7 +334,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
           "25 combined" in {
 
-            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ (if (i < (MAX / 2).floor) indRow(i) else busRow(i))
             })
 
@@ -350,7 +377,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
           "one type maxed out" in {
 
-            val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ indRow(i)
             })
 
@@ -384,7 +411,7 @@ class AddASettlorControllerSpec extends SpecBase {
 
           "both types maxed out" in {
 
-            val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil)((acc, i) => {
               acc :+ (if (i < MAX) indRow(i) else busRow(i))
             })
 
@@ -424,20 +451,116 @@ class AddASettlorControllerSpec extends SpecBase {
         }
       }
 
-      "redirect to the next page when valid data is submitted" in {
+      "redirect to the next page when valid data is submitted" when {
 
-        val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete)).build()
+        "YesNow selected" in {
 
-        val request = FakeRequest(POST, submitAnotherRoute)
-          .withFormUrlEncodedBody(("value", AddASettlor.options.head.value))
+          val selection = AddASettlor.YesNow
 
-        val result = route(application, request).value
+          when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(InProgress))
 
-        status(result) mustEqual SEE_OTHER
+          val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+            .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+            .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+            .build()
 
-        redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+          val request = FakeRequest(POST, submitAnotherRoute)
+            .withFormUrlEncodedBody(("value", selection.toString))
 
-        application.stop()
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+
+          application.stop()
+        }
+
+        "YesLater selected" in {
+
+          val selection = AddASettlor.YesLater
+
+          when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(InProgress))
+
+          val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+            .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+            .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+            .build()
+
+          val request = FakeRequest(POST, submitAnotherRoute)
+            .withFormUrlEncodedBody(("value", selection.toString))
+
+          val result = route(application, request).value
+
+          status(result) mustEqual SEE_OTHER
+
+          redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+
+          application.stop()
+        }
+
+        "NoComplete selected" when {
+
+          val selection = AddASettlor.NoComplete
+
+          "registration progress is completed" in {
+
+            when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(Completed))
+
+            val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+              .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+              .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+              .build()
+
+            val request = FakeRequest(POST, submitAnotherRoute)
+              .withFormUrlEncodedBody(("value", selection.toString))
+
+            val result = route(application, request).value
+
+            status(result) mustEqual SEE_OTHER
+
+            redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+            verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+
+            application.stop()
+          }
+
+          "registration progress is not completed" in {
+
+            forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
+              beforeEach()
+
+              when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(regProgressStatus)
+
+              val application = applicationBuilder(userAnswers = Some(userAnswersWithSettlorsComplete))
+                .overrides(bind[TrustsStoreService].toInstance(mockTrustsStoreService))
+                .overrides(bind[RegistrationProgress].toInstance(mockRegistrationProgress))
+                .build()
+
+              val request = FakeRequest(POST, submitAnotherRoute)
+                .withFormUrlEncodedBody(("value", selection.toString))
+
+              val result = route(application, request).value
+
+              status(result) mustEqual SEE_OTHER
+
+              redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
+
+              verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+              verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+
+              application.stop()
+            }
+          }
+        }
       }
 
       "return a Bad Request and errors when invalid data is submitted" in {
