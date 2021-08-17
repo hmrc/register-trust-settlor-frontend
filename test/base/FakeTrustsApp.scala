@@ -30,8 +30,6 @@ import scala.concurrent.ExecutionContext
 trait FakeTrustsApp extends GuiceOneAppPerSuite {
   this: TestSuite =>
 
-  val appConfig = injector.instanceOf[FrontendAppConfig]
-
   def injector: Injector = app.injector
 
   def frontendAppConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]

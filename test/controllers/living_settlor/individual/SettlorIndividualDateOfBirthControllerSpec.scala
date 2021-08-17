@@ -30,7 +30,7 @@ import java.time.{LocalDate, ZoneOffset}
 
 class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
-  private val formProvider: DateOfBirthFormProvider = new DateOfBirthFormProvider(appConfig)
+  private val formProvider: DateOfBirthFormProvider = new DateOfBirthFormProvider(frontendAppConfig)
   private val form: Form[LocalDate] = formProvider()
   private val index: Int = 0
 

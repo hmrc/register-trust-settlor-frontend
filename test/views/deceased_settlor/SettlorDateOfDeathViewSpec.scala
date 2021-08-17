@@ -29,7 +29,7 @@ class SettlorDateOfDeathViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "settlorDateOfDeath"
 
-  val form = new SettlorDateOfDeathFormProvider(appConfig).withConfig()
+  val form = new SettlorDateOfDeathFormProvider(frontendAppConfig).withConfig()
 
   "SettlorDateOfDeathView view" must {
 

@@ -28,7 +28,7 @@ class PassportOrIdCardFormProviderSpec extends
 
   val prefix = "passport"
 
-  val form = new PassportOrIdCardFormProvider(appConfig)(prefix)
+  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix)
 
   ".country" must {
 

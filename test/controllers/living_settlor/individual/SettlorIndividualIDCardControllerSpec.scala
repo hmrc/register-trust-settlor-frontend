@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
 import utils._
 import utils.countryOptions.CountryOptions
 import views.html.living_settlor.individual.SettlorIndividualIDCardView
@@ -37,7 +37,7 @@ import scala.concurrent.Future
 
 class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
-  private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(appConfig)
+  private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
   private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualIDCard")
   private val index: Int = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
@@ -99,14 +99,14 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+      val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
       when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val userAnswers = emptyUserAnswers
         .set(SettlorIndividualNamePage(index),name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[FeatureFlagService].toInstance(mockFeatureFlagService))
+        .overrides(bind[TrustsStoreService].toInstance(mockFeatureFlagService))
         .build()
 
       val request =

@@ -32,7 +32,7 @@ import java.time.LocalDate
 
 class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new SettlorsDateOfBirthFormProvider(appConfig)
+  val formProvider = new SettlorsDateOfBirthFormProvider(frontendAppConfig)
   val dateOfDeath: LocalDate = LocalDate.parse("2019-02-03")
   val form: Form[LocalDate] = formProvider.withConfig()
 

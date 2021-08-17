@@ -19,6 +19,7 @@ package controllers.deceased_settlor
 import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
+import models.TaskStatus
 import models.pages.Status.Completed
 import navigation.Navigator
 import pages.DeceasedSettlorStatus
@@ -26,7 +27,7 @@ import pages.deceased_settlor.DeceasedSettlorAnswerPage
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
-import services.DraftRegistrationService
+import services.{DraftRegistrationService, TrustsStoreService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.DeceasedSettlorPrintHelper
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
@@ -43,7 +44,8 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: DeceasedSettlorAnswerView,
                                                  draftRegistrationService: DraftRegistrationService,
-                                                 deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper
+                                                 deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
+                                                 trustsStoreService: TrustsStoreService
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
@@ -61,6 +63,7 @@ class DeceasedSettlorAnswerController @Inject()(
         updatedAnswers <- Future.fromTry(request.userAnswers.set(DeceasedSettlorStatus, Completed))
         _ <- registrationsRepository.set(updatedAnswers)
         _ <- draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
+        _ <- trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
       } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
   }
 }

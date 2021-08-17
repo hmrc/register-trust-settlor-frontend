@@ -27,7 +27,7 @@ import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FeatureFlagService
+import services.TrustsStoreService
 import views.html.living_settlor.individual.SettlorIndividualNINOYesNoView
 
 import scala.concurrent.Future
@@ -86,13 +86,13 @@ class SettlorIndividualNINOYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val mockFeatureFlagService: FeatureFlagService = mock[FeatureFlagService]
+      val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
       when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
-        .overrides(bind[FeatureFlagService].toInstance(mockFeatureFlagService))
+        .overrides(bind[TrustsStoreService].toInstance(mockFeatureFlagService))
         .build()
 
       val request =

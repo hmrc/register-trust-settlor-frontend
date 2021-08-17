@@ -16,17 +16,17 @@
 
 package generators
 
-import java.time.LocalDate
-
 import models.pages._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
+
+import java.time.LocalDate
 
 trait ModelGenerators {
 
   implicit lazy val arbitraryKindOfTrust: Arbitrary[KindOfTrust] =
     Arbitrary {
-      Gen.oneOf(KindOfTrust.values.toSeq)
+      Gen.oneOf(KindOfTrust.values)
     }
 
   implicit lazy val arbitrarySettlorIndividualPassport: Arbitrary[PassportOrIdCardDetails] =
@@ -79,6 +79,11 @@ trait ModelGenerators {
   implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] =
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))
+    }
+
+  implicit lazy val arbitraryStatus: Arbitrary[Status] =
+    Arbitrary {
+      Gen.oneOf(Status.values.toList)
     }
 
 }
