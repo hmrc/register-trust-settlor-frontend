@@ -38,38 +38,25 @@ class SettlorNavigatorSpec extends SpecBase {
       "YesNow" must {
         "redirect to Individual or Business" when {
 
-          "no living settlors" in {
-            val userAnswers = emptyUserAnswers.set(AddASettlorPage, YesNow).success.value
+          "no living settlors" must {
+            "redirect to index 0" in {
+              val userAnswers = emptyUserAnswers.set(AddASettlorPage, YesNow).success.value
 
-            navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+              navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            }
           }
 
-          "living settlors" when {
+          "there are living settlors" must {
+            "redirect to next index" in {
+              val userAnswers = emptyUserAnswers
+                .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+                .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
+                .set(LivingSettlorStatus(0), Completed).success.value
+                .set(AddASettlorPage, YesNow).success.value
 
-            "last settlor is in progress" must {
-              "redirect to in-progress index" in {
-                val userAnswers = emptyUserAnswers
-                  .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-                  .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-                  .set(AddASettlorPage, YesNow).success.value
-
-                navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
-                  .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-              }
-            }
-
-            "last settlor is complete" must {
-              "redirect to next index" in {
-                val userAnswers = emptyUserAnswers
-                  .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-                  .set(SettlorIndividualNamePage(0), FullName("Joe", None, "Bloggs")).success.value
-                  .set(LivingSettlorStatus(0), Completed).success.value
-                  .set(AddASettlorPage, YesNow).success.value
-
-                navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
-                  .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(1, fakeDraftId))
-              }
+              navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
+                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(1, fakeDraftId))
             }
           }
 
