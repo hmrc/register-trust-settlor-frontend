@@ -18,6 +18,7 @@ package controllers
 
 import connectors.SubmissionDraftConnector
 import controllers.actions.RegistrationIdentifierAction
+import models.TaskStatus.InProgress
 import models.UserAnswers
 import models.pages.Status.Completed
 import models.requests.IdentifierRequest
@@ -26,7 +27,7 @@ import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
 import repositories.RegistrationsRepository
 import sections.{DeceasedSettlor, LivingSettlors}
-import services.FeatureFlagService
+import services.TrustsStoreService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 
 import javax.inject.Inject
@@ -36,7 +37,7 @@ class IndexController @Inject()(
                                  val controllerComponents: MessagesControllerComponents,
                                  repository: RegistrationsRepository,
                                  identify: RegistrationIdentifierAction,
-                                 featureFlagService: FeatureFlagService,
+                                 trustsStoreService: TrustsStoreService,
                                  submissionDraftConnector: SubmissionDraftConnector
                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
@@ -58,7 +59,7 @@ class IndexController @Inject()(
     }
 
     for {
-      is5mldEnabled <- featureFlagService.is5mldEnabled()
+      is5mldEnabled <- trustsStoreService.is5mldEnabled()
       isTaxable <- submissionDraftConnector.getIsTrustTaxable(draftId)
       utr <- submissionDraftConnector.getTrustUtr(draftId)
       userAnswers <- repository.get(draftId)
@@ -67,6 +68,7 @@ class IndexController @Inject()(
         case None => UserAnswers(draftId, Json.obj(), request.internalId, is5mldEnabled, isTaxable, utr)
       }
       result <- redirect(ua)
+      _ <- trustsStoreService.updateTaskStatus(draftId, InProgress)
     } yield result
   }
 }

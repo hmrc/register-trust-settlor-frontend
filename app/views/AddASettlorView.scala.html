@@ -43,12 +43,14 @@
     maxedOut: List[String]
 )(implicit request: Request[_], messages: Messages)
 
+@settlorsMaxedOut = @{maxedOut.size == 2}
+
 @main_template(
     title = s"${errorPrefix(form)}$heading",
     showBackLink = true
 ) {
 
-    @formHelper(action = AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
+    @formHelper(action = if (settlorsMaxedOut) AddASettlorController.submitComplete(draftId) else AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
 
         @error_summary(form.errors, AddASettlor.options)
 
@@ -62,7 +64,7 @@
 
         @addToList(complete, "complete", "settlor")
 
-        @if(maxedOut.size == 2) {
+        @if(settlorsMaxedOut) {
             <div class="govuk-inset-text">
                 <ul class="govuk-list">
                     <li>@messages("addASettlor.maxedOut.all", if (appConfig.countMaxAsCombined) MAX else MAX * 2)</li>

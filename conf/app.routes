@@ -26,6 +26,8 @@ GET        /:draftId/add                                                        
 POST       /:draftId/add                                                                    controllers.AddASettlorController.submitOne(draftId: String)
 GET        /:draftId/add-another                                                            controllers.AddASettlorController.onPageLoad(draftId: String)
 POST       /:draftId/add-another                                                            controllers.AddASettlorController.submitAnother(draftId: String)
+GET        /:draftId/complete                                                               controllers.AddASettlorController.onPageLoad(draftId: String)
+POST       /:draftId/complete                                                               controllers.AddASettlorController.submitComplete(draftId: String)
 
 GET        /:draftId/:index/remove-yes-no                                                   controllers.RemoveSettlorYesNoController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/:index/remove-yes-no                                                   controllers.RemoveSettlorYesNoController.onSubmit(index: Int, draftId: String)

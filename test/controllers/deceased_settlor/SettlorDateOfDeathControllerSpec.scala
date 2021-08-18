@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new SettlorDateOfDeathFormProvider(appConfig)
+  val formProvider = new SettlorDateOfDeathFormProvider(frontendAppConfig)
   val form = formProvider.withConfig()
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
