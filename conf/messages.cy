@@ -1,3 +1,5 @@
+service.name = Cofrestru Ymddiriedolaeth a’i Chynnal
+
 5mld.countryOfNationality.checkYourAnswersLabel = Beth oedd gwlad cenedligrwydd {0}?
 5mld.countryOfNationality.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
 5mld.countryOfNationality.error.length = Mae’n rhaid i wlad y cenedligrwydd fod yn 100 o gymeriadau neu lai
@@ -614,7 +616,6 @@ site.inprogress = Ar y gweill
 site.no = Na
 site.onlyContinue = Yn eich blaen
 site.save.continue = Cadw ac yn eich blaen
-site.service_name = Cofrestru Ymddiriedolaeth a’i Chynnal
 site.service_section = Setlwyr
 site.sign_in = Mewngofnodi
 site.sign_out = Allgofnodi
