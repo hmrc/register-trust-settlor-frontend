@@ -62,7 +62,7 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
 
   private def settlorIndividualOrBusinessPage(index: Int, draftId: String)(answers: UserAnswers): Call =
     answers.get(SettlorIndividualOrBusinessPage(index)) match {
-      case Some(individualOrBusiness) => SettlorNavigator.addSettlorNowRoute(individualOrBusiness, answers, draftId)
+      case Some(individualOrBusiness) => SettlorNavigator.addSettlorNowRoute(individualOrBusiness, answers, draftId, Some(index))
       case _ => controllers.routes.SessionExpiredController.onPageLoad()
     }
 }
@@ -81,30 +81,28 @@ object SettlorNavigator {
     }
   }
 
-  def addSettlorNowRoute(`type`: IndividualOrBusiness, answers: UserAnswers, draftId: String): Call = {
+  def addSettlorNowRoute(`type`: IndividualOrBusiness, answers: UserAnswers, draftId: String, index: Option[Int] = None): Call = {
     `type` match {
-      case Individual => routeToIndividualSettlorIndex(answers, draftId)
-      case Business => routeToSettlorProtectorIndex(answers, draftId)
+      case Individual => routeToIndividualSettlorIndex(answers, draftId, index)
+      case Business => routeToSettlorProtectorIndex(answers, draftId, index)
     }
   }
 
-  private def routeToIndividualSettlorIndex(answers: UserAnswers, draftId: String): Call = {
-    routeToIndex(answers, controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad, draftId)
+  private def routeToIndividualSettlorIndex(answers: UserAnswers, draftId: String, index: Option[Int]): Call = {
+    routeToIndex(answers, controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad, draftId, index)
   }
 
-  private def routeToSettlorProtectorIndex(answers: UserAnswers, draftId: String): Call = {
-    routeToIndex(answers, controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad, draftId)
+  private def routeToSettlorProtectorIndex(answers: UserAnswers, draftId: String, index: Option[Int]): Call = {
+    routeToIndex(answers, controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad, draftId, index)
   }
 
   private def routeToIndex[T <: SettlorViewModel](answers: UserAnswers,
                                                   route: (Int, String) => Call,
-                                                  draftId: String): Call = {
-    val settlors = answers.get(sections.LivingSettlors).getOrElse(List.empty)
-    val index = settlors match {
-      case Nil => 0
-      case x if !x.last.isComplete => x.size - 1
-      case x => x.size
+                                                  draftId: String,
+                                                  index: Option[Int] = None): Call = {
+    val i = index.getOrElse {
+      answers.get(sections.LivingSettlors).getOrElse(Nil).size
     }
-    route(index, draftId)
+    route(i, draftId)
   }
 }
