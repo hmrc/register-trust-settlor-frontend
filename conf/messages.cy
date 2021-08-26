@@ -425,7 +425,7 @@ settlorIndividualName.title = Beth yw enw’r setlwr?
 settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
 settlorIndividualNINO.error.required = Nodwch rif Yswiriant Gwladol y setlwr
-settlorIndividualNINO.error.duplicate = Nodwch rif Yswiriant Gwladol nad yw wedi’i ddefnyddio eisoes i ychwanegu Setlwr
+settlorIndividualNINO.error.duplicate = Nodwch rif Yswiriant Gwladol nad yw wedi’i ddefnyddio eisoes i ychwanegu setlwr
 settlorIndividualNINO.heading = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
 
