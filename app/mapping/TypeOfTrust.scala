@@ -55,9 +55,11 @@ object TypeOfTrust extends Enumerable.Implicits {
       (__ \ 'deceased).readNullable[DeceasedSettlor]
     ).tupled
     .flatMap {
-      case (_ :: _, None) => (__ \ 'kindOfTrust).read[TypeOfTrust](KindOfTrust.typeofTrustReads)
-      case (Nil, Some(_)) => Reads(_ => JsSuccess(WillTrustOrIntestacyTrust))
-      case _ => Reads(_ => JsError("User answers are in an invalid state."))
+      case (_ :: _, None) | (Nil, Some(_)) =>
+        (__ \ 'kindOfTrust).read[TypeOfTrust](KindOfTrust.typeofTrustReads) orElse
+          Reads(_ => JsSuccess(WillTrustOrIntestacyTrust))
+      case _ =>
+        Reads(_ => JsError("User answers are in an invalid state."))
     }
 
 }
