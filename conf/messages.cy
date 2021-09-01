@@ -274,8 +274,13 @@ settlorBusinessTimeYesNo.heading = Ar ddyddiad pob cyfraniad at yr ymddiriedolae
 settlorBusinessTimeYesNo.title = Ar ddyddiad pob cyfraniad at yr ymddiriedolaeth, a oedd y busnes wedi bodoli am o leiaf 2 flynedd?
 
 settlorBusinessType.checkYourAnswersLabel = Pa fath o fusnes yw {0}?
-settlorBusinessType.error.required = Dewiswch ba fath o fusnes yw’r setlwr
+settlorBusinessType.error.required = Dewiswch a yw’r busnes yn fusnes masnachu neu’n fusnes buddsoddi
 settlorBusinessType.heading = Pa fath o fusnes yw {0}?
+settlorBusinessType.p1 = Mae busnes masnachu yn cynnal proffesiwn neu alwedigaeth i wneud elw.
+settlorBusinessType.p2 = Mae busnes buddsoddi naill ai’n gweithredu am reswm y tu hwnt i elw, neu’n ymwneud yn bennaf â’r canlynol:
+settlorBusinessType.bullet1 = delio mewn gwarantau, stociau a chyfranddaliadau
+settlorBusinessType.bullet2 = delio mewn tir neu adeiladau
+settlorBusinessType.bullet3 = gwneud neu ddal buddsoddiadau
 settlorBusinessType.title = Pa fath o fusnes yw’r setlwr?
 
 settlorBusinessUtr.checkYourAnswersLabel = Beth yw Cyfeirnod Unigryw y Trethdalwr (UTR) ar gyfer {0}?
