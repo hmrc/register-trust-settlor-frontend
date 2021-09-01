@@ -525,7 +525,12 @@ settlorBusinessAddressUK.heading = What is {0}’s address?
 settlorBusinessType.checkYourAnswersLabel = What kind of business is {0}?
 settlorBusinessType.title = What kind of business is the settlor?
 settlorBusinessType.heading = What kind of business is {0}?
-settlorBusinessType.error.required = Select what kind of business the settlor is
+settlorBusinessType.p1 = A trading business carries out a profession or vocation for profit.
+settlorBusinessType.p2 = An investment business either operates for a reason outside of profit, or is mostly involved in:
+settlorBusinessType.bullet1 = dealing in securities, stocks and shares
+settlorBusinessType.bullet2 = dealing in land or buildings
+settlorBusinessType.bullet3 = making or holding of investments
+settlorBusinessType.error.required = Select if the business is a trading, or investment business
 
 kindOfBusiness.Trading = Trading
 kindOfBusiness.Investment = Investment

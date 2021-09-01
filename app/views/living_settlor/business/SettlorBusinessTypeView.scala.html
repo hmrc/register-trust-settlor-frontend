@@ -16,12 +16,14 @@
 
 @import controllers.living_settlor.business.routes._
 @import models.pages.KindOfBusiness
-@import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
+@import views.html.components.{Heading, BulletList, SubmitButton, ErrorSummary, InputRadio}
 @import views.ViewUtils.mapRadioOptionsToRadioItems
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
+    heading: Heading,
+    bulletList: BulletList,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
     input_radio: InputRadio
@@ -38,12 +40,24 @@
 
         @error_summary(form.errors, KindOfBusiness.options)
 
+        @heading(messages("settlorBusinessType.heading", settlorBusinessName))
+
+        <p>@messages("settlorBusinessType.p1")</p>
+
+        <p>@messages("settlorBusinessType.p2")</p>
+
+        @bulletList("settlorBusinessType", Seq(
+            "bullet1",
+            "bullet2",
+            "bullet3"
+        ))
+
         @input_radio(
             field = form("value"),
             legend = messages("settlorBusinessType.heading", settlorBusinessName),
-            legendClass = Some("govuk-heading-l"),
             inputs = mapRadioOptionsToRadioItems(form("value"), KindOfBusiness.options),
-            legendAsHeading = true
+            legendAsHeading = false,
+            legendClass = Some("govuk-visually-hidden")
         )
 
         @submitButton()
