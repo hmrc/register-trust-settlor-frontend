@@ -17,7 +17,7 @@
 package mapping
 
 import base.SpecBase
-import models.{AddressType, IdentificationType, PassportType, Settlor, UserAnswers}
+import models.{AddressType, IdentificationType, PassportType, Settlor, UserAnswers, YesNoDontKnow}
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import pages.living_settlor.individual._
 import pages.living_settlor.individual.mld5._
@@ -243,7 +243,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
             .set(CountryOfResidencyYesNoPage(index), false).success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(MentalCapacityYesNoPage(index), true).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
 
           val result = mapper.build(userAnswers).get
 
@@ -268,7 +268,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(CountryOfResidencyYesNoPage(index), true).success.value
             .set(UkCountryOfResidencyYesNoPage(index), true).success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(MentalCapacityYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
 
           val result = mapper.build(userAnswers).get
 
@@ -295,7 +295,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             .set(UkCountryOfResidencyYesNoPage(index), false).success.value
             .set(CountryOfResidencyPage(index), "ES").success.value
             .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(MentalCapacityYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
 
           val result = mapper.build(userAnswers).get
 

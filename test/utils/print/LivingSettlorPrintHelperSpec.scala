@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.living_settlor.individual.mld5.routes._
 import controllers.living_settlor.individual.routes._
 import controllers.living_settlor.routes._
-import models.UserAnswers
+import models.{UserAnswers, YesNoDontKnow}
 import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import models.pages._
@@ -212,7 +212,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
             .set(SettlorIndividualNINOYesNoPage(index), true).success.value
             .set(SettlorIndividualNINOPage(index), nino).success.value
             .set(CountryOfResidencyYesNoPage(index), false).success.value
-            .set(MentalCapacityYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
           val expectedAnswerRows = Seq(
@@ -239,7 +239,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
             .set(SettlorIndividualNINOPage(index), nino).success.value
             .set(CountryOfResidencyYesNoPage(index), true).success.value
             .set(UkCountryOfResidencyYesNoPage(index), true).success.value
-            .set(MentalCapacityYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
           val expectedAnswerRows = Seq(
@@ -270,7 +270,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
             .set(CountryOfResidencyYesNoPage(index), true).success.value
             .set(UkCountryOfResidencyYesNoPage(index), false).success.value
             .set(CountryOfResidencyPage(index), "FR").success.value
-            .set(MentalCapacityYesNoPage(index), false).success.value
+            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
             .set(LivingSettlorStatus(index), Completed).success.value
 
           val expectedAnswerRows = Seq(

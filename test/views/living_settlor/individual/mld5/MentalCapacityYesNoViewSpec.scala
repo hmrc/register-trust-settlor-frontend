@@ -16,20 +16,22 @@
 
 package views.living_settlor.individual.mld5
 
-import forms.YesNoFormProvider
+import forms.YesNoDontKnowFormProvider
+import models.YesNoDontKnow
 import models.pages.FullName
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
-import views.behaviours.YesNoViewBehaviours
+import viewmodels.RadioOption
+import views.behaviours.{OptionsViewBehaviours, QuestionViewBehaviours}
 import views.html.living_settlor.individual.mld5.MentalCapacityYesNoView
 
-class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
+class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] with OptionsViewBehaviours {
 
   private val messageKeyPrefix: String = "settlorIndividualMentalCapacityYesNo"
   private val index: Int = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
+  override val form: Form[YesNoDontKnow] = new YesNoDontKnowFormProvider().withPrefix(messageKeyPrefix)
 
   "MentalCapacityYesNo View" must {
 
@@ -42,7 +44,13 @@ class MentalCapacityYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name.toString))
+    val options = List(
+      RadioOption(id = "value-yes", value = YesNoDontKnow.Yes.toString, messageKey = "site.yes"),
+      RadioOption(id = "value-no",  value = YesNoDontKnow.No.toString, messageKey = "site.no"),
+      RadioOption(id = "value-dontKnow", value = YesNoDontKnow.DontKnow.toString, messageKey = "site.dontKnow")
+    )
+
+    behave like pageWithOptions[YesNoDontKnow](form, applyView, options)
 
     behave like pageWithASubmitButton(applyView(form))
   }
