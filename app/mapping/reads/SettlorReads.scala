@@ -16,6 +16,7 @@
 
 package mapping.reads
 
+import models.YesNoDontKnow
 import models.pages.Address
 import play.api.libs.json.{JsSuccess, Reads, __}
 
@@ -27,4 +28,10 @@ trait SettlorReads {
       Reads(_ => JsSuccess(None: Option[Address]))
   }
 
+  def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
+    (__ \ 'mentalCapacityYesNo).readNullable[Boolean].flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
+      Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
+    }.orElse {
+      (__ \ 'mentalCapacityYesNo).readNullable[YesNoDontKnow]
+    }
 }

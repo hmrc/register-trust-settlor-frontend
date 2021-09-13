@@ -18,6 +18,7 @@ package mapping
 
 import mapping.reads.IndividualSettlor
 import models.Settlor
+import models.YesNoDontKnow.{DontKnow, No, Yes}
 
 class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
 
@@ -27,6 +28,12 @@ class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
     identification = settlor.identification,
     countryOfResidence = settlor.countryOfResidence,
     nationality = settlor.nationality,
-    legallyIncapable = settlor.hasMentalCapacity.map(!_)
+    legallyIncapable = {
+      settlor.hasMentalCapacity.flatMap {
+        case Yes => Some(false)
+        case No => Some(true)
+        case DontKnow => None
+      }
+    }
   )
 }

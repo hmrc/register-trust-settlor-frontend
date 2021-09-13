@@ -16,6 +16,7 @@
 
 package generators
 
+import models.YesNoDontKnow
 import models.pages._
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
@@ -86,4 +87,8 @@ trait ModelGenerators {
       Gen.oneOf(Status.values.toList)
     }
 
+  implicit lazy val arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] =
+    Arbitrary {
+      Gen.oneOf(YesNoDontKnow.values)
+    }
 }

@@ -16,14 +16,14 @@
 
 @import controllers.living_settlor.individual.mld5.routes._
 @import models.pages.FullName
-@import views.html.components.{SubmitButton, ErrorSummary, InputYesNo, Heading}
+@import views.html.components.{SubmitButton, ErrorSummary, InputYesNoDontKnow, Heading}
 
 @this(
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
     error_summary: ErrorSummary,
-    inputYesNo: InputYesNo,
+    InputYesNoDontKnow: InputYesNoDontKnow,
     headingI: Heading
 )
 
@@ -53,7 +53,7 @@
 
         @content
 
-        @inputYesNo(
+        @InputYesNoDontKnow(
             field = form("value"),
             label = messages("settlorIndividualMentalCapacityYesNo.heading", name.toString),
             legendAsHeading = false,
