@@ -90,7 +90,7 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request = FakeRequest(POST, onPageLoadRoute)
-        .withFormUrlEncodedBody(("value", "true"))
+        .withFormUrlEncodedBody(("value", "yes"))
 
       val result = route(application, request).value
 
