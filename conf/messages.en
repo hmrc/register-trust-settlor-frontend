@@ -49,6 +49,7 @@ site.hidden-cancel = Cancel {0}
 site.hidden-continue = Continue {0}
 site.no = No
 site.yes = Yes
+site.or = or
 site.dontKnow = I don’t know
 site.save.continue = Save and continue
 site.continue = Continue

@@ -636,6 +636,8 @@ site.sign_in = Mewngofnodi
 site.sign_out = Allgofnodi
 site.textarea.char_limit = (Y terfyn yw {0} o gymeriadau)
 site.yes = Iawn
+site.dontKnow = Nid wyf yn gwybod
+site.or = CHANGE ME
 
 taskList.settlors.label = Setlwyr
 
