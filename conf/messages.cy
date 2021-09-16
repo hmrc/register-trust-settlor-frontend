@@ -402,15 +402,25 @@ settlorIndividualIDCardYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gw
 settlorIndividualIDCardYesNo.heading = A ydych yn gwybod manylion cerdyn adnabod {0}?
 settlorIndividualIDCardYesNo.title = A ydych yn gwybod manylion cerdyn adnabod y setlwr?
 
+settlorIndividualMentalCapacityYesNo.title = A oes gan y setlwr alluedd meddyliol ar adeg y cofrestru?
+settlorIndividualMentalCapacityYesNo.heading = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
+settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
+#settlorIndividualMentalCapacityYesNo.error.required = CHANGE ME: Dewiswch ‘Iawn’ os oes gan y setlwr alluedd meddyliol ar adeg y cofrestru
+
+#settlorIndividualMentalCapacityYesNo.p1 = CHANGE ME: Nid oes gan setlwr alluedd meddyliol os yw’n analluog yn ôl y gyfraith i ddeall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
+#settlorIndividualMentalCapacityYesNo.p2 = CHANGE ME: NEW
+
 settlorIndividualMentalCapacityYesNo.bulletpoint1 = salwch meddwl
 settlorIndividualMentalCapacityYesNo.bulletpoint2 = anabledd dysgu
 settlorIndividualMentalCapacityYesNo.bulletpoint3 = dementia neu gyflwr cysylltiedig
 settlorIndividualMentalCapacityYesNo.bulletpoint4 = methu â chyfathrebu
-settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-settlorIndividualMentalCapacityYesNo.error.required = Dewiswch ‘Iawn’ os oes gan y setlwr alluedd meddyliol ar adeg y cofrestru
-settlorIndividualMentalCapacityYesNo.heading = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-settlorIndividualMentalCapacityYesNo.p1 = Nid oes gan setlwr alluedd meddyliol os nad yw’n gallu deall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
-settlorIndividualMentalCapacityYesNo.title = A oes gan y setlwr alluedd meddyliol ar adeg y cofrestru?
+
+#settlorIndividualMentalCapacityYesNo.p3= Bydd CThEM yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
+#settlorIndividualMentalCapacityYesNo.p4= Os nad ydych yn siŵr a oes gan y setlwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
+
+#settlorIndividualMentalCapacityYesNo.heading2 = CHANGE ME: NEW HEADING
+settlorIndividualMentalCapacityYesNo.p5 = Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
 
 settlorIndividualName.checkYourAnswersLabel = Beth yw enw’r setlwr?
 settlorIndividualName.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
@@ -626,6 +636,8 @@ site.sign_in = Mewngofnodi
 site.sign_out = Allgofnodi
 site.textarea.char_limit = (Y terfyn yw {0} o gymeriadau)
 site.yes = Iawn
+site.dontKnow = Nid wyf yn gwybod
+site.or = neu
 
 taskList.settlors.label = Setlwyr
 

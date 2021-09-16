@@ -19,7 +19,8 @@ package controllers.living_settlor.individual.mld5
 import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
-import forms.YesNoFormProvider
+import forms.YesNoDontKnowFormProvider
+import models.YesNoDontKnow
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.mld5.MentalCapacityYesNoPage
@@ -39,12 +40,12 @@ class MentalCapacityYesNoController @Inject()(
                                                @IndividualSettlor navigator: Navigator,
                                                actions: Actions,
                                                requireName: NameRequiredActionProvider,
-                                               yesNoFormProvider: YesNoFormProvider,
+                                               yesNoFormProvider: YesNoDontKnowFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
                                                view: MentalCapacityYesNoView
                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
+  private val form: Form[YesNoDontKnow] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
 
   private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
     actions.authWithData(draftId) andThen requireName(index, draftId)

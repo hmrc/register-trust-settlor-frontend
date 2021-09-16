@@ -17,7 +17,7 @@
 package mapping.reads
 
 import mapping.IdentificationMapper.{buildAddress, buildPassport}
-import models.IdentificationType
+import models.{IdentificationType, YesNoDontKnow}
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
@@ -32,7 +32,7 @@ final case class IndividualSettlor(name: FullName,
                                    idCard: Option[PassportOrIdCardDetails],
                                    countryOfResidence: Option[String],
                                    nationality: Option[String],
-                                   hasMentalCapacity: Option[Boolean]) extends Settlor {
+                                   hasMentalCapacity: Option[YesNoDontKnow]) extends Settlor {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 
@@ -53,7 +53,7 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "idCard").readNullable[PassportOrIdCardDetails] and
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
-      (__ \ "mentalCapacityYesNo").readNullable[Boolean]
+      readMentalCapacity
     )(IndividualSettlor.apply _)
 
 }

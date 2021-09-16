@@ -16,11 +16,12 @@
 
 package pages.living_settlor.individual.mld5
 
+import models.YesNoDontKnow
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
-case class MentalCapacityYesNoPage(index: Int) extends QuestionPage[Boolean] {
+case class MentalCapacityYesNoPage(index: Int) extends QuestionPage[YesNoDontKnow] {
 
   override def path: JsPath = LivingSettlors.path \ index \ toString
 

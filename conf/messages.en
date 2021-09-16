@@ -49,6 +49,8 @@ site.hidden-cancel = Cancel {0}
 site.hidden-continue = Continue {0}
 site.no = No
 site.yes = Yes
+site.or = or
+site.dontKnow = I don’t know
 site.save.continue = Save and continue
 site.continue = Continue
 site.onlyContinue = Continue
@@ -372,11 +374,21 @@ settlorIndividualMentalCapacityYesNo.title = Does the settlor have mental capaci
 settlorIndividualMentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
 settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel = Does {0} have mental capacity at the time of registration?
 settlorIndividualMentalCapacityYesNo.error.required = Select yes if the settlor has mental capacity at the time of registration
-settlorIndividualMentalCapacityYesNo.p1 = A settlor does not have mental capacity if they cannot understand information about the trust due to any of the following:
+
+settlorIndividualMentalCapacityYesNo.p1 = A settlor does not have mental capacity if they are legally incapable of understanding information about the trust.
+settlorIndividualMentalCapacityYesNo.p2 = For example, this can be due to:
+
 settlorIndividualMentalCapacityYesNo.bulletpoint1 = mental illness
 settlorIndividualMentalCapacityYesNo.bulletpoint2 = learning disability
 settlorIndividualMentalCapacityYesNo.bulletpoint3 = dementia or a related condition
 settlorIndividualMentalCapacityYesNo.bulletpoint4 = being unable to communicate
+
+settlorIndividualMentalCapacityYesNo.p3 = HMRC will assume that the settlor does have mental capacity, unless you tell HMRC that they do not have mental capacity.
+settlorIndividualMentalCapacityYesNo.p4 = If you are not certain whether the settlor has mental capacity, select ‘I don’t know’.
+
+settlorIndividualMentalCapacityYesNo.heading2 = Why HMRC are asking this question
+settlorIndividualMentalCapacityYesNo.p5 = Normally, HMRC can share a person’s data under the Money Laundering and Terrorist Financing (Amendment) Regulations 2020.
+settlorIndividualMentalCapacityYesNo.p6 = Where a person does not have mental capacity, HMRC are required to not share their personal data.
 
 settlorIndividualAddressYesNo.title = Do you know the settlor’s address?
 settlorIndividualAddressYesNo.heading = Do you know {0}’s address?

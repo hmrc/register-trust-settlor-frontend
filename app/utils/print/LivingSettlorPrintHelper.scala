@@ -53,7 +53,7 @@ class LivingSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
     bound.passportOrIdCardDetailsQuestion(SettlorIndividualPassportPage(index), "settlorIndividualPassport", SettlorIndividualPassportController.onPageLoad(index, draftId).url),
     bound.yesNoQuestion(SettlorIndividualIDCardYesNoPage(index), "settlorIndividualIDCardYesNo", SettlorIndividualIDCardYesNoController.onPageLoad(index, draftId).url),
     bound.passportOrIdCardDetailsQuestion(SettlorIndividualIDCardPage(index), "settlorIndividualIDCard", SettlorIndividualIDCardController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(MentalCapacityYesNoPage(index), "settlorIndividualMentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(index, draftId).url)
+    bound.enumQuestion(MentalCapacityYesNoPage(index), "settlorIndividualMentalCapacityYesNo", MentalCapacityYesNoController.onPageLoad(index, draftId).url, "site")
   )
 
 }

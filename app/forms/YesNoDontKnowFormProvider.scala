@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-package pages.living_settlor.individual.mld5
+package forms
 
+import forms.mappings.Mappings
 import models.YesNoDontKnow
-import pages.behaviours.PageBehaviours
+import play.api.data.Form
 
-class MentalCapacityYesNoPageSpec extends PageBehaviours {
+import javax.inject.Inject
 
-  "MentalCapacityYesNoPage" must {
+class YesNoDontKnowFormProvider @Inject() extends Mappings {
 
-    beRetrievable[YesNoDontKnow](MentalCapacityYesNoPage(0))
-
-    beSettable[YesNoDontKnow](MentalCapacityYesNoPage(0))
-
-    beRemovable[YesNoDontKnow](MentalCapacityYesNoPage(0))
-  }
+  def withPrefix(prefix: String): Form[YesNoDontKnow] =
+    Form(
+      "value" -> enumerable[YesNoDontKnow](requiredKey =  s"$prefix.error.required")
+    )
 }
