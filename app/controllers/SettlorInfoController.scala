@@ -29,18 +29,13 @@ class SettlorInfoController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        actions: Actions,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: SettlorInfoView,
-                                       view5mld: mld5.SettlorInfo5MLDView
+                                       view: SettlorInfoView
                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
       val userAnswers: UserAnswers = request.userAnswers
-      if (userAnswers.is5mldEnabled) {
-        Ok(view5mld(draftId, userAnswers.isTaxable))
-      } else {
-        Ok(view(draftId))
-      }
+        Ok(view(draftId, userAnswers.isTaxable))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {

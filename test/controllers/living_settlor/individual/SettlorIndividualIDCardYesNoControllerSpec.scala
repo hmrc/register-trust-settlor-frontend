@@ -20,8 +20,6 @@ import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
 import models.pages.FullName
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
 import pages.living_settlor.individual.{SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
 import play.api.inject.bind
@@ -29,8 +27,6 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import services.TrustsStoreService
 import views.html.living_settlor.individual.SettlorIndividualIDCardYesNoView
-
-import scala.concurrent.Future
 
 class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
 
@@ -87,7 +83,6 @@ class SettlorIndividualIDCardYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
-      when(mockFeatureFlagService.is5mldEnabled()(any(), any())).thenReturn(Future.successful(false))
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 

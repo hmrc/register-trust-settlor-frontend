@@ -98,38 +98,22 @@ class DeceasedSettlorNavigator @Inject()(config: FrontendAppConfig) extends Navi
 
   private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorsDateOfBirthPage => ua =>
-      navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, draftId)
-    case SettlorNationalInsuranceNumberPage => ua =>
-      if (ua.is5mldEnabled) {
+      mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
+    case SettlorNationalInsuranceNumberPage => _ =>
         mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
-      } else {
-        rts.DeceasedSettlorAnswerController.onPageLoad(draftId)
-      }
   }
 
   private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
     case SettlorDateOfBirthYesNoPage => ua => yesNoNav(
       fromPage = SettlorDateOfBirthYesNoPage,
       yesCall = rts.SettlorsDateOfBirthController.onPageLoad(draftId),
-      noCall = navigateAwayFromDateOfBirthQuestions(ua.is5mldEnabled, draftId)
+      noCall = mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
     )(ua)
     case SettlorsNationalInsuranceYesNoPage => ua => yesNoNav(
       fromPage = SettlorsNationalInsuranceYesNoPage,
       yesCall = rts.SettlorNationalInsuranceNumberController.onPageLoad(draftId),
-      noCall = if (ua.is5mldEnabled) {
-        mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
-      } else {
-        rts.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId)
-      }
+      noCall = mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
     )(ua)
-  }
-
-  private def navigateAwayFromDateOfBirthQuestions(is5mldEnabled: Boolean, draftId: String): Call = {
-    if (is5mldEnabled) {
-      mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
-    } else {
-      rts.SettlorsNINoYesNoController.onPageLoad(draftId)
-    }
   }
 
   private def navigateAwayFromNationalityQuestions(isTaxable: Boolean, draftId: String): Call = {
