@@ -17,7 +17,6 @@
 package services
 
 import connectors.TrustsStoreConnector
-import models.FeatureResponse
 import models.TaskStatus.TaskStatus
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
@@ -29,15 +28,6 @@ class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
   def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
-  }
-
-  def is5mldEnabled()(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = isFeatureEnabled("5mld")
-
-  private def isFeatureEnabled(feature: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
-    trustsStoreConnector.getFeature(feature).map {
-      case FeatureResponse(_, true) => true
-      case _ => false
-    }
   }
 
 }

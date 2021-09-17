@@ -27,9 +27,9 @@ class TrustTypeNavigatorSpec extends SpecBase {
 
   "TrustType Navigator" when {
 
-    "4mld" when {
+    "taxable" when {
 
-      val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
+      val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
 
       "SetUpAfterSettlorDiedYesNoPage" when {
 
@@ -164,167 +164,27 @@ class TrustTypeNavigatorSpec extends SpecBase {
       }
     }
 
-    "5mld" when {
+    "non-taxable" when {
 
-      "taxable" when {
+      val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = false)
 
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = true)
+      "SetUpAfterSettlorDiedYesNoPage" when {
 
-        "SetUpAfterSettlorDiedYesNoPage" when {
+        "yes" must {
+          "redirect to Deceased Settlor Name" in {
+            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
 
-          "yes" must {
-            "redirect to Deceased Settlor Name" in {
-              val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-
-              navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "no" must {
-            "redirect to Kind of Trust" in {
-              val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-
-              navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.KindOfTrustController.onPageLoad(fakeDraftId))
-            }
+            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
+              .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
 
-        "KindOfTrustPage" when {
-
-          "Deed" must {
-            "redirect to Set up in addition to will trust" in {
-              val userAnswers = baseAnswers.set(KindOfTrustPage, Deed).success.value
-
-              navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.AdditionToWillTrustYesNoController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "Intervivos" must {
-            "redirect to Holdover relief yes/no" in {
-              val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
-
-              navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.HoldoverReliefYesNoController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "FlatManagement" must {
-            "redirect to Individual or Business" in {
-              val userAnswers = baseAnswers.set(KindOfTrustPage, FlatManagement).success.value
-
-              navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-            }
-          }
-
-          "HeritageMaintenanceFund" must {
-            "redirect to Individual or Business" in {
-              val userAnswers = baseAnswers.set(KindOfTrustPage, HeritageMaintenanceFund).success.value
-
-              navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-            }
-          }
-
-          "Employees" must {
-            "redirect to EFRBS yes/no" in {
-              val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
-
-              navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId))
-            }
-          }
-        }
-
-        "EfrbsYesNoPage" when {
-
-          "yes" must {
-            "redirect to EFRBS start date" in {
-              val userAnswers = baseAnswers.set(EfrbsYesNoPage, true).success.value
-
-              navigator.nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "no" must {
-            "redirect to Individual or Business" in {
-              val userAnswers = baseAnswers.set(EfrbsYesNoPage, false).success.value
-
-              navigator.nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-            }
-          }
-        }
-
-        "SetUpInAdditionToWillTrustYesNoPage" when {
-
-          "yes" must {
-            "redirect to Deceased Settlor Name" in {
-              val userAnswers = baseAnswers.set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
-
-              navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "no" must {
-            "redirect to How was deed of variation created" in {
-              val userAnswers = baseAnswers.set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
-
-              navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.trust_type.routes.HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId))
-            }
-          }
-        }
-
-        "EfrbsStartDatePage" must {
+        "no" must {
           "redirect to Individual or Business" in {
-            navigator.nextPage(EfrbsStartDatePage, fakeDraftId)(baseAnswers)
+            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+
+            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-          }
-        }
-
-        "HowDeedOfVariationCreatedPage" must {
-          "redirect to Individual or Business" in {
-            navigator.nextPage(HowDeedOfVariationCreatedPage, fakeDraftId)(baseAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-          }
-        }
-
-        "HoldoverReliefYesNoPage" must {
-          "redirect to Individual or Business" in {
-            navigator.nextPage(HoldoverReliefYesNoPage, fakeDraftId)(baseAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-          }
-        }
-      }
-
-      "non-taxable" when {
-
-        val baseAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
-
-        "SetUpAfterSettlorDiedYesNoPage" when {
-
-          "yes" must {
-            "redirect to Deceased Settlor Name" in {
-              val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
-
-              navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
-            }
-          }
-
-          "no" must {
-            "redirect to Individual or Business" in {
-              val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
-
-              navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-            }
           }
         }
       }

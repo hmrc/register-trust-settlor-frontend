@@ -20,10 +20,10 @@ import base.SpecBase
 import controllers.living_settlor.individual.mld5.routes._
 import controllers.living_settlor.individual.routes._
 import controllers.living_settlor.routes._
-import models.{UserAnswers, YesNoDontKnow}
 import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import models.pages._
+import models.{UserAnswers, YesNoDontKnow}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
@@ -61,241 +61,235 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
     "return a living settlor answer section" when {
 
-      "4mld" when {
+      "no DoB, NINO or address" in {
 
-        "no DoB, NINO or address" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), false).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
-
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
-
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
-
-        "DoB and NINO" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
-            .set(SettlorIndividualDateOfBirthPage(index), date).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
-
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
-
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
-
-        "UK address and no passport/ID card" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), true).success.value
-            .set(SettlorAddressUKPage(index), ukAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
-
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorIndividualAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualIDCardYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
-
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
-
-        "UK address and passport" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), true).success.value
-            .set(SettlorAddressUKPage(index), ukAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), true).success.value
-            .set(SettlorIndividualPassportPage(index), passportOrIdCardDetails).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
-
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorIndividualAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualPassport.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
-
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
-
-        "international address and ID card" in {
-
-          val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-            .set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), false).success.value
-            .set(SettlorAddressYesNoPage(index), true).success.value
-            .set(SettlorAddressUKYesNoPage(index), false).success.value
-            .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
-            .set(SettlorIndividualPassportYesNoPage(index), false).success.value
-            .set(SettlorIndividualIDCardYesNoPage(index), true).success.value
-            .set(SettlorIndividualIDCardPage(index), passportOrIdCardDetails).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
-
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorIndividualAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualIDCardYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualIDCard.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualIDCardController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
-
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
-      }
-
-      "5mld" when {
-
-        val baseAnswers: UserAnswers = emptyUserAnswers
+        val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+          .set(SettlorAddressYesNoPage(index), false).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
 
-        "nationality and residency both unknown" in {
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
 
-          val userAnswers = baseAnswers
-            .set(CountryOfNationalityYesNoPage(index), false).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-            .set(CountryOfResidencyYesNoPage(index), false).success.value
-            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
 
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
+      "DoB and NINO" in {
 
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
+          .set(SettlorIndividualDateOfBirthPage(index), date).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+          .set(SettlorIndividualNINOPage(index), nino).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
 
-        "UK nationality and residency" in {
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
 
-          val userAnswers = baseAnswers
-            .set(CountryOfNationalityYesNoPage(index), true).success.value
-            .set(UkCountryOfNationalityYesNoPage(index), true).success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-            .set(CountryOfResidencyYesNoPage(index), true).success.value
-            .set(UkCountryOfResidencyYesNoPage(index), true).success.value
-            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
 
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
+      "UK address and no passport/ID card" in {
 
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+          .set(SettlorAddressYesNoPage(index), true).success.value
+          .set(SettlorAddressUKYesNoPage(index), true).success.value
+          .set(SettlorAddressUKPage(index), ukAddress).success.value
+          .set(SettlorIndividualPassportYesNoPage(index), false).success.value
+          .set(SettlorIndividualIDCardYesNoPage(index), false).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
 
-        "non-UK nationality and residency" in {
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorIndividualAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualIDCardYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
 
-          val userAnswers = baseAnswers
-            .set(CountryOfNationalityYesNoPage(index), true).success.value
-            .set(UkCountryOfNationalityYesNoPage(index), false).success.value
-            .set(CountryOfNationalityPage(index), "FR").success.value
-            .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-            .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-            .set(SettlorIndividualNINOPage(index), nino).success.value
-            .set(CountryOfResidencyYesNoPage(index), true).success.value
-            .set(UkCountryOfResidencyYesNoPage(index), false).success.value
-            .set(CountryOfResidencyPage(index), "FR").success.value
-            .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
-            .set(LivingSettlorStatus(index), Completed).success.value
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
 
-          val expectedAnswerRows = Seq(
-            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
-            AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfNationality.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualCountryOfResidency.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidencyController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
-            AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("I don’t know"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
-          )
+      "UK address and passport" in {
 
-          assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
-        }
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+          .set(SettlorAddressYesNoPage(index), true).success.value
+          .set(SettlorAddressUKYesNoPage(index), true).success.value
+          .set(SettlorAddressUKPage(index), ukAddress).success.value
+          .set(SettlorIndividualPassportYesNoPage(index), true).success.value
+          .set(SettlorIndividualPassportPage(index), passportOrIdCardDetails).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
+
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorIndividualAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualPassport.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
+
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
+
+      "international address and ID card" in {
+
+        val userAnswers = emptyUserAnswers
+          .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), false).success.value
+          .set(SettlorAddressYesNoPage(index), true).success.value
+          .set(SettlorAddressUKYesNoPage(index), false).success.value
+          .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
+          .set(SettlorIndividualPassportYesNoPage(index), false).success.value
+          .set(SettlorIndividualIDCardYesNoPage(index), true).success.value
+          .set(SettlorIndividualIDCardPage(index), passportOrIdCardDetails).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
+
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorIndividualAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualPassportYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualIDCardYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualIDCardYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualIDCard.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualIDCardController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
+
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
+
+      val baseAnswers: UserAnswers = emptyUserAnswers
+        .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+        .set(SettlorIndividualNamePage(index), name).success.value
+        .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+
+      "nationality and residency both unknown" in {
+
+        val userAnswers = baseAnswers
+          .set(CountryOfNationalityYesNoPage(index), false).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+          .set(SettlorIndividualNINOPage(index), nino).success.value
+          .set(CountryOfResidencyYesNoPage(index), false).success.value
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
+
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
+
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
+
+      "UK nationality and residency" in {
+
+        val userAnswers = baseAnswers
+          .set(CountryOfNationalityYesNoPage(index), true).success.value
+          .set(UkCountryOfNationalityYesNoPage(index), true).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+          .set(SettlorIndividualNINOPage(index), nino).success.value
+          .set(CountryOfResidencyYesNoPage(index), true).success.value
+          .set(UkCountryOfResidencyYesNoPage(index), true).success.value
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.No).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
+
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
+
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
+      }
+
+      "non-UK nationality and residency" in {
+
+        val userAnswers = baseAnswers
+          .set(CountryOfNationalityYesNoPage(index), true).success.value
+          .set(UkCountryOfNationalityYesNoPage(index), false).success.value
+          .set(CountryOfNationalityPage(index), "FR").success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+          .set(SettlorIndividualNINOPage(index), nino).success.value
+          .set(CountryOfResidencyYesNoPage(index), true).success.value
+          .set(UkCountryOfResidencyYesNoPage(index), false).success.value
+          .set(CountryOfResidencyPage(index), "FR").success.value
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.DontKnow).success.value
+          .set(LivingSettlorStatus(index), Completed).success.value
+
+        val expectedAnswerRows = Seq(
+          AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+          AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfNationality.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualNINO.checkYourAnswersLabel", answer = Html("AA 00 00 00 A"), changeUrl = Some(SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualCountryOfResidency.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidencyController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel", answer = Html("I don’t know"), changeUrl = Some(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+        )
+
+        assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
       }
     }
   }
 
   private def assertThatUserAnswersProduceExpectedAnswerRows(userAnswers: UserAnswers,
-                                                     expectedAnswerRows: Seq[AnswerRow]): Assertion = {
+                                                             expectedAnswerRows: Seq[AnswerRow]): Assertion = {
 
     val checkDetailsSection = livingSettlorPrintHelper.checkDetailsSection(userAnswers, name.toString, fakeDraftId, index)
     checkDetailsSection mustEqual AnswerSection(

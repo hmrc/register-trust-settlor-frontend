@@ -17,9 +17,8 @@
 package connectors
 
 import config.FrontendAppConfig
-import models.FeatureResponse
 import models.TaskStatus.TaskStatus
-import uk.gov.hmrc.http.HttpReads.Implicits.{readFromJson, _}
+import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 
 import javax.inject.Inject
@@ -28,11 +27,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
-
-  def getFeature(feature: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[FeatureResponse] = {
-    val url: String = s"$baseUrl/features/$feature"
-    http.GET[FeatureResponse](url)
-  }
 
   def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
                       (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {

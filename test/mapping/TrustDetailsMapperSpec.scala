@@ -38,7 +38,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
     "taxable" must {
 
-      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = false, isTaxable = true)
+      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
 
       "not map user answers to trust details model" when {
 
@@ -229,7 +229,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
     "non-taxable" must {
 
-      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(is5mldEnabled = true, isTaxable = false)
+      val flaggedAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = false)
 
       "return None" when {
 
