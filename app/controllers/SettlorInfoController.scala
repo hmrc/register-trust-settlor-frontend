@@ -29,7 +29,7 @@ class SettlorInfoController @Inject()(
                                        override val messagesApi: MessagesApi,
                                        actions: Actions,
                                        val controllerComponents: MessagesControllerComponents,
-                                       view: SettlorInfoView,
+                                       view: SettlorInfoView
                                      ) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
