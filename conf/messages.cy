@@ -405,20 +405,16 @@ settlorIndividualIDCardYesNo.title = A ydych yn gwybod manylion cerdyn adnabod y
 settlorIndividualMentalCapacityYesNo.title = A oes gan y setlwr alluedd meddyliol ar adeg y cofrestru?
 settlorIndividualMentalCapacityYesNo.heading = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
 settlorIndividualMentalCapacityYesNo.checkYourAnswersLabel = A oes gan {0} alluedd meddyliol ar adeg y cofrestru?
-#settlorIndividualMentalCapacityYesNo.error.required = CHANGE ME: Dewiswch ‘Iawn’ os oes gan y setlwr alluedd meddyliol ar adeg y cofrestru
-
-#settlorIndividualMentalCapacityYesNo.p1 = CHANGE ME: Nid oes gan setlwr alluedd meddyliol os yw’n analluog yn ôl y gyfraith i ddeall gwybodaeth am yr ymddiriedolaeth oherwydd unrhyw un o’r canlynol:
-#settlorIndividualMentalCapacityYesNo.p2 = CHANGE ME: NEW
-
+settlorIndividualMentalCapacityYesNo.error.required = Dewiswch ‘Iawn’ os oes gan y setlwr alluedd meddyliol ar adeg y cofrestru
+settlorIndividualMentalCapacityYesNo.p1 = Nid oes gan setlwr alluedd meddyliol os yw’n analluog yn ôl y gyfraith i ddeall gwybodaeth am yr ymddiriedolaeth
+settlorIndividualMentalCapacityYesNo.p2 = Er enghraifft, gall hyn fod oherwydd
 settlorIndividualMentalCapacityYesNo.bulletpoint1 = salwch meddwl
 settlorIndividualMentalCapacityYesNo.bulletpoint2 = anabledd dysgu
 settlorIndividualMentalCapacityYesNo.bulletpoint3 = dementia neu gyflwr cysylltiedig
 settlorIndividualMentalCapacityYesNo.bulletpoint4 = methu â chyfathrebu
-
-#settlorIndividualMentalCapacityYesNo.p3= Bydd CThEM yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
-#settlorIndividualMentalCapacityYesNo.p4= Os nad ydych yn siŵr a oes gan y setlwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
-
-#settlorIndividualMentalCapacityYesNo.heading2 = CHANGE ME: NEW HEADING
+settlorIndividualMentalCapacityYesNo.p3 = Bydd CThEM yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
+settlorIndividualMentalCapacityYesNo.p4 = Os nad ydych yn siŵr a oes gan y setlwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
+settlorIndividualMentalCapacityYesNo.heading2 = Pam mae CThEM yn gofyn y cwestiwn hwn
 settlorIndividualMentalCapacityYesNo.p5 = Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
 settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
 
