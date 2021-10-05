@@ -415,8 +415,8 @@ settlorIndividualMentalCapacityYesNo.bulletpoint4 = methu â chyfathrebu
 settlorIndividualMentalCapacityYesNo.p3 = Bydd CThEM yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
 settlorIndividualMentalCapacityYesNo.p4 = Os nad ydych yn siŵr a oes gan y setlwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
 settlorIndividualMentalCapacityYesNo.heading2 = Pam mae CThEM yn gofyn y cwestiwn hwn
-settlorIndividualMentalCapacityYesNo.p5 = Fel arfer, caiff CThEM rannu data person o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
-settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, mae gofyn i CThEM beidio â rhannu data personol y person hwnnw.
+settlorIndividualMentalCapacityYesNo.p5 = O dan amgylchiadau cyfyngedig penodol, caiff CThEM rannu data personol o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, ni fydd CThEM yn rhannu data personol y person hwnnw.
 
 settlorIndividualName.checkYourAnswersLabel = Beth yw enw’r setlwr?
 settlorIndividualName.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
