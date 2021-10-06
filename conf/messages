@@ -681,3 +681,10 @@ settlorInfo.bulletpoint10 = if the business had existed for at least 2 years whe
 5mld.settlorInfo.bulletpoint16 = if it’s an employer-financed retirement scheme, and if so what date it started
 5mld.settlorInfo.bulletpoint17 = the business type (trading or investment) if the scheme’s settlor is a business
 5mld.settlorInfo.bulletpoint18 = if the business has existed for at least 2 years when any asset was added to the trust
+
+pageNotFound.title = Page not found
+pageNotFound.heading = Page not found
+pageNotFound.p1 = If you typed the web address, check it is correct.
+pageNotFound.p2 = If you pasted the web address, check that you copied the entire address.
+pageNotFound.p3 = If the web address is correct or you selected a link or button, {0}.
+pageNotFound.link = contact the trust helpline to speak to someone about a trust (opens in a new tab)
