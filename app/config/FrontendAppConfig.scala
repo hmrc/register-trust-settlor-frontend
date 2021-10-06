@@ -19,7 +19,7 @@ package config
 import com.google.inject.{Inject, Singleton}
 import controllers.routes
 import play.api.Configuration
-import play.api.i18n.Lang
+import play.api.i18n.{Lang, Messages}
 import play.api.mvc.Call
 import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 
@@ -81,6 +81,14 @@ class FrontendAppConfig @Inject() (configuration: Configuration,
     (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
+
+  def helplineUrl(implicit messages: Messages): String = {
+    val path = messages.lang.code match {
+      case WELSH => "urls.welshHelpline"
+      case _ => "urls.trustsHelpline"
+    }
+    configuration.get[String](path)
+  }
 
   /**
    * The schema allows up to 25 individuals AND 25 businesses when submitting a registration.
