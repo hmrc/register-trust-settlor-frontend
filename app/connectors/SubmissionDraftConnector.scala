@@ -17,8 +17,9 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.RolesInCompanies.RolesInCompaniesAnswered
+import models.{AllStatus, RegistrationSubmission, RolesInCompanies, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
-import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
@@ -30,10 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
-  private val beneficiariesSection = "beneficiaries"
-
-  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
-  private val statusSection = "status"
 
   def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
@@ -53,20 +50,10 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     }
   }
 
-  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] = {
-    getDraftSection(draftId, beneficiariesSection)
-  }
-
   @deprecated("Status should be tracked in trusts-store", "05/11/2021")
   def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] = {
-    getDraftSection(draftId, statusSection).map {
+    getDraftSection(draftId, "status").map {
       section => section.data.as[AllStatus]
-    }
-  }
-
-  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
-    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
-      case _ => true
     }
   }
 
@@ -77,8 +64,19 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
   }
 
+
+  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
+    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
+      case _ => true
+    }
+  }
+
+  def allIndividualBeneficiariesHaveRoleInCompany(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[RolesInCompaniesAnswered] = {
+    http.GET[RolesInCompaniesAnswered](s"$submissionsBaseUrl/$draftId/beneficiaries")
+  }
+
   def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$submissionsBaseUrl/$draftId/set/$beneficiariesSection/remove-role-in-company"
+    val url: String = s"$submissionsBaseUrl/$draftId/set/beneficiaries/remove-role-in-company"
     http.POSTEmpty[HttpResponse](url)
   }
 

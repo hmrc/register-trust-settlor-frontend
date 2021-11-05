@@ -99,8 +99,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
         .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-      when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
-        .thenReturn(Future.successful(true))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
+        .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
@@ -114,8 +114,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).setBeneficiaryStatus(any())(any())
-      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }
@@ -128,8 +128,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
-      when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
+        .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
@@ -143,8 +143,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
-      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }

@@ -18,7 +18,7 @@ package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
 import models.pages.Status.InProgress
-import models.{RegistrationSubmission, SubmissionDraftResponse}
+import models.{RegistrationSubmission, RolesInCompanies, SubmissionDraftResponse}
 import org.scalatest.{MustMatchers, OptionValues}
 import org.scalatestplus.play.PlaySpec
 import play.api.Application
@@ -121,6 +121,149 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
       }
     }
 
+    ".allIndividualBeneficiariesHaveRoleInCompany" must {
+
+      "return CouldNotDetermine when unable to determine status of roles in companies" in {
+
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.INTERNAL_SERVER_ERROR)
+            )
+        )
+
+        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+        result mustBe RolesInCompanies.CouldNotDetermine
+      }
+
+      "return NoIndividualBeneficiaries when there are no individuals" in {
+        val data = Json.parse(
+          """
+            |{
+            |  "data": {
+            |    "beneficiaries": {
+            |      "classOfBeneficiaries": [
+            |        {
+            |          "description": "grandchildren"
+            |        }
+            |      ]
+            |    }
+            |  }
+            |}
+            """.stripMargin)
+
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(Json.stringify(data))
+            )
+        )
+
+        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+        result mustBe RolesInCompanies.NoIndividualBeneficiaries
+      }
+
+      "return NotAllRolesAnswered where some individuals do not have role in company" in {
+        val data = Json.parse(
+          """
+            |{
+            |  "data": {
+            |    "beneficiaries": {
+            |      "individualBeneficiaries": [
+            |        {
+            |          "name": {
+            |            "firstName": "Joe",
+            |            "lastName": "Bloggs"
+            |          },
+            |          "roleInCompany": "Director"
+            |        },
+            |        {
+            |          "name": {
+            |            "firstName": "John",
+            |            "lastName": "Doe"
+            |          }
+            |        },
+            |        {
+            |          "name": {
+            |            "firstName": "Jane",
+            |            "lastName": "Doe"
+            |          },
+            |          "roleInCompany": "Employee"
+            |        }
+            |      ]
+            |    }
+            |  }
+            |}
+          """.stripMargin)
+
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(Json.stringify(data))
+            )
+        )
+
+        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+        result mustBe RolesInCompanies.NotAllRolesAnswered
+      }
+
+      "return AllRolesAnswered where all individuals have role in company answered" in {
+        val data = Json.parse(
+          """
+            |{
+            |  "data": {
+            |    "beneficiaries": {
+            |      "individualBeneficiaries": [
+            |        {
+            |          "name": {
+            |            "firstName": "Joe",
+            |            "lastName": "Bloggs"
+            |          },
+            |          "roleInCompany": "Director"
+            |        },
+            |        {
+            |          "name": {
+            |            "firstName": "John",
+            |            "lastName": "Doe"
+            |          },
+            |          "roleInCompany": "Employee"
+            |        },
+            |        {
+            |          "name": {
+            |            "firstName": "Jane",
+            |            "lastName": "Doe"
+            |          },
+            |          "roleInCompany": "Employee"
+            |        }
+            |      ]
+            |    }
+            |  }
+            |}
+            """.stripMargin)
+
+        server.stubFor(
+          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+            .willReturn(
+              aResponse()
+                .withStatus(Status.OK)
+                .withBody(Json.stringify(data))
+            )
+        )
+
+        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+        result mustBe RolesInCompanies.AllRolesAnswered
+      }
+    }
+
     ".removeRoleInCompanyAnswers" must {
 
       val removeRoleInCompanyAnswersUrl = s"$submissionsUrl/$testDraftId/set/beneficiaries/remove-role-in-company"
@@ -161,7 +304,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
       }
     }
 
-    ".removeLivingSettlorsSettlorMappedPiece" must {
+    ".removeLivingSettlorsMappedPiece" must {
 
       val removeLivingSettlorsMappedPieceUrl = s"$submissionsUrl/$testDraftId/remove-mapped-piece/living-settlors"
 
@@ -225,7 +368,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
       }
     }
 
-    "getTrustUtr" must {
+    ".getTrustUtr" must {
 
       val utr = "1234567890"
 

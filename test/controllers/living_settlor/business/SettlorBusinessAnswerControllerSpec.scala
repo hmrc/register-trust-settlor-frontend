@@ -21,7 +21,7 @@ import controllers.routes._
 import models.UserAnswers
 import models.pages._
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.Mockito.{reset, times, verify, when}
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.trust_type._
@@ -99,8 +99,8 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-      when(mockCreateDraftRegistrationService.setBeneficiaryStatus(any())(any()))
-        .thenReturn(Future.successful(true))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(),any ())(any()))
+        .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
@@ -114,8 +114,8 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).setBeneficiaryStatus(any())(any())
-      verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
     }
@@ -128,8 +128,8 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
         .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
         .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
-      when(mockCreateDraftRegistrationService.removeRoleInCompanyAnswers(any())(any()))
-        .thenReturn(Future.successful(HttpResponse(OK, "")))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(),any ())(any()))
+        .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
@@ -143,7 +143,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).removeRoleInCompanyAnswers(any())(any())
+      verify(mockCreateDraftRegistrationService).removeBeneficiaryRoleInCompanyAnswers(any())(any())
       verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()

@@ -30,4 +30,10 @@ class TrustsStoreService @Inject()(trustsStoreConnector: TrustsStoreConnector) {
     trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
   }
 
+  def updateBeneficiaryTaskStatus(draftId: String, taskStatus: TaskStatus)
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    trustsStoreConnector.updateTaskStatus(draftId, taskStatus)
+  }
+
+
 }

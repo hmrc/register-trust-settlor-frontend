@@ -17,9 +17,11 @@
 package services
 
 import connectors.SubmissionDraftConnector
-import models.ReadOnlyUserAnswers
+import models.pages.KindOfTrust.Employees
+import models.{ReadOnlyUserAnswers, RolesInCompanies, TaskStatus, UserAnswers}
 import models.pages.Status.InProgress
 import pages.beneficiaries.RoleInCompanyPage
+import pages.trust_type.KindOfTrustPage
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -27,41 +29,28 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsRepository,
-                                         submissionDraftConnector: SubmissionDraftConnector)
+class DraftRegistrationService @Inject()(submissionDraftConnector: SubmissionDraftConnector,
+                                         trustsStoreService: TrustsStoreService)
                                         (implicit ec: ExecutionContext) {
 
-  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
-  def setBeneficiaryStatus(draftId: String)(implicit hc: HeaderCarrier): Future[Boolean] =
-    submissionDraftConnector.getDraftBeneficiaries(draftId: String) flatMap { response =>
-      val answers = response.data.asOpt[ReadOnlyUserAnswers]
+  def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Unit] = {
+    if (userAnswers.get(KindOfTrustPage).contains(Employees)) {
 
-      val roleInCompanyQuestionRequiresAnswering: Boolean =
-        answers match {
-          case Some(userAnswers) =>
-            userAnswers.get(IndividualBeneficiaries) match {
-              case Some(individualBeneficiaries) =>
-                individualBeneficiaries.zipWithIndex.exists { x =>
-                  userAnswers.get(RoleInCompanyPage(x._2)).isEmpty
-                }
-              case _ =>
-                false
-            }
-          case _ =>
-            false
-        }
-
-      if (roleInCompanyQuestionRequiresAnswering) {
-        registrationsRepository.getAllStatus(draftId) flatMap {
-          allStatus =>
-            registrationsRepository.setAllStatus(draftId, allStatus.copy(beneficiaries = Some(InProgress)))
-        }
-      } else {
-        Future.successful(true)
+      submissionDraftConnector.allIndividualBeneficiariesHaveRoleInCompany(draftId) flatMap {
+        case RolesInCompanies.AllRolesAnswered | RolesInCompanies.NoIndividualBeneficiaries =>
+          Future.successful(())
+        case RolesInCompanies.NotAllRolesAnswered =>
+          trustsStoreService.updateBeneficiaryTaskStatus(draftId, TaskStatus.InProgress).map(_ => ())
+        case RolesInCompanies.CouldNotDetermine =>
+          Future.successful(())
       }
-    }
 
-  def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+    } else {
+      removeBeneficiaryRoleInCompanyAnswers(draftId).map(_ => ())
+    }
+  }
+
+  def removeBeneficiaryRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeRoleInCompanyAnswers(draftId)
 
   def removeDeceasedSettlorMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =

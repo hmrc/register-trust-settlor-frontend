@@ -18,9 +18,12 @@ package services
 
 import base.SpecBase
 import connectors.SubmissionDraftConnector
+import models.RolesInCompanies.{AllRolesAnswered, CouldNotDetermine, NoIndividualBeneficiaries, NotAllRolesAnswered}
+import models.pages.KindOfTrust
 import models.{AllStatus, SubmissionDraftResponse}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, times, verify, when}
+import org.mockito.Mockito.{never, reset, times, verify, when}
+import pages.trust_type.KindOfTrustPage
 import play.api.libs.json.Json
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -33,193 +36,119 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
-  private val mockRepository: RegistrationsRepository = mock[RegistrationsRepository]
   private val mockConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
+  private val mockTrustStore: TrustsStoreService = mock[TrustsStoreService]
 
-  private val service = new DraftRegistrationService(mockRepository, mockConnector)
+  private val service = new DraftRegistrationService(mockConnector, mockTrustStore)
 
   "Draft registration service" when {
 
-    ".setBeneficiaryStatus" when {
+    ".amendBeneficiariesState" when {
 
-      "response data not validated as ReadOnlyUserAnswers" must {
-        "do nothing" in {
+      "kind of trust is not Employee related" must {
 
-          reset(mockRepository)
+        "clean up role in companies answers" in {
+
+          reset(mockTrustStore)
           reset(mockConnector)
 
-          val response = SubmissionDraftResponse(LocalDateTime.now(), Json.obj(), None)
+          val userAnswers = emptyUserAnswers
+            .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
-          when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
-            .thenReturn(Future.successful(response))
+          Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-          Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+          verify(mockConnector, never()).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+          verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
 
-          verify(mockRepository, times(0)).getAllStatus(any())(any())
-          verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
+          verify(mockConnector, times(1)).removeRoleInCompanyAnswers(any())(any(), any())
         }
       }
 
-      "there are no individual beneficiaries" must {
-        "do nothing" in {
+      "kind of trust is Employee related" when {
 
-          reset(mockRepository)
-          reset(mockConnector)
+        "there are no individual beneficiaries" must {
 
-          val data = Json.parse(
-            """
-              |{
-              |  "data": {
-              |    "beneficiaries": {
-              |      "classOfBeneficiaries": [
-              |        {
-              |          "description": "Future grandchildren"
-              |        }
-              |      ]
-              |    }
-              |  }
-              |}
-            """.stripMargin)
-
-          val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
-
-          when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
-            .thenReturn(Future.successful(response))
-
-          Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
-
-          verify(mockRepository, times(0)).getAllStatus(any())(any())
-          verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
-        }
-      }
-
-      "there are beneficiaries" when {
-        "individual beneficiary has role in company defined" must {
           "do nothing" in {
 
-            reset(mockRepository)
+            reset(mockTrustStore)
             reset(mockConnector)
 
-            val data = Json.parse(
-              """
-                |{
-                |  "data": {
-                |    "beneficiaries": {
-                |      "individualBeneficiaries": [
-                |        {
-                |          "name": {
-                |            "firstName": "Joe",
-                |            "lastName": "Bloggs"
-                |          },
-                |          "roleInCompany": "Director"
-                |        }
-                |      ]
-                |    }
-                |  }
-                |}
-            """.stripMargin)
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+              .thenReturn(Future.successful(NoIndividualBeneficiaries))
 
-            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
-              .thenReturn(Future.successful(response))
+            Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
-
-            verify(mockRepository, times(0)).getAllStatus(any())(any())
-            verify(mockRepository, times(0)).setAllStatus(any(), any())(any())
+            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+            verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
           }
         }
 
-        "individual beneficiary does not have role in company defined" must {
-          "set beneficiaries section to In Progress as role in company needs answering" in {
+        "can not determine if all roles are answered" must {
 
-            reset(mockRepository)
+          "do nothing" in {
+
+            reset(mockTrustStore)
             reset(mockConnector)
 
-            val data = Json.parse(
-              """
-                |{
-                |  "data": {
-                |    "beneficiaries": {
-                |      "individualBeneficiaries": [
-                |        {
-                |          "name": {
-                |            "firstName": "Joe",
-                |            "lastName": "Bloggs"
-                |          }
-                |        }
-                |      ]
-                |    }
-                |  }
-                |}
-            """.stripMargin)
+            val userAnswers = emptyUserAnswers
+              .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+              .thenReturn(Future.successful(CouldNotDetermine))
 
-            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
-              .thenReturn(Future.successful(response))
+            Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-            when(mockRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
-            when(mockRepository.setAllStatus(any(), any())(any())).thenReturn(Future.successful(true))
-
-            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
-
-            verify(mockRepository, times(1)).getAllStatus(any())(any())
-            verify(mockRepository, times(1)).setAllStatus(any(), any())(any())
+            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+            verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
           }
         }
 
-        "any individual beneficiary doesn't have role in company defined" must {
-          "set beneficiaries section to In Progress as role in company needs answering" in {
+        "there are individual beneficiaries" when {
 
-            reset(mockRepository)
-            reset(mockConnector)
+          "the individuals all have roles in company defined" must {
+            "do nothing" in {
 
-            val data = Json.parse(
-              """
-                |{
-                |  "data": {
-                |    "beneficiaries": {
-                |      "individualBeneficiaries": [
-                |        {
-                |          "name": {
-                |            "firstName": "Joe",
-                |            "lastName": "Bloggs"
-                |          },
-                |          "roleInCompany": "Director"
-                |        },
-                |        {
-                |          "name": {
-                |            "firstName": "John",
-                |            "lastName": "Doe"
-                |          }
-                |        },
-                |        {
-                |          "name": {
-                |            "firstName": "Jane",
-                |            "lastName": "Doe"
-                |          },
-                |          "roleInCompany": "Employee"
-                |        }
-                |      ]
-                |    }
-                |  }
-                |}
-            """.stripMargin)
+              reset(mockTrustStore)
+              reset(mockConnector)
 
-            val response = SubmissionDraftResponse(LocalDateTime.now(), data, None)
+              val userAnswers = emptyUserAnswers
+                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-            when(mockConnector.getDraftBeneficiaries(any())(any(), any()))
-              .thenReturn(Future.successful(response))
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+                .thenReturn(Future.successful(AllRolesAnswered))
 
-            when(mockRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
-            when(mockRepository.setAllStatus(any(), any())(any())).thenReturn(Future.successful(true))
+              Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-            Await.result(service.setBeneficiaryStatus(fakeDraftId), Duration.Inf)
+              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+              verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+              verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
+            }
+          }
 
-            verify(mockRepository, times(1)).getAllStatus(any())(any())
-            verify(mockRepository, times(1)).setAllStatus(any(), any())(any())
+          "any individual beneficiary does not have role in company defined" must {
+
+            "set beneficiaries section to in progress" in {
+
+              reset(mockTrustStore)
+              reset(mockConnector)
+
+              val userAnswers = emptyUserAnswers
+                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+                .thenReturn(Future.successful(NotAllRolesAnswered))
+
+              Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
+
+              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+              verify(mockTrustStore, times(1)).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+              verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
+            }
           }
         }
       }
@@ -233,13 +162,14 @@ class DraftRegistrationServiceSpec extends SpecBase {
         when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
           .thenReturn(Future.successful(HttpResponse(status, "")))
 
-        val result = Await.result(service.removeRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
+        val result = Await.result(service.removeBeneficiaryRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
 
         result.status mustBe status
       }
     }
 
     ".removeDeceasedSettlorMappedPiece" must {
+
       "return Http response" in {
 
         val status: Int = 200
