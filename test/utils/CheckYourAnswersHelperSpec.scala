@@ -44,9 +44,8 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
   "CheckYourAnswersHelper" when {
 
     "deceasedSettlor" when {
-
       "there is a deceased settlor" must {
-        "return Some deceased settlor section" in {
+        "return deceased settlor section" in {
 
           when(mockPrintHelpers.deceasedSettlorSection(any(), any(), any())(any()))
             .thenReturn(fakeAnswerSection)
@@ -56,24 +55,23 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(userAnswers, fakeDraftId)
 
-          helper.deceasedSettlor mustBe Some(Seq(fakeAnswerSection))
+          helper.deceasedSettlor mustBe Seq(fakeAnswerSection)
         }
       }
 
       "there is no deceased settlor" must {
-        "return None" in {
+        "return no answers" in {
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(emptyUserAnswers, fakeDraftId)
 
-          helper.deceasedSettlor mustBe None
+          helper.deceasedSettlor mustBe Nil
         }
       }
     }
 
     "livingSettlors" when {
-
       "there are living settlors" must {
-        "return Some living settlor sections" in {
+        "return living settlor sections" in {
 
           when(mockPrintHelpers.livingSettlorSection(any(), any(), any(), any())(any()))
             .thenReturn(fakeAnswerSection)
@@ -89,16 +87,16 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(userAnswers, fakeDraftId)
 
-          helper.livingSettlors mustBe Some(Seq(fakeAnswerSection, fakeAnswerSection))
+          helper.livingSettlors mustBe Seq(fakeAnswerSection, fakeAnswerSection)
         }
       }
 
       "there are no living settlors" must {
-        "return None" in {
+        "return no answers" in {
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(emptyUserAnswers, fakeDraftId)
 
-          helper.livingSettlors mustBe None
+          helper.livingSettlors mustBe Nil
         }
       }
     }

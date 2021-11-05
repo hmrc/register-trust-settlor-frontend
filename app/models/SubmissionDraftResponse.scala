@@ -54,9 +54,8 @@ object RegistrationSubmission {
 
   // Set of data sent by sub-frontend, with user answers, status, any mapped pieces and answer sections.
   case class DataSet(data: JsValue,
-                     status: Option[Status],
-                     registrationPieces: List[MappedPiece],
-                     answerSections: List[AnswerSection])
+                     registrationPieces: Seq[MappedPiece],
+                     answerSections: Seq[AnswerSection])
 
   object DataSet {
     implicit lazy val format: OFormat[DataSet] = Json.format[DataSet]
@@ -76,6 +75,7 @@ object SubmissionDraftId {
   implicit lazy val format: OFormat[SubmissionDraftId] = Json.format[SubmissionDraftId]
 }
 
+@deprecated("Status should be tracked in trusts-store", "05/11/2021")
 case class AllStatus(
                       beneficiaries: Option[Status] = None,
                       trustees: Option[Status] = None,
@@ -85,6 +85,7 @@ case class AllStatus(
                       trustDetails: Option[Status] = None
                     )
 
+@deprecated("Status should be tracked in trusts-store", "05/11/2021")
 object AllStatus {
   implicit lazy val format: OFormat[AllStatus] = Json.format[AllStatus]
 }

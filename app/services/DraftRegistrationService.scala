@@ -31,6 +31,7 @@ class DraftRegistrationService @Inject()(registrationsRepository: RegistrationsR
                                          submissionDraftConnector: SubmissionDraftConnector)
                                         (implicit ec: ExecutionContext) {
 
+  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
   def setBeneficiaryStatus(draftId: String)(implicit hc: HeaderCarrier): Future[Boolean] =
     submissionDraftConnector.getDraftBeneficiaries(draftId: String) flatMap { response =>
       val answers = response.data.asOpt[ReadOnlyUserAnswers]

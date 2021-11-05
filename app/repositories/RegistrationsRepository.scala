@@ -78,7 +78,9 @@ trait RegistrationsRepository {
 
   def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]]
 
+  @deprecated(message = "Status object in trusts no longer used", since = "01/11/2021")
   def getAllStatus(draftId: String)(implicit hc: HeaderCarrier): Future[AllStatus]
 
+  @deprecated(message = "Status object in trusts no longer used", since = "01/11/2021")
   def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier): Future[Boolean]
 }

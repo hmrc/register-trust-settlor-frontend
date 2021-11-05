@@ -22,76 +22,63 @@ import models.pages.Status._
 import models.{RegistrationSubmission, UserAnswers}
 import pages.RegistrationProgress
 import play.api.i18n.Messages
-import play.api.libs.json.Json
+import play.api.libs.json.{JsValue, Json}
 import utils.CheckYourAnswersHelper
 import utils.print.PrintHelpers
 import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class SubmissionSetFactory @Inject()(registrationProgress: RegistrationProgress,
-                                     settlorsMapper: SettlorsMapper,
+class SubmissionSetFactory @Inject()(settlorsMapper: SettlorsMapper,
                                      deceasedSettlorMapper: DeceasedSettlorMapper,
                                      trustDetailsMapper: TrustDetailsMapper,
                                      printHelpers: PrintHelpers) {
 
-  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
-    val status = registrationProgress.settlorsStatus(userAnswers)
+  private def mappedPiece(path: String, json: JsValue) =
+    List(RegistrationSubmission.MappedPiece(path, json))
 
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
-      status = status,
-      registrationPieces = mappedDataIfCompleted(userAnswers, status),
-      answerSections = answerSectionsIfCompleted(userAnswers, status)
+      registrationPieces = mappedDataIfCompleted(userAnswers),
+      answerSections = answerSectionsIfCompleted(userAnswers)
     )
   }
 
-  private def mappedDataIfCompleted(userAnswers: UserAnswers, status: Option[Status]): List[RegistrationSubmission.MappedPiece] = {
+  private def mappedDataIfCompleted(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
 
-    if (status.contains(Completed)) {
+    val tdMappedPiece = trustDetailsMapper.build(userAnswers)
+      .map(td => mappedPiece("trust/details/", Json.toJson(td)))
+      .getOrElse(List.empty)
 
-      val trustDetailsMappedPiece = trustDetailsMapper.build(userAnswers) match {
-        case Some(trustDetails) => List(RegistrationSubmission.MappedPiece("trust/details/", Json.toJson(trustDetails)))
-        case _ => List.empty
-      }
-
-      val settlorsMappedPiece = (settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
-        case (_, Some(deceasedSettlor)) => List(RegistrationSubmission.MappedPiece("trust/entities/deceased", Json.toJson(deceasedSettlor)))
-        case (Some(settlors), _)        => List(RegistrationSubmission.MappedPiece("trust/entities/settlors", Json.toJson(settlors)))
-        case _                          => List.empty
-      }
-
-      trustDetailsMappedPiece ++ settlorsMappedPiece
-
-    } else {
-      List.empty
+    val sMappedPiece = (
+        settlorsMapper.build(userAnswers),
+        deceasedSettlorMapper.build(userAnswers)
+      ) match {
+      case (None, Some(ds)) =>
+        mappedPiece("trust/entities/deceased", Json.toJson(ds))
+      case (Some(s), None) =>
+        mappedPiece("trust/entities/settlors", Json.toJson(s))
+      case _ =>
+        List.empty
     }
 
+    tdMappedPiece ++ sMappedPiece
   }
 
-  def answerSectionsIfCompleted(userAnswers: UserAnswers, status: Option[Status])
-                               (implicit messages: Messages): List[RegistrationSubmission.AnswerSection] = {
+  def answerSectionsIfCompleted(userAnswers: UserAnswers)
+                               (implicit messages: Messages): Seq[RegistrationSubmission.AnswerSection] = {
+    val cyaHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId)
 
-    val checkYourAnswersHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId)
+    val settlorRows = settlorsMapper.build(userAnswers).map { _ =>
+      cyaHelper.livingSettlors
+    }.getOrElse(Nil)
 
-    if (status.contains(Status.Completed)) {
+    val deceasedRows = deceasedSettlorMapper.build(userAnswers).map { _ =>
+      cyaHelper.deceasedSettlor
+    }.getOrElse(Nil)
 
-      ((settlorsMapper.build(userAnswers), deceasedSettlorMapper.build(userAnswers)) match {
-        case (_, Some(_)) =>
-          List(
-            checkYourAnswersHelper.deceasedSettlor
-          ).flatten.flatten
-        case (Some(_), _) =>
-          List(
-            checkYourAnswersHelper.livingSettlors
-          ).flatten.flatten
-        case _ =>
-          List.empty
-      }) map convertForSubmission
-
-    } else {
-      List.empty
-    }
+    (deceasedRows ++ settlorRows).map(convertForSubmission)
   }
 
   private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {

@@ -68,7 +68,6 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
 
         val submissionDraftSetData = RegistrationSubmission.DataSet(
           sectionData,
-          Some(InProgress),
           List.empty,
           List.empty)
 

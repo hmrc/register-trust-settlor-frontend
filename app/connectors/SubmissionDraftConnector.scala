@@ -31,6 +31,8 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
   private val beneficiariesSection = "beneficiaries"
+
+  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
   private val statusSection = "status"
 
   def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)
@@ -55,19 +57,20 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     getDraftSection(draftId, beneficiariesSection)
   }
 
+  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
   def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] = {
     getDraftSection(draftId, statusSection).map {
       section => section.data.as[AllStatus]
     }
   }
 
-  // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
     http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
       case _ => true
     }
   }
 
+  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
   def setStatus(draftId: String, status: AllStatus)
                (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
