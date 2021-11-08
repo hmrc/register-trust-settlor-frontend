@@ -24,6 +24,7 @@ import models.{AllStatus, SubmissionDraftResponse}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{never, reset, times, verify, when}
 import pages.trust_type.KindOfTrustPage
+import play.api.http.Status.OK
 import play.api.libs.json.Json
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -55,6 +56,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
           val userAnswers = emptyUserAnswers
             .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
+          when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
+            .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
+
           Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
           verify(mockConnector, never()).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
@@ -76,7 +80,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
             val userAnswers = emptyUserAnswers
               .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
               .thenReturn(Future.successful(NoIndividualBeneficiaries))
 
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
@@ -97,7 +101,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
             val userAnswers = emptyUserAnswers
               .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
               .thenReturn(Future.successful(CouldNotDetermine))
 
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
@@ -119,7 +123,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
               val userAnswers = emptyUserAnswers
                 .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
                 .thenReturn(Future.successful(AllRolesAnswered))
 
               Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
@@ -140,8 +144,11 @@ class DraftRegistrationServiceSpec extends SpecBase {
               val userAnswers = emptyUserAnswers
                 .set(KindOfTrustPage, KindOfTrust.Employees).success.value
 
-              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any()))
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
                 .thenReturn(Future.successful(NotAllRolesAnswered))
+
+              when(mockTrustStore.updateBeneficiaryTaskStatus(any(), any())(any(), any()))
+                .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
               Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 

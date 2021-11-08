@@ -143,7 +143,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).removeBeneficiaryRoleInCompanyAnswers(any())(any())
+      verify(mockCreateDraftRegistrationService).amendBeneficiariesState(any(), any())(any())
       verify(mockCreateDraftRegistrationService).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
