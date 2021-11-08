@@ -20,16 +20,12 @@ import base.SpecBase
 import connectors.SubmissionDraftConnector
 import models.RolesInCompanies.{AllRolesAnswered, CouldNotDetermine, NoIndividualBeneficiaries, NotAllRolesAnswered}
 import models.pages.KindOfTrust
-import models.{AllStatus, SubmissionDraftResponse}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{never, reset, times, verify, when}
+import org.mockito.Mockito._
 import pages.trust_type.KindOfTrustPage
 import play.api.http.Status.OK
-import play.api.libs.json.Json
-import repositories.RegistrationsRepository
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
-import java.time.LocalDateTime
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 

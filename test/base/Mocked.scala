@@ -18,7 +18,6 @@ package base
 
 import java.time.LocalDate
 
-import models.AllStatus
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
