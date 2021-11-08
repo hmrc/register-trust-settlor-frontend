@@ -22,6 +22,7 @@ import models.{ReadOnlyUserAnswers, RolesInCompanies, TaskStatus, UserAnswers}
 import models.pages.Status.InProgress
 import pages.beneficiaries.RoleInCompanyPage
 import pages.trust_type.KindOfTrustPage
+import play.api.Logging
 import repositories.RegistrationsRepository
 import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -31,20 +32,24 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class DraftRegistrationService @Inject()(submissionDraftConnector: SubmissionDraftConnector,
                                          trustsStoreService: TrustsStoreService)
-                                        (implicit ec: ExecutionContext) {
+                                        (implicit ec: ExecutionContext) extends Logging {
 
   def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Unit] = {
     if (userAnswers.get(KindOfTrustPage).contains(Employees)) {
 
+      logger.info(s"[DraftRegistrationService] trust is Employee related")
+
       submissionDraftConnector.allIndividualBeneficiariesHaveRoleInCompany(draftId) flatMap {
         case RolesInCompanies.AllRolesAnswered | RolesInCompanies.NoIndividualBeneficiaries =>
+          logger.info(s"[DraftRegistrationService] trust has all director/employee roles answered or no individuals")
           Future.successful(())
         case RolesInCompanies.NotAllRolesAnswered =>
+          logger.info(s"[DraftRegistrationService] trust has beneficiaries with not all director/employee roles answered")
           trustsStoreService.updateBeneficiaryTaskStatus(draftId, TaskStatus.InProgress).map(_ => ())
         case RolesInCompanies.CouldNotDetermine =>
+          logger.info(s"[DraftRegistrationService] could not determine the roles for individual beneficiaries")
           Future.successful(())
       }
-
     } else {
       removeBeneficiaryRoleInCompanyAnswers(draftId).map(_ => ())
     }

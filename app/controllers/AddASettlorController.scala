@@ -160,7 +160,10 @@ class AddASettlorController @Inject()(
 
   private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)
                            (implicit hc: HeaderCarrier): Future[HttpResponse] = {
-    val status = (selection, registrationProgress.settlorsStatus(userAnswers)) match {
+
+    val settlorStatus = registrationProgress.settlorsStatus(userAnswers)
+
+    val status = (selection, settlorStatus) match {
       case (NoComplete, Some(Completed)) => TaskStatus.Completed
       case _ => TaskStatus.InProgress
     }

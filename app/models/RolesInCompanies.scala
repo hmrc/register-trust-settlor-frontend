@@ -16,11 +16,12 @@
 
 package models
 
+import play.api.Logging
 import play.api.http.Status
-import play.api.libs.json.{Format, JsError, JsObject, JsSuccess, Json, Reads, __}
+import play.api.libs.json._
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object RolesInCompanies {
+object RolesInCompanies extends Logging {
 
   final case class RoleInCompany(roleInCompany: models.pages.RoleInCompany)
 
@@ -40,7 +41,7 @@ object RolesInCompanies {
         case Status.OK =>
           if (response.json.\\("individualBeneficiaries").nonEmpty) {
             val jsonReads =
-              (__ \ 'data \ 'beneficiaries \ 'individualBeneficiaries)
+              (__ \\ 'individualBeneficiaries)
                 .read[Seq[RoleInCompany]]
 
             response.json.validate[Seq[RoleInCompany]](jsonReads) match {

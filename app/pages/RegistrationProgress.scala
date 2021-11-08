@@ -45,8 +45,8 @@ class RegistrationProgress @Inject()() {
   }
 
   private def statusForNonWillTrust(userAnswers: UserAnswers,
-                                      deceasedStatus: Option[Status]
-                                     ): Option[Status] = {
+                                    deceasedStatus: Option[Status]
+                                   ): Option[Status] = {
     userAnswers
       .get(LivingSettlors)
       .getOrElse(Nil) match {

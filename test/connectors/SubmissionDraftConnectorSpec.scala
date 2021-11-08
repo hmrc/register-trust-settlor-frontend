@@ -123,145 +123,202 @@ class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with Optio
 
     ".allIndividualBeneficiariesHaveRoleInCompany" must {
 
-      "return CouldNotDetermine when unable to determine status of roles in companies" in {
+      "search absolute path" when {
 
-        server.stubFor(
-          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.INTERNAL_SERVER_ERROR)
-            )
-        )
-
-        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
-
-        result mustBe RolesInCompanies.CouldNotDetermine
-      }
-
-      "return NoIndividualBeneficiaries when there are no individuals" in {
-        val data = Json.parse(
-          """
-            |{
-            |  "data": {
-            |    "beneficiaries": {
-            |      "classOfBeneficiaries": [
-            |        {
-            |          "description": "grandchildren"
-            |        }
-            |      ]
-            |    }
-            |  }
-            |}
-            """.stripMargin)
-
-        server.stubFor(
-          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(Json.stringify(data))
-            )
-        )
-
-        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
-
-        result mustBe RolesInCompanies.NoIndividualBeneficiaries
-      }
-
-      "return NotAllRolesAnswered where some individuals do not have role in company" in {
-        val data = Json.parse(
-          """
-            |{
-            |  "data": {
-            |    "beneficiaries": {
-            |      "individualBeneficiaries": [
-            |        {
-            |          "name": {
-            |            "firstName": "Joe",
-            |            "lastName": "Bloggs"
-            |          },
-            |          "roleInCompany": "Director"
-            |        },
-            |        {
-            |          "name": {
-            |            "firstName": "John",
-            |            "lastName": "Doe"
-            |          }
-            |        },
-            |        {
-            |          "name": {
-            |            "firstName": "Jane",
-            |            "lastName": "Doe"
-            |          },
-            |          "roleInCompany": "Employee"
-            |        }
-            |      ]
-            |    }
-            |  }
-            |}
+        "there are individuals without roleInCompany defined" in {
+          val data = Json.parse(
+            """
+              |{
+              |  "createdAt": "2021-11-08T11:46:59.505",
+              |  "data": {
+              |    "_id": "73ec58aa-d822-47e7-8035-05aaf9f4b055",
+              |    "data": {
+              |      "beneficiaries": {
+              |        "individualBeneficiaries": [
+              |          {
+              |            "name": {
+              |              "firstName": "Adam",
+              |              "lastName": "Conder"
+              |            },
+              |            "dateOfBirthYesNo": false,
+              |            "incomeYesNo": true,
+              |            "countryOfNationalityYesNo": false,
+              |            "nationalInsuranceNumberYesNo": false,
+              |            "countryOfResidenceYesNo": false,
+              |            "addressYesNo": false,
+              |            "mentalCapacityYesNo": "dontKnow",
+              |            "vulnerableYesNo": false,
+              |            "status": "completed"
+              |          }
+              |        ]
+              |      },
+              |      "addABeneficiary": "no-complete"
+              |    },
+              |    "internalId": "Int-e32b62fc-bf49-4554-be36-c37902895d7d",
+              |    "isTaxable": true
+              |  }
+              |}
           """.stripMargin)
 
-        server.stubFor(
-          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(Json.stringify(data))
-            )
-        )
+          server.stubFor(
+            get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.OK)
+                  .withBody(Json.stringify(data))
+              )
+          )
 
-        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+          val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
 
-        result mustBe RolesInCompanies.NotAllRolesAnswered
+          result mustBe RolesInCompanies.NotAllRolesAnswered
+        }
       }
 
-      "return AllRolesAnswered where all individuals have role in company answered" in {
-        val data = Json.parse(
-          """
-            |{
-            |  "data": {
-            |    "beneficiaries": {
-            |      "individualBeneficiaries": [
-            |        {
-            |          "name": {
-            |            "firstName": "Joe",
-            |            "lastName": "Bloggs"
-            |          },
-            |          "roleInCompany": "Director"
-            |        },
-            |        {
-            |          "name": {
-            |            "firstName": "John",
-            |            "lastName": "Doe"
-            |          },
-            |          "roleInCompany": "Employee"
-            |        },
-            |        {
-            |          "name": {
-            |            "firstName": "Jane",
-            |            "lastName": "Doe"
-            |          },
-            |          "roleInCompany": "Employee"
-            |        }
-            |      ]
-            |    }
-            |  }
-            |}
+      "search recursively" when {
+
+        "return CouldNotDetermine when unable to determine status of roles in companies" in {
+
+          server.stubFor(
+            get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.INTERNAL_SERVER_ERROR)
+              )
+          )
+
+          val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+          result mustBe RolesInCompanies.CouldNotDetermine
+        }
+
+        "return NoIndividualBeneficiaries when there are no individuals" in {
+          val data = Json.parse(
+            """
+              |{
+              |  "data": {
+              |    "beneficiaries": {
+              |      "classOfBeneficiaries": [
+              |        {
+              |          "description": "grandchildren"
+              |        }
+              |      ]
+              |    }
+              |  }
+              |}
             """.stripMargin)
 
-        server.stubFor(
-          get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
-            .willReturn(
-              aResponse()
-                .withStatus(Status.OK)
-                .withBody(Json.stringify(data))
-            )
-        )
+          server.stubFor(
+            get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.OK)
+                  .withBody(Json.stringify(data))
+              )
+          )
 
-        val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+          val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
 
-        result mustBe RolesInCompanies.AllRolesAnswered
+          result mustBe RolesInCompanies.NoIndividualBeneficiaries
+        }
+
+        "return NotAllRolesAnswered where some individuals do not have role in company" in {
+          val data = Json.parse(
+            """
+              |{
+              |  "data": {
+              |    "beneficiaries": {
+              |      "individualBeneficiaries": [
+              |        {
+              |          "name": {
+              |            "firstName": "Joe",
+              |            "lastName": "Bloggs"
+              |          },
+              |          "roleInCompany": "Director"
+              |        },
+              |        {
+              |          "name": {
+              |            "firstName": "John",
+              |            "lastName": "Doe"
+              |          }
+              |        },
+              |        {
+              |          "name": {
+              |            "firstName": "Jane",
+              |            "lastName": "Doe"
+              |          },
+              |          "roleInCompany": "Employee"
+              |        }
+              |      ]
+              |    }
+              |  }
+              |}
+          """.stripMargin)
+
+          server.stubFor(
+            get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.OK)
+                  .withBody(Json.stringify(data))
+              )
+          )
+
+          val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+          result mustBe RolesInCompanies.NotAllRolesAnswered
+        }
+
+        "return AllRolesAnswered where all individuals have role in company answered" in {
+          val data = Json.parse(
+            """
+              |{
+              |  "data": {
+              |    "beneficiaries": {
+              |      "individualBeneficiaries": [
+              |        {
+              |          "name": {
+              |            "firstName": "Joe",
+              |            "lastName": "Bloggs"
+              |          },
+              |          "roleInCompany": "Director"
+              |        },
+              |        {
+              |          "name": {
+              |            "firstName": "John",
+              |            "lastName": "Doe"
+              |          },
+              |          "roleInCompany": "Employee"
+              |        },
+              |        {
+              |          "name": {
+              |            "firstName": "Jane",
+              |            "lastName": "Doe"
+              |          },
+              |          "roleInCompany": "Employee"
+              |        }
+              |      ]
+              |    }
+              |  }
+              |}
+            """.stripMargin)
+
+          server.stubFor(
+            get(urlEqualTo(s"$submissionsUrl/$testDraftId/beneficiaries"))
+              .willReturn(
+                aResponse()
+                  .withStatus(Status.OK)
+                  .withBody(Json.stringify(data))
+              )
+          )
+
+          val result = Await.result(connector.allIndividualBeneficiariesHaveRoleInCompany(testDraftId), Duration.Inf)
+
+          result mustBe RolesInCompanies.AllRolesAnswered
+        }
       }
+
+
     }
 
     ".removeRoleInCompanyAnswers" must {
