@@ -17,8 +17,9 @@
 package connectors
 
 import config.FrontendAppConfig
+import models.RolesInCompanies.RolesInCompaniesAnswered
+import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
-import models.{AllStatus, RegistrationSubmission, SubmissionDraftData, SubmissionDraftResponse}
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
@@ -30,8 +31,6 @@ import scala.concurrent.{ExecutionContext, Future}
 class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
-  private val beneficiariesSection = "beneficiaries"
-  private val statusSection = "status"
 
   def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)
                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
@@ -51,31 +50,18 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
     }
   }
 
-  def getDraftBeneficiaries(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[SubmissionDraftResponse] = {
-    getDraftSection(draftId, beneficiariesSection)
-  }
-
-  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] = {
-    getDraftSection(draftId, statusSection).map {
-      section => section.data.as[AllStatus]
-    }
-  }
-
-  // TODO - once the trust matching journey has been fixed to set a value for trustTaxable the recover can be removed
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
     http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {
       case _ => true
     }
   }
 
-  def setStatus(draftId: String, status: AllStatus)
-               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
+  def allIndividualBeneficiariesHaveRoleInCompany(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[RolesInCompaniesAnswered] = {
+    http.GET[RolesInCompaniesAnswered](s"$submissionsBaseUrl/$draftId/beneficiaries")
   }
 
   def removeRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val url: String = s"$submissionsBaseUrl/$draftId/set/$beneficiariesSection/remove-role-in-company"
+    val url: String = s"$submissionsBaseUrl/$draftId/set/beneficiaries/remove-role-in-company"
     http.POSTEmpty[HttpResponse](url)
   }
 

@@ -16,17 +16,16 @@
 
 package repositories
 
-import java.time.LocalDate
-
 import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
-import javax.inject.Inject
-import models.{AllStatus, UserAnswers}
+import models.UserAnswers
 import play.api.http
 import play.api.i18n.Messages
 import play.api.libs.json._
 import uk.gov.hmrc.http.HeaderCarrier
 
+import java.time.LocalDate
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: SubmissionDraftConnector,
@@ -58,16 +57,6 @@ class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: Submiss
 
   def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]] =
     submissionDraftConnector.getTrustSetupDate(draftId)
-
-  override def getAllStatus(draftId: String)(implicit hc: HeaderCarrier): Future[AllStatus] = {
-    submissionDraftConnector.getStatus(draftId)
-  }
-
-  override def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier): Future[Boolean] = {
-    submissionDraftConnector.setStatus(draftId, status).map {
-      response => response.status == http.Status.OK
-    }
-  }
 }
 
 trait RegistrationsRepository {
@@ -77,8 +66,4 @@ trait RegistrationsRepository {
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
 
   def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]]
-
-  def getAllStatus(draftId: String)(implicit hc: HeaderCarrier): Future[AllStatus]
-
-  def setAllStatus(draftId: String, status: AllStatus)(implicit hc: HeaderCarrier): Future[Boolean]
 }

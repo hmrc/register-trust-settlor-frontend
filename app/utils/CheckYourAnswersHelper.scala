@@ -29,38 +29,31 @@ class CheckYourAnswersHelper @Inject()(printHelpers: PrintHelpers)
                                       (userAnswers: UserAnswers, draftId: String)
                                       (implicit messages: Messages) extends Logging {
 
-  def deceasedSettlor: Option[Seq[AnswerSection]] = {
-
-    userAnswers.get(DeceasedSettlor) match {
-      case Some(value) => value match {
-        case x: SettlorDeceasedViewModel =>
-          Some(Seq(printHelpers.deceasedSettlorSection(userAnswers, x.name, draftId)))
-        case _ =>
-          None
-      }
+  def deceasedSettlor: Seq[AnswerSection] = {
+    userAnswers.get(DeceasedSettlor).map {
+      case x: SettlorDeceasedViewModel =>
+        Seq(printHelpers.deceasedSettlorSection(userAnswers, x.name, draftId))
       case _ =>
-        None
-    }
+        Nil
+    }.getOrElse(Nil)
   }
 
-  def livingSettlors: Option[Seq[AnswerSection]] = {
-
-    for {
-      livingSettlors <- userAnswers.get(LivingSettlors)
-      indexed = livingSettlors.zipWithIndex
+  def livingSettlors: Seq[AnswerSection] = {
+    val r = for {
+      s <- userAnswers.get(LivingSettlors)
+      indexed = s.zipWithIndex
     } yield indexed.map {
-      case (settlor, index) =>
+        case (x: SettlorIndividualViewModel, index) =>
+          printHelpers.livingSettlorSection(userAnswers, x.name.getOrElse(""), index, draftId)
+        case (x: SettlorBusinessViewModel, index) =>
+          printHelpers.businessSettlorSection(userAnswers, x.name.getOrElse(""), index, draftId)
+        case _ =>
+          logger.warn("Unexpected view model type for a living settlor.")
+          AnswerSection()
+      }
 
-        settlor match {
-          case x: SettlorIndividualViewModel =>
-            printHelpers.livingSettlorSection(userAnswers, x.name.getOrElse(""), index, draftId)
-          case x: SettlorBusinessViewModel =>
-            printHelpers.businessSettlorSection(userAnswers, x.name.getOrElse(""), index, draftId)
-          case _ =>
-            logger.warn("Unexpected view model type for a living settlor.")
-            AnswerSection()
-        }
-    }
+    r.getOrElse(Nil)
   }
+
 
 }

@@ -48,4 +48,19 @@ class TrustsStoreServiceSpec extends SpecBase {
       }
     }
   }
+
+  ".updateBeneficiaryTaskStatus" must {
+    "call trusts store connector" in {
+
+      when(mockConnector.updateBeneficiaryTaskStatus(any(), any())(any(), any()))
+        .thenReturn(Future.successful(HttpResponse(OK, "")))
+
+      val result = trustsStoreService.updateBeneficiaryTaskStatus(draftId, Completed)
+
+      whenReady(result) { res =>
+        res.status mustBe OK
+        verify(mockConnector).updateBeneficiaryTaskStatus(eqTo(draftId), eqTo(Completed))(any(), any())
+      }
+    }
+  }
 }

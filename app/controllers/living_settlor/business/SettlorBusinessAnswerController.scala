@@ -67,13 +67,7 @@ class SettlorBusinessAnswerController @Inject()(
       for {
         updatedAnswers <- Future.fromTry(request.userAnswers.set(LivingSettlorStatus(index), Completed))
         _ <- registrationsRepository.set(updatedAnswers)
-        _ <- {
-          if (updatedAnswers.get(KindOfTrustPage).contains(Employees)) {
-            draftRegistrationService.setBeneficiaryStatus(draftId)
-          } else {
-            draftRegistrationService.removeRoleInCompanyAnswers(draftId)
-          }
-        }
+        _ <- draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
         _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
       } yield Redirect(navigator.nextPage(SettlorBusinessAnswerPage, draftId)(updatedAnswers))
   }

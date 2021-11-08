@@ -34,4 +34,10 @@ class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig
     http.POST[TaskStatus, HttpResponse](url, taskStatus)
   }
 
+  def updateBeneficiaryTaskStatus(draftId: String, taskStatus: TaskStatus)
+                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+    val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$draftId"
+    http.POST[TaskStatus, HttpResponse](url, taskStatus)
+  }
+
 }

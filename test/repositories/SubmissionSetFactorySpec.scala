@@ -41,7 +41,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
       "return no mapped data if there are no completed settlors" in {
 
-        val result = factory.answerSectionsIfCompleted(emptyUserAnswers, Some(InProgress))
+        val result = factory.answerSectionsIfCompleted(emptyUserAnswers)
 
         result mustBe Nil
       }
@@ -49,21 +49,19 @@ class SubmissionSetFactorySpec extends SpecBase {
       "return mapped data if there are completed settlors" when {
 
         val status: Status = Completed
-        val trustDetails: TrustDetailsType = models.TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
+        val trustDetails: TrustDetailsType =
+          models.TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
+
         val deceasedSettlor: WillType = WillType(name, None, None, None, None, None)
 
         val arbitraryUserAnswers: UserAnswers = emptyUserAnswers
 
-        val mockRegistrationProgress: RegistrationProgress = mock[RegistrationProgress]
         val mockSettlorsMapper: SettlorsMapper = mock[SettlorsMapper]
         val mockDeceasedSettlorMapper: DeceasedSettlorMapper = mock[DeceasedSettlorMapper]
         val mockTrustDetailsMapper: TrustDetailsMapper = mock[TrustDetailsMapper]
         val printHelpers: PrintHelpers = injector.instanceOf[PrintHelpers]
 
-        when(mockRegistrationProgress.settlorsStatus(any())).thenReturn(Some(status))
-
         val factory = new SubmissionSetFactory(
-          registrationProgress = mockRegistrationProgress,
           settlorsMapper = mockSettlorsMapper,
           deceasedSettlorMapper = mockDeceasedSettlorMapper,
           trustDetailsMapper = mockTrustDetailsMapper,
@@ -80,7 +78,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           result mustBe DataSet(
             data = Json.toJson(arbitraryUserAnswers),
-            status = Some(status),
             registrationPieces = List(
               MappedPiece(
                 "trust/details/",
@@ -110,7 +107,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             result mustBe DataSet(
               data = Json.toJson(arbitraryUserAnswers),
-              status = Some(status),
               registrationPieces = List(
                 MappedPiece(
                   "trust/entities/settlors",
@@ -138,7 +134,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             result mustBe DataSet(
               data = Json.toJson(arbitraryUserAnswers),
-              status = Some(status),
               registrationPieces = List(
                 MappedPiece(
                   "trust/entities/settlors",
@@ -160,7 +155,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           result mustBe DataSet(
             data = Json.toJson(arbitraryUserAnswers),
-            status = Some(status),
             registrationPieces = List(
               MappedPiece(
                 "trust/entities/deceased",
@@ -181,7 +175,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
           result mustBe DataSet(
             data = Json.toJson(arbitraryUserAnswers),
-            status = Some(status),
             registrationPieces = List(
               MappedPiece(
                 "trust/details/",

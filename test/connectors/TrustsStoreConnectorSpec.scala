@@ -69,5 +69,34 @@ class TrustsStoreConnectorSpec extends SpecBase with MustMatchers with OptionVal
         }
       }
     }
+
+    ".updateBeneficiaryTaskStatus" must {
+
+      val url = s"/trusts-store/register/tasks/update-beneficiaries/$draftId"
+
+      "return OK with the current task status" in {
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .willReturn(ok())
+        )
+
+        whenReady(connector.updateBeneficiaryTaskStatus(draftId, Completed)) {
+          _.status mustBe 200
+        }
+      }
+
+      "return default tasks when a failure occurs" in {
+
+        server.stubFor(
+          post(urlEqualTo(url))
+            .willReturn(serverError())
+        )
+
+        whenReady(connector.updateBeneficiaryTaskStatus(draftId, Completed)) {
+          _.status mustBe 500
+        }
+      }
+    }
   }
 }
