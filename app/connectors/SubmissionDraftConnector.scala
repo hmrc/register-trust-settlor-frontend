@@ -18,7 +18,7 @@ package connectors
 
 import config.FrontendAppConfig
 import models.RolesInCompanies.RolesInCompaniesAnswered
-import models.{AllStatus, RegistrationSubmission, RolesInCompanies, SubmissionDraftData, SubmissionDraftResponse}
+import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
 import play.api.libs.json.{JsValue, Json}
 import uk.gov.hmrc.http.HttpReads.Implicits._
@@ -49,21 +49,6 @@ class SubmissionDraftConnector @Inject()(http: HttpClient, config: FrontendAppCo
       case _ => None
     }
   }
-
-  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
-  def getStatus(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AllStatus] = {
-    getDraftSection(draftId, "status").map {
-      section => section.data.as[AllStatus]
-    }
-  }
-
-  @deprecated("Status should be tracked in trusts-store", "05/11/2021")
-  def setStatus(draftId: String, status: AllStatus)
-               (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
-    val submissionDraftData = SubmissionDraftData(Json.toJson(status), None, None)
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/status", Json.toJson(submissionDraftData))
-  }
-
 
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] = {
     http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover {

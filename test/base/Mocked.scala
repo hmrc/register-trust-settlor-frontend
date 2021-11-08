@@ -33,7 +33,6 @@ trait Mocked extends MockitoSugar {
 
   when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
   when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
-  when(registrationsRepository.getAllStatus(any())(any())).thenReturn(Future.successful(AllStatus()))
 
   val mockCreateDraftRegistrationService: DraftRegistrationService = mock[DraftRegistrationService]
 

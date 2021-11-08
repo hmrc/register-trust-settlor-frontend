@@ -28,7 +28,8 @@ class RegistrationProgress @Inject()() {
 
   def settlorsStatus(userAnswers: UserAnswers): Option[Status] = {
 
-    val isDeceasedSettlorComplete: Boolean = userAnswers.get(DeceasedSettlorStatus).contains(Completed)
+    val isDeceasedSettlorComplete: Boolean =
+      userAnswers.get(DeceasedSettlorStatus).contains(Completed)
 
     userAnswers.get(SetUpAfterSettlorDiedYesNoPage) match {
       case Some(setUpAfterSettlorDied) =>
@@ -37,14 +38,22 @@ class RegistrationProgress @Inject()() {
         } else {
           userAnswers.get(LivingSettlors).getOrElse(Nil) match {
             case Nil =>
-              val inAdditionToWillTrust = userAnswers.get(SetUpInAdditionToWillTrustYesNoPage).getOrElse(false)
+
+              val inAdditionToWillTrust =
+                userAnswers
+                  .get(SetUpInAdditionToWillTrustYesNoPage)
+                  .getOrElse(false)
+
               if (!inAdditionToWillTrust) {
                 Some(Status.InProgress)
               } else {
                 determineStatus(isDeceasedSettlorComplete)
               }
             case living =>
-              val noMoreToAdd = userAnswers.get(AddASettlorPage).contains(AddASettlor.NoComplete)
+              val noMoreToAdd = userAnswers
+                .get(AddASettlorPage)
+                .contains(AddASettlor.NoComplete)
+
               val isComplete = !living.exists(_.status == InProgress)
               determineStatus(isComplete && noMoreToAdd)
           }
