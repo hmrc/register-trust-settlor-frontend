@@ -29,6 +29,6 @@ trait Navigator {
   def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
     answers.get(fromPage)
       .map(if (_) yesCall else noCall)
-      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad())
+      .getOrElse(controllers.routes.SessionExpiredController.onPageLoad)
   }
 }

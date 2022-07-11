@@ -56,14 +56,14 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
     answers.get(AddASettlorPage) match {
       case Some(YesNow) => SettlorNavigator.addSettlorRoute(answers, draftId)
       case Some(_) => settlorsCompletedRoute(draftId)
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
   }
 
   private def settlorIndividualOrBusinessPage(index: Int, draftId: String)(answers: UserAnswers): Call =
     answers.get(SettlorIndividualOrBusinessPage(index)) match {
       case Some(individualOrBusiness) => SettlorNavigator.addSettlorNowRoute(individualOrBusiness, answers, draftId, Some(index))
-      case _ => controllers.routes.SessionExpiredController.onPageLoad()
+      case _ => controllers.routes.SessionExpiredController.onPageLoad
     }
 }
 

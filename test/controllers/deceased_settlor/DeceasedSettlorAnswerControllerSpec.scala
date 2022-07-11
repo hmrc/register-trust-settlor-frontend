@@ -97,7 +97,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
@@ -113,7 +113,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

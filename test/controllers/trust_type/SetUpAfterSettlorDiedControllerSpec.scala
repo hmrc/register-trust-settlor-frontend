@@ -120,7 +120,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
@@ -137,7 +137,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

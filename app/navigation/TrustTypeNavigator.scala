@@ -70,7 +70,7 @@ class TrustTypeNavigator extends Navigator {
       case Some(Employees) =>
         EmployerFinancedRbsYesNoController.onPageLoad(draftId)
       case _ =>
-        SessionExpiredController.onPageLoad()
+        SessionExpiredController.onPageLoad
     }
   }
 

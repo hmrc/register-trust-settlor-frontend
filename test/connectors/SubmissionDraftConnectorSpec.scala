@@ -17,9 +17,9 @@
 package connectors
 
 import com.github.tomakehurst.wiremock.client.WireMock._
-import models.pages.Status.InProgress
 import models.{RegistrationSubmission, RolesInCompanies, SubmissionDraftResponse}
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.play.PlaySpec
 import play.api.Application
 import play.api.http.Status
@@ -34,7 +34,7 @@ import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
 
-class SubmissionDraftConnectorSpec extends PlaySpec with MustMatchers with OptionValues with WireMockHelper {
+class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionValues with WireMockHelper {
 
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 

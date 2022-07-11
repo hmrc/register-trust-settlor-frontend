@@ -19,10 +19,11 @@ package mapping.reads
 import base.SpecBase
 import models.YesNoDontKnow
 import models.pages.FullName
-import org.scalatest.{MustMatchers, OptionValues}
+import org.scalatest.OptionValues
+import org.scalatest.matchers.must.Matchers
 import play.api.libs.json.Json
 
-class IndividualSettlorSpec extends SpecBase with MustMatchers with OptionValues {
+class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
 
   "TrusteeIndividual reads" must {
 

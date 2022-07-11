@@ -17,10 +17,7 @@
 package repositories
 
 import mapping.{DeceasedSettlorMapper, SettlorsMapper, TrustDetailsMapper}
-import models.pages.Status
-import models.pages.Status._
 import models.{RegistrationSubmission, UserAnswers}
-import pages.RegistrationProgress
 import play.api.i18n.Messages
 import play.api.libs.json.{JsValue, Json}
 import utils.CheckYourAnswersHelper
