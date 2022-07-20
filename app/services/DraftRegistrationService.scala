@@ -18,13 +18,9 @@ package services
 
 import connectors.SubmissionDraftConnector
 import models.pages.KindOfTrust.Employees
-import models.{ReadOnlyUserAnswers, RolesInCompanies, TaskStatus, UserAnswers}
-import models.pages.Status.InProgress
-import pages.beneficiaries.RoleInCompanyPage
+import models.{RolesInCompanies, TaskStatus, UserAnswers}
 import pages.trust_type.KindOfTrustPage
 import play.api.Logging
-import repositories.RegistrationsRepository
-import sections.beneficiaries.IndividualBeneficiaries
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject

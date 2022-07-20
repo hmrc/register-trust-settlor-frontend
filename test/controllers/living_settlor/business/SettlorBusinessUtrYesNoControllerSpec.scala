@@ -157,7 +157,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }
@@ -173,7 +173,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
 
       status(result) mustEqual SEE_OTHER
 
-      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad().url
+      redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
     }

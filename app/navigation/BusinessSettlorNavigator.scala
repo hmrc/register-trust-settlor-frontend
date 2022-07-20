@@ -108,6 +108,6 @@ class BusinessSettlorNavigator extends Navigator {
     ua.get(KindOfTrustPage) match {
       case Some(Employees) => businessRoutes.SettlorBusinessTypeController.onPageLoad(index, draftId)
       case Some(_) => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
-      case None => controllers.routes.SessionExpiredController.onPageLoad()
+      case None => controllers.routes.SessionExpiredController.onPageLoad
     }
 }

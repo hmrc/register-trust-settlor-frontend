@@ -20,11 +20,10 @@ import java.time.LocalDateTime
 
 import base.SpecBase
 import connectors.SubmissionDraftConnector
-import models.pages.Status.InProgress
 import models._
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{verify, when}
-import org.scalatest.MustMatchers
+import org.scalatest.matchers.must.Matchers
 import org.scalatestplus.mockito.MockitoSugar
 import play.api.http
 import play.api.libs.json.Json
@@ -33,7 +32,7 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-class RegistrationRepositorySpec extends SpecBase with MustMatchers with MockitoSugar {
+class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSugar {
 
   private val unusedSubmissionSetFactory = mock[SubmissionSetFactory];
 

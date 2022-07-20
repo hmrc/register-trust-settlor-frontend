@@ -21,10 +21,12 @@ import java.time.LocalDate
 import generators.Generators
 import org.scalacheck.Gen
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import org.scalatest.{FreeSpec, MustMatchers, OptionValues}
+import org.scalatest.matchers.must.Matchers
+import org.scalatest.freespec.AsyncFreeSpec
+import org.scalatest.{OptionValues}
 import play.api.data.{Form, FormError}
 
-class DateMappingsSpec extends FreeSpec with MustMatchers with ScalaCheckPropertyChecks with Generators with OptionValues
+class DateMappingsSpec extends AsyncFreeSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues
   with Mappings {
 
   val form = Form(
