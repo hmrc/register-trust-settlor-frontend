@@ -24,6 +24,7 @@ import models.pages.Status.Completed
 import navigation.Navigator
 import pages.DeceasedSettlorStatus
 import pages.deceased_settlor.DeceasedSettlorAnswerPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
@@ -31,9 +32,11 @@ import services.{DraftRegistrationService, TrustsStoreService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.DeceasedSettlorPrintHelper
 import views.html.deceased_settlor.DeceasedSettlorAnswerView
+import views.html.errors.TechnicalErrorView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class DeceasedSettlorAnswerController @Inject()(
                                                  override val messagesApi: MessagesApi,
@@ -45,8 +48,9 @@ class DeceasedSettlorAnswerController @Inject()(
                                                  view: DeceasedSettlorAnswerView,
                                                  draftRegistrationService: DraftRegistrationService,
                                                  deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
-                                                 trustsStoreService: TrustsStoreService
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 trustsStoreService: TrustsStoreService,
+                                                 technicalErrorView: TechnicalErrorView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -58,12 +62,17 @@ class DeceasedSettlorAnswerController @Inject()(
 
   def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
     implicit request =>
-
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(DeceasedSettlorStatus, Completed))
-        _ <- registrationsRepository.set(updatedAnswers)
-        _ <- draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
-        _ <- trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
-      } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
+      request.userAnswers.set(DeceasedSettlorStatus, Completed) match {
+        case Success(updatedAnswers) =>
+          registrationsRepository.set(updatedAnswers).map { _ =>
+            draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
+            trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
+            Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
+          }
+        case Failure(_) => {
+          logger.error("[DeceasedSettlorAnswerController][onSubmit] Error while storing user answers")
+          Future.successful(InternalServerError(technicalErrorView()))
+        }
+      }
   }
 }

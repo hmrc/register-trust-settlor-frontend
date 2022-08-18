@@ -21,15 +21,18 @@ import controllers.actions.Actions
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.trust_type.SetUpInAdditionToWillTrustYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.trust_type.AdditionToWillTrustYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class AdditionToWillTrustYesNoController @Inject()(
                                                     override val messagesApi: MessagesApi,
@@ -38,8 +41,9 @@ class AdditionToWillTrustYesNoController @Inject()(
                                                     actions: Actions,
                                                     yesNoFormProvider: YesNoFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    view: AdditionToWillTrustYesNoView
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                    view: AdditionToWillTrustYesNoView,
+                                                    technicalErrorView: TechnicalErrorView
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
@@ -60,12 +64,17 @@ class AdditionToWillTrustYesNoController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, draftId)(updatedAnswers))
+          request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[AdditionToWillTrustYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

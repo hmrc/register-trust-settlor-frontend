@@ -28,6 +28,7 @@ import models.{Enumerable, TaskStatus, UserAnswers}
 import navigation.Navigator
 import pages.trust_type.KindOfTrustPage
 import pages.{AddASettlorPage, AddASettlorYesNoPage, RegistrationProgress}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
 import play.api.mvc._
@@ -37,10 +38,12 @@ import uk.gov.hmrc.http.HttpVerbs.GET
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.AddASettlorViewHelper
+import views.html.errors.TechnicalErrorView
 import views.html.{AddASettlorView, AddASettlorYesNoView}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class AddASettlorController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -53,9 +56,10 @@ class AddASettlorController @Inject()(
                                        addAnotherView: AddASettlorView,
                                        yesNoView: AddASettlorYesNoView,
                                        trustsStoreService: TrustsStoreService,
-                                       registrationProgress: RegistrationProgress
+                                       registrationProgress: RegistrationProgress,
+                                       technicalErrorView: TechnicalErrorView
                                      )(implicit ec: ExecutionContext, config: FrontendAppConfig)
-  extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+  extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
   private val yesNoForm: Form[Boolean] = yesNoFormProvider.withPrefix("addASettlorYesNo")
@@ -106,11 +110,17 @@ class AddASettlorController @Inject()(
           Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText)))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorYesNoPage, value))
-            _ <- registrationsRepository.set(updatedAnswers)
-            _ <- setTaskStatus(draftId, TaskStatus.InProgress)
-          } yield Redirect(navigator.nextPage(AddASettlorYesNoPage, draftId)(updatedAnswers))
+          request.userAnswers.set(AddASettlorYesNoPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                setTaskStatus(draftId, TaskStatus.InProgress)
+                Redirect(navigator.nextPage(AddASettlorYesNoPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[AddASettlorController][submitAnother] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }
@@ -137,11 +147,17 @@ class AddASettlorController @Inject()(
           ))
         },
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorPage, value))
-            _ <- registrationsRepository.set(updatedAnswers)
-            _ <- setTaskStatus(updatedAnswers, draftId, value)
-          } yield Redirect(navigator.nextPage(AddASettlorPage, draftId)(updatedAnswers))
+          request.userAnswers.set(AddASettlorPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                setTaskStatus(updatedAnswers, draftId, value)
+                Redirect(navigator.nextPage(AddASettlorPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[AddASettlorController][submitAnother] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }
@@ -151,11 +167,17 @@ class AddASettlorController @Inject()(
 
       val status = NoComplete
 
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(AddASettlorPage, status))
-        _ <- registrationsRepository.set(updatedAnswers)
-        _ <- setTaskStatus(updatedAnswers, draftId, status)
-      } yield Redirect(Call(GET, config.registrationProgressUrl(draftId)))
+        request.userAnswers.set(AddASettlorPage, status) match {
+          case Success(updatedAnswers) =>
+            registrationsRepository.set(updatedAnswers).map { _ =>
+              setTaskStatus(updatedAnswers, draftId, status)
+              Redirect(Call(GET, config.registrationProgressUrl(draftId)))
+            }
+          case Failure(_) => {
+            logger.error("[AddASettlorController][submitComplete] Error while storing user answers")
+            Future.successful(InternalServerError(technicalErrorView()))
+          }
+      }
   }
 
   private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)

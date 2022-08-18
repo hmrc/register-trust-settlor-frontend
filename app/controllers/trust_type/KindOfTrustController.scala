@@ -24,15 +24,18 @@ import models.pages.KindOfTrust
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.trust_type.{KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.trust_type.KindOfTrustView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class KindOfTrustController @Inject()(
                                        override val messagesApi: MessagesApi,
@@ -42,8 +45,9 @@ class KindOfTrustController @Inject()(
                                        formProvider: KindOfTrustFormProvider,
                                        val controllerComponents: MessagesControllerComponents,
                                        view: KindOfTrustView,
-                                       requiredAnswer: RequiredAnswerActionProvider
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                       requiredAnswer: RequiredAnswerActionProvider,
+                                       technicalErrorView: TechnicalErrorView
+                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
@@ -68,12 +72,17 @@ class KindOfTrustController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(KindOfTrustPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(KindOfTrustPage, draftId)(updatedAnswers))
+          request.userAnswers.set(KindOfTrustPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(KindOfTrustPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[KindOfTrustController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

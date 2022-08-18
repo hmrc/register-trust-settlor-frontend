@@ -22,15 +22,18 @@ import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNamePage, SettlorIndividualPassportYesNoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.individual.SettlorIndividualPassportYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorIndividualPassportYesNoController @Inject()(
                                                           override val messagesApi: MessagesApi,
@@ -40,8 +43,9 @@ class SettlorIndividualPassportYesNoController @Inject()(
                                                           requireName: NameRequiredActionProvider,
                                                           yesNoFormProvider: YesNoFormProvider,
                                                           val controllerComponents: MessagesControllerComponents,
-                                                          view: SettlorIndividualPassportYesNoView
-                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                          view: SettlorIndividualPassportYesNoView,
+                                                          technicalErrorView: TechnicalErrorView
+                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualPassportYesNo")
 
@@ -66,12 +70,17 @@ class SettlorIndividualPassportYesNoController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualPassportYesNoPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualPassportYesNoPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorIndividualPassportYesNoPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorIndividualPassportYesNoPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorIndividualPassportYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

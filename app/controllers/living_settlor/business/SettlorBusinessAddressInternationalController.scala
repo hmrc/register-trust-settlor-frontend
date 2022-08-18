@@ -23,16 +23,19 @@ import forms.InternationalAddressFormProvider
 import models.pages.InternationalAddress
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessAddressInternationalPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptionsNonUK
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.business.SettlorBusinessAddressInternationalView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorBusinessAddressInternationalController @Inject()(
                                                                override val messagesApi: MessagesApi,
@@ -43,8 +46,9 @@ class SettlorBusinessAddressInternationalController @Inject()(
                                                                formProvider: InternationalAddressFormProvider,
                                                                val controllerComponents: MessagesControllerComponents,
                                                                view: SettlorBusinessAddressInternationalView,
-                                                               val countryOptions: CountryOptionsNonUK
-                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                               val countryOptions: CountryOptionsNonUK,
+                                                               technicalErrorView: TechnicalErrorView
+                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[InternationalAddress] = formProvider()
 
@@ -65,12 +69,17 @@ class SettlorBusinessAddressInternationalController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.businessName))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorBusinessAddressInternationalController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

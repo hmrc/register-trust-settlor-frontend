@@ -22,15 +22,18 @@ import forms.DeedOfVariationFormProvider
 import models.pages.DeedOfVariation
 import navigation.Navigator
 import pages.trust_type.HowDeedOfVariationCreatedPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.trust_type.HowDeedOfVariationCreatedView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class HowDeedOfVariationCreatedController @Inject()(
                                                      override val messagesApi: MessagesApi,
@@ -39,8 +42,9 @@ class HowDeedOfVariationCreatedController @Inject()(
                                                      actions: Actions,
                                                      deedOfVariationFormProvider: DeedOfVariationFormProvider,
                                                      val controllerComponents: MessagesControllerComponents,
-                                                     view: HowDeedOfVariationCreatedView
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     view: HowDeedOfVariationCreatedView,
+                                                     technicalErrorView: TechnicalErrorView
+                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
 
@@ -61,12 +65,17 @@ class HowDeedOfVariationCreatedController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HowDeedOfVariationCreatedPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, draftId)(updatedAnswers))
+          request.userAnswers.set(HowDeedOfVariationCreatedPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[HowDeedOfVariationCreatedController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

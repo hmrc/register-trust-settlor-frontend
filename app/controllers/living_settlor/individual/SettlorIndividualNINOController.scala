@@ -23,15 +23,18 @@ import forms.NinoFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNINOPage, SettlorIndividualNamePage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.individual.SettlorIndividualNINOView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorIndividualNINOController @Inject()(
                                                  override val messagesApi: MessagesApi,
@@ -41,8 +44,9 @@ class SettlorIndividualNINOController @Inject()(
                                                  requireName: NameRequiredActionProvider,
                                                  formProvider: NinoFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: SettlorIndividualNINOView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 view: SettlorIndividualNINOView,
+                                                 technicalErrorView: TechnicalErrorView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
     formProvider("settlorIndividualNINO", request.userAnswers, index)
@@ -68,12 +72,17 @@ class SettlorIndividualNINOController @Inject()(
       form(index).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualNINOPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorIndividualNINOPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorIndividualNINOController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

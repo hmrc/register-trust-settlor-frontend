@@ -67,18 +67,19 @@
     <logger name="io.netty" level="INFO"/>
     <logger name="sun.net.www.protocol.http" level="INFO"/>
 
-    <logger name="controllers" level="DEBUG"/>
-    <logger name="services" level="DEBUG"/>
-    <logger name="models" level="DEBUG"/>
-    <logger name="repositories" level="DEBUG"/>
-    <logger name="connectors" level="DEBUG"/>
-    <logger name="mapping" level="DEBUG"/>
+    <logger name="controllers" level="INFO"/>
+    <logger name="services" level="INFO"/>
+    <logger name="models" level="INFO"/>
+    <logger name="repositories" level="INFO"/>
+    <logger name="connectors" level="INFO"/>
+    <logger name="mapping" level="INFO"/>
+    <logger name="uk.gov.hmrc.play.bootstrap.filters.DefaultLoggingFilter" level="WARN"/>
 
     <logger name="connector" level="TRACE">
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>

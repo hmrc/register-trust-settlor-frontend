@@ -23,15 +23,18 @@ import forms.UKAddressFormProvider
 import models.pages.UKAddress
 import navigation.Navigator
 import pages.living_settlor.business.SettlorBusinessAddressUKPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.business.SettlorBusinessAddressUKView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorBusinessAddressUKController @Inject()(
                                                     override val messagesApi: MessagesApi,
@@ -41,8 +44,9 @@ class SettlorBusinessAddressUKController @Inject()(
                                                     requireName: NameRequiredActionProvider,
                                                     formProvider: UKAddressFormProvider,
                                                     val controllerComponents: MessagesControllerComponents,
-                                                    view: SettlorBusinessAddressUKView
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                    view: SettlorBusinessAddressUKView,
+                                                    technicalErrorView: TechnicalErrorView
+                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[UKAddress] = formProvider()
 
@@ -63,12 +67,17 @@ class SettlorBusinessAddressUKController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorBusinessAddressUKPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorBusinessAddressUKPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorBusinessAddressUKPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorBusinessAddressUKPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorBusinessAddressUKYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }
