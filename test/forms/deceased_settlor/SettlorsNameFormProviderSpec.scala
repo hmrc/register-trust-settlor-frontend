@@ -18,6 +18,8 @@ package forms.deceased_settlor
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
+import generators.Generators
+import org.scalacheck.Gen
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 
@@ -76,6 +78,21 @@ class SettlorsNameFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       validDataGenerator = RegexpGen.from(Validation.nameRegex)
     )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe Some("middle")
+    }
+
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  ", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe None
+    }
+
+    "bind whitespace no values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe None
+    }
   }
 
   ".lastName" must {
