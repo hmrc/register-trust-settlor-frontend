@@ -22,15 +22,19 @@ import models.Enumerable
 import models.pages.IndividualOrBusiness
 import navigation.Navigator
 import pages.living_settlor.SettlorIndividualOrBusinessPage
+import pages.living_settlor.individual.SettlorIndividualNamePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.SettlorIndividualOrBusinessView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorIndividualOrBusinessController @Inject()(
                                                        override val messagesApi: MessagesApi,
@@ -39,8 +43,9 @@ class SettlorIndividualOrBusinessController @Inject()(
                                                        actions: Actions,
                                                        formProvider: SettlorIndividualOrBusinessFormProvider,
                                                        val controllerComponents: MessagesControllerComponents,
-                                                       view: SettlorIndividualOrBusinessView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits {
+                                                       view: SettlorIndividualOrBusinessView,
+                                                       technicalErrorView: TechnicalErrorView
+                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val form: Form[IndividualOrBusiness] = formProvider()
 
@@ -61,12 +66,17 @@ class SettlorIndividualOrBusinessController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorIndividualOrBusinessController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

@@ -23,16 +23,19 @@ import forms.PassportOrIdCardFormProvider
 import models.pages.PassportOrIdCardDetails
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNamePage, SettlorIndividualPassportPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.countryOptions.CountryOptions
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.individual.SettlorIndividualPassportView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorIndividualPassportController @Inject()(
                                                      override val messagesApi: MessagesApi,
@@ -43,8 +46,9 @@ class SettlorIndividualPassportController @Inject()(
                                                      formProvider: PassportOrIdCardFormProvider,
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: SettlorIndividualPassportView,
-                                                     val countryOptions: CountryOptions
-                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                     val countryOptions: CountryOptions,
+                                                     technicalErrorView: TechnicalErrorView
+                                                   )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualPassport")
 
@@ -69,12 +73,17 @@ class SettlorIndividualPassportController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualPassportPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualPassportPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorIndividualPassportPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorIndividualPassportPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorIndividualPassportController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

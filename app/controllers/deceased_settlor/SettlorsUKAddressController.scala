@@ -23,15 +23,18 @@ import forms.UKAddressFormProvider
 import models.pages.UKAddress
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsUKAddressPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorsUKAddressView
+import views.html.errors.TechnicalErrorView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorsUKAddressController @Inject()(
                                              override val messagesApi: MessagesApi,
@@ -41,8 +44,9 @@ class SettlorsUKAddressController @Inject()(
                                              requireName: NameRequiredActionProvider,
                                              formProvider: UKAddressFormProvider,
                                              val controllerComponents: MessagesControllerComponents,
-                                             view: SettlorsUKAddressView
-                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                             view: SettlorsUKAddressView,
+                                             technicalErrorView: TechnicalErrorView
+                                           )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[UKAddress] = formProvider()
 
@@ -67,13 +71,17 @@ class SettlorsUKAddressController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, name))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsUKAddressPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsUKAddressPage, draftId)(updatedAnswers))
-        }
+        value =>
+          request.userAnswers.set(SettlorsUKAddressPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorsUKAddressPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorsUKAddressController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
       )
   }
 }

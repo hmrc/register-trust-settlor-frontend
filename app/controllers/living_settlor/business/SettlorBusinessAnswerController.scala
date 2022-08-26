@@ -26,17 +26,19 @@ import models.requests.SettlorBusinessNameRequest
 import navigation.Navigator
 import pages.LivingSettlorStatus
 import pages.living_settlor.business.SettlorBusinessAnswerPage
-import pages.trust_type.KindOfTrustPage
+import play.api.Logging
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import utils.print.BusinessSettlorPrintHelper
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.SettlorAnswersView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorBusinessAnswerController @Inject()(
                                                  override val messagesApi: MessagesApi,
@@ -47,8 +49,9 @@ class SettlorBusinessAnswerController @Inject()(
                                                  requireName: NameRequiredActionProvider,
                                                  view: SettlorAnswersView,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 businessSettlorPrintHelper: BusinessSettlorPrintHelper
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                 businessSettlorPrintHelper: BusinessSettlorPrintHelper,
+                                                 technicalErrorView: TechnicalErrorView
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorBusinessNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)
@@ -63,13 +66,18 @@ class SettlorBusinessAnswerController @Inject()(
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
     implicit request =>
-
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(LivingSettlorStatus(index), Completed))
-        _ <- registrationsRepository.set(updatedAnswers)
-        _ <- draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
-        _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
-      } yield Redirect(navigator.nextPage(SettlorBusinessAnswerPage, draftId)(updatedAnswers))
+      request.userAnswers.set(LivingSettlorStatus(index), Completed) match {
+        case Success(updatedAnswers) =>
+          registrationsRepository.set(updatedAnswers).map { _ =>
+            draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
+            draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
+            Redirect(navigator.nextPage(SettlorBusinessAnswerPage, draftId)(updatedAnswers))
+          }
+        case Failure(_) => {
+          logger.error("[SettlorBusinessAnswerController][onSubmit] Error while storing user answers")
+          Future.successful(InternalServerError(technicalErrorView()))
+        }
+      }
   }
 
 }

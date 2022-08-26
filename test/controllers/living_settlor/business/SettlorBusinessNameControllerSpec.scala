@@ -90,6 +90,22 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "return a 500 when the try fails" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, businessRoutes.SettlorBusinessNameController.onPageLoad(2, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", "answer"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

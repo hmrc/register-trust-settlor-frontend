@@ -28,9 +28,11 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.individual.SettlorIndividualNameView
-
 import javax.inject.Inject
+import play.api.Logging
+
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorIndividualNameController @Inject()(
                                                  override val messagesApi: MessagesApi,
@@ -40,7 +42,7 @@ class SettlorIndividualNameController @Inject()(
                                                  formProvider: SettlorIndividualNameFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
                                                  view: SettlorIndividualNameView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[FullName] = formProvider()
 
@@ -63,10 +65,16 @@ class SettlorIndividualNameController @Inject()(
           Future.successful(BadRequest(view(formWithErrors, draftId, index))),
 
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorIndividualNamePage(index), value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorIndividualNamePage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(SettlorIndividualNamePage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorIndividualNamePage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorIndividualNameController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError("ok"))
+            }
+          }
         }
       )
   }

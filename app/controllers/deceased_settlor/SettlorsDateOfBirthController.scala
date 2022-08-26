@@ -23,16 +23,19 @@ import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorsDateOfBirthView
+import views.html.errors.TechnicalErrorView
 
 import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class SettlorsDateOfBirthController @Inject()(
                                                override val messagesApi: MessagesApi,
@@ -42,8 +45,9 @@ class SettlorsDateOfBirthController @Inject()(
                                                requireName: NameRequiredActionProvider,
                                                formProvider: SettlorsDateOfBirthFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: SettlorsDateOfBirthView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               view: SettlorsDateOfBirthView,
+                                               technicalErrorView: TechnicalErrorView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(maxDate: (LocalDate, String)): Form[LocalDate] =
     formProvider.withConfig(maxDate)
@@ -69,13 +73,17 @@ class SettlorsDateOfBirthController @Inject()(
       form(maxDate).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, name))),
-
-        value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(SettlorsDateOfBirthPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(SettlorsDateOfBirthPage, draftId)(updatedAnswers))
-        }
+        value =>
+          request.userAnswers.set(SettlorsDateOfBirthPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(SettlorsDateOfBirthPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[SettlorsDateOfBirthController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
       )
   }
 

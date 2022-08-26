@@ -96,6 +96,22 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "return an Internal Server Error when the try fails" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, routes.SettlorIndividualNameController.onPageLoad(2, fakeDraftId).url)
+          .withFormUrlEncodedBody(("firstName", "first"), ("middleName", "middle"), ("lastName", "last"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

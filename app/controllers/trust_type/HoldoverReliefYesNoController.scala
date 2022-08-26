@@ -21,15 +21,18 @@ import controllers.actions._
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.trust_type.{HoldoverReliefYesNoPage, SetUpAfterSettlorDiedYesNoPage}
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.trust_type.HoldoverReliefYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class HoldoverReliefYesNoController @Inject()(
                                                override val messagesApi: MessagesApi,
@@ -39,8 +42,9 @@ class HoldoverReliefYesNoController @Inject()(
                                                requiredAnswer: RequiredAnswerActionProvider,
                                                yesNoFormProvider: YesNoFormProvider,
                                                val controllerComponents: MessagesControllerComponents,
-                                               view: HoldoverReliefYesNoView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                               view: HoldoverReliefYesNoView,
+                                               technicalErrorView: TechnicalErrorView
+                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")
 
@@ -65,12 +69,17 @@ class HoldoverReliefYesNoController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(HoldoverReliefYesNoPage, value))
-            _              <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId)(updatedAnswers))
+          request.userAnswers.set(HoldoverReliefYesNoPage, value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[HoldoverReliefYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }

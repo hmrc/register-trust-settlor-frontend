@@ -62,12 +62,11 @@ final case class UserAnswers(draftId: String,
 
   def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
 
-    val updatedData = data.setObject(page.path, Json.toJson(value)) match {
+    val updatedData: Try[JsObject] = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
         Success(jsValue)
       case JsError(errors) =>
-        val errorPaths = errors.collectFirst{ case (path, e) => s"$path $e"}
-        logger.warn(s"Unable to set path ${page.path} due to errors $errorPaths")
+        logger.warn(s"Unable to set path ${page.path} due to errors")
         Failure(JsResultException(errors))
     }
 

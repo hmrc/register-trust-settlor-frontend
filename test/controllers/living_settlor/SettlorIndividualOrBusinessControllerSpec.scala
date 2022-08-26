@@ -91,6 +91,22 @@ class SettlorIndividualOrBusinessControllerSpec extends SpecBase {
       application.stop()
     }
 
+    "return a 500 when there's an issue parsing the user answers" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, routes.SettlorIndividualOrBusinessController.onPageLoad(2, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", IndividualOrBusiness.options.head.value))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
+
+      application.stop()
+    }
+
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()

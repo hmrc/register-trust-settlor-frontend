@@ -23,15 +23,18 @@ import forms.YesNoFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.mld5.CountryOfResidencyYesNoPage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, ActionBuilder, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
+import views.html.errors.TechnicalErrorView
 import views.html.living_settlor.individual.mld5.CountryOfResidencyYesNoView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.{Failure, Success}
 
 class CountryOfResidencyYesNoController @Inject()(
                                                    override val messagesApi: MessagesApi,
@@ -41,8 +44,9 @@ class CountryOfResidencyYesNoController @Inject()(
                                                    requireName: NameRequiredActionProvider,
                                                    yesNoFormProvider: YesNoFormProvider,
                                                    val controllerComponents: MessagesControllerComponents,
-                                                   view: CountryOfResidencyYesNoView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+                                                   view: CountryOfResidencyYesNoView,
+                                                   technicalErrorView: TechnicalErrorView
+                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualCountryOfResidencyYesNo")
 
@@ -67,12 +71,17 @@ class CountryOfResidencyYesNoController @Inject()(
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
-
         value => {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(CountryOfResidencyYesNoPage(index), value))
-            _ <- registrationsRepository.set(updatedAnswers)
-          } yield Redirect(navigator.nextPage(CountryOfResidencyYesNoPage(index), draftId)(updatedAnswers))
+          request.userAnswers.set(CountryOfResidencyYesNoPage(index), value) match {
+            case Success(updatedAnswers) =>
+              registrationsRepository.set(updatedAnswers).map { _ =>
+                Redirect(navigator.nextPage(CountryOfResidencyYesNoPage(index), draftId)(updatedAnswers))
+              }
+            case Failure(_) => {
+              logger.error("[CountryOfResidencyYesNoController][onSubmit] Error while storing user answers")
+              Future.successful(InternalServerError(technicalErrorView()))
+            }
+          }
         }
       )
   }
