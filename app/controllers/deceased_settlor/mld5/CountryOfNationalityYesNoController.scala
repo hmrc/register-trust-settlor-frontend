@@ -44,7 +44,7 @@ class CountryOfNationalityYesNoController @Inject()(
                                                      yesNoFormProvider: YesNoFormProvider,
                                                      val controllerComponents: MessagesControllerComponents,
                                                      view: CountryOfNationalityYesNoView,
-                                                     technicalErrorView: TechnicalErrorView,
+                                                     technicalErrorView: TechnicalErrorView
                                                    )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfNationalityYesNo")
