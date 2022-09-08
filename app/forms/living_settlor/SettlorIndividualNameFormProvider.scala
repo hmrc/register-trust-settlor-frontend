@@ -16,8 +16,10 @@
 
 package forms.living_settlor
 
+import forms.helpers.WhitespaceHelper._
 import forms.Validation
 import forms.mappings.Mappings
+
 import javax.inject.Inject
 import models.pages.FullName
 import play.api.data.Form
@@ -37,12 +39,13 @@ class SettlorIndividualNameFormProvider @Inject() extends Mappings {
           )
         ),
       "middleName" -> optional(text()
+        .transform(trimWhitespace, identity[String])
         .verifying(
           firstError(
             maxLength(35, s"settlorIndividualName.error.middlename.length"),
             regexp(Validation.nameRegex, s"settlorIndividualName.error.middlename.invalid"))
         )
-      ),
+      ).transform(emptyToNone, identity[Option[String]]),
       "lastName" -> text(s"settlorIndividualName.error.lastname.required")
         .verifying(
           firstError(
