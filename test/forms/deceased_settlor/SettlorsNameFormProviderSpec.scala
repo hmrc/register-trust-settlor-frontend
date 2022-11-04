@@ -18,8 +18,6 @@ package forms.deceased_settlor
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
-import generators.Generators
-import org.scalacheck.Gen
 import play.api.data.FormError
 import wolfendale.scalacheck.regexp.RegexpGen
 

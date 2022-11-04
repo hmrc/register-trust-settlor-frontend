@@ -22,7 +22,6 @@ import models.Enumerable
 import models.pages.IndividualOrBusiness
 import navigation.Navigator
 import pages.living_settlor.SettlorIndividualOrBusinessPage
-import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
