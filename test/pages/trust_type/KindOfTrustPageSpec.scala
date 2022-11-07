@@ -16,16 +16,16 @@
 
 package pages.trust_type
 
-import java.time.LocalDate
-
 import models.UserAnswers
-import models.pages.{DeedOfVariation, FullName, KindOfBusiness, KindOfTrust}
 import models.pages.Status._
+import models.pages.{DeedOfVariation, FullName, KindOfBusiness, KindOfTrust}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
-import pages.{DeceasedSettlorStatus, deceased_settlor => deceasedPages}
 import pages.living_settlor.business.{SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage}
+import pages.{DeceasedSettlorStatus, deceased_settlor => deceasedPages}
 import sections.DeceasedSettlor
+
+import java.time.LocalDate
 
 class KindOfTrustPageSpec extends PageBehaviours {
 

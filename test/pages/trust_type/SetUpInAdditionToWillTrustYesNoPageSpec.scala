@@ -17,11 +17,11 @@
 package pages.trust_type
 
 import models.UserAnswers
-import models.pages.{DeedOfVariation, FullName}
 import models.pages.Status.Completed
+import models.pages.{DeedOfVariation, FullName}
 import org.scalacheck.Arbitrary.arbitrary
-import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
 import pages.behaviours.PageBehaviours
+import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
 import sections.{DeceasedSettlor, LivingSettlors}
 
 class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {

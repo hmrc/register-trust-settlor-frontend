@@ -19,12 +19,12 @@ package generators
 import models.pages._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Arbitrary.arbitrary
+import pages.AddASettlorPage
 import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
+import pages.living_settlor.individual._
 import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
-import pages.AddASettlorPage
-import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {

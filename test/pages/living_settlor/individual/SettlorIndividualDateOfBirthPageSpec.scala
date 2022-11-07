@@ -16,10 +16,10 @@
 
 package pages.living_settlor.individual
 
-import java.time.LocalDate
-
 import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class SettlorIndividualDateOfBirthPageSpec extends PageBehaviours {
 

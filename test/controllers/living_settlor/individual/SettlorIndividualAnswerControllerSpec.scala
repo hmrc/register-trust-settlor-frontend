@@ -20,8 +20,7 @@ import base.SpecBase
 import controllers.routes._
 import models.UserAnswers
 import models.pages._
-import org.mockito.Matchers._
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.any
 import pages.living_settlor._
 import pages.living_settlor.individual._
 import pages.trust_type._

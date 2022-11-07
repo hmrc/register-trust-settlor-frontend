@@ -23,8 +23,7 @@ import models.pages.IndividualOrBusiness.Individual
 import models.pages.Status.{Completed, InProgress}
 import models.{TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.scalatest.BeforeAndAfterEach
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
 import pages.{DeceasedSettlorStatus, LivingSettlorStatus, deceased_settlor => deceasedPages}
@@ -222,7 +221,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
         val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
         route(application, request).value.map { _ =>
-          val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+          val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
           uaCaptor.getValue.isTaxable mustBe true
@@ -254,7 +253,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
             val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
             route(application, request).value.map { _ =>
-              val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+              val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
               uaCaptor.getValue.isTaxable mustBe true
@@ -285,7 +284,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
             val request = FakeRequest(GET, routes.IndexController.onPageLoad(fakeDraftId).url)
 
             route(application, request).value.map { _ =>
-              val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+              val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
               uaCaptor.getValue.isTaxable mustBe false

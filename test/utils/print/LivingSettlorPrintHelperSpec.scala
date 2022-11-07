@@ -24,8 +24,7 @@ import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import models.pages._
 import models.{UserAnswers, YesNoDontKnow}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.ArgumentMatchers.any
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

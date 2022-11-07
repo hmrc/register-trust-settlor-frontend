@@ -21,7 +21,7 @@ import controllers.routes._
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.data.Form
 import play.api.test.FakeRequest

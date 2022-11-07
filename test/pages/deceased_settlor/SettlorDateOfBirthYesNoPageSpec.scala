@@ -16,11 +16,11 @@
 
 package pages.deceased_settlor
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class SettlorDateOfBirthYesNoPageSpec extends PageBehaviours {
 

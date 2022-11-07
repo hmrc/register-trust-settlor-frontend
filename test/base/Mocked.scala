@@ -16,14 +16,12 @@
 
 package base
 
-import java.time.LocalDate
-
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers.any
+import org.mockito.MockitoSugar
 import repositories.RegistrationsRepository
 import services.DraftRegistrationService
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 trait Mocked extends MockitoSugar {

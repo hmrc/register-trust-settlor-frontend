@@ -22,8 +22,7 @@ import models.UserAnswers
 import models.pages.FullName
 import models.pages.IndividualOrBusiness._
 import org.mockito.ArgumentCaptor
-import org.mockito.Matchers.any
-import org.mockito.Mockito._
+import org.mockito.ArgumentMatchers.any
 import pages.living_settlor._
 import pages.living_settlor.business._
 import pages.living_settlor.individual._
@@ -202,7 +201,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorIndividualNamePage(index)) mustNot be(defined)
@@ -230,7 +229,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
-        val uaCaptor = ArgumentCaptor.forClass(classOf[UserAnswers])
+        val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
         verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
         uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorBusinessNamePage(index)) mustNot be(defined)
