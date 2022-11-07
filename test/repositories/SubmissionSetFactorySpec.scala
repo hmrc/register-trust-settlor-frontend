@@ -19,12 +19,9 @@ package repositories
 import base.SpecBase
 import mapping._
 import models.RegistrationSubmission.{DataSet, MappedPiece}
-import models.pages.Status._
-import models.pages.{FullName, Status}
+import models.pages.FullName
 import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
-import pages.RegistrationProgress
+import org.mockito.ArgumentMatchers.any
 import play.api.libs.json.Json
 import utils.print.PrintHelpers
 
@@ -48,7 +45,6 @@ class SubmissionSetFactorySpec extends SpecBase {
 
       "return mapped data if there are completed settlors" when {
 
-        val status: Status = Completed
         val trustDetails: TrustDetailsType =
           models.TrustDetailsType(TypeOfTrust.HeritageTrust, None, None, None)
 

@@ -16,10 +16,10 @@
 
 package pages.deceased_settlor
 
-import java.time.LocalDate
-
 import org.scalacheck.Arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class SettlorDateOfDeathPageSpec extends PageBehaviours {
 

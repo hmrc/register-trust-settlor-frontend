@@ -16,12 +16,12 @@
 
 package pages.living_settlor.individual
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.pages.{InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
+
+import java.time.LocalDate
 
 class SettlorAddressYesNoPageSpec extends PageBehaviours {
 

@@ -16,8 +16,6 @@
 
 package pages.trust_type
 
-import java.time.LocalDate
-
 import models.UserAnswers
 import models.pages.{DeedOfVariation, FullName, KindOfTrust, Status}
 import org.scalacheck.Arbitrary.arbitrary
@@ -27,6 +25,8 @@ import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.{DeceasedSettlorStatus, LivingSettlorStatus}
 import sections.{DeceasedSettlor, LivingSettlors}
+
+import java.time.LocalDate
 
 class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
 

@@ -18,9 +18,8 @@ package controllers.actions
 
 import models.UserAnswers
 import models.pages.Status
-import org.mockito.Matchers._
-import org.mockito.Mockito._
-import org.scalatestplus.mockito.MockitoSugar
+import org.mockito.ArgumentMatchers.any
+import org.mockito.MockitoSugar
 import repositories.RegistrationsRepository
 
 import scala.concurrent.{ExecutionContext, Future}

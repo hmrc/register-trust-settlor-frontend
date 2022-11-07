@@ -17,8 +17,8 @@
 package pages.deceased_settlor.mld5
 
 import models.UserAnswers
-import pages.behaviours.PageBehaviours
 import org.scalacheck.Arbitrary.arbitrary
+import pages.behaviours.PageBehaviours
 
 class CountryOfNationalityInTheUkYesNoPageSpec extends PageBehaviours {
 

@@ -17,10 +17,9 @@
 package mapping
 
 import base.SpecBase
-import models.{Settlor, SettlorCompany, Settlors, UserAnswers}
 import models.pages.FullName
-import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import models.{Settlor, SettlorCompany, Settlors, UserAnswers}
+import org.mockito.ArgumentMatchers.any
 
 class SettlorsMapperSpec extends SpecBase {
 

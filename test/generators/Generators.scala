@@ -16,11 +16,11 @@
 
 package generators
 
-import java.time.{Instant, LocalDate, ZoneOffset}
-
 import org.scalacheck.Arbitrary._
 import org.scalacheck.Gen._
 import org.scalacheck.{Gen, Shrink}
+
+import java.time.{Instant, LocalDate, ZoneOffset}
 
 trait Generators extends UserAnswersGenerator with PageGenerators with ModelGenerators with UserAnswersEntryGenerators {
 
@@ -71,7 +71,7 @@ trait Generators extends UserAnswersGenerator with PageGenerators with ModelGene
     val gen = arbitrary[BigDecimal]
       .suchThat(_.abs < Int.MaxValue)
       .suchThat(!_.isValidInt)
-      .map(_.formatted("%f"))
+      .map("%f".format(_))
 
     maxLength match {
       case Some(size) =>

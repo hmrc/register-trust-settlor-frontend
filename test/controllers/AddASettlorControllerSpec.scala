@@ -27,8 +27,7 @@ import models.pages.KindOfTrust.Intervivos
 import models.pages.Status._
 import models.pages.{AddASettlor, FullName, Status}
 import models.{TaskStatus, UserAnswers}
-import org.mockito.Matchers.{any, eq => eqTo}
-import org.mockito.Mockito.{reset, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

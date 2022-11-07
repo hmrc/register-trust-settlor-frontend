@@ -19,8 +19,7 @@ package utils
 import base.SpecBase
 import models.pages.IndividualOrBusiness._
 import models.pages._
-import org.mockito.Matchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.ArgumentMatchers.any
 import org.scalatest.BeforeAndAfterEach
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
