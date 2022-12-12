@@ -19,6 +19,7 @@ package controllers
 import base.SpecBase
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import uk.gov.hmrc.http.SessionKeys.redirect
 import views.html.SessionExpiredView
 
 class SessionExpiredControllerSpec extends SpecBase {
@@ -41,6 +42,20 @@ class SessionExpiredControllerSpec extends SpecBase {
         view()(request, messages).toString
 
       application.stop()
+    }
+
+    "on POST redirect to the registerUrl" in {
+
+      val application = applicationBuilder(userAnswers = None).build()
+
+      val request = FakeRequest(POST, routes.SessionExpiredController.onSubmit.url)
+
+      val result = route(application, request).value
+
+      status(result) mustEqual SEE_OTHER
+
+      redirectLocation(result).value mustBe
+        s"${frontendAppConfig.loginUrl}?continue=http%3A%2F%2Flocalhost%3A9781%2Ftrusts-registration&origin=register-trust-settlor-frontend"
     }
   }
 }
