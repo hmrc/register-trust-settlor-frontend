@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 HM Revenue & Customs
+ * Copyright 2023 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -127,7 +127,7 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
             AnswerRow(label = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidenceInTheUkYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
             AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
             AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorBusinessAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressUK.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorBusinessAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = businessName)
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
@@ -156,7 +156,7 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
             AnswerRow(label = "settlorBusiness.5mld.countryOfResidence.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidenceController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
             AnswerRow(label = "settlorBusinessAddressYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
             AnswerRow(label = "settlorBusinessAddressUKYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
-            AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = businessName),
+            AnswerRow(label = "settlorBusinessAddressInternational.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = businessName)
           )
 
           assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
