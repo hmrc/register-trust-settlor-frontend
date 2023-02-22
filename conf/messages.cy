@@ -412,11 +412,11 @@ settlorIndividualMentalCapacityYesNo.bulletpoint1 = salwch meddwl
 settlorIndividualMentalCapacityYesNo.bulletpoint2 = anabledd dysgu
 settlorIndividualMentalCapacityYesNo.bulletpoint3 = dementia neu gyflwr cysylltiedig
 settlorIndividualMentalCapacityYesNo.bulletpoint4 = methu â chyfathrebu
-settlorIndividualMentalCapacityYesNo.p3 = Bydd CThEM yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEM nad oes ganddo alluedd meddyliol.
+settlorIndividualMentalCapacityYesNo.p3 = Bydd CThEF yn cymryd bod gan y setlwr alluedd meddyliol, oni roddwch wybod i CThEF nad oes ganddo alluedd meddyliol.
 settlorIndividualMentalCapacityYesNo.p4 = Os nad ydych yn siŵr a oes gan y setlwr alluedd meddyliol, dewiswch ‘Nid wyf yn gwybod’.
-settlorIndividualMentalCapacityYesNo.heading2 = Pam mae CThEM yn gofyn y cwestiwn hwn
-settlorIndividualMentalCapacityYesNo.p5 = O dan amgylchiadau cyfyngedig penodol, caiff CThEM rannu data personol o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
-settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, ni fydd CThEM yn rhannu data personol y person hwnnw.
+settlorIndividualMentalCapacityYesNo.heading2 = Pam mae CThEF yn gofyn y cwestiwn hwn
+settlorIndividualMentalCapacityYesNo.p5 = O dan amgylchiadau cyfyngedig penodol, caiff CThEF rannu data personol o dan Reoliadau Gwyngalchu Arian ac Ariannu Terfysgaeth (Diwygiad) 2020.
+settlorIndividualMentalCapacityYesNo.p6 = Pan nad oes gan berson alluedd meddyliol, ni fydd CThEF yn rhannu data personol y person hwnnw.
 
 settlorIndividualName.checkYourAnswersLabel = Beth yw enw’r setlwr?
 settlorIndividualName.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
@@ -673,7 +673,7 @@ pageNotFound.heading = Heb ddod o hyd i’r dudalen
 pageNotFound.p1 = Os gwnaethoch deipio’r cyfeiriad gwe, gwiriwch ei fod yn gywir.
 pageNotFound.p2 = Os gwnaethoch ludo’r cyfeiriad gwe, gwiriwch eich bod wedi copïo’r cyfeiriad yn llawn.
 pageNotFound.p3 = Os yw’r cyfeiriad gwe yn gywir, neu eich bod wedi dewis cysylltiad neu fotwm, {0}.
-pageNotFound.link = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEM i siarad â rhywun ynghylch ymddiriedolaeth (yn agor tab newydd)
+pageNotFound.link = cysylltwch â Gwasanaeth Cwsmeriaid Cymraeg CThEF i siarad â rhywun ynghylch ymddiriedolaeth (yn agor tab newydd)
 
 serverError.title=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
 serverError.heading=Mae’n ddrwg gennym, mae problem gyda’r gwasanaeth
