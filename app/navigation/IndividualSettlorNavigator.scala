@@ -40,6 +40,8 @@ class IndividualSettlorNavigator extends Navigator {
   }
 
   private def simpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+    case SettlorAliveYesNoPage(index) => _ =>
+      SettlorIndividualNameController.onPageLoad(index, draftId)
     case SettlorIndividualNamePage(index) => _ =>
       SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, draftId)
     case CountryOfNationalityPage(index) => ua =>

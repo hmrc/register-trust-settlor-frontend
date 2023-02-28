@@ -117,6 +117,9 @@ POST       /:draftId/living/:index/individual-or-business                       
 
 ## Individual
 
+GET        /:draftId/living/:index/individual/settlor-alive                                 controllers.living_settlor.individual.SettlorAliveYesNoController.onPageLoad(index: Int, draftId: String)
+POST       /:draftId/living/:index/individual/settlor-alive                                 controllers.living_settlor.individual.SettlorAliveYesNoController.onSubmit(index: Int, draftId: String)
+
 GET        /:draftId/living/:index/individual/name                                          controllers.living_settlor.individual.SettlorIndividualNameController.onPageLoad(index: Int, draftId: String)
 POST       /:draftId/living/:index/individual/name                                          controllers.living_settlor.individual.SettlorIndividualNameController.onSubmit(index: Int, draftId: String)
 

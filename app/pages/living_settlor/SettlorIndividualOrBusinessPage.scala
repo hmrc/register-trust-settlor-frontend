@@ -22,7 +22,7 @@ import models.pages.IndividualOrBusiness.{Business, Individual}
 import pages.QuestionPage
 import pages.LivingSettlorStatus
 import pages.living_settlor.business._
-import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
+import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorAliveYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
@@ -48,7 +48,8 @@ final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPag
           .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
           .flatMap(_.remove(LivingSettlorStatus(index)))
       case Some(Business) =>
-        userAnswers.remove(SettlorIndividualNamePage(index))
+        userAnswers.remove(SettlorAliveYesNoPage(index))
+          .flatMap(_.remove(SettlorIndividualNamePage(index)))
           .flatMap(_.remove(SettlorIndividualDateOfBirthYesNoPage(index)))
           .flatMap(_.remove(SettlorIndividualDateOfBirthPage(index)))
           .flatMap(_.remove(SettlorIndividualNINOYesNoPage(index)))

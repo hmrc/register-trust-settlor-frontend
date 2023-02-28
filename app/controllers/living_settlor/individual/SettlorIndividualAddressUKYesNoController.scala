@@ -76,10 +76,9 @@ class SettlorIndividualAddressUKYesNoController @Inject()(
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(SettlorAddressUKYesNoPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[SettlorIndividualAddressUKYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )

@@ -77,6 +77,7 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
           .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
           .set(HoldoverReliefYesNoPage, true).success.value
           .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+          .set(SettlorAliveYesNoPage(0), true).success.value
           .set(SettlorIndividualNamePage(0), FullName("First", None, "Last")).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(0), true).success.value
           .set(LivingSettlorStatus(0), InProgress).success.value

@@ -161,6 +161,10 @@ removeSettlor.heading = Are you sure you want to remove {0}?
 removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
+settlorAliveYesNo.title = Is the settlor alive at the time of registration?
+settlorAliveYesNo.heading = Is the settlor alive at the time of registration?
+settlorAliveYesNo.error.required = Select yes if the settlor is alive
+
 5mld.countryOfResidenceYesNo.title = Do you know the settlor’s last known country of residence?
 5mld.countryOfResidenceYesNo.heading = Do you know {0}’s last known country of residence?
 5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
