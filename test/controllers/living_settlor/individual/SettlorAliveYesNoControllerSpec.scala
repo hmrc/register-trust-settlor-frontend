@@ -14,58 +14,60 @@
  * limitations under the License.
  */
 
-package controllers.trust_type
+package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.SessionExpiredController
 import forms.YesNoFormProvider
-import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.trust_type.SetUpAfterSettlorDiedView
+import views.html.living_settlor.individual.SettlorAliveYesNoView
 
-class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
+class SettlorAliveYesNoControllerSpec extends SpecBase {
 
-  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDiedYesNo")
+  private lazy val settlorAliveYesNoGetRoute = controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onPageLoad(index, draftId).url
+  private lazy val settlorAliveYesNoPostRoute = controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onSubmit(index, draftId).url
+  private val index = 0
+  private val formProvider = new YesNoFormProvider()
+  private val form = formProvider.withPrefix("settlorAliveYesNo")
 
-  lazy val setUpAfterSettlorDiedRoute = routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url
-
-  "SetUpAfterSettlorDied Controller" must {
+  "SettlorAliveYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
+      val request = FakeRequest(GET, settlorAliveYesNoGetRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val view = application.injector.instanceOf[SettlorAliveYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form,fakeDraftId, isTaxable = true)(request, messages).toString
+        view(form, draftId, index)(request, messages).toString()
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
-
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val request = FakeRequest(GET, settlorAliveYesNoGetRoute)
 
       val result = route(application, request).value
+
+      val view = application.injector.instanceOf[SettlorAliveYesNoView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, isTaxable = true)(request, messages).toString
+        view(form.fill(false), draftId, index)(request, messages).toString()
 
       application.stop()
     }
@@ -76,7 +78,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
+        FakeRequest(POST, settlorAliveYesNoPostRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -90,22 +92,40 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
+        FakeRequest(POST, settlorAliveYesNoPostRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val view = application.injector.instanceOf[SettlorAliveYesNoView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, isTaxable = true)(request, messages).toString
+        view(boundForm, draftId, index)(request, messages).toString
+
+      application.stop()
+    }
+
+    "return an Internal Server Error when the try fails" in {
+
+      val application =
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+
+      val request =
+        FakeRequest(POST, routes.SettlorAliveYesNoController.onSubmit(index + 2, fakeDraftId).url)
+          .withFormUrlEncodedBody(("value", "true"))
+
+      val result = route(application, request).value
+
+      status(result) mustEqual INTERNAL_SERVER_ERROR
 
       application.stop()
     }
@@ -114,7 +134,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
+      val request = FakeRequest(GET, settlorAliveYesNoGetRoute)
 
       val result = route(application, request).value
 
@@ -129,9 +149,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
-          .withFormUrlEncodedBody(("value", "true"))
+      val request = FakeRequest(GET, settlorAliveYesNoPostRoute)
 
       val result = route(application, request).value
 
@@ -142,4 +160,5 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

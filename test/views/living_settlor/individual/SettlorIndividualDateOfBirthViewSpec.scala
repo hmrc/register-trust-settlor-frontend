@@ -27,31 +27,36 @@ import java.time.LocalDate
 
 class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
-  val messageKeyPrefix = "settlorIndividualDateOfBirth"
   val index = 0
-  val name = FullName("First", Some("middle"), "Last")
+  val name: FullName = FullName("First", Some("middle"), "Last")
 
   val form = new DateOfBirthFormProvider(frontendAppConfig)()
 
-  "SettlorIndividualDateOfBirthView view" must {
+  Seq(
+    ("settlorIndividualDateOfBirth", true),
+    ("settlorIndividualDateOfBirthPastTense", false)
+  ) foreach {
+    case (setUpBeforeSettlorMessage, setUpBeforeSettlorDiedBool) =>
+      s"SettlorIndividualDateOfBirthView view (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
 
-    val view = viewFor[SettlorIndividualDateOfBirthView](Some(emptyUserAnswers))
+        val view = viewFor[SettlorIndividualDateOfBirthView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-    val applyViewF = (form: Form[_]) => applyView(form)
+        val applyViewF = (form: Form[_]) => applyView(form)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        behave like dynamicTitlePage(applyView(form), setUpBeforeSettlorMessage, name.toString)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithDateFields(form, applyViewF,
-      messageKeyPrefix,
-      "value",
-      name.toString
-    )
+        behave like pageWithDateFields(form, applyViewF,
+          setUpBeforeSettlorMessage,
+          "value",
+          name.toString
+        )
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like pageWithASubmitButton(applyView(form))
+      }
   }
 }

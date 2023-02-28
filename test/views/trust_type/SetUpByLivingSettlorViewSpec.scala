@@ -20,19 +20,19 @@ import forms.YesNoFormProvider
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.YesNoViewBehaviours
-import views.html.trust_type.SetUpAfterSettlorDiedView
+import views.html.trust_type.SetUpByLivingSettlorView
 
-class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
+class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "setUpAfterSettlorDiedYesNo"
+  val messageKeyPrefix = "setUpByLivingSettlorYesNo"
 
 
-  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDiedYesNo")
+  val form = new YesNoFormProvider().withPrefix("setUpByLivingSettlorYesNo")
 
-  "SetUpAfterSettlorDied view" when {
+  "SetUpByLivingSettlor view" when {
 
     "for a taxable trust" must {
-      val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
+      val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, isTaxable = true)(fakeRequest, messages)
@@ -42,13 +42,13 @@ class SetUpAfterSettlorDiedViewSpec extends YesNoViewBehaviours {
       behave like pageWithBackLink(applyView(form))
 
 
-      behave like yesNoPage(form, applyView, messageKeyPrefix, Some(messageKeyPrefix))
+      behave like yesNoPage(form, applyView, messageKeyPrefix)
 
       behave like pageWithASubmitButton(applyView(form))
     }
 
     "for a non taxable trust" must {
-      val view = viewFor[SetUpAfterSettlorDiedView](Some(emptyUserAnswers))
+      val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
       def applyView(form: Form[_]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, isTaxable = false)(fakeRequest, messages)

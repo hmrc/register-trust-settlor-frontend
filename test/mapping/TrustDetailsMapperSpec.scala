@@ -23,7 +23,7 @@ import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
 import models.{TrustDetailsType, UserAnswers}
 import pages.deceased_settlor.SettlorsNamePage
 import pages.living_settlor._
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.trust_type._
 
 import java.time.LocalDate
@@ -52,9 +52,10 @@ class TrustDetailsMapperSpec extends SpecBase {
         "invalid user answers due to having living and deceased settlors" in {
 
           val userAnswers = flaggedAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            .set(SetUpByLivingSettlorYesNoPage, true).success.value
             .set(SettlorsNamePage, fullName).success.value
             .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorAliveYesNoPage(0), true).success.value
             .set(SettlorIndividualNamePage(0), fullName).success.value
 
           val result = mapper.build(userAnswers)
@@ -65,12 +66,12 @@ class TrustDetailsMapperSpec extends SpecBase {
 
       "map user answers to trust details model" when {
 
-        val setupAfterSettlorDiedAnswers = flaggedAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+        val SetUpByLivingSettlorViewAnswers = flaggedAnswers
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
 
         "setup after settlor died" in {
 
-          val userAnswers = setupAfterSettlorDiedAnswers
+          val userAnswers = SetUpByLivingSettlorViewAnswers
             .set(SettlorsNamePage, fullName).success.value
 
           val result = mapper.build(userAnswers).get
@@ -85,12 +86,12 @@ class TrustDetailsMapperSpec extends SpecBase {
 
         "not setup after settlor died" when {
 
-          val setupAfterSettlorDiedAnswers = flaggedAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          val SetUpByLivingSettlorViewAnswers = flaggedAnswers
+            .set(SetUpByLivingSettlorYesNoPage, false).success.value
 
           "deed of variation" when {
 
-            val baseAnswers = setupAfterSettlorDiedAnswers
+            val baseAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
             "set up in addition to will trust" in {
@@ -115,6 +116,7 @@ class TrustDetailsMapperSpec extends SpecBase {
                 .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
                 .set(HowDeedOfVariationCreatedPage, ReplacedWill).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -132,10 +134,11 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             val holdoverReliefYesNo: Boolean = true
 
-            val userAnswers = setupAfterSettlorDiedAnswers
+            val userAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
               .set(HoldoverReliefYesNoPage, holdoverReliefYesNo).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -150,9 +153,10 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           "flat management" in {
 
-            val userAnswers = setupAfterSettlorDiedAnswers
+            val userAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.FlatManagement).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -167,9 +171,10 @@ class TrustDetailsMapperSpec extends SpecBase {
 
           "heritage maintenance fund" in {
 
-            val userAnswers = setupAfterSettlorDiedAnswers
+            val userAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -188,11 +193,12 @@ class TrustDetailsMapperSpec extends SpecBase {
 
               val date: LocalDate = LocalDate.parse("1996-02-03")
 
-              val userAnswers = setupAfterSettlorDiedAnswers
+              val userAnswers = SetUpByLivingSettlorViewAnswers
                 .set(KindOfTrustPage, KindOfTrust.Employees).success.value
                 .set(EfrbsYesNoPage, true).success.value
                 .set(EfrbsStartDatePage, date).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -207,10 +213,11 @@ class TrustDetailsMapperSpec extends SpecBase {
 
             "not efrbs" in {
 
-              val userAnswers = setupAfterSettlorDiedAnswers
+              val userAnswers = SetUpByLivingSettlorViewAnswers
                 .set(KindOfTrustPage, KindOfTrust.Employees).success.value
                 .set(EfrbsYesNoPage, false).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -235,7 +242,7 @@ class TrustDetailsMapperSpec extends SpecBase {
 
         "set up after settlor died" in {
           val answers: UserAnswers = flaggedAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            .set(SetUpByLivingSettlorYesNoPage, true).success.value
             .set(SettlorsNamePage, fullName).success.value
 
           val result = mapper.build(answers)
@@ -244,8 +251,9 @@ class TrustDetailsMapperSpec extends SpecBase {
 
         "not set up after settlor died" in {
           val answers: UserAnswers = flaggedAnswers
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+            .set(SetUpByLivingSettlorYesNoPage, false).success.value
             .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorAliveYesNoPage(0), true).success.value
             .set(SettlorIndividualNamePage(0), fullName).success.value
 
           val result = mapper.build(answers)

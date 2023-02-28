@@ -19,8 +19,9 @@ package controllers.living_settlor.individual
 import base.SpecBase
 import controllers.routes._
 import forms.living_settlor.SettlorIndividualNameFormProvider
+import models.UserAnswers
 import models.pages.FullName
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -39,23 +40,29 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
 
   "SettlorIndividualName Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    Seq(true, false)
+      .foreach(setUpBeforeSettlorDied =>
+        s"return OK and the correct view for a GET when the userAnswers SetUpBeforeSettlorDied is set to $setUpBeforeSettlorDied" in {
 
-      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
+          val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
 
-      val request = FakeRequest(GET, settlorIndividualNameRoute)
+          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val view = application.injector.instanceOf[SettlorIndividualNameView]
+          val request = FakeRequest(GET, settlorIndividualNameRoute)
 
-      val result = route(application, request).value
+          val view = application.injector.instanceOf[SettlorIndividualNameView]
 
-      status(result) mustEqual OK
+          val result = route(application, request).value
 
-      contentAsString(result) mustEqual
-        view(form, fakeDraftId, index)(request, messages).toString
+          status(result) mustEqual OK
 
-      application.stop()
-    }
+          contentAsString(result) mustEqual
+            view(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDied)(request, messages).toString
+
+          application.stop()
+        }
+      )
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
@@ -73,7 +80,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FullName("first name", Some("middle name"), "last name")), fakeDraftId, index)(request, messages).toString
+        view(form.fill(FullName("first name", Some("middle name"), "last name")), fakeDraftId, index, setUpBeforeSettlorDied = false)(request, messages).toString
 
       application.stop()
     }
@@ -129,7 +136,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index)(request, messages).toString
+        view(boundForm, fakeDraftId, index, setUpBeforeSettlorDied = false)(request, messages).toString
 
       application.stop()
     }

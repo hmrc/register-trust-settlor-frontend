@@ -20,7 +20,7 @@ import config.annotations.TrustType
 import controllers.actions._
 import forms.YesNoFormProvider
 import navigation.Navigator
-import pages.trust_type.{HoldoverReliefYesNoPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, SetUpByLivingSettlorYesNoPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -50,7 +50,7 @@ class HoldoverReliefYesNoController @Inject()(
 
   private def actions(draftId: String) =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SetUpAfterSettlorDiedYesNoPage, routes.SetUpAfterSettlorDiedController.onPageLoad(draftId)))
+      requiredAnswer(RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId)))
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
     implicit request =>

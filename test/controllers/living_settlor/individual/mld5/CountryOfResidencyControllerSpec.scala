@@ -22,7 +22,7 @@ import controllers.routes._
 import forms.CountryFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.living_settlor.individual.mld5.CountryOfResidencyPage
 import play.api.data.Form
 import play.api.test.FakeRequest
@@ -45,13 +45,16 @@ class CountryOfResidencyControllerSpec extends SpecBase {
   private val validAnswer: String = "France"
   private val validFormAnswer: String = "FR"
 
-  private val baseAnswers: UserAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(SettlorAliveYesNoPage(index), true).success.value
+    .set(SettlorIndividualNamePage(index), name).success.value
 
   "CountryOfResidency Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val formContentInPastTense: Form[String] = formProvider.withPrefix("settlorIndividualCountryOfResidencyPastTense")
 
-      val userAnswers = baseAnswers
+      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -64,7 +67,7 @@ class CountryOfResidencyControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(formContentInPastTense, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = false)(request, messages).toString
 
       application.stop()
     }
@@ -85,7 +88,7 @@ class CountryOfResidencyControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(form.fill(validAnswer), index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }
@@ -126,7 +129,7 @@ class CountryOfResidencyControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, countryOptions, name)(request, messages).toString
+        view(boundForm, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }

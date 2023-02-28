@@ -24,7 +24,7 @@ import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual._
-import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpByLivingSettlorYesNoPage}
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
@@ -173,10 +173,10 @@ trait UserAnswersEntryGenerators extends PageGenerators with ModelGenerators {
       } yield (page, value)
     }
 
-  implicit lazy val arbitrarySetUpAfterSettlorDiedUserAnswersEntry: Arbitrary[(SetUpAfterSettlorDiedYesNoPage.type, JsValue)] =
+  implicit lazy val arbitrarySetUpByLivingSettlorRouteUserAnswersEntry: Arbitrary[(SetUpByLivingSettlorYesNoPage.type, JsValue)] =
     Arbitrary {
       for {
-        page  <- arbitrary[SetUpAfterSettlorDiedYesNoPage.type]
+        page  <- arbitrary[SetUpByLivingSettlorYesNoPage.type]
         value <- arbitrary[Boolean].map(Json.toJson(_))
       } yield (page, value)
     }

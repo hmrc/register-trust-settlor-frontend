@@ -55,7 +55,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       val fakeAnswerSection = AnswerSection()
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
 
       val application: Application = applicationBuilder(userAnswers = Some(baseAnswers))

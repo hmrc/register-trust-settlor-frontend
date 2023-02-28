@@ -22,7 +22,7 @@ import pages.deceased_settlor._
 import pages.living_settlor._
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.individual._
-import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{HoldoverReliefYesNoPage, KindOfTrustPage, SetUpByLivingSettlorYesNoPage}
 
 trait PageGenerators {
 
@@ -83,8 +83,8 @@ trait PageGenerators {
   implicit lazy val arbitraryWasSettlorsAddressUKYesNoPage: Arbitrary[WasSettlorsAddressUKYesNoPage.type] =
     Arbitrary(WasSettlorsAddressUKYesNoPage)
 
-  implicit lazy val arbitrarySetUpAfterSettlorDiedPage: Arbitrary[SetUpAfterSettlorDiedYesNoPage.type] =
-    Arbitrary(SetUpAfterSettlorDiedYesNoPage)
+  implicit lazy val arbitrarySetUpByLivingSettlorYesNoPage: Arbitrary[SetUpByLivingSettlorYesNoPage.type] =
+    Arbitrary(SetUpByLivingSettlorYesNoPage)
 
   implicit lazy val arbitrarySettlorsUKAddressPage: Arbitrary[SettlorsUKAddressPage.type] =
     Arbitrary(SettlorsUKAddressPage)

@@ -42,7 +42,7 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers = initial
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Employees).success.value
           .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business).success.value
           .set(SettlorBusinessNamePage(0), "AWS").success.value
@@ -73,10 +73,11 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
     forAll(arbitrary[UserAnswers], arbitrary[String]) {
       (initial, str) =>
         val answers: UserAnswers = initial
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
           .set(HoldoverReliefYesNoPage, true).success.value
           .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+          .set(SettlorAliveYesNoPage(0), true).success.value
           .set(SettlorIndividualNamePage(0), FullName("First", None, "Last")).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(0), true).success.value
           .set(LivingSettlorStatus(0), InProgress).success.value

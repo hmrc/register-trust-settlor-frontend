@@ -48,7 +48,7 @@ class UkCountryOfNationalityYesNoController @Inject()(
                                                        technicalErrorView: TechnicalErrorView
                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualUkCountryOfNationalityYesNo")
+  private def form(messageKey: String): Form[Boolean] = yesNoFormProvider.withPrefix(messageKey)
 
   private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
     actions.authWithData(draftId) andThen requireName(index, draftId)
@@ -57,20 +57,26 @@ class UkCountryOfNationalityYesNoController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
     implicit request =>
 
+      val messageKeyPrefix =
+        if(request.settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
+
       val preparedForm = request.userAnswers.get(UkCountryOfNationalityYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(messageKeyPrefix)
+        case Some(value) => form(messageKeyPrefix).fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, request.name))
+      Ok(view(preparedForm, index, draftId, request.name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      val messageKeyPrefix =
+        if(request.settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
+
+      form(messageKeyPrefix).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name, request.settlorAliveAtRegistration(index)))),
 
         value => {
           request.userAnswers.set(UkCountryOfNationalityYesNoPage(index), value) match {
@@ -78,10 +84,9 @@ class UkCountryOfNationalityYesNoController @Inject()(
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(UkCountryOfNationalityYesNoPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[UkCountryOfNationalityYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )

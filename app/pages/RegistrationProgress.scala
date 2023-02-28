@@ -19,7 +19,7 @@ package pages
 import models.UserAnswers
 import models.pages.Status.{Completed, InProgress}
 import models.pages.{AddASettlor, Status}
-import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
+import pages.trust_type.{SetUpByLivingSettlorYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import sections.LivingSettlors
 import viewmodels.SettlorViewModel
 
@@ -33,13 +33,13 @@ class RegistrationProgress @Inject()() {
       userAnswers.get(DeceasedSettlorStatus).contains(Completed)
     )
 
-    val setupAfterDied = userAnswers.get(SetUpAfterSettlorDiedYesNoPage)
+    val setupByLivingSettlor = userAnswers.get(SetUpByLivingSettlorYesNoPage)
 
-    setupAfterDied flatMap { setupAfter =>
-      if (setupAfter) {
-        deceasedStatus
-      } else {
+    setupByLivingSettlor flatMap { setupByLivingSettlor =>
+      if (setupByLivingSettlor) {
         statusForNonWillTrust(userAnswers, deceasedStatus)
+      } else {
+        deceasedStatus
       }
     }
   }

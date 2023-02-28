@@ -23,22 +23,22 @@ import sections.{DeceasedSettlor, LivingSettlors, Settlors}
 
 import scala.util.{Success, Try}
 
-case object SetUpAfterSettlorDiedYesNoPage extends QuestionPage[Boolean] {
+case object SetUpByLivingSettlorYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = Settlors.path \ toString
 
-  override def toString: String = "setUpAfterSettlorDiedYesNo"
+  override def toString: String = "setUpByLivingSettlorYesNo"
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     value match {
-      case Some(false) =>
+      case Some(true) =>
         userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
           case Some(true) =>
             Success(userAnswers)
           case _ =>
             userAnswers.remove(DeceasedSettlor)
         }
-      case Some(true) =>
+      case Some(false) =>
         userAnswers.remove(KindOfTrustPage)
           .flatMap(_.remove(SetUpInAdditionToWillTrustYesNoPage))
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))

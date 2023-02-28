@@ -23,7 +23,7 @@ import models.Enumerable
 import models.pages.KindOfTrust
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
-import pages.trust_type.{KindOfTrustPage, SetUpAfterSettlorDiedYesNoPage}
+import pages.trust_type.{KindOfTrustPage, SetUpByLivingSettlorYesNoPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -51,7 +51,7 @@ class KindOfTrustController @Inject()(
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SetUpAfterSettlorDiedYesNoPage, routes.SetUpAfterSettlorDiedController.onPageLoad(draftId)))
+      requiredAnswer(RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId)))
 
   private val form: Form[KindOfTrust] = formProvider()
 

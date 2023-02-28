@@ -30,7 +30,7 @@ class BusinessSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverte
                                            trustTypePrintHelper: TrustTypePrintHelper)
   extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
 
-  override def answerRows(index: Int, draftId: String)
+  override def answerRows(index: Int, draftId: String, prefix: Option[String] = None)
                          (bound: AnswerRowConverter#Bound)
                          (implicit messages: Messages): Seq[Option[AnswerRow]] = Seq(
     bound.enumQuestion(SettlorIndividualOrBusinessPage(index), "settlorIndividualOrBusiness", SettlorIndividualOrBusinessController.onPageLoad(index, draftId).url, "settlorIndividualOrBusiness"),

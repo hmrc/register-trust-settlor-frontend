@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes._
 import forms.PassportOrIdCardFormProvider
 import models.pages.{FullName, PassportOrIdCardDetails}
-import pages.living_settlor.individual.{SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage}
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -44,54 +44,90 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
   "SettlorIndividualPassport Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    Seq(true, false)
+      .foreach(setUpBeforeSettlorDied => {
+        s"when the settlor decided question been answered $setUpBeforeSettlorDied" should {
 
-      val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNamePage(index),name).success.value
+          "return OK and the correct view for a GET" in {
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorIndividualPassportRoute)
+            val request = FakeRequest(GET, settlorIndividualPassportRoute)
 
-      val view = application.injector.instanceOf[SettlorIndividualPassportView]
+            val view = application.injector.instanceOf[SettlorIndividualPassportView]
 
-      val result = route(application, request).value
+            val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-      status(result) mustEqual OK
+            status(result) mustEqual OK
 
-      contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, index, name)(request, messages).toString
+            contentAsString(result) mustEqual
+              view(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
 
-      application.stop()
-    }
+            application.stop()
+          }
 
-    "populate the view correctly on a GET when the question has previously been answered" in {
+          "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNamePage(index),name).success.value
-        .set(SettlorIndividualPassportPage(index),
-          PassportOrIdCardDetails("Field 1", "Field 2", validAnswer )).success.value
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, settlorIndividualPassportRoute)
+            val request =
+              FakeRequest(POST, settlorIndividualPassportRoute)
+                .withFormUrlEncodedBody(("value", "invalid value"))
 
-      val view = application.injector.instanceOf[SettlorIndividualPassportView]
+            val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = route(application, request).value
+            val view = application.injector.instanceOf[SettlorIndividualPassportView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val result = route(application, request).value
 
-      status(result) mustEqual OK
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
 
-      contentAsString(result) mustEqual
-        view(form.fill(PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)),
-          countryOptions, fakeDraftId, index, name)(request, messages).toString
+            status(result) mustEqual BAD_REQUEST
 
-      application.stop()
-    }
+            contentAsString(result) mustEqual
+              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
+
+            application.stop()
+          }
+
+          "populate the view correctly on a GET when the question has previously been answered" in {
+
+            val userAnswers = emptyUserAnswers
+              .set(SettlorIndividualNamePage(index), name).success.value
+              .set(SettlorIndividualPassportPage(index),
+                PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)).success.value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
+
+            val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+            val request = FakeRequest(GET, settlorIndividualPassportRoute)
+
+            val view = application.injector.instanceOf[SettlorIndividualPassportView]
+
+            val result = route(application, request).value
+
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+
+            status(result) mustEqual OK
+
+            contentAsString(result) mustEqual
+              view(form.fill(PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)),
+                countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
+
+            application.stop()
+          }
+        }
+      }
+    )
 
     "redirect to the next page when valid data is submitted" in {
 
@@ -135,33 +171,6 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
 
       redirectLocation(result).value mustEqual routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
-
-      application.stop()
-    }
-
-    "return a Bad Request and errors when invalid data is submitted" in {
-
-      val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNamePage(index),name).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request =
-        FakeRequest(POST, settlorIndividualPassportRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
-
-      val boundForm = form.bind(Map("value" -> "invalid value"))
-
-      val view = application.injector.instanceOf[SettlorIndividualPassportView]
-
-      val result = route(application, request).value
-
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
-
-      status(result) mustEqual BAD_REQUEST
-
-      contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

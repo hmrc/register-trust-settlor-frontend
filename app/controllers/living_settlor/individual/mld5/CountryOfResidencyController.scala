@@ -64,7 +64,7 @@ class CountryOfResidencyController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name))
+      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
@@ -72,17 +72,16 @@ class CountryOfResidencyController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(CountryOfResidencyPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(CountryOfResidencyPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[CountryOfResidencyController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )

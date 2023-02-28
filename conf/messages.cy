@@ -217,6 +217,11 @@ removeSettlor.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r setlwr
 removeSettlor.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeSettlor.title = A ydych yn siŵr eich bod am dynnu’r setlwr?
 
+settlorAliveYesNo.title = A yw’r setlwr yn fyw ar adeg y cofrestru?
+settlorAliveYesNo.heading = A yw’r setlwr yn fyw ar adeg y cofrestru?
+settlorAliveYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn fyw
+settlorAliveYesNo.checkYourAnswersLabel = A yw’r setlwr yn fyw ar adeg y cofrestru?
+
 session_expired.guidance = Mae hyn oherwydd eich bod wedi bod yn segur ar y gwasanaeth ers 15 munud.
 session_expired.guidance.2 = Bydd angen i chi fewngofnodi er mwyn mynd yn eich blaen i gofrestru’r ymddiriedolaeth.
 session_expired.heading = Er eich diogelwch
@@ -327,19 +332,37 @@ settlorIndividualAddressInternational.checkYourAnswersLabel = Beth yw cyfeiriad 
 settlorIndividualAddressInternational.heading = Beth yw cyfeiriad {0}?
 settlorIndividualAddressInternational.title = Beth yw cyfeiriad y setlwr?
 
+settlorIndividualAddressInternationalPastTense.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressInternationalPastTense.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
+settlorIndividualAddressInternationalPastTense.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
+
 settlorIndividualAddressUK.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
 settlorIndividualAddressUK.heading = Beth yw cyfeiriad {0}?
 settlorIndividualAddressUK.title = Beth yw cyfeiriad y setlwr?
+
+settlorIndividualAddressUKPastTense.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressUKPastTense.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
+settlorIndividualAddressUKPastTense.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
 
 settlorIndividualAddressUKYesNo.checkYourAnswersLabel = A yw {0} yn byw yn y DU?
 settlorIndividualAddressUKYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn byw yn y DU
 settlorIndividualAddressUKYesNo.heading = A yw {0} yn byw yn y DU?
 settlorIndividualAddressUKYesNo.title = A yw’r setlwr yn byw yn y DU?
 
+settlorIndividualAddressUKYesNoPastTense.title = A oedd cyfeiriad hysbys diwethaf y setlwr yn y DU?
+settlorIndividualAddressUKYesNoPastTense.heading = A oedd cyfeiriad hysbys diwethaf {0} yn y DU?
+settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = A oedd cyfeiriad hysbys diwethaf {0} yn y DU?
+settlorIndividualAddressUKYesNoPastTense.error.required = Dewiswch ‘Iawn’ os oedd cyfeiriad hysbys diwethaf y setlwr yn y DU
+
 settlorIndividualAddressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad {0}?
 settlorIndividualAddressYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad y setlwr
 settlorIndividualAddressYesNo.heading = A ydych yn gwybod cyfeiriad {0}?
 settlorIndividualAddressYesNo.title = A ydych yn gwybod cyfeiriad y setlwr?
+
+settlorIndividualAddressYesNoPastTense.title = A ydych yn gwybod cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressYesNoPastTense.heading = A ydych yn gwybod cyfeiriad hysbys diwethaf {0}?
+settlorIndividualAddressYesNoPastTense.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad hysbys diwethaf {0}?
+settlorIndividualAddressYesNoPastTense.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad hysbys diwethaf y setlwr
 
 settlorIndividualCountryOfNationality.checkYourAnswersLabel = Beth yw gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationality.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
@@ -347,6 +370,13 @@ settlorIndividualCountryOfNationality.error.length = Mae’n rhaid i wlad y cene
 settlorIndividualCountryOfNationality.error.required = Nodwch wlad
 settlorIndividualCountryOfNationality.heading = Beth yw gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationality.title = Beth yw gwlad cenedligrwydd y setlwr?
+
+settlorIndividualCountryOfNationalityPastTense.title = Beth oedd gwlad cenedligrwydd y setlwr?
+settlorIndividualCountryOfNationalityPastTense.heading = Beth oedd gwlad cenedligrwydd {0}?
+settlorIndividualCountryOfNationalityPastTense.checkYourAnswersLabel = Beth oedd gwlad cenedligrwydd {0}?
+settlorIndividualCountryOfNationalityPastTense.error.required = Nodwch wlad
+settlorIndividualCountryOfNationalityPastTense.error.length = Mae’n rhaid i wlad y cenedligrwydd fod yn 100 o gymeriadau neu lai
+settlorIndividualCountryOfNationalityPastTense.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
 
 settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel = A ydych yn gwybod gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationalityYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod gwlad cenedligrwydd y setlwr
@@ -361,16 +391,34 @@ settlorIndividualCountryOfResidency.error.required = Nodwch wlad
 settlorIndividualCountryOfResidency.heading = Beth yw gwlad breswyl {0}?
 settlorIndividualCountryOfResidency.title = Beth yw gwlad breswyl y setlwr?
 
+settlorIndividualCountryOfResidencyPastTense.title = Beth oedd gwlad breswyl y setlwr?
+settlorIndividualCountryOfResidencyPastTense.heading = Beth oedd gwlad breswyl {0}?
+settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = Beth oedd gwlad breswyl {0}?
+settlorIndividualCountryOfResidencyPastTense.error.required = Nodwch wlad
+settlorIndividualCountryOfResidencyPastTense.error.length = Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z yn unig
+
 settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = A ydych yn gwybod gwlad breswyl {0}?
 settlorIndividualCountryOfResidencyYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y setlwr
 settlorIndividualCountryOfResidencyYesNo.heading = A ydych yn gwybod gwlad breswyl {0}?
 settlorIndividualCountryOfResidencyYesNo.hint = Fel arfer, y wlad breswyl yw lle mae’r setlwr yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
 settlorIndividualCountryOfResidencyYesNo.title = A ydych yn gwybod gwlad breswyl y setlwr?
 
+settlorIndividualCountryOfResidencyYesNoPastTense.title = A ydych yn gwybod gwlad breswyl hysbys ddiwethaf y setlwr?
+settlorIndividualCountryOfResidencyYesNoPastTense.heading = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}?
+settlorIndividualCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}?
+settlorIndividualCountryOfResidencyYesNoPastTense.hint = Fel arfer, y wlad breswyl hysbys ddiwethaf yw’r man lle’r oedd y setlwr yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
+settlorIndividualCountryOfResidencyYesNoPastTense.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf y setlwr
+
 settlorIndividualDateOfBirth.checkYourAnswersLabel = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorIndividualDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
+
+settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = Beth oedd dyddiad geni {0}?
+settlorIndividualDateOfBirthPastTense.heading = Beth oedd dyddiad geni {0}?
+settlorIndividualDateOfBirthPastTense.hint = Er enghraifft, 31 3 1980.
+settlorIndividualDateOfBirthPastTense.title = Beth oedd dyddiad geni’r setlwr?
 
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad geni {0}?
 settlorIndividualDateOfBirthYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod y dyddiad geni
@@ -396,6 +444,26 @@ settlorIndividualIDCard.number.error.invalid = Gall rhif y cerdyn adnabod gynnwy
 settlorIndividualIDCard.number.error.length = Mae’n rhaid i rif y cerdyn adnabod fod yn 30 o gymeriadau neu lai
 settlorIndividualIDCard.number.error.required = Nodwch rif cerdyn adnabod y setlwr
 settlorIndividualIDCard.title = Beth yw manylion cerdyn adnabod y setlwr?
+
+settlorIndividualIDCardPastTense.checkYourAnswersLabel = Beth yw manylion cerdyn ID diwethaf {0}?
+settlorIndividualIDCardPastTense.country = Gwlad cyhoeddi’r cerdyn adnabod
+settlorIndividualIDCardPastTense.country.error.length = Mae’n rhaid i wlad cerdyn adnabod y setlwr fod yn 100 o gymeriadau neu lai
+settlorIndividualIDCardPastTense.country.error.required = Nodwch wlad cyhoeddi cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.error.country.required = Nodwch wlad cyhoeddi cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.expiryDate.error.future = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualIDCardPastTense.expiryDate.error.invalid = Nodwch ddyddiad go iawn pan ddaw cerdyn adnabod y setlwr i ben
+settlorIndividualIDCardPastTense.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualIDCardPastTense.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0}
+settlorIndividualIDCardPastTense.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y cerdyn adnabod
+settlorIndividualIDCardPastTense.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0} a {1}
+settlorIndividualIDCardPastTense.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
+settlorIndividualIDCardPastTense.expiryDate.title = Dyddiad dod i ben
+settlorIndividualIDCardPastTense.heading = Beth yw manylion cerdyn ID diwethaf {0}?
+settlorIndividualIDCardPastTense.number = Rhif y cerdyn adnabod
+settlorIndividualIDCardPastTense.number.error.invalid = Gall rhif y cerdyn adnabod gynnwys llythrennau a rhifau yn unig
+settlorIndividualIDCardPastTense.number.error.length = Mae’n rhaid i rif y cerdyn adnabod fod yn 30 o gymeriadau neu lai
+settlorIndividualIDCardPastTense.number.error.required = Nodwch rif cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.title = Beth yw manylion cerdyn ID diwethaf y setlwr?
 
 settlorIndividualIDCardYesNo.checkYourAnswersLabel = A ydych yn gwybod manylion cerdyn adnabod {0}?
 settlorIndividualIDCardYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod manylion cerdyn adnabod y setlwr
@@ -432,6 +500,21 @@ settlorIndividualName.heading = Beth yw enw’r setlwr?
 settlorIndividualName.lastName = Enw olaf
 settlorIndividualName.middleName = Enwau canol (dewisol)
 settlorIndividualName.title = Beth yw enw’r setlwr?
+
+settlorIndividualNamePastTense.checkYourAnswersLabel = Beth oedd enw’r setlwr?
+settlorIndividualNamePastTense.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.firstname.length = Mae’n rhaid i enw cyntaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.firstname.required = Nodwch enw cyntaf y setlwr
+settlorIndividualNamePastTense.error.lastname.invalid = Mae’n rhaid i enw olaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.lastname.length = Mae’n rhaid i enw olaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.lastname.required = Nodwch enw olaf y setlwr
+settlorIndividualNamePastTense.error.middlename.invalid = Mae’n rhaid i enwau canol y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.middlename.length = Mae’n rhaid i enwau canol y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.firstName = Enw cyntaf
+settlorIndividualNamePastTense.heading = Beth oedd enw’r setlwr?
+settlorIndividualNamePastTense.lastName = Enw olaf
+settlorIndividualNamePastTense.middleName = Enwau canol (dewisol)
+settlorIndividualNamePastTense.title = Beth oedd enw’r setlwr?
 
 settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
@@ -474,6 +557,26 @@ settlorIndividualPassport.number.error.required = Nodwch rif pasbort y setlwr
 settlorIndividualPassport.number.hint = Er enghraifft, 502135326.
 settlorIndividualPassport.title = Beth yw manylion pasbort y setlwr?
 
+settlorIndividualPassportPastTense.checkYourAnswersLabel = Beth yw manylion pasbort diwethaf {0}?
+settlorIndividualPassportPastTense.country = Gwlad cyhoeddi’r pasbort
+settlorIndividualPassportPastTense.country.error.length = Mae’n rhaid i wlad pasbort y setlwr fod yn 100 o gymeriadau neu lai
+settlorIndividualPassportPastTense.country.error.required = Nodwch wlad cyhoeddi pasbort y setlwr
+settlorIndividualPassportPastTense.expiryDate.error.future = Mae’n rhaid i ddyddiad dod i ben y pasbort fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualPassportPastTense.expiryDate.error.invalid = Nodwch ddyddiad go iawn pan ddaw pasbort y setlwr i ben
+settlorIndividualPassportPastTense.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i ben y pasbort fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualPassportPastTense.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0}
+settlorIndividualPassportPastTense.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y pasbort
+settlorIndividualPassportPastTense.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0} a {1}
+settlorIndividualPassportPastTense.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
+settlorIndividualPassportPastTense.expiryDate.title = Dyddiad dod i ben
+settlorIndividualPassportPastTense.heading = Beth yw manylion pasbort diwethaf {0}?
+settlorIndividualPassportPastTense.number = Rhif pasbort
+settlorIndividualPassportPastTense.number.error.invalid = Gall y rhif pasbort gynnwys llythrennau a rhifau yn unig
+settlorIndividualPassportPastTense.number.error.length = Mae’n rhaid i’r rhif pasbort fod yn 30 o gymeriadau neu lai
+settlorIndividualPassportPastTense.number.error.required = Nodwch rif pasbort y setlwr
+settlorIndividualPassportPastTense.number.hint = Er enghraifft, 502135326.
+settlorIndividualPassportPastTense.title = Beth yw manylion pasbort diwethaf y setlwr?
+
 settlorIndividualPassportYesNo.checkYourAnswersLabel = A ydych yn gwybod manylion pasbort {0}?
 settlorIndividualPassportYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod manylion pasbort y setlwr
 settlorIndividualPassportYesNo.heading = A ydych yn gwybod manylion pasbort {0}?
@@ -484,10 +587,20 @@ settlorIndividualUkCountryOfNationalityYesNo.error.required = Dewiswch ‘Iawn�
 settlorIndividualUkCountryOfNationalityYesNo.heading = A oes gan {0} genedligrwydd y DU?
 settlorIndividualUkCountryOfNationalityYesNo.title = A oes gan y setlwr genedligrwydd y DU?
 
+settlorIndividualUkCountryOfNationalityYesNoPastTense.title = A oedd gan y setlwr genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.heading = A oedd gan {0} genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.checkYourAnswersLabel = A oedd gan {0} genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.error.required = Dewiswch ‘Iawn’ os oedd gan y setlwr genedligrwydd y DU
+
 settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel = A yw {0} yn breswylydd yn y DU?
 settlorIndividualUkCountryOfResidencyYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn breswylydd yn y DU
 settlorIndividualUkCountryOfResidencyYesNo.heading = A yw {0} yn breswylydd yn y DU?
 settlorIndividualUkCountryOfResidencyYesNo.title = A yw’r setlwr yn breswylydd yn y DU?
+
+settlorIndividualUkCountryOfResidencyYesNoPastTense.title = A oedd y setlwr yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.heading = A oedd {0} yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = A oedd {0} yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.error.required = Dewiswch ‘Iawn’ os oedd y setlwr yn breswylydd yn y DU
 
 settlorInfo.bulletpoint1 = dyddiad y farwolaeth
 settlorInfo.bulletpoint10 = a oedd y busnes wedi bodoli am o leiaf 2 flynedd pan ychwanegwyd unrhyw ased at yr ymddiriedolaeth
@@ -581,11 +694,12 @@ settlorsUKAddress.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
 
-setUpAfterSettlorDiedYesNo.checkYourAnswersLabel = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
-setUpAfterSettlorDiedYesNo.error.required = Dewiswch ‘Iawn’ os cafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw
-setUpAfterSettlorDiedYesNo.heading = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
-setUpAfterSettlorDiedYesNo.hint = Gelwir hyn hefyd yn ymddiriedolaeth ewyllys.
-setUpAfterSettlorDiedYesNo.title = A gafodd yr ymddiriedolaeth ei chreu ar ôl i’r setlwr farw?
+setUpByLivingSettlorYesNo.title = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.heading = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.checkYourAnswersLabel = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.error.required = Dewiswch ‘Iawn’ os cafodd yr ymddiriedolaeth ei chreu gan setlwr byw
+setUpByLivingSettlorYesNo.yes = Iawn, cafodd yr ymddiriedolaeth ei chreu gan setlwr byw
+setUpByLivingSettlorYesNo.no = Na, ‘ymddiriedolaeth ewyllys’ yw hi neu ymddiriedolaeth a gafodd ei chreu ar ôl i’r setlwr farw
 
 setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel = A yw hyn yn ychwanegol at ymddiriedolaeth ewyllys?
 setUpInAdditionToWillTrustYesNo.error.required = Dewiswch ‘Iawn’ os yw’r ymddiriedolaeth yn ychwanegol at ymddiriedolaeth ewyllys

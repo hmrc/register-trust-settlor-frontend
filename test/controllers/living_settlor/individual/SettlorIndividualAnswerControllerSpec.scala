@@ -17,6 +17,7 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
+import controllers.living_settlor.individual.routes.SettlorIndividualNameController
 import controllers.routes._
 import models.UserAnswers
 import models.pages._
@@ -29,9 +30,10 @@ import play.api.inject.bind
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import play.twirl.api.Html
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.LivingSettlorPrintHelper
-import viewmodels.AnswerSection
+import viewmodels.{AnswerRow, AnswerSection}
 import views.html.living_settlor.SettlorAnswersView
 
 import scala.concurrent.Future
@@ -44,21 +46,57 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
   private lazy val settlorIndividualAnswerRoute: String = routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
   private lazy val onSubmit: Call = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
 
-  val baseAnswers: UserAnswers = emptyUserAnswers
+  private val baseAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorIndividualNamePage(index), settlorName).success.value
+
+  private val answerRow = AnswerRow(
+    label = "settlorIndividualName.checkYourAnswersLabel",
+    answer = Html(settlorName.toString),
+    changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)
+  )
 
   "SettlorIndividualAnswer Controller" must {
 
-    "return OK and the correct view for a GET" in {
+    "return OK and the correct view for a GET where messageKeyPrefix is None" in {
 
+      val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
       val mockPrintHelper = mock[LivingSettlorPrintHelper]
 
-      val fakeAnswerSection = AnswerSection()
+      val fakeAnswerSection = AnswerSection(rows = Seq(answerRow))
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
 
-      val application: Application = applicationBuilder(userAnswers = Some(baseAnswers))
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[LivingSettlorPrintHelper].toInstance(mockPrintHelper))
+        .build()
+
+      val request = FakeRequest(GET, settlorIndividualAnswerRoute)
+
+      val result: Future[Result] = route(application, request).value
+
+      val view: SettlorAnswersView = application.injector.instanceOf[SettlorAnswersView]
+
+      status(result) mustEqual OK
+
+      contentAsString(result) mustEqual
+        view(onSubmit, Seq(fakeAnswerSection))(request, messages).toString
+
+      application.stop()
+    }
+
+    "return OK and the correct view for a GET where messageKeyPrefix is defined" in {
+
+      val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
+      val prefix = "PastTense"
+      val mockPrintHelper = mock[LivingSettlorPrintHelper]
+
+      val fakeAnswerSection = AnswerSection(rows = Seq(answerRow.copy(label = s"settlorIndividualName$prefix.checkYourAnswersLabel")))
+
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
+        .thenReturn(fakeAnswerSection)
+
+      val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[LivingSettlorPrintHelper].toInstance(mockPrintHelper))
         .build()
 
