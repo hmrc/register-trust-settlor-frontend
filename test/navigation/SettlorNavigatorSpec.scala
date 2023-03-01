@@ -115,7 +115,7 @@ class SettlorNavigatorSpec extends SpecBase {
           val userAnswers = emptyUserAnswers.set(AddASettlorYesNoPage, true).success.value
 
           navigator.nextPage(AddASettlorYesNoPage, fakeDraftId)(userAnswers)
-            .mustBe(controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId))
+            .mustBe(controllers.trust_type.routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId))
         }
       }
 

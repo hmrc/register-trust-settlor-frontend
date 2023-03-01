@@ -70,7 +70,7 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)
+      behave like pageWithContinueButton(applyView, routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url)
     }
 
     "non-taxable" must {
@@ -113,7 +113,7 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url)
+      behave like pageWithContinueButton(applyView, routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url)
     }
   }
 }

@@ -19,7 +19,7 @@ package controllers.trust_type
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import pages.trust_type.{SetUpAfterSettlorDiedYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
+import pages.trust_type.{SetUpByLivingSettlorYesNoPage, SetUpInAdditionToWillTrustYesNoPage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.trust_type.AdditionToWillTrustYesNoView
@@ -35,7 +35,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -56,7 +56,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+        .set(SetUpByLivingSettlorYesNoPage, false).success.value
         .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -77,7 +77,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -97,7 +97,7 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

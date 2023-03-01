@@ -20,7 +20,7 @@ import config.annotations.TrustType
 import controllers.actions.Actions
 import forms.YesNoFormProvider
 import navigation.Navigator
-import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
+import pages.trust_type.SetUpByLivingSettlorYesNoPage
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -28,29 +28,29 @@ import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.errors.TechnicalErrorView
-import views.html.trust_type.SetUpAfterSettlorDiedView
+import views.html.trust_type.SetUpByLivingSettlorView
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SetUpAfterSettlorDiedController @Inject()(
+class SetUpByLivingSettlorController @Inject()(
                                                  override val messagesApi: MessagesApi,
                                                  registrationsRepository: RegistrationsRepository,
                                                  @TrustType navigator: Navigator,
                                                  actions: Actions,
                                                  yesNoFormProvider: YesNoFormProvider,
                                                  val controllerComponents: MessagesControllerComponents,
-                                                 view: SetUpAfterSettlorDiedView,
+                                                 view: SetUpByLivingSettlorView,
                                                  technicalErrorView: TechnicalErrorView
                                                )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpAfterSettlorDiedYesNo")
+  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpByLivingSettlorYesNo")
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
     implicit request =>
 
-      val preparedForm = request.userAnswers.get(SetUpAfterSettlorDiedYesNoPage) match {
+      val preparedForm: Form[Boolean] = request.userAnswers.get(SetUpByLivingSettlorYesNoPage) match {
         case None => form
         case Some(value) => form.fill(value)
       }
@@ -65,13 +65,13 @@ class SetUpAfterSettlorDiedController @Inject()(
         (formWithErrors: Form[_]) =>
           Future.successful(BadRequest(view(formWithErrors, draftId, request.userAnswers.isTaxable))),
         value => {
-          request.userAnswers.set(SetUpAfterSettlorDiedYesNoPage, value) match {
+          request.userAnswers.set(SetUpByLivingSettlorYesNoPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, draftId)(updatedAnswers))
+                Redirect(navigator.nextPage(SetUpByLivingSettlorYesNoPage, draftId)(updatedAnswers))
               }
             case Failure(_) => {
-              logger.error("[SetUpAfterSettlorDiedController][onSubmit] Error while storing user answers")
+              logger.error("[SetUpByLivingSettlorController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
             }
           }

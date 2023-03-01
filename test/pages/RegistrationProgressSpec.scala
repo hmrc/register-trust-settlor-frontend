@@ -34,7 +34,7 @@ class RegistrationProgressSpec extends SpecBase {
 
   "Registration progress" must {
 
-    "return None if SetUpAfterSettlorDiedYesNoPage not answered" in {
+    "return None if setUpByLivingSettlorYesNoPage not answered" in {
 
       val result = registrationProgress.settlorsStatus(emptyUserAnswers)
 
@@ -46,7 +46,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup after settlor died and deceased settlor incomplete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
 
         val result = registrationProgress.settlorsStatus(userAnswers)
 
@@ -56,7 +56,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup in addition to will trust and deceased settlor incomplete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
 
@@ -68,7 +68,7 @@ class RegistrationProgressSpec extends SpecBase {
       "not setup in addition to will trust and no living settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
 
@@ -80,7 +80,7 @@ class RegistrationProgressSpec extends SpecBase {
       "there is an incomplete living settlor" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value
@@ -99,7 +99,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup after settlor died and deceased settlor complete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
           .set(deceasedPages.SettlorsNamePage, name).success.value
           .set(DeceasedSettlorStatus, Completed).success.value
 
@@ -111,7 +111,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup in addition to will trust and deceased settlor completed" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
           .set(deceasedPages.SettlorsNamePage, name).success.value
@@ -125,7 +125,7 @@ class RegistrationProgressSpec extends SpecBase {
       "not setup in addition to will trust and complete living settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
@@ -141,7 +141,7 @@ class RegistrationProgressSpec extends SpecBase {
       "there are no incomplete living settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value

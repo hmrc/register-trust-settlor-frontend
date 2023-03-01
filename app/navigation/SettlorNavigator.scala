@@ -40,7 +40,7 @@ class SettlorNavigator @Inject()(config: FrontendAppConfig) extends Navigator {
     case AddASettlorPage => addSettlorRoute(draftId)
     case AddASettlorYesNoPage => yesNoNav(
       fromPage = AddASettlorYesNoPage,
-      yesCall = controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(draftId),
+      yesCall = controllers.trust_type.routes.SetUpByLivingSettlorController.onPageLoad(draftId),
       noCall = settlorsCompletedRoute(draftId)
     )
     case SettlorIndividualOrBusinessPage(index) => settlorIndividualOrBusinessPage(index, draftId)
