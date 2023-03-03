@@ -17,7 +17,9 @@
 package views.living_settlor.individual
 
 import forms.living_settlor.SettlorIndividualNameFormProvider
+import models.UserAnswers
 import models.pages.FullName
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.QuestionViewBehaviours
@@ -25,29 +27,36 @@ import views.html.living_settlor.individual.SettlorIndividualNameView
 
 class SettlorIndividualNameViewSpec extends QuestionViewBehaviours[FullName] {
 
-  val messageKeyPrefix = "settlorIndividualName"
   val index = 0
 
   override val form = new SettlorIndividualNameFormProvider()()
 
-  "SettlorIndividualNameView" must {
+  Seq(
+    ("settlorIndividualName", true),
+    ("settlorIndividualNamePastTense", false)
+  ) foreach {
+    case (setUpBeforeSettlorMessage, setUpBeforeSettlorDiedBool) =>
+      s"SettlorIndividualNameView view (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
 
-    val view = viewFor[SettlorIndividualNameView](Some(emptyUserAnswers))
+        val userAnswers: UserAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDiedBool).success.value
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
+        val view = viewFor[SettlorIndividualNameView](Some(userAnswers))
 
-    behave like normalPage(applyView(form), messageKeyPrefix)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like normalPage(applyView(form), setUpBeforeSettlorMessage)
 
-    behave like pageWithTextFields(
-      form,
-      applyView,
-      messageKeyPrefix,
-      Seq(("firstName", None), ("middleName", None), ("lastName", None))
-    )
+        behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like pageWithTextFields(
+          form,
+          applyView,
+          setUpBeforeSettlorMessage,
+          Seq(("firstName", None), ("middleName", None), ("lastName", None))
+        )
+
+        behave like pageWithASubmitButton(applyView(form))
+      }
   }
 }

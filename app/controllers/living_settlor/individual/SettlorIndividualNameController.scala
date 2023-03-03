@@ -21,13 +21,14 @@ import controllers.actions.Actions
 import forms.living_settlor.SettlorIndividualNameFormProvider
 import models.pages.FullName
 import navigation.Navigator
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.individual.SettlorIndividualNameView
+
 import javax.inject.Inject
 import play.api.Logging
 
@@ -47,22 +48,37 @@ class SettlorIndividualNameController @Inject()(
   private val form: Form[FullName] = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+    implicit request => {
+
+      val setUpAfterSettlorDied: Boolean = request
+        .userAnswers
+        .get(SettlorAliveYesNoPage(index)) match {
+          case Some(value) => value
+          case None => false
+        }
 
       val preparedForm = request.userAnswers.get(SettlorIndividualNamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index))
+      Ok(view(preparedForm, draftId, index, setUpAfterSettlorDied))
+    }
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
     implicit request =>
 
+      val setUpAfterSettlorDied: Boolean = request
+        .userAnswers
+        .get(SettlorAliveYesNoPage(index)) match {
+          case Some(value) => value
+          case None => false
+        }
+
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, setUpAfterSettlorDied))),
 
         value => {
           request.userAnswers.set(SettlorIndividualNamePage(index), value) match {

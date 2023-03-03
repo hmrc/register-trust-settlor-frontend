@@ -414,6 +414,11 @@ settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorIndividualDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
 
+settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = TBC {0}
+settlorIndividualDateOfBirthPastTense.heading = TBC {0}
+settlorIndividualDateOfBirthPastTense.hint = TBC
+settlorIndividualDateOfBirthPastTense.title = TBC
+
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad geni {0}?
 settlorIndividualDateOfBirthYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod y dyddiad geni
 settlorIndividualDateOfBirthYesNo.heading = A ydych yn gwybod dyddiad geni {0}?
@@ -494,6 +499,21 @@ settlorIndividualName.heading = Beth yw enw’r setlwr?
 settlorIndividualName.lastName = Enw olaf
 settlorIndividualName.middleName = Enwau canol (dewisol)
 settlorIndividualName.title = Beth yw enw’r setlwr?
+
+settlorIndividualNamePastTense.checkYourAnswersLabel = Beth yw enw’r setlwr?
+settlorIndividualNamePastTense.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.firstname.length = Mae’n rhaid i enw cyntaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.firstname.required = Nodwch enw cyntaf y setlwr
+settlorIndividualNamePastTense.error.lastname.invalid = Mae’n rhaid i enw olaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.lastname.length = Mae’n rhaid i enw olaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.lastname.required = Nodwch enw olaf y setlwr
+settlorIndividualNamePastTense.error.middlename.invalid = Mae’n rhaid i enwau canol y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.middlename.length = Mae’n rhaid i enwau canol y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.firstName = Enw cyntaf
+settlorIndividualNamePastTense.heading = What was the settlor’s name?
+settlorIndividualNamePastTense.lastName = Enw olaf
+settlorIndividualNamePastTense.middleName = Enwau canol (dewisol)
+settlorIndividualNamePastTense.title = What was the settlor’s name?
 
 settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
