@@ -36,6 +36,14 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
 
       val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
 
+      "SettlorAliveYesNoPage" must {
+        val page = SettlorAliveYesNoPage(index)
+        "redirect to settlor individual name" in {
+          navigator.nextPage(page, fakeDraftId)(baseAnswers)
+            .mustBe(SettlorIndividualNameController.onPageLoad(index, fakeDraftId))
+        }
+      }
+
       "SettlorIndividualNamePage" must {
         val page = SettlorIndividualNamePage(index)
         "redirect to date of birth yes/no" in {

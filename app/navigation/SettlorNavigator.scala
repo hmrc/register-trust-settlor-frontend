@@ -21,7 +21,6 @@ import models.UserAnswers
 import models.pages.AddASettlor._
 import models.pages.IndividualOrBusiness
 import models.pages.IndividualOrBusiness.{Business, Individual}
-import models.pages.KindOfTrust._
 import pages.living_settlor._
 import pages.{AddASettlorPage, AddASettlorYesNoPage, _}
 import play.api.mvc.Call
@@ -89,7 +88,7 @@ object SettlorNavigator {
   }
 
   private def routeToIndividualSettlorIndex(answers: UserAnswers, draftId: String, index: Option[Int]): Call = {
-    routeToIndex(answers, controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad, draftId, index)
+    routeToIndex(answers, controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onPageLoad, draftId, index)
   }
 
   private def routeToSettlorProtectorIndex(answers: UserAnswers, draftId: String, index: Option[Int]): Call = {

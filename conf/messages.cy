@@ -217,6 +217,10 @@ removeSettlor.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r setlwr
 removeSettlor.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeSettlor.title = A ydych yn siŵr eich bod am dynnu’r setlwr?
 
+settlorAliveYesNo.title = Is the settlor alive at the time of registration?
+settlorAliveYesNo.heading = Is the settlor alive at the time of registration?
+settlorAliveYesNo.error.required = Select yes if the settlor is alive
+
 session_expired.guidance = Mae hyn oherwydd eich bod wedi bod yn segur ar y gwasanaeth ers 15 munud.
 session_expired.guidance.2 = Bydd angen i chi fewngofnodi er mwyn mynd yn eich blaen i gofrestru’r ymddiriedolaeth.
 session_expired.heading = Er eich diogelwch
