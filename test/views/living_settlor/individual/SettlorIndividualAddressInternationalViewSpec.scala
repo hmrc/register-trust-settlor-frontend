@@ -28,33 +28,38 @@ import views.html.living_settlor.individual.SettlorIndividualAddressInternationa
 
 class SettlorIndividualAddressInternationalViewSpec extends InternationalAddressViewBehaviours {
 
-  val messageKeyPrefix = "settlorIndividualAddressInternational"
-  val index = 0
-  val name = FullName("First", None, "Last")
-
   override val form = new InternationalAddressFormProvider()()
+  private val index = 0
+  private val name = FullName("First", None, "Last")
 
-  "SettlorIndividualAddressInternationalView" must {
+  Seq(
+    ("settlorIndividualAddressInternational", true),
+    ("settlorIndividualAddressInternationalPastTense", false)
+  ) foreach {
+    case (messageKey, settlorAliveAtRegistration) =>
 
-    val view = viewFor[SettlorIndividualAddressInternationalView](Some(emptyUserAnswers))
+      s"SettlorIndividualAddressInternationalView where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+        val view = viewFor[SettlorIndividualAddressInternationalView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, index, fakeDraftId, name)(fakeRequest, messages)
+        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, countryOptions, index, fakeDraftId, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like dynamicTitlePage(applyView(form), messageKey, name.toString)
 
-    behave like internationalAddress(
-      applyView,
-      Some("taskList.settlors.label"),
-      Some(messageKeyPrefix),
-      routes.SettlorIndividualAddressInternationalController.onSubmit(index, fakeDraftId).url,
-      name.toString
-    )
+        behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like internationalAddress(
+          applyView,
+          Some("taskList.settlors.label"),
+          Some(messageKey),
+          routes.SettlorIndividualAddressInternationalController.onSubmit(index, fakeDraftId).url,
+          name.toString
+        )
+
+        behave like pageWithASubmitButton(applyView(form))
+      }
   }
 }

@@ -26,10 +26,18 @@
     ukAddress: UkAddress
 )
 
-@(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualAddressUKPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualAddressUK"
+    } else {
+        "settlorIndividualAddressUKPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressUK.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualAddressUKPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -37,7 +45,7 @@
 
         @error_summary(form.errors)
 
-        @ukAddress(form, messages("settlorIndividualAddressUK.heading", name.toString))
+        @ukAddress(form, messages(s"${settlorIndividualAddressUKPrefix}.heading", name.toString))
 
         @submitButton()
     }
