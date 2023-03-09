@@ -21,8 +21,9 @@ import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.UKAddressFormProvider
 import models.pages.UKAddress
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
-import pages.living_settlor.individual.{SettlorAddressUKPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{SettlorAddressUKPage, SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -60,7 +61,7 @@ class SettlorIndividualAddressUKController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, name, settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
@@ -70,19 +71,25 @@ class SettlorIndividualAddressUKController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorAddressUKPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(SettlorAddressUKPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[SettlorIndividualAddressUKController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )
+  }
+
+  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
+    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case Some(value) => value
+      case None => false
+    }
   }
 }

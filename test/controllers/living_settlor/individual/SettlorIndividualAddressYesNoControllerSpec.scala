@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
 import models.pages.FullName
-import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.living_settlor.individual.SettlorIndividualAddressYesNoView
@@ -37,6 +37,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
   "SettlorIndividualAddressYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val formContentInPastTense = formProvider.withPrefix("settlorIndividualAddressYesNoPastTense")
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
@@ -51,14 +52,15 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(request, messages).toString
+        view(formContentInPastTense, fakeDraftId, index, name, settlorAliveAtRegistration = false)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+        .set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorAddressYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -72,14 +74,15 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+        .set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorAddressYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -99,7 +102,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
-      val userAnswers = emptyUserAnswers
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
         .set(SettlorAddressYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -117,8 +120,8 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+        .set(SettlorIndividualNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -135,7 +138,7 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }

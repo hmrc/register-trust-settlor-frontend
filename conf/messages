@@ -362,10 +362,21 @@ settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = Do you know {0}
 settlorIndividualCountryOfResidencyYesNo.hint = The country of residence is usually where the settlor lives and works most of the time during the tax year.
 settlorIndividualCountryOfResidencyYesNo.error.required = Select yes if you know the settlor’s country of residence
 
+settlorIndividualCountryOfResidencyYesNoPastTense.title = Do you know the settlor’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.heading = Do you know {0}’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.hint = The last known country of residence is usually where the settlor lived and worked most of the time during the tax year.
+settlorIndividualCountryOfResidencyYesNoPastTense.error.required = Select yes if you know the settlor’s last known country of residence
+
 settlorIndividualUkCountryOfResidencyYesNo.title = Is the settlor a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.heading = Is {0} a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel = Is {0} a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.error.required = Select yes if the settlor is a UK resident
+
+settlorIndividualUkCountryOfResidencyYesNoPastTense.title = Was the settlor a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.heading = Was {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Was {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.error.required = Select yes if the settlor was a UK resident
 
 settlorIndividualCountryOfResidency.title = What is the settlor’s country of residence?
 settlorIndividualCountryOfResidency.heading = What is {0}’s country of residence?
@@ -373,6 +384,13 @@ settlorIndividualCountryOfResidency.checkYourAnswersLabel = What is {0}’s coun
 settlorIndividualCountryOfResidency.error.required = Enter a country
 settlorIndividualCountryOfResidency.error.length = The country of residence must be 100 characters or less
 settlorIndividualCountryOfResidency.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+settlorIndividualCountryOfResidencyPastTense.title = What was the settlor’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.heading = What was {0}’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = What is {0}’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.error.required = Enter a country
+settlorIndividualCountryOfResidencyPastTense.error.length = The country of residence must be 100 characters or less
+settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 settlorIndividualMentalCapacityYesNo.title = Does the settlor have mental capacity at the time of registration?
 settlorIndividualMentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
@@ -399,6 +417,11 @@ settlorIndividualAddressYesNo.heading = Do you know {0}’s address?
 settlorIndividualAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 settlorIndividualAddressYesNo.error.required = Select yes if you know the settlor’s address
 
+settlorIndividualAddressYesNoPastTense.title = Do you know the settlor’s last known address?
+settlorIndividualAddressYesNoPastTense.heading = Do you know {0}’s last known address?
+settlorIndividualAddressYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known address?
+settlorIndividualAddressYesNoPastTense.error.required = Select yes if you know the settlor’s last known address
+
 settlorIndividualNINO.title = What is the settlor’s National Insurance number?
 settlorIndividualNINO.heading = What is {0}’s National Insurance number?
 settlorIndividualNINO.checkYourAnswersLabel = What is {0}’s National Insurance number?
@@ -416,14 +439,27 @@ settlorIndividualAddressInternational.title = What is the settlor’s address?
 settlorIndividualAddressInternational.heading = What is {0}’s address?
 settlorIndividualAddressInternational.checkYourAnswersLabel = What is {0}’s address?
 
+settlorIndividualAddressInternationalPastTense.title = What is the settlor’s last known address?
+settlorIndividualAddressInternationalPastTense.heading = What is {0}’s last known address?
+settlorIndividualAddressInternationalPastTense.checkYourAnswersLabel = What is {0}’s last known address?
+
 settlorIndividualAddressUK.title = What is the settlor’s address?
 settlorIndividualAddressUK.heading = What is {0}’s address?
 settlorIndividualAddressUK.checkYourAnswersLabel = What is {0}’s address?
+
+settlorIndividualAddressUKPastTense.title = What is the settlor’s last known address?
+settlorIndividualAddressUKPastTense.heading = What is {0}’s last known address?
+settlorIndividualAddressUKPastTense.checkYourAnswersLabel = What is {0}’s last known address?
 
 settlorIndividualAddressUKYesNo.title = Does the settlor live in the UK?
 settlorIndividualAddressUKYesNo.heading = Does {0} live in the UK?
 settlorIndividualAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 settlorIndividualAddressUKYesNo.error.required = Select yes if the settlor lives in the UK
+
+settlorIndividualAddressUKYesNoPastTense.title = Was the settlor’s last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.heading = Was {0} last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = Was {0} last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.error.required = Select yes if the settlor’s last known address was in the UK
 
 settlorIndividualIDCard.title = What are the settlor’s ID card details?
 settlorIndividualIDCard.heading = What are {0}’s ID card details?

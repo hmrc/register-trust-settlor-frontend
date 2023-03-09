@@ -27,10 +27,19 @@
     internationalAddress: InternationalAddress
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName,
+settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualAddressInternationalPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualAddressInternational"
+    } else {
+        "settlorIndividualAddressInternationalPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualAddressInternational.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualAddressInternationalPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -40,7 +49,7 @@
 
         @internationalAddress(
             form = form,
-            legend = messages("settlorIndividualAddressInternational.heading", name.toString),
+            legend = messages(s"${settlorIndividualAddressInternationalPrefix}.heading", name.toString),
             legendAsHeading = true,
             countryOptions = countryOptions
         )

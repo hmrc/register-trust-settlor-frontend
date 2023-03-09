@@ -25,30 +25,35 @@ import views.html.living_settlor.individual.SettlorIndividualAddressUKView
 
 class SettlorIndividualAddressUKViewSpec extends UkAddressViewBehaviours {
 
-  val messageKeyPrefix = "settlorIndividualAddressUK"
-  val index = 0
-  val name: FullName = FullName("First", Some("middle"), "Last")
-
   override val form = new UKAddressFormProvider()()
+  private val index = 0
+  private val name: FullName = FullName("First", Some("middle"), "Last")
 
-  "SettlorIndividualAddressUKView" must {
+  Seq(
+    ("settlorIndividualAddressUK", true),
+    ("settlorIndividualAddressUKPastTense", false)
+  ) foreach {
+    case (messageKey, settlorAliveAtRegistration) =>
 
-    val view = viewFor[SettlorIndividualAddressUKView](Some(emptyUserAnswers))
+      s"SettlorIndividualAddressUKView where settlorAliveAtRegistration = $settlorAliveAtRegistration)" must {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+        val view = viewFor[SettlorIndividualAddressUKView](Some(emptyUserAnswers))
+
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, fakeDraftId, index, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        behave like dynamicTitlePage(applyView(form), messageKey, name.toString)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like pageWithBackLink(applyView(form))
 
-    behave like ukAddressPage(
-      applyView,
-      Some(messageKeyPrefix),
-      name.toString
-    )
+        behave like ukAddressPage(
+          applyView,
+          Some(messageKey),
+          name.toString
+        )
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like pageWithASubmitButton(applyView(form))
+      }
   }
 }

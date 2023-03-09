@@ -26,10 +26,18 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[_], index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualCountryOfResidencyYesNoPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualCountryOfResidencyYesNo"
+    } else {
+        "settlorIndividualCountryOfResidencyYesNoPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualCountryOfResidencyYesNo.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualCountryOfResidencyYesNoPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -39,9 +47,9 @@
 
         @inputYesNo(
             field = form("value"),
-            label = messages("settlorIndividualCountryOfResidencyYesNo.heading", name.toString),
+            label = messages(s"${settlorIndividualCountryOfResidencyYesNoPrefix}.heading", name.toString),
             legendClass = Some("govuk-heading-l"),
-            hint = Some(messages("settlorIndividualCountryOfResidencyYesNo.hint"))
+            hint = Some(messages(s"${settlorIndividualCountryOfResidencyYesNoPrefix}.hint"))
         )
 
         @submitButton()

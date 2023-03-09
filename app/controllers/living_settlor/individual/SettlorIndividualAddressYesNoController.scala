@@ -20,8 +20,9 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
-import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{SettlorAddressYesNoPage, SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -47,41 +48,49 @@ class SettlorIndividualAddressYesNoController @Inject()(
                                                          technicalErrorView: TechnicalErrorView
                                                        )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging{
 
-  private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualAddressYesNo")
+  private def form(messageKey: String): Form[Boolean] = yesNoFormProvider.withPrefix(messageKey)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+      val messageKeyPrefix = if(settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo" else "settlorIndividualAddressYesNoPastTense"
 
       val preparedForm = request.userAnswers.get(SettlorAddressYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(messageKeyPrefix)
+        case Some(value) => form(messageKeyPrefix).fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, name, settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+      val messageKeyPrefix = if(settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo" else "settlorIndividualAddressYesNoPastTense"
 
-      form.bindFromRequest().fold(
+      form(messageKeyPrefix).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorAddressYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(SettlorAddressYesNoPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[SettlorIndividualAddressYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )
+  }
+
+  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
+    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case Some(value) => value
+      case None => false
+    }
   }
 }
