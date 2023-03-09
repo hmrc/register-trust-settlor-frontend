@@ -349,12 +349,24 @@ settlorIndividualUkCountryOfNationalityYesNo.heading = Does {0} have UK national
 settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
 settlorIndividualUkCountryOfNationalityYesNo.error.required = Select yes if the settlor has UK nationality
 
+settlorIndividualUkCountryOfNationalityYesNoPastTense.title = Did the settlor have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.heading = Did {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.checkYourAnswersLabel = Did {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.error.required = Select yes if the settlor had UK nationality
+
 settlorIndividualCountryOfNationality.title = What is the settlor’s country of nationality?
 settlorIndividualCountryOfNationality.heading = What is {0}’s country of nationality?
 settlorIndividualCountryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
 settlorIndividualCountryOfNationality.error.required = Enter a country
 settlorIndividualCountryOfNationality.error.length = The country of nationality must be 100 characters or less
 settlorIndividualCountryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+settlorIndividualCountryOfNationalityPastTense.title = What was the settlor’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.heading = What was {0}’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.checkYourAnswersLabel = What was {0}’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.error.required = Enter a country
+settlorIndividualCountryOfNationalityPastTense.error.length = The country of nationality must be 100 characters or less
+settlorIndividualCountryOfNationalityPastTense.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 settlorIndividualCountryOfResidencyYesNo.title = Do you know the settlor’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.heading = Do you know {0}’s country of residence?

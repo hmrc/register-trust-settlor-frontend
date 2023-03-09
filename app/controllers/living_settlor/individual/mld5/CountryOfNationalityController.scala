@@ -22,6 +22,7 @@ import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.CountryFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import pages.living_settlor.individual.mld5.CountryOfNationalityPage
 import play.api.Logging
 import play.api.data.Form
@@ -50,7 +51,7 @@ class CountryOfNationalityController @Inject()(
                                                 technicalErrorView: TechnicalErrorView
                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
 
-  private val form: Form[String] = countryFormProvider.withPrefix("settlorIndividualCountryOfNationality")
+  private def form(messageKey: String): Form[String] = countryFormProvider.withPrefix(messageKey)
 
   private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
     actions.authWithData(draftId) andThen requireName(index, draftId)
@@ -59,32 +60,44 @@ class CountryOfNationalityController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
     implicit request =>
 
+      val messageKeyPrefix =
+        if(settlorAliveAtRegistration(index)) "settlorIndividualCountryOfNationality" else "settlorIndividualCountryOfNationalityPastTense"
+
       val preparedForm = request.userAnswers.get(CountryOfNationalityPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
+        case None => form(messageKeyPrefix)
+        case Some(value) => form(messageKeyPrefix).fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name))
+      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name, settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
     implicit request =>
 
-      form.bindFromRequest().fold(
+      val messageKeyPrefix =
+        if(settlorAliveAtRegistration(index)) "settlorIndividualCountryOfNationality" else "settlorIndividualCountryOfNationalityPastTense"
+
+      form(messageKeyPrefix).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name, settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(CountryOfNationalityPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(CountryOfNationalityPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[CountryOfNationalityController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )
+  }
+
+  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
+    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case Some(value) => value
+      case None => false
+    }
   }
 }

@@ -370,6 +370,13 @@ settlorIndividualCountryOfNationality.error.required = Nodwch wlad
 settlorIndividualCountryOfNationality.heading = Beth yw gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationality.title = Beth yw gwlad cenedligrwydd y setlwr?
 
+settlorIndividualCountryOfNationalityPastTense.title = Beth oedd gwlad cenedligrwydd y setlwr?
+settlorIndividualCountryOfNationalityPastTense.heading = Beth oedd gwlad cenedligrwydd {0}?
+settlorIndividualCountryOfNationalityPastTense.checkYourAnswersLabel = Beth oedd gwlad cenedligrwydd {0}?
+settlorIndividualCountryOfNationalityPastTense.error.required = Nodwch wlad
+settlorIndividualCountryOfNationalityPastTense.error.length = Mae’n rhaid i wlad y cenedligrwydd fod yn 100 o gymeriadau neu lai
+settlorIndividualCountryOfNationalityPastTense.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
+
 settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel = A ydych yn gwybod gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationalityYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod gwlad cenedligrwydd y setlwr
 settlorIndividualCountryOfNationalityYesNo.heading = A ydych yn gwybod gwlad cenedligrwydd {0}?
@@ -518,6 +525,11 @@ settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel = A oes gan {
 settlorIndividualUkCountryOfNationalityYesNo.error.required = Dewiswch ‘Iawn’ os oes gan y setlwr genedligrwydd y DU
 settlorIndividualUkCountryOfNationalityYesNo.heading = A oes gan {0} genedligrwydd y DU?
 settlorIndividualUkCountryOfNationalityYesNo.title = A oes gan y setlwr genedligrwydd y DU?
+
+settlorIndividualUkCountryOfNationalityYesNoPastTense.title = A oedd gan y setlwr genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.heading = A oedd gan {0} genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.checkYourAnswersLabel = A oedd gan {0} genedligrwydd y DU?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.error.required = Dewiswch ‘Iawn’ os oedd gan y setlwr genedligrwydd y DU
 
 settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel = A yw {0} yn breswylydd yn y DU?
 settlorIndividualUkCountryOfResidencyYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn breswylydd yn y DU
