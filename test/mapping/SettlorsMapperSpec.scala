@@ -27,6 +27,7 @@ class SettlorsMapperSpec extends SpecBase {
   private val mockBusinessMapper: BusinessSettlorsMapper = mock[BusinessSettlorsMapper]
 
   private val individualSettlor: Settlor = Settlor(
+    aliveAtRegistration = true,
     name = FullName("Joe", None, "Bloggs"),
     dateOfBirth = None,
     identification = None,

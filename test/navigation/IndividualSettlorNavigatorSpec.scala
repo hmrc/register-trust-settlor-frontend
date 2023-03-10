@@ -174,13 +174,24 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         "no" when {
 
           "NINO known" must {
-            "redirect to legally incapable yes/no" in {
+            "redirect to legally incapable yes/no if the settlor is alive at registration" in {
               val userAnswers = baseAnswers
+                .set(SettlorAliveYesNoPage(index), true).success.value
                 .set(SettlorIndividualNINOPage(index), nino).success.value
                 .set(page, false).success.value
 
               navigator.nextPage(page, fakeDraftId)(userAnswers)
                 .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+            }
+
+            "redirect to check answers if the settlor is not alive at registration" in {
+              val userAnswers = baseAnswers
+                .set(SettlorAliveYesNoPage(index), false).success.value
+                .set(SettlorIndividualNINOPage(index), nino).success.value
+                .set(page, false).success.value
+
+              navigator.nextPage(page, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -200,13 +211,24 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         "yes" when {
 
           "NINO known" must {
-            "redirect to legally incapable yes/no" in {
+            "redirect to legally incapable yes/no if the settlor is alive at registration" in {
               val userAnswers = baseAnswers
+                .set(SettlorAliveYesNoPage(index), true).success.value
                 .set(SettlorIndividualNINOPage(index), nino).success.value
                 .set(page, true).success.value
 
               navigator.nextPage(page, fakeDraftId)(userAnswers)
                 .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+            }
+
+            "redirect to check answers if the settlor is not alive at registration" in {
+              val userAnswers = baseAnswers
+                .set(SettlorAliveYesNoPage(index), false).success.value
+                .set(SettlorIndividualNINOPage(index), nino).success.value
+                .set(page, true).success.value
+
+              navigator.nextPage(page, fakeDraftId)(userAnswers)
+                .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
             }
           }
 
@@ -233,13 +255,24 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidencyPage" when {
         val page = CountryOfResidencyPage(index)
         "NINO known" must {
-          "redirect to legally incapable yes/no" in {
+          "redirect to legally incapable yes/no if the settlor is alive at registration" in {
             val userAnswers = baseAnswers
+              .set(SettlorAliveYesNoPage(index), true).success.value
               .set(SettlorIndividualNINOPage(index), nino).success.value
               .set(page, "FR").success.value
 
             navigator.nextPage(page, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+
+          "redirect to check answers if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers
+              .set(SettlorAliveYesNoPage(index), false).success.value
+              .set(SettlorIndividualNINOPage(index), nino).success.value
+              .set(page, "FR").success.value
+
+            navigator.nextPage(page, fakeDraftId)(userAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -288,11 +321,22 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         }
 
         "no" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
+          "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+            val userAnswers = baseAnswers
+              .set(SettlorAliveYesNoPage(index), true).success.value
+              .set(page, false).success.value
 
             navigator.nextPage(page, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+
+          "redirect to check answers if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers
+              .set(SettlorAliveYesNoPage(index), false).success.value
+              .set(page, false).success.value
+
+            navigator.nextPage(page, fakeDraftId)(userAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -357,9 +401,14 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
 
       "SettlorIndividualPassportPage" must {
         val page = SettlorIndividualPassportPage(index)
-        "redirect to legally incapable yes/no" in {
-          navigator.nextPage(page, fakeDraftId)(baseAnswers)
+        "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+          navigator.nextPage(page, fakeDraftId)(baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value)
             .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+        }
+
+        "redirect to check answers if the settlor is not alive at registration" in {
+          navigator.nextPage(page, fakeDraftId)(baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value)
+            .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -375,20 +424,34 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         }
 
         "no" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
+          "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+              .set(page, false).success.value
 
             navigator.nextPage(page, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+
+          "redirect to check answers if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
+              .set(page, false).success.value
+
+            navigator.nextPage(page, fakeDraftId)(userAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
       }
 
       "SettlorIndividualIDCardPage" must {
         val page = SettlorIndividualIDCardPage(index)
-        "redirect to legally incapable yes/no" in {
-          navigator.nextPage(page, fakeDraftId)(baseAnswers)
+        "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+          navigator.nextPage(page, fakeDraftId)(baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value)
             .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+        }
+
+        "redirect to check answers if the settlor is not alive at registration" in {
+          navigator.nextPage(page, fakeDraftId)(baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value)
+            .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
         }
       }
 
@@ -512,11 +575,20 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
         }
 
         "no" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, false).success.value
+          "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+              .set(page, false).success.value
 
             navigator.nextPage(page, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+
+          "redirect to check answers if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
+              .set(page, false).success.value
+
+            navigator.nextPage(page, fakeDraftId)(userAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
       }
@@ -524,11 +596,20 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
       "UkCountryOfResidencyYesNoPage" when {
         val page = UkCountryOfResidencyYesNoPage(index)
         "yes" must {
-          "redirect to legally incapable yes/no" in {
-            val userAnswers = baseAnswers.set(page, true).success.value
+          "redirect to legally incapable yes/no if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+              .set(page, true).success.value
 
             navigator.nextPage(page, fakeDraftId)(userAnswers)
               .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+          }
+
+          "redirect to check answers if the settlor is not alive at registration" in {
+            val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
+              .set(page, true).success.value
+
+            navigator.nextPage(page, fakeDraftId)(userAnswers)
+              .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
           }
         }
 
@@ -544,11 +625,19 @@ class IndividualSettlorNavigatorSpec extends SpecBase {
 
       "CountryOfResidencyPage" must {
         val page = CountryOfResidencyPage(index)
-        "redirect to legally incapable yes/no" in {
-          val userAnswers = baseAnswers.set(page, "FR").success.value
+        "redirect to legally incapable yes/no if the settlor is alive at registration" in {
+          val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+            .set(page, "FR").success.value
 
           navigator.nextPage(page, fakeDraftId)(userAnswers)
             .mustBe(MentalCapacityYesNoController.onPageLoad(index, fakeDraftId))
+        }
+
+        "redirect to check answers if the settlor is not alive at registration" in {
+          val userAnswers = baseAnswers.set(page, "FR").success.value
+
+          navigator.nextPage(page, fakeDraftId)(userAnswers)
+            .mustBe(SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId))
         }
       }
 
