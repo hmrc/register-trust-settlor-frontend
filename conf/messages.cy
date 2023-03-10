@@ -633,12 +633,12 @@ settlorsUKAddress.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsUKAddress.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
 
-setUpByLivingSettlorYesNo.title = TBC
-setUpByLivingSettlorYesNo.heading = TBC
-setUpByLivingSettlorYesNo.checkYourAnswersLabel = TBC
-setUpByLivingSettlorYesNo.error.required = TBC
-setUpByLivingSettlorYesNo.yes = TBC
-setUpByLivingSettlorYesNo.no = TBC
+setUpByLivingSettlorYesNo.title = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.heading = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.checkYourAnswersLabel = A gafodd yr ymddiriedolaeth ei chreu gan setlwr byw?
+setUpByLivingSettlorYesNo.error.required = Dewiswch ‘Iawn’ os cafodd yr ymddiriedolaeth ei chreu gan setlwr byw
+setUpByLivingSettlorYesNo.yes = Iawn, cafodd yr ymddiriedolaeth ei chreu gan setlwr byw
+setUpByLivingSettlorYesNo.no = Na, ‘ymddiriedolaeth ewyllys’ yw hi neu ymddiriedolaeth a gafodd ei chreu ar ôl i’r setlwr farw
 
 setUpInAdditionToWillTrustYesNo.checkYourAnswersLabel = A yw hyn yn ychwanegol at ymddiriedolaeth ewyllys?
 setUpInAdditionToWillTrustYesNo.error.required = Dewiswch ‘Iawn’ os yw’r ymddiriedolaeth yn ychwanegol at ymddiriedolaeth ewyllys
