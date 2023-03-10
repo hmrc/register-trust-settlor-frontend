@@ -31,7 +31,7 @@ class TrustTypePrintHelper @Inject()(answerRowConverter: AnswerRowConverter) {
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers)
 
     Seq(
-      bound.yesNoQuestion(SetUpAfterSettlorDiedYesNoPage, "setUpAfterSettlorDiedYesNo", SetUpAfterSettlorDiedController.onPageLoad(draftId).url),
+      bound.yesNoQuestion(SetUpByLivingSettlorYesNoPage, "setUpByLivingSettlorYesNo", SetUpByLivingSettlorController.onPageLoad(draftId).url),
       bound.enumQuestion(KindOfTrustPage, "kindOfTrust", KindOfTrustController.onPageLoad(draftId).url, "kindOfTrust"),
       bound.yesNoQuestion(SetUpInAdditionToWillTrustYesNoPage, "setUpInAdditionToWillTrustYesNo", AdditionToWillTrustYesNoController.onPageLoad(draftId).url),
       bound.enumQuestion(HowDeedOfVariationCreatedPage, "howDeedOfVariationCreated", HowDeedOfVariationCreatedController.onPageLoad(draftId).url, "howDeedOfVariationCreated"),

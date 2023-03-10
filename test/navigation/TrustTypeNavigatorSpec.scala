@@ -31,22 +31,22 @@ class TrustTypeNavigatorSpec extends SpecBase {
 
       val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
 
-      "SetUpAfterSettlorDiedYesNoPage" when {
+      "setUpByLivingSettlorYesNoPage" when {
 
-        "yes" must {
+        "no" must {
           "redirect to Deceased Settlor Name" in {
-            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
+            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
 
-        "no" must {
+        "yes" must {
           "redirect to Kind of Trust" in {
-            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+            val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
-            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
+            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.KindOfTrustController.onPageLoad(fakeDraftId))
           }
         }
@@ -168,22 +168,22 @@ class TrustTypeNavigatorSpec extends SpecBase {
 
       val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = false)
 
-      "SetUpAfterSettlorDiedYesNoPage" when {
+      "setUpByLivingSettlorYesNoPage" when {
 
-        "yes" must {
+        "no" must {
           "redirect to Deceased Settlor Name" in {
-            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+            val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
+            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
 
-        "no" must {
+        "yes" must {
           "redirect to Individual or Business" in {
-            val userAnswers = baseAnswers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+            val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
-            navigator.nextPage(SetUpAfterSettlorDiedYesNoPage, fakeDraftId)(userAnswers)
+            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
           }
         }

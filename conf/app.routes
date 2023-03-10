@@ -33,8 +33,8 @@ POST       /:draftId/:index/remove-yes-no                                       
 
 # Trust type
 
-GET        /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpAfterSettlorDiedController.onPageLoad(draftId: String)
-POST       /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpAfterSettlorDiedController.onSubmit(draftId: String)
+GET        /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onPageLoad(draftId: String)
+POST       /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onSubmit(draftId: String)
 
 GET        /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onPageLoad(draftId: String)
 POST       /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onSubmit(draftId: String)

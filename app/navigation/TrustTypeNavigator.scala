@@ -35,14 +35,14 @@ class TrustTypeNavigator extends Navigator {
                         draftId: String): UserAnswers => Call = route(draftId)(page)
 
   override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SetUpAfterSettlorDiedYesNoPage => ua => yesNoNav(
-      fromPage = SetUpAfterSettlorDiedYesNoPage,
-      yesCall = SettlorsNameController.onPageLoad(draftId),
-      noCall = if (ua.isTaxable) {
+    case SetUpByLivingSettlorYesNoPage => ua => yesNoNav(
+      fromPage = SetUpByLivingSettlorYesNoPage,
+      yesCall = if (ua.isTaxable) {
         KindOfTrustController.onPageLoad(draftId)
       } else {
         redirectToLivingSettlorQuestions(draftId)
-      }
+      },
+      noCall = SettlorsNameController.onPageLoad(draftId)
     )(ua)
     case KindOfTrustPage => kindOfTrustPage(draftId)
     case EfrbsYesNoPage => yesNoNav(

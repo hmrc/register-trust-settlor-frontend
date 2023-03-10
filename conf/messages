@@ -280,11 +280,12 @@ settlorsUKAddress.title = What is the settlor’s last known address?
 settlorsUKAddress.heading = What is {0}’s last known address?
 settlorsUKAddress.checkYourAnswersLabel = What is {0}’s last known address?
 
-setUpAfterSettlorDiedYesNo.title = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.heading = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.checkYourAnswersLabel = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.error.required = Select yes if the trust was set up after the settlor died
-setUpAfterSettlorDiedYesNo.hint = This is also known as a will trust.
+setUpByLivingSettlorYesNo.title = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.heading = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.checkYourAnswersLabel = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.error.required = Select yes if the trust was set up by a living settlor
+setUpByLivingSettlorYesNo.yes = Yes, the trust was set up by a living settlor
+setUpByLivingSettlorYesNo.no = No, it is a ''will trust'' or a trust set up after the settlor died
 
 setUpInAdditionToWillTrustYesNo.title = Is this in addition to a will trust?
 setUpInAdditionToWillTrustYesNo.heading = Is this in addition to a will trust?

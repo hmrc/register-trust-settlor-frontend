@@ -19,28 +19,28 @@ package controllers.trust_type
 import base.SpecBase
 import controllers.routes._
 import forms.YesNoFormProvider
-import pages.trust_type.SetUpAfterSettlorDiedYesNoPage
+import pages.trust_type.SetUpByLivingSettlorYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.trust_type.SetUpAfterSettlorDiedView
+import views.html.trust_type.SetUpByLivingSettlorView
 
-class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
+class SetUpByLivingSettlorControllerSpec extends SpecBase {
 
-  val form = new YesNoFormProvider().withPrefix("setUpAfterSettlorDiedYesNo")
+  val form = new YesNoFormProvider().withPrefix("setUpByLivingSettlorYesNo")
 
-  lazy val setUpAfterSettlorDiedRoute = routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId).url
+  lazy val setUpByLivingSettlorRoute = routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url
 
-  "SetUpAfterSettlorDied Controller" must {
+  "SetUpByLivingSettlor Controller" must {
 
     "return OK and the correct view for a GET" in {
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       status(result) mustEqual OK
 
@@ -52,13 +52,13 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       val result = route(application, request).value
 
@@ -76,7 +76,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
         applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
+        FakeRequest(POST, setUpByLivingSettlorRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
@@ -93,12 +93,12 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
+        FakeRequest(POST, setUpByLivingSettlorRoute)
           .withFormUrlEncodedBody(("value", ""))
 
       val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[SetUpAfterSettlorDiedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       val result = route(application, request).value
 
@@ -114,7 +114,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, setUpAfterSettlorDiedRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
       val result = route(application, request).value
 
@@ -130,7 +130,7 @@ class SetUpAfterSettlorDiedControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, setUpAfterSettlorDiedRoute)
+        FakeRequest(POST, setUpByLivingSettlorRoute)
           .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
