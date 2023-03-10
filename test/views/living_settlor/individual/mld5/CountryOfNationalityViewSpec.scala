@@ -25,25 +25,32 @@ import views.html.living_settlor.individual.mld5.CountryOfNationalityView
 
 class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
 
-  private val messageKeyPrefix: String = "settlorIndividualCountryOfNationality"
   private val index: Int = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[String] = new CountryFormProvider().withPrefix(messageKeyPrefix)
+  override val form: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationality")
+  val formContentInPastTense: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationalityPastTense")
 
-  "CountryOfNationality View" must {
+  Seq(
+    ("settlorIndividualCountryOfNationality", true, form),
+    ("settlorIndividualCountryOfNationalityPastTense", false, formContentInPastTense)
+  ) foreach {
+    case (messageKey, settlorAliveAtRegistration, formToUse) =>
 
-    val view = viewFor[CountryOfNationalityView](Some(emptyUserAnswers))
+      s"CountryOfNationality View where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, index, fakeDraftId, countryOptions, name)(fakeRequest, messages)
+        val view = viewFor[CountryOfNationalityView](Some(emptyUserAnswers))
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 
-    behave like selectCountryPage(form, applyView, messageKeyPrefix, name.toString)
+        behave like pageWithBackLink(applyView(formToUse))
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like selectCountryPage(formToUse, applyView, messageKey, name.toString)
+
+        behave like pageWithASubmitButton(applyView(formToUse))
+      }
   }
 }
