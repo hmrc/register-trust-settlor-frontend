@@ -30,10 +30,18 @@
     select: InputSelect
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualPassportPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualPassport"
+    } else {
+        "settlorIndividualPassportPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualPassport.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualPassportPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -41,10 +49,10 @@
 
         @error_summary(form.errors)
 
-        @heading("settlorIndividualPassport.heading", Some(name.toString))
+        @heading(s"${settlorIndividualPassportPrefix}.heading", Some(name.toString))
 
         @select(field = form("country"),
-            label = messages("settlorIndividualPassport.country"),
+            label = messages(s"${settlorIndividualPassportPrefix}.country"),
             labelClasses = Set("bold"),
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
@@ -55,16 +63,16 @@
         @inputText(
             field = form("number"),
             inputClass = Some("govuk-input--width-20"),
-            label = messages("settlorIndividualPassport.number"),
-            hint = Some(messages(s"settlorIndividualPassport.number.hint"))
+            label = messages(s"${settlorIndividualPassportPrefix}.number"),
+            hint = Some(messages(s"${settlorIndividualPassportPrefix}.number.hint"))
         )
 
         @input_date(
             field = form("expiryDate"),
-            legend = messages("settlorIndividualPassport.expiryDate.title"),
+            legend = messages(s"${settlorIndividualPassportPrefix}.expiryDate.title"),
             legendClass = "bold",
             legendAsHeading = false,
-            hint = Some(messages(s"settlorIndividualPassport.expiryDate.hint"))
+            hint = Some(messages(s"${settlorIndividualPassportPrefix}.expiryDate.hint"))
         )
 
         @submitButton()

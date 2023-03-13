@@ -519,6 +519,26 @@ settlorIndividualPassport.expiryDate.error.invalid = Enter a real date when the 
 settlorIndividualPassport.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 settlorIndividualPassport.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
+settlorIndividualPassportPastTense.title = What are the settlor’s last passport details?
+settlorIndividualPassportPastTense.heading = What are {0}’s last passport details?
+settlorIndividualPassportPastTense.checkYourAnswersLabel = What are {0}’s last passport details?
+settlorIndividualPassportPastTense.country = Passport country of issue
+settlorIndividualPassportPastTense.country.error.required = Enter the settlor’s passport country of issue
+settlorIndividualPassportPastTense.country.error.length = The settlor’s passport country must be 100 characters or less
+settlorIndividualPassportPastTense.number = Passport number
+settlorIndividualPassportPastTense.number.hint = For example, 502135326.
+settlorIndividualPassportPastTense.number.error.required = Enter the settlor’s passport number
+settlorIndividualPassportPastTense.number.error.length = Passport number must be 30 characters or less
+settlorIndividualPassportPastTense.number.error.invalid = Passport number can only include letters and numbers
+settlorIndividualPassportPastTense.expiryDate.title = Expiry date
+settlorIndividualPassportPastTense.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980.
+settlorIndividualPassportPastTense.expiryDate.error.required.all = Enter the passport expiry date
+settlorIndividualPassportPastTense.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+settlorIndividualPassportPastTense.expiryDate.error.required = Passport expiry date must include {0}
+settlorIndividualPassportPastTense.expiryDate.error.invalid = Enter a real date when the settlor’s passport expires
+settlorIndividualPassportPastTense.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+settlorIndividualPassportPastTense.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
 settlorIndividualPassportYesNo.title = Do you know the settlor’s passport details?
 settlorIndividualPassportYesNo.heading = Do you know {0}’s passport details?
 settlorIndividualPassportYesNo.checkYourAnswersLabel = Do you know {0}’s passport details?

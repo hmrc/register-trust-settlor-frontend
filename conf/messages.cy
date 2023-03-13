@@ -516,6 +516,26 @@ settlorIndividualPassport.number.error.required = Nodwch rif pasbort y setlwr
 settlorIndividualPassport.number.hint = Er enghraifft, 502135326.
 settlorIndividualPassport.title = Beth yw manylion pasbort y setlwr?
 
+settlorIndividualPassportPastTense.checkYourAnswersLabel = Beth yw manylion pasbort {0}?
+settlorIndividualPassportPastTense.country = Gwlad cyhoeddi’r pasbort
+settlorIndividualPassportPastTense.country.error.length = Mae’n rhaid i wlad pasbort y setlwr fod yn 100 o gymeriadau neu lai
+settlorIndividualPassportPastTense.country.error.required = Nodwch wlad cyhoeddi pasbort y setlwr
+settlorIndividualPassportPastTense.expiryDate.error.future = Mae’n rhaid i ddyddiad dod i ben y pasbort fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualPassportPastTense.expiryDate.error.invalid = Nodwch ddyddiad go iawn pan ddaw pasbort y setlwr i ben
+settlorIndividualPassportPastTense.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i ben y pasbort fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualPassportPastTense.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0}
+settlorIndividualPassportPastTense.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y pasbort
+settlorIndividualPassportPastTense.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y pasbort gynnwys {0} a {1}
+settlorIndividualPassportPastTense.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
+settlorIndividualPassportPastTense.expiryDate.title = Dyddiad dod i ben
+settlorIndividualPassportPastTense.heading = Beth yw manylion pasbort {0}?
+settlorIndividualPassportPastTense.number = Rhif pasbort
+settlorIndividualPassportPastTense.number.error.invalid = Gall y rhif pasbort gynnwys llythrennau a rhifau yn unig
+settlorIndividualPassportPastTense.number.error.length = Mae’n rhaid i’r rhif pasbort fod yn 30 o gymeriadau neu lai
+settlorIndividualPassportPastTense.number.error.required = Nodwch rif pasbort y setlwr
+settlorIndividualPassportPastTense.number.hint = Er enghraifft, 502135326.
+settlorIndividualPassportPastTense.title = Beth yw manylion pasbort y setlwr?
+
 settlorIndividualPassportYesNo.checkYourAnswersLabel = A ydych yn gwybod manylion pasbort {0}?
 settlorIndividualPassportYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod manylion pasbort y setlwr
 settlorIndividualPassportYesNo.heading = A ydych yn gwybod manylion pasbort {0}?
