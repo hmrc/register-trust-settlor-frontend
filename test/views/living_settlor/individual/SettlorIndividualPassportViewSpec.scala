@@ -18,7 +18,6 @@ package views.living_settlor.individual
 
 import forms.PassportOrIdCardFormProvider
 import models.pages.{FullName, PassportOrIdCardDetails}
-import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption

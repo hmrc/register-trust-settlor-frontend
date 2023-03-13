@@ -27,48 +27,53 @@ import views.html.living_settlor.individual.SettlorIndividualIDCardView
 
 class SettlorIndividualIDCardViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetails] {
 
-  val messageKeyPrefix = "settlorIndividualIDCard"
   val index = 0
   val name = FullName("First", Some("Middle"), "Last")
 
   override val form = new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport")
 
-  "SettlorIndividualIDCardView" must {
+  Seq(
+    ("settlorIndividualIDCard", true),
+    ("settlorIndividualIDCardPastTense", false)
+  ) foreach {
+    case (settlorIndividualIDCardMessage, setUpBeforeSettlorDiedBool) =>
+      s"SettlorIndividualIDCardView (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
 
-    val view = viewFor[SettlorIndividualIDCardView](Some(emptyUserAnswers))
+        val view = viewFor[SettlorIndividualIDCardView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, countryOptions, fakeDraftId, index, name)(fakeRequest, messages)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-    val applyViewF = (form: Form[_]) => applyView(form)
+        val applyViewF = (form: Form[_]) => applyView(form)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        behave like dynamicTitlePage(applyView(form), settlorIndividualIDCardMessage, name.toString)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like pageWithBackLink(applyView(form))
 
-    "date fields" must {
+        "date fields" must {
 
-      behave like pageWithDateFields(form, applyViewF,
-        messageKeyPrefix,
-        "expiryDate",
-        name.toString
-      )
-    }
+          behave like pageWithDateFields(form, applyViewF,
+            settlorIndividualIDCardMessage,
+            "expiryDate",
+            name.toString
+          )
+        }
 
-    "text fields" must {
+        "text fields" must {
 
-      behave like pageWithTextFields(
-        form,
-        applyView,
-        messageKeyPrefix,
-        Seq(("number", None)),
-        name.toString
-      )
-    }
+          behave like pageWithTextFields(
+            form,
+            applyView,
+            settlorIndividualIDCardMessage,
+            Seq(("number", None)),
+            name.toString
+          )
+        }
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like pageWithASubmitButton(applyView(form))
 
+      }
   }
 }

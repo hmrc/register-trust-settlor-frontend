@@ -439,6 +439,26 @@ settlorIndividualIDCard.number.error.length = Mae’n rhaid i rif y cerdyn adnab
 settlorIndividualIDCard.number.error.required = Nodwch rif cerdyn adnabod y setlwr
 settlorIndividualIDCard.title = Beth yw manylion cerdyn adnabod y setlwr?
 
+settlorIndividualIDCardPastTense.checkYourAnswersLabel = Beth yw manylion cerdyn adnabod {0}?
+settlorIndividualIDCardPastTense.country = Gwlad cyhoeddi’r cerdyn adnabod
+settlorIndividualIDCardPastTense.country.error.length = Mae’n rhaid i wlad cerdyn adnabod y setlwr fod yn 100 o gymeriadau neu lai
+settlorIndividualIDCardPastTense.country.error.required = Nodwch wlad cyhoeddi cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.error.country.required = Nodwch wlad cyhoeddi cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.expiryDate.error.future = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualIDCardPastTense.expiryDate.error.invalid = Nodwch ddyddiad go iawn pan ddaw cerdyn adnabod y setlwr i ben
+settlorIndividualIDCardPastTense.expiryDate.error.past = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod fod ar ôl 31 Rhagfyr 1499 a chyn 01 Ionawr 2100
+settlorIndividualIDCardPastTense.expiryDate.error.required = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0}
+settlorIndividualIDCardPastTense.expiryDate.error.required.all = Nodwch ddyddiad dod i ben y cerdyn adnabod
+settlorIndividualIDCardPastTense.expiryDate.error.required.two = Mae’n rhaid i ddyddiad dod i ben y cerdyn adnabod gynnwys {0} a {1}
+settlorIndividualIDCardPastTense.expiryDate.hint = Gall y dyddiad dod i ben fod yn y gorffennol. Er enghraifft, 31 3 1980.
+settlorIndividualIDCardPastTense.expiryDate.title = Dyddiad dod i ben
+settlorIndividualIDCardPastTense.heading = Beth yw manylion cerdyn adnabod {0}?
+settlorIndividualIDCardPastTense.number = Rhif y cerdyn adnabod
+settlorIndividualIDCardPastTense.number.error.invalid = Gall rhif y cerdyn adnabod gynnwys llythrennau a rhifau yn unig
+settlorIndividualIDCardPastTense.number.error.length = Mae’n rhaid i rif y cerdyn adnabod fod yn 30 o gymeriadau neu lai
+settlorIndividualIDCardPastTense.number.error.required = Nodwch rif cerdyn adnabod y setlwr
+settlorIndividualIDCardPastTense.title = Beth yw manylion cerdyn adnabod y setlwr?
+
 settlorIndividualIDCardYesNo.checkYourAnswersLabel = A ydych yn gwybod manylion cerdyn adnabod {0}?
 settlorIndividualIDCardYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod manylion cerdyn adnabod y setlwr
 settlorIndividualIDCardYesNo.heading = A ydych yn gwybod manylion cerdyn adnabod {0}?

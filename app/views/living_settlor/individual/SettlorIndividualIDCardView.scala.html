@@ -30,10 +30,18 @@
     select: InputSelect
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualIDCardPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualIDCard"
+    } else {
+        "settlorIndividualIDCardPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualIDCard.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualIDCardPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -41,10 +49,10 @@
 
         @error_summary(form.errors)
 
-        @heading("settlorIndividualIDCard.heading", Some(name.toString))
+        @heading(s"${settlorIndividualIDCardPrefix}.heading", Some(name.toString))
 
         @select(field = form("country"),
-            label = messages("settlorIndividualIDCard.country"),
+            label = messages(s"${settlorIndividualIDCardPrefix}.country"),
             labelClasses = Set("bold"),
             options = countryOptions,
             placeholder = Some(messages("site.address.country.select")),
@@ -55,15 +63,15 @@
         @inputText(
             field = form("number"),
             inputClass = Some("govuk-input--width-20"),
-            label = messages("settlorIndividualIDCard.number")
+            label = messages(s"${settlorIndividualIDCardPrefix}.number")
         )
 
         @input_date(
             field = form("expiryDate"),
-            legend = messages("settlorIndividualIDCard.expiryDate.title"),
+            legend = messages(s"${settlorIndividualIDCardPrefix}.expiryDate.title"),
             legendClass = "bold",
             legendAsHeading = false,
-            hint = Some(messages(s"settlorIndividualIDCard.expiryDate.hint"))
+            hint = Some(messages(s"${settlorIndividualIDCardPrefix}.expiryDate.hint"))
         )
 
         @submitButton()
