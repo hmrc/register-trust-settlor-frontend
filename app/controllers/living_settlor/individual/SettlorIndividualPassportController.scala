@@ -62,7 +62,7 @@ class SettlorIndividualPassportController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
@@ -72,7 +72,7 @@ class SettlorIndividualPassportController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name, request.settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorIndividualPassportPage(index), value) match {
             case Success(updatedAnswers) =>

@@ -22,7 +22,6 @@ import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
-import pages.living_settlor.individual.SettlorAliveYesNoPage
 import pages.living_settlor.individual.mld5.UkCountryOfNationalityYesNoPage
 import play.api.Logging
 import play.api.data.Form
@@ -59,25 +58,25 @@ class UkCountryOfNationalityYesNoController @Inject()(
     implicit request =>
 
       val messageKeyPrefix =
-        if(settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
+        if(request.settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
 
       val preparedForm = request.userAnswers.get(UkCountryOfNationalityYesNoPage(index)) match {
         case None => form(messageKeyPrefix)
         case Some(value) => form(messageKeyPrefix).fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, request.name, settlorAliveAtRegistration(index)))
+      Ok(view(preparedForm, index, draftId, request.name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
     implicit request =>
 
       val messageKeyPrefix =
-        if(settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
+        if(request.settlorAliveAtRegistration(index)) "settlorIndividualUkCountryOfNationalityYesNo" else "settlorIndividualUkCountryOfNationalityYesNoPastTense"
 
       form(messageKeyPrefix).bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name, settlorAliveAtRegistration(index)))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name, request.settlorAliveAtRegistration(index)))),
 
         value => {
           request.userAnswers.set(UkCountryOfNationalityYesNoPage(index), value) match {
@@ -92,12 +91,4 @@ class UkCountryOfNationalityYesNoController @Inject()(
         }
       )
   }
-
-  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
-    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
-      case Some(value) => value
-      case None => false
-    }
-  }
-
 }
