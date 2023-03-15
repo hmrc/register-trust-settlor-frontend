@@ -24,7 +24,8 @@ import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
 
-final case class IndividualSettlor(name: FullName,
+final case class IndividualSettlor(aliveAtRegistration: Boolean,
+                                   name: FullName,
                                    dateOfBirth: Option[LocalDate],
                                    nino: Option[String],
                                    address: Option[Address],
@@ -45,7 +46,8 @@ final case class IndividualSettlor(name: FullName,
 object IndividualSettlor extends SettlorReads {
 
   implicit lazy val reads: Reads[IndividualSettlor] = (
-    (__ \ "name").read[FullName] and
+    (__ \ "aliveAtRegistration").read[Boolean] and
+      (__ \ "name").read[FullName] and
       (__ \ "dateOfBirth").readNullable[LocalDate] and
       (__ \ "nino").readNullable[String] and
       readAddress() and
@@ -54,6 +56,6 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
       readMentalCapacity
-    )(IndividualSettlor.apply _)
+    ) (IndividualSettlor.apply _)
 
 }

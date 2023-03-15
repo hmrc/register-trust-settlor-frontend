@@ -31,6 +31,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
       val json = Json.parse(
         """
           |{
+          | "aliveAtRegistration": true,
           | "name": {
           |   "firstName": "John",
           |   "lastName": "Smith"
@@ -40,6 +41,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
           |""".stripMargin)
 
       json.as[IndividualSettlor] mustBe IndividualSettlor(
+        aliveAtRegistration = true,
         name = FullName("John", None, "Smith"),
         dateOfBirth = None,
         nino = None,
@@ -56,6 +58,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
       val json = Json.parse(
         """
           |{
+          | "aliveAtRegistration": true,
           | "name": {
           |   "firstName": "John",
           |   "lastName": "Smith"
@@ -65,6 +68,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
           |""".stripMargin)
 
       json.as[IndividualSettlor] mustBe IndividualSettlor(
+        aliveAtRegistration = true,
         name = FullName("John", None, "Smith"),
         dateOfBirth = None,
         nino = None,

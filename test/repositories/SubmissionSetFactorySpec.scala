@@ -90,7 +90,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             val settlors: Settlors = Settlors(
               settlor = Some(List(
-                Settlor(name, None, None, None, None, None)
+                Settlor(aliveAtRegistration = true, name, None, None, None, None, None)
               )),
               settlorCompany = None
             )

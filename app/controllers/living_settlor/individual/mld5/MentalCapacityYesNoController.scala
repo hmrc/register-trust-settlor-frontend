@@ -78,10 +78,9 @@ class MentalCapacityYesNoController @Inject()(
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[MentalCapacityYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
       )
   }

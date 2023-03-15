@@ -18,22 +18,24 @@ package mapping
 
 import mapping.reads.IndividualSettlor
 import models.Settlor
-import models.YesNoDontKnow.{DontKnow, No, Yes}
+import models.YesNoDontKnow.{No, Yes}
 
 class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
 
-  override def settlorType(settlor: IndividualSettlor): Settlor = Settlor(
-    name = settlor.name,
-    dateOfBirth = settlor.dateOfBirth,
-    identification = settlor.identification,
-    countryOfResidence = settlor.countryOfResidence,
-    nationality = settlor.nationality,
-    legallyIncapable = {
-      settlor.hasMentalCapacity.flatMap {
-        case Yes => Some(false)
-        case No => Some(true)
-        case DontKnow => None
+  override def settlorType(settlor: IndividualSettlor): Settlor =
+    Settlor(
+      aliveAtRegistration = settlor.aliveAtRegistration,
+      name = settlor.name,
+      dateOfBirth = settlor.dateOfBirth,
+      identification = settlor.identification,
+      countryOfResidence = settlor.countryOfResidence,
+      nationality = settlor.nationality,
+      legallyIncapable = {
+        (settlor.aliveAtRegistration, settlor.hasMentalCapacity) match {
+          case (true, Some(Yes)) => Some(false)
+          case (true, Some(No)) => Some(true)
+          case (_, _) => None
+        }
       }
-    }
-  )
+    )
 }

@@ -102,10 +102,10 @@ class IndividualSettlorNavigator extends Navigator {
       CountryOfNationalityYesNoController.onPageLoad(index, draftId)
     case SettlorIndividualNINOPage(index) => _ =>
         CountryOfResidencyYesNoController.onPageLoad(index, draftId)
-    case SettlorIndividualPassportPage(index) => _ =>
-      MentalCapacityYesNoController.onPageLoad(index, draftId)
-    case SettlorIndividualIDCardPage(index) => _ =>
-      MentalCapacityYesNoController.onPageLoad(index, draftId)
+    case SettlorIndividualPassportPage(index) => ua =>
+      showOrHideMentalCapacityQuestion(ua, index, draftId)
+    case SettlorIndividualIDCardPage(index) => ua =>
+      showOrHideMentalCapacityQuestion(ua, index, draftId)
   }
 
   private def mldDependentYesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
@@ -125,13 +125,13 @@ class IndividualSettlorNavigator extends Navigator {
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualAddressUKYesNoController.onPageLoad(index, draftId),
-        noCall = MentalCapacityYesNoController.onPageLoad(index, draftId)
+        noCall = showOrHideMentalCapacityQuestion(ua, index, draftId)
       )(ua)
     case page @ SettlorIndividualIDCardYesNoPage(index) => ua =>
       yesNoNav(
         fromPage = page,
         yesCall = SettlorIndividualIDCardController.onPageLoad(index, draftId),
-        noCall = MentalCapacityYesNoController.onPageLoad(index, draftId)
+        noCall = showOrHideMentalCapacityQuestion(ua, index, draftId)
       )(ua)
   }
 
@@ -145,7 +145,7 @@ class IndividualSettlorNavigator extends Navigator {
 
   private def navigateAwayFromCountryOfResidencyQuestions(ua: UserAnswers, index: Int, draftId: String): Call = {
     if (isNinoDefined(ua, index) || !ua.isTaxable) {
-      MentalCapacityYesNoController.onPageLoad(index, draftId)
+      showOrHideMentalCapacityQuestion(ua, index, draftId)
     } else {
       SettlorIndividualAddressYesNoController.onPageLoad(index, draftId)
     }
@@ -153,5 +153,13 @@ class IndividualSettlorNavigator extends Navigator {
 
   private def isNinoDefined(ua: UserAnswers, index: Int): Boolean = {
     ua.get(SettlorIndividualNINOPage(index)).isDefined
+  }
+
+  private def showOrHideMentalCapacityQuestion(ua: UserAnswers, index: Int, draftId: String): Call = {
+    if(ua.get(SettlorAliveYesNoPage(index)).contains(true)) {
+      MentalCapacityYesNoController.onPageLoad(index, draftId)
+    } else {
+      SettlorIndividualAnswerController.onPageLoad(index, draftId)
+    }
   }
 }

@@ -23,7 +23,7 @@ import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
 import models.{TrustDetailsType, UserAnswers}
 import pages.deceased_settlor.SettlorsNamePage
 import pages.living_settlor._
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.trust_type._
 
 import java.time.LocalDate
@@ -55,6 +55,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             .set(SetUpByLivingSettlorYesNoPage, true).success.value
             .set(SettlorsNamePage, fullName).success.value
             .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorAliveYesNoPage(0), true).success.value
             .set(SettlorIndividualNamePage(0), fullName).success.value
 
           val result = mapper.build(userAnswers)
@@ -115,6 +116,7 @@ class TrustDetailsMapperSpec extends SpecBase {
                 .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
                 .set(HowDeedOfVariationCreatedPage, ReplacedWill).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -136,6 +138,7 @@ class TrustDetailsMapperSpec extends SpecBase {
               .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
               .set(HoldoverReliefYesNoPage, holdoverReliefYesNo).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -153,6 +156,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             val userAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.FlatManagement).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -170,6 +174,7 @@ class TrustDetailsMapperSpec extends SpecBase {
             val userAnswers = SetUpByLivingSettlorViewAnswers
               .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
               .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+              .set(SettlorAliveYesNoPage(0), true).success.value
               .set(SettlorIndividualNamePage(0), fullName).success.value
 
             val result = mapper.build(userAnswers).get
@@ -193,6 +198,7 @@ class TrustDetailsMapperSpec extends SpecBase {
                 .set(EfrbsYesNoPage, true).success.value
                 .set(EfrbsStartDatePage, date).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -211,6 +217,7 @@ class TrustDetailsMapperSpec extends SpecBase {
                 .set(KindOfTrustPage, KindOfTrust.Employees).success.value
                 .set(EfrbsYesNoPage, false).success.value
                 .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+                .set(SettlorAliveYesNoPage(0), true).success.value
                 .set(SettlorIndividualNamePage(0), fullName).success.value
 
               val result = mapper.build(userAnswers).get
@@ -246,6 +253,7 @@ class TrustDetailsMapperSpec extends SpecBase {
           val answers: UserAnswers = flaggedAnswers
             .set(SetUpByLivingSettlorYesNoPage, false).success.value
             .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+            .set(SettlorAliveYesNoPage(0), true).success.value
             .set(SettlorIndividualNamePage(0), fullName).success.value
 
           val result = mapper.build(answers)

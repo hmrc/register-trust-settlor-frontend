@@ -26,6 +26,7 @@ import java.time.LocalDate
 
 class IndividualSettlorsMapperSpec extends SpecBase {
 
+  private val aliveAtRegistration: Boolean = true
   private val name: FullName = FullName("Joe", None, "Bloggs")
   private val date: LocalDate = LocalDate.parse("1996-02-03")
   private val nino: String = "AA000000A"
@@ -62,6 +63,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "NINO" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), true).success.value
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), true).success.value
@@ -70,6 +72,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
@@ -86,6 +89,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "UK address and passport" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), true).success.value
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -98,6 +102,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
@@ -114,6 +119,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "non-UK address and ID card" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), true).success.value
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -127,6 +133,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
@@ -143,6 +150,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "UK address and no passport/ID card" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), true).success.value
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
             .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -155,6 +163,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name,
             dateOfBirth = None,
             identification = Some(IdentificationType(
@@ -171,6 +180,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         "no identification" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
+            .set(SettlorAliveYesNoPage(index), true).success.value
             .set(SettlorIndividualNamePage(index), name).success.value
             .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
             .set(SettlorIndividualDateOfBirthPage(index), date).success.value
@@ -180,6 +190,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
           val result = mapper.build(userAnswers).get
 
           result mustBe List(Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name,
             dateOfBirth = Some(date),
             identification = None,
@@ -195,11 +206,13 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         def name(index: Int): FullName = FullName("Name", None, s"$index")
 
         val userAnswers: UserAnswers = emptyUserAnswers
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(0), name(0)).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
           .set(SettlorIndividualNINOYesNoPage(0), false).success.value
           .set(SettlorAddressYesNoPage(0), false).success.value
 
+          .set(SettlorAliveYesNoPage(1), true).success.value
           .set(SettlorIndividualNamePage(1), name(1)).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(1), false).success.value
           .set(SettlorIndividualNINOYesNoPage(1), false).success.value
@@ -209,6 +222,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
 
         result mustBe List(
           Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name(0),
             dateOfBirth = None,
             identification = None,
@@ -217,6 +231,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
             legallyIncapable = None
           ),
           Settlor(
+            aliveAtRegistration = aliveAtRegistration,
             name = name(1),
             dateOfBirth = None,
             identification = None,
@@ -230,6 +245,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
       "country of nationality and residency unknown" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(CountryOfNationalityYesNoPage(index), false).success.value
@@ -241,6 +257,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe List(Settlor(
+          aliveAtRegistration = aliveAtRegistration,
           name = name,
           dateOfBirth = None,
           identification = None,
@@ -253,6 +270,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
       "UK country of nationality and residency" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(CountryOfNationalityYesNoPage(index), true).success.value
@@ -266,6 +284,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe List(Settlor(
+          aliveAtRegistration = aliveAtRegistration,
           name = name,
           dateOfBirth = None,
           identification = None,
@@ -278,6 +297,7 @@ class IndividualSettlorsMapperSpec extends SpecBase {
       "non-UK country of nationality and residency" in {
 
         val userAnswers: UserAnswers = emptyUserAnswers
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(CountryOfNationalityYesNoPage(index), true).success.value
@@ -293,11 +313,38 @@ class IndividualSettlorsMapperSpec extends SpecBase {
         val result = mapper.build(userAnswers).get
 
         result mustBe List(Settlor(
+          aliveAtRegistration = aliveAtRegistration,
           name = name,
           dateOfBirth = None,
           identification = None,
           countryOfResidence = Some("ES"),
           nationality = Some("FR"),
+          legallyIncapable = None
+        ))
+      }
+
+      "settlor is not alive at the time of registration" in {
+        val userAnswers: UserAnswers = emptyUserAnswers
+          .set(SettlorAliveYesNoPage(index), false).success.value
+          .set(SettlorIndividualNamePage(index), name).success.value
+          .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
+          .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+          .set(SettlorIndividualNINOPage(index), nino).success.value
+          .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
+
+        val result = mapper.build(userAnswers).get
+
+        result mustBe List(Settlor(
+          aliveAtRegistration = false,
+          name = name,
+          dateOfBirth = None,
+          identification = Some(IdentificationType(
+            nino = Some(nino),
+            passport = None,
+            address = None
+          )),
+          countryOfResidence = None,
+          nationality = None,
           legallyIncapable = None
         ))
       }
