@@ -33,13 +33,13 @@ class RegistrationProgress @Inject()() {
       userAnswers.get(DeceasedSettlorStatus).contains(Completed)
     )
 
-    val setupAfterDied = userAnswers.get(SetUpByLivingSettlorYesNoPage)
+    val setupByLivingSettlor = userAnswers.get(SetUpByLivingSettlorYesNoPage)
 
-    setupAfterDied flatMap { setupAfter =>
-      if (setupAfter) {
-        deceasedStatus
-      } else {
+    setupByLivingSettlor flatMap { setupByLivingSettlor =>
+      if (setupByLivingSettlor) {
         statusForNonWillTrust(userAnswers, deceasedStatus)
+      } else {
+        deceasedStatus
       }
     }
   }
