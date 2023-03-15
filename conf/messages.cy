@@ -414,6 +414,11 @@ settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorIndividualDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
 
+settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = Beth oedd dyddiad geni {0}?
+settlorIndividualDateOfBirthPastTense.heading = Beth oedd dyddiad geni {0}?
+settlorIndividualDateOfBirthPastTense.hint = Er enghraifft, 31 3 1980.
+settlorIndividualDateOfBirthPastTense.title = Beth oedd dyddiad geni’r setlwr?
+
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad geni {0}?
 settlorIndividualDateOfBirthYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod y dyddiad geni
 settlorIndividualDateOfBirthYesNo.heading = A ydych yn gwybod dyddiad geni {0}?
@@ -494,6 +499,21 @@ settlorIndividualName.heading = Beth yw enw’r setlwr?
 settlorIndividualName.lastName = Enw olaf
 settlorIndividualName.middleName = Enwau canol (dewisol)
 settlorIndividualName.title = Beth yw enw’r setlwr?
+
+settlorIndividualNamePastTense.checkYourAnswersLabel = Beth oedd enw’r setlwr?
+settlorIndividualNamePastTense.error.firstname.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.firstname.length = Mae’n rhaid i enw cyntaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.firstname.required = Nodwch enw cyntaf y setlwr
+settlorIndividualNamePastTense.error.lastname.invalid = Mae’n rhaid i enw olaf y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.lastname.length = Mae’n rhaid i enw olaf y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.error.lastname.required = Nodwch enw olaf y setlwr
+settlorIndividualNamePastTense.error.middlename.invalid = Mae’n rhaid i enwau canol y setlwr gynnwys y llythrennau a i z yn unig
+settlorIndividualNamePastTense.error.middlename.length = Mae’n rhaid i enwau canol y setlwr fod yn 35 o gymeriadau neu lai
+settlorIndividualNamePastTense.firstName = Enw cyntaf
+settlorIndividualNamePastTense.heading = Beth oedd enw’r setlwr?
+settlorIndividualNamePastTense.lastName = Enw olaf
+settlorIndividualNamePastTense.middleName = Enwau canol (dewisol)
+settlorIndividualNamePastTense.title = Beth oedd enw’r setlwr?
 
 settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
@@ -624,7 +644,7 @@ settlorsBasedInTheUK.error.required = Dewiswch ‘Iawn’ os oes unrhyw un o’r
 settlorsBasedInTheUK.heading = A oes unrhyw un o’r setlwyr wedi’u lleoli yn y DU?
 settlorsBasedInTheUK.title = A oes unrhyw un o’r setlwyr wedi’u lleoli yn y DU?
 
-settlorsDateOfBirth.checkYourAnswersLabel = Beth yw dyddiad geni {0}?
+settlorsDateOfBirth.checkYourAnswersLabel = Beth oedd dyddiad geni {0}?
 settlorsDateOfBirth.error.afterDateOfDeath = Mae’n rhaid i’r dyddiad geni fod ar neu cyn dyddiad y farwolaeth
 settlorsDateOfBirth.error.future = Mae’n rhaid i’r dyddiad geni fod heddiw neu yn y gorffennol
 settlorsDateOfBirth.error.invalid = Nodwch ddyddiad geni go iawn
@@ -632,9 +652,9 @@ settlorsDateOfBirth.error.past = Mae’n rhaid i’r dyddiad geni fod ar ôl 31 
 settlorsDateOfBirth.error.required = Mae’n rhaid i’r dyddiad geni gynnwys {0}
 settlorsDateOfBirth.error.required.all = Nodwch ddyddiad geni
 settlorsDateOfBirth.error.required.two = Mae’n rhaid i’r dyddiad geni gynnwys {0} a {1}
-settlorsDateOfBirth.heading = Beth yw dyddiad geni {0}?
+settlorsDateOfBirth.heading = Beth oedd dyddiad geni {0}?
 settlorsDateOfBirth.hint = Er enghraifft, 31 3 1980.
-settlorsDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
+settlorsDateOfBirth.title = Beth oedd dyddiad geni’r setlwr?
 
 settlorsInternationalAddress.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}?
 settlorsInternationalAddress.heading = Beth yw cyfeiriad hysbys diwethaf {0}?
@@ -645,7 +665,7 @@ settlorsLastKnownAddressYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn g
 settlorsLastKnownAddressYesNo.heading = A ydych yn gwybod cyfeiriad hysbys diwethaf {0}?
 settlorsLastKnownAddressYesNo.title = A ydych yn gwybod cyfeiriad hysbys diwethaf y setlwr?
 
-settlorsName.checkYourAnswersLabel = Beth yw enw’r setlwr?
+settlorsName.checkYourAnswersLabel = Beth oedd enw’r setlwr?
 settlorsName.error.firstName.invalid = Mae’n rhaid i enw cyntaf y setlwr gynnwys y llythrennau a i z yn unig
 settlorsName.error.firstName.length = Mae’n rhaid i enw cyntaf y setlwr fod yn 35 o gymeriadau neu lai
 settlorsName.error.firstName.required = Nodwch enw cyntaf y setlwr
@@ -655,10 +675,10 @@ settlorsName.error.lastName.required = Nodwch enw olaf y setlwr
 settlorsName.error.middleName.invalid = Mae’n rhaid i enwau canol y setlwr gynnwys y llythrennau a i z yn unig
 settlorsName.error.middleName.length = Mae’n rhaid i enwau canol y setlwr fod yn 35 o gymeriadau neu lai
 settlorsName.firstName = Enw cyntaf
-settlorsName.heading = Beth yw enw’r setlwr?
+settlorsName.heading = Beth oedd enw’r setlwr?
 settlorsName.lastName = Enw olaf
 settlorsName.middleName = Enwau canol (dewisol)
-settlorsName.title = Beth yw enw’r setlwr?
+settlorsName.title = Beth oedd enw’r setlwr?
 
 settlorsNationalInsuranceYesNo.checkYourAnswersLabel = A ydych yn gwybod rhif Yswiriant Gwladol {0}?
 settlorsNationalInsuranceYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod rhif Yswiriant Gwladol y setlwr
