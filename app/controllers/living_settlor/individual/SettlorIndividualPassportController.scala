@@ -21,8 +21,9 @@ import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.PassportOrIdCardFormProvider
 import models.pages.PassportOrIdCardDetails
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
-import pages.living_settlor.individual.{SettlorIndividualNamePage, SettlorIndividualPassportPage}
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -62,7 +63,7 @@ class SettlorIndividualPassportController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name, request.settlorAliveAtRegistration(index)))
+      Ok(view(preparedForm, countryOptions.options, draftId, index, name, settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
@@ -72,7 +73,7 @@ class SettlorIndividualPassportController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name, request.settlorAliveAtRegistration(index)))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, index, name, settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorIndividualPassportPage(index), value) match {
             case Success(updatedAnswers) =>
@@ -86,5 +87,12 @@ class SettlorIndividualPassportController @Inject()(
           }
         }
       )
+  }
+
+  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
+    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case Some(value) => value
+      case None => false
+    }
   }
 }

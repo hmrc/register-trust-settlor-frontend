@@ -22,6 +22,7 @@ import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.CountryFormProvider
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import pages.living_settlor.individual.mld5.CountryOfResidencyPage
 import play.api.Logging
 import play.api.data.Form
@@ -64,7 +65,7 @@ class CountryOfResidencyController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))
+      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name, settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
@@ -72,7 +73,7 @@ class CountryOfResidencyController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))),
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name, settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(CountryOfResidencyPage(index), value) match {
             case Success(updatedAnswers) =>
@@ -85,5 +86,12 @@ class CountryOfResidencyController @Inject()(
           }
         }
       )
+  }
+
+  private def settlorAliveAtRegistration(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Boolean = {
+    request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case Some(value) => value
+      case None => false
+    }
   }
 }
