@@ -21,6 +21,7 @@ import models.pages.AddASettlor.NoComplete
 import models.pages.IndividualOrBusiness._
 import models.pages.Status._
 import models.pages.{FullName, KindOfTrust}
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
 import pages.trust_type._
 import pages.{deceased_settlor => deceasedPages}
@@ -83,6 +84,7 @@ class RegistrationProgressSpec extends SpecBase {
           .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+          .set(SettlorAliveYesNoPage(0), true).success.value
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value
           .set(LivingSettlorStatus(0), Completed).success.value
           .set(SettlorIndividualOrBusinessPage(1), Business).success.value
@@ -99,7 +101,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup after settlor died and deceased settlor complete" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpByLivingSettlorYesNoPage, true).success.value
+          .set(SetUpByLivingSettlorYesNoPage, false).success.value
           .set(deceasedPages.SettlorsNamePage, name).success.value
           .set(DeceasedSettlorStatus, Completed).success.value
 
@@ -111,7 +113,7 @@ class RegistrationProgressSpec extends SpecBase {
       "setup in addition to will trust and deceased settlor completed" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpByLivingSettlorYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
           .set(deceasedPages.SettlorsNamePage, name).success.value
@@ -125,10 +127,11 @@ class RegistrationProgressSpec extends SpecBase {
       "not setup in addition to will trust and complete living settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpByLivingSettlorYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
           .set(KindOfTrustPage, KindOfTrust.Deed).success.value
           .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+          .set(SettlorAliveYesNoPage(0), true).success.value
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value
           .set(LivingSettlorStatus(0), Completed).success.value
           .set(AddASettlorPage, NoComplete).success.value
@@ -141,9 +144,10 @@ class RegistrationProgressSpec extends SpecBase {
       "there are no incomplete living settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SetUpByLivingSettlorYesNoPage, false).success.value
+          .set(SetUpByLivingSettlorYesNoPage, true).success.value
           .set(KindOfTrustPage, KindOfTrust.HeritageMaintenanceFund).success.value
           .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
+          .set(SettlorAliveYesNoPage(0), true).success.value
           .set(individualPages.SettlorIndividualNamePage(0), name).success.value
           .set(LivingSettlorStatus(0), Completed).success.value
           .set(SettlorIndividualOrBusinessPage(1), Business).success.value
