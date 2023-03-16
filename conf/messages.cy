@@ -217,9 +217,10 @@ removeSettlor.error.required = Dewiswch ‘Iawn’ os ydych am dynnu’r setlwr
 removeSettlor.heading = A ydych yn siŵr eich bod am dynnu {0}?
 removeSettlor.title = A ydych yn siŵr eich bod am dynnu’r setlwr?
 
-settlorAliveYesNo.title = Is the settlor alive at the time of registration?
-settlorAliveYesNo.heading = Is the settlor alive at the time of registration?
-settlorAliveYesNo.error.required = Select yes if the settlor is alive
+settlorAliveYesNo.title = A yw’r setlwr yn fyw ar adeg y cofrestru?
+settlorAliveYesNo.checkYourAnswersLabel = A yw’r setlwr yn fyw ar adeg y cofrestru?
+settlorAliveYesNo.heading = A yw’r setlwr yn fyw ar adeg y cofrestru?
+settlorAliveYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn fyw
 
 session_expired.guidance = Mae hyn oherwydd eich bod wedi bod yn segur ar y gwasanaeth ers 15 munud.
 session_expired.guidance.2 = Bydd angen i chi fewngofnodi er mwyn mynd yn eich blaen i gofrestru’r ymddiriedolaeth.
@@ -331,37 +332,37 @@ settlorIndividualAddressInternational.checkYourAnswersLabel = Beth yw cyfeiriad 
 settlorIndividualAddressInternational.heading = Beth yw cyfeiriad {0}?
 settlorIndividualAddressInternational.title = Beth yw cyfeiriad y setlwr?
 
-settlorIndividualAddressInternationalPastTense.title = What is the settlor’s last known address?
-settlorIndividualAddressInternationalPastTense.heading = What is {0}’s last known address?
-settlorIndividualAddressInternationalPastTense.checkYourAnswersLabel = What is {0}’s last known address?
+settlorIndividualAddressInternationalPastTense.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressInternationalPastTense.heading = Beth yw cyfeiriad hysbys diwethaf {0}’s?
+settlorIndividualAddressInternationalPastTense.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}’s?
 
 settlorIndividualAddressUK.checkYourAnswersLabel = Beth yw cyfeiriad {0}?
 settlorIndividualAddressUK.heading = Beth yw cyfeiriad {0}?
 settlorIndividualAddressUK.title = Beth yw cyfeiriad y setlwr?
 
-settlorIndividualAddressUKPastTense.title = What is the settlor’s last known address?
-settlorIndividualAddressUKPastTense.heading = What is {0}’s last known address?
-settlorIndividualAddressUKPastTense.checkYourAnswersLabel = What is {0}’s last known address?
+settlorIndividualAddressUKPastTense.title = Beth yw cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressUKPastTense.heading = Beth yw cyfeiriad hysbys diwethaf {0}’s?
+settlorIndividualAddressUKPastTense.checkYourAnswersLabel = Beth yw cyfeiriad hysbys diwethaf {0}’s?
 
 settlorIndividualAddressUKYesNo.checkYourAnswersLabel = A yw {0} yn byw yn y DU?
 settlorIndividualAddressUKYesNo.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn byw yn y DU
 settlorIndividualAddressUKYesNo.heading = A yw {0} yn byw yn y DU?
 settlorIndividualAddressUKYesNo.title = A yw’r setlwr yn byw yn y DU?
 
-settlorIndividualAddressUKYesNoPastTense.title = Was the settlor’s last known address in the UK?
-settlorIndividualAddressUKYesNoPastTense.heading = Was {0} last known address in the UK?
-settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = Was {0} last known address in the UK?
-settlorIndividualAddressUKYesNoPastTense.error.required = Select yes if the settlor’s last known address was in the UK
+settlorIndividualAddressUKYesNoPastTense.title = A oedd cyfeiriad hysbys diwethaf y setlwr yn y DU?
+settlorIndividualAddressUKYesNoPastTense.heading = A oedd cyfeiriad hysbys diwethaf {0} yn y DU?
+settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = A oedd cyfeiriad hysbys diwethaf {0} yn y DU?
+settlorIndividualAddressUKYesNoPastTense.error.required = Dewiswch ‘Iawn’ os oedd cyfeiriad hysbys diwethaf y setlwr yn y DU
 
 settlorIndividualAddressYesNo.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad {0}?
 settlorIndividualAddressYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad y setlwr
 settlorIndividualAddressYesNo.heading = A ydych yn gwybod cyfeiriad {0}?
 settlorIndividualAddressYesNo.title = A ydych yn gwybod cyfeiriad y setlwr?
 
-settlorIndividualAddressYesNoPastTense.title = Do you know the settlor’s last known address?
-settlorIndividualAddressYesNoPastTense.heading = Do you know {0}’s last known address?
-settlorIndividualAddressYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known address?
-settlorIndividualAddressYesNoPastTense.error.required = Select yes if you know the settlor’s last known address
+settlorIndividualAddressYesNoPastTense.title = A ydych yn gwybod cyfeiriad hysbys diwethaf y setlwr?
+settlorIndividualAddressYesNoPastTense.heading = A ydych yn gwybod cyfeiriad hysbys diwethaf {0}’s?
+settlorIndividualAddressYesNoPastTense.checkYourAnswersLabel = A ydych yn gwybod cyfeiriad hysbys diwethaf {0}’s?
+settlorIndividualAddressYesNoPastTense.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod cyfeiriad hysbys diwethaf y setlwr
 
 settlorIndividualCountryOfNationality.checkYourAnswersLabel = Beth yw gwlad cenedligrwydd {0}?
 settlorIndividualCountryOfNationality.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
@@ -390,12 +391,12 @@ settlorIndividualCountryOfResidency.error.required = Nodwch wlad
 settlorIndividualCountryOfResidency.heading = Beth yw gwlad breswyl {0}?
 settlorIndividualCountryOfResidency.title = Beth yw gwlad breswyl y setlwr?
 
-settlorIndividualCountryOfResidencyPastTense.title = What was the settlor’s country of residence?
-settlorIndividualCountryOfResidencyPastTense.heading = What was {0}’s country of residence?
-settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = What is {0}’s country of residence?
-settlorIndividualCountryOfResidencyPastTense.error.required = Enter a country
-settlorIndividualCountryOfResidencyPastTense.error.length = The country of residence must be 100 characters or less
-settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+settlorIndividualCountryOfResidencyPastTense.title = A ydych yn gwybod gwlad breswyl hysbys ddiwethaf y setlwr?
+settlorIndividualCountryOfResidencyPastTense.heading = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}’s?
+settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}’s?
+settlorIndividualCountryOfResidencyPastTense.error.required = Nodwch wlad
+settlorIndividualCountryOfResidencyPastTense.error.length = Mae’n rhaid i’r wlad breswyl fod yn 100 o gymeriadau neu lai
+settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = Mae’n rhaid i’r wlad breswyl gynnwys y llythrennau a i z yn unig
 
 settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = A ydych yn gwybod gwlad breswyl {0}?
 settlorIndividualCountryOfResidencyYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y setlwr
@@ -403,11 +404,11 @@ settlorIndividualCountryOfResidencyYesNo.heading = A ydych yn gwybod gwlad bresw
 settlorIndividualCountryOfResidencyYesNo.hint = Fel arfer, y wlad breswyl yw lle mae’r setlwr yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
 settlorIndividualCountryOfResidencyYesNo.title = A ydych yn gwybod gwlad breswyl y setlwr?
 
-settlorIndividualCountryOfResidencyYesNoPastTense.title = Do you know the settlor’s last known country of residence?
-settlorIndividualCountryOfResidencyYesNoPastTense.heading = Do you know {0}’s last known country of residence?
-settlorIndividualCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
-settlorIndividualCountryOfResidencyYesNoPastTense.hint = The last known country of residence is usually where the settlor lived and worked most of the time during the tax year.
-settlorIndividualCountryOfResidencyYesNoPastTense.error.required = Select yes if you know the settlor’s last known country of residence
+settlorIndividualCountryOfResidencyYesNoPastTense.title = A ydych yn gwybod gwlad breswyl hysbys ddiwethaf y setlwr?
+settlorIndividualCountryOfResidencyYesNoPastTense.heading = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}’s?
+settlorIndividualCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = A ydych yn gwybod beth oedd gwlad breswyl hysbys ddiwethaf {0}’s?
+settlorIndividualCountryOfResidencyYesNoPastTense.hint = Fel arfer, y wlad breswyl yw lle mae’r setlwr yn byw ac yn gweithio’r rhan fwyaf o’r amser yn ystod y flwyddyn dreth.
+settlorIndividualCountryOfResidencyYesNoPastTense.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod gwlad breswyl y setlwr
 
 settlorIndividualDateOfBirth.checkYourAnswersLabel = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
@@ -596,10 +597,10 @@ settlorIndividualUkCountryOfResidencyYesNo.error.required = Dewiswch ‘Iawn’ 
 settlorIndividualUkCountryOfResidencyYesNo.heading = A yw {0} yn breswylydd yn y DU?
 settlorIndividualUkCountryOfResidencyYesNo.title = A yw’r setlwr yn breswylydd yn y DU?
 
-settlorIndividualUkCountryOfResidencyYesNoPastTense.title = Was the settlor a UK resident?
-settlorIndividualUkCountryOfResidencyYesNoPastTense.heading = Was {0} a UK resident?
-settlorIndividualUkCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Was {0} a UK resident?
-settlorIndividualUkCountryOfResidencyYesNoPastTense.error.required = Select yes if the settlor was a UK resident
+settlorIndividualUkCountryOfResidencyYesNoPastTense.title = A oedd y setlwr yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.heading = A oedd {0} yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = A oedd {0} yn breswylydd yn y DU?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.error.required = Dewiswch ‘Iawn’ os yw’r setlwr yn breswylydd yn y DU // TODO: CHECK
 
 settlorInfo.bulletpoint1 = dyddiad y farwolaeth
 settlorInfo.bulletpoint10 = a oedd y busnes wedi bodoli am o leiaf 2 flynedd pan ychwanegwyd unrhyw ased at yr ymddiriedolaeth

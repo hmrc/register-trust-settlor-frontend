@@ -162,6 +162,7 @@ removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
 settlorAliveYesNo.title = Is the settlor alive at the time of registration?
+settlorAliveYesNo.checkYourAnswersLabel = Is the settlor alive at the time of registration?
 settlorAliveYesNo.heading = Is the settlor alive at the time of registration?
 settlorAliveYesNo.error.required = Select yes if the settlor is alive
 
@@ -420,7 +421,7 @@ settlorIndividualCountryOfResidency.error.invalidCharacters = The country of res
 
 settlorIndividualCountryOfResidencyPastTense.title = What was the settlor’s country of residence?
 settlorIndividualCountryOfResidencyPastTense.heading = What was {0}’s country of residence?
-settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = What is {0}’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = What was {0}’s country of residence?
 settlorIndividualCountryOfResidencyPastTense.error.required = Enter a country
 settlorIndividualCountryOfResidencyPastTense.error.length = The country of residence must be 100 characters or less
 settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
