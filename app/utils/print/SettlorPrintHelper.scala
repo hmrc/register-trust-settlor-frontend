@@ -32,32 +32,32 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper,
     answerSection(userAnswers, name, index, draftId)(headingKey, sectionKey(index))
   }
 
-  def checkDetailsSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0)
+  def checkDetailsSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0, prefix: Option[String] = None)
                          (implicit messages: Messages): AnswerSection = {
-    answerSection(userAnswers, name, index, draftId)(None, None)
+    answerSection(userAnswers, name, index, draftId, prefix)(None, None)
   }
 
-  private def answerSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+  private def answerSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String, prefix: Option[String] = None)
                            (heading: Option[String], section: Option[String])
                            (implicit messages: Messages): AnswerSection = {
     AnswerSection(
       headingKey = heading,
-      rows = answerRows(userAnswers, name, index, draftId),
+      rows = answerRows(userAnswers, name, index, draftId, prefix),
       sectionKey = section,
       headingArgs = Seq(index + 1)
     )
   }
 
-  private def answerRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
+  private def answerRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String, prefix: Option[String])
                         (implicit messages: Messages): Seq[AnswerRow] = {
 
     val bound = answerRowConverter.bind(userAnswers, name)
 
     trustTypePrintHelper.answerRows(userAnswers, draftId) ++
-      answerRows(index, draftId)(bound).flatten
+      answerRows(index, draftId, prefix)(bound).flatten
   }
 
-  def answerRows(index: Int, draftId: String)
+  def answerRows(index: Int, draftId: String, prefix: Option[String] = None)
                 (bound: AnswerRowConverter#Bound)
                 (implicit messages: Messages): Seq[Option[AnswerRow]]
 
