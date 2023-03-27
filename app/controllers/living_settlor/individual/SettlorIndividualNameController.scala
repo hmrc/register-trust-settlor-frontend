@@ -20,8 +20,9 @@ import config.annotations.IndividualSettlor
 import controllers.actions.Actions
 import forms.living_settlor.SettlorIndividualNameFormProvider
 import models.pages.FullName
+import models.requests.RegistrationDataRequest
 import navigation.Navigator
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.SettlorIndividualNamePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,37 +49,23 @@ class SettlorIndividualNameController @Inject()(
   private val form: Form[FullName] = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request => {
-
-      val setUpAfterSettlorDied: Boolean = request
-        .userAnswers
-        .get(SettlorAliveYesNoPage(index)) match {
-          case Some(value) => value
-          case None => false
-        }
+    implicit request: RegistrationDataRequest[AnyContent] => {
 
       val preparedForm = request.userAnswers.get(SettlorIndividualNamePage(index)) match {
         case None => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, setUpAfterSettlorDied))
+      Ok(view(preparedForm, draftId, index, request.settlorAliveAtRegistration(index)))
     }
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      val setUpAfterSettlorDied: Boolean = request
-        .userAnswers
-        .get(SettlorAliveYesNoPage(index)) match {
-          case Some(value) => value
-          case None => false
-        }
+    implicit request: RegistrationDataRequest[AnyContent] =>
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, setUpAfterSettlorDied))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.settlorAliveAtRegistration(index)))),
 
         value => {
           request.userAnswers.set(SettlorIndividualNamePage(index), value) match {

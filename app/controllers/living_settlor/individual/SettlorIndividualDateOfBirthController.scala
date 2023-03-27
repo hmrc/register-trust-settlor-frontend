@@ -21,7 +21,7 @@ import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.DateOfBirthFormProvider
 import navigation.Navigator
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{SettlorIndividualDateOfBirthPage, SettlorIndividualNamePage}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -53,13 +53,6 @@ class SettlorIndividualDateOfBirthController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
     implicit request =>
 
-      val setUpAfterSettlorDied: Boolean = request
-        .userAnswers
-        .get(SettlorAliveYesNoPage(index)) match {
-        case Some(value) => value
-        case None => false
-      }
-
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(SettlorIndividualDateOfBirthPage(index)) match {
@@ -67,24 +60,17 @@ class SettlorIndividualDateOfBirthController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name, setUpAfterSettlorDied))
+      Ok(view(preparedForm, draftId, index, name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
     implicit request =>
 
-      val setUpAfterSettlorDied: Boolean = request
-        .userAnswers
-        .get(SettlorAliveYesNoPage(index)) match {
-        case Some(value) => value
-        case None => false
-      }
-
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, setUpAfterSettlorDied))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, request.settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorIndividualDateOfBirthPage(index), value) match {
             case Success(updatedAnswers) =>
