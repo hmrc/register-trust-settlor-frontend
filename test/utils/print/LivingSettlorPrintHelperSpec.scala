@@ -64,6 +64,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -72,6 +73,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -85,6 +87,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
           .set(SettlorIndividualDateOfBirthPage(index), date).success.value
@@ -94,6 +97,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualDateOfBirth.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -108,6 +112,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -120,6 +125,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -137,6 +143,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -149,6 +156,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -166,6 +174,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val userAnswers = emptyUserAnswers
           .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+          .set(SettlorAliveYesNoPage(index), true).success.value
           .set(SettlorIndividualNamePage(index), name).success.value
           .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
           .set(SettlorIndividualNINOYesNoPage(index), false).success.value
@@ -179,6 +188,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualNINOYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualNINOYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -195,6 +205,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
       val baseAnswers: UserAnswers = emptyUserAnswers
         .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+        .set(SettlorAliveYesNoPage(index), true).success.value
         .set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
 
@@ -211,6 +222,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -238,6 +250,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -269,6 +282,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         val expectedAnswerRows = Seq(
           AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+          AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualName.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
           AnswerRow(label = "settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualDateOfBirthYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
           AnswerRow(label = "settlorIndividualCountryOfNationalityYesNo.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
@@ -284,8 +298,106 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
         assertThatUserAnswersProduceExpectedAnswerRows(userAnswers, expectedAnswerRows)
       }
+
+      "include prefix in the message key when defined" when {
+
+        "UK residency, UK address and Passport pages" in {
+
+          val prefix = "PastTense"
+
+          val baseAnswers = emptyUserAnswers
+            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+            .set(SettlorAliveYesNoPage(index), false).success.value
+
+          val pagesWithPrefix = baseAnswers
+            .set(SettlorIndividualNamePage(index), name).success.value
+            .set(SettlorIndividualDateOfBirthPage(index), date).success.value
+            .set(UkCountryOfNationalityYesNoPage(index), true).success.value
+            .set(CountryOfResidencyYesNoPage(index), true).success.value
+            .set(UkCountryOfResidencyYesNoPage(index), true).success.value
+            .set(SettlorAddressYesNoPage(index), true).success.value
+            .set(SettlorAddressUKYesNoPage(index), true).success.value
+            .set(SettlorAddressUKPage(index), ukAddress).success.value
+            .set(SettlorIndividualPassportPage(index), passportOrIdCardDetails).success.value
+            .set(LivingSettlorStatus(index), Completed).success.value
+
+
+          val expectedAnswerRows = Seq(
+            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualName$prefix.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow(label = s"settlorIndividualDateOfBirth$prefix.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualUkCountryOfNationalityYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualCountryOfResidencyYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualUkCountryOfResidencyYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressUKYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressUK$prefix.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />Line 4<br />AB11AB"), changeUrl = Some(SettlorIndividualAddressUKController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualPassport$prefix.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+          )
+
+          val checkDetailsSection = livingSettlorPrintHelper.checkDetailsSection(pagesWithPrefix, name.toString, fakeDraftId, index, Some(prefix))
+
+          checkDetailsSection mustEqual AnswerSection(
+            headingKey = None,
+            rows = expectedAnswerRows,
+            sectionKey = None,
+            headingArgs = Seq(index + 1)
+          )
+        }
+
+        "Non-UK residency, International address and ID Card pages" in {
+
+          val prefix = "PastTense"
+
+          val baseAnswers = emptyUserAnswers
+            .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+            .set(SettlorAliveYesNoPage(index), false).success.value
+
+          val pagesWithPrefix = baseAnswers
+            .set(SettlorIndividualNamePage(index), name).success.value
+            .set(SettlorIndividualDateOfBirthPage(index), date).success.value
+            .set(UkCountryOfNationalityYesNoPage(index), false).success.value
+            .set(CountryOfNationalityPage(index), "FR").success.value
+            .set(CountryOfResidencyYesNoPage(index), true).success.value
+            .set(UkCountryOfResidencyYesNoPage(index), false).success.value
+            .set(CountryOfResidencyPage(index), "FR").success.value
+            .set(SettlorAddressYesNoPage(index), true).success.value
+            .set(SettlorAddressUKYesNoPage(index), false).success.value
+            .set(SettlorAddressInternationalPage(index), nonUkAddress).success.value
+            .set(SettlorIndividualIDCardPage(index), passportOrIdCardDetails).success.value
+            .set(LivingSettlorStatus(index), Completed).success.value
+
+
+          val expectedAnswerRows = Seq(
+            AnswerRow(label = "settlorIndividualOrBusiness.checkYourAnswersLabel", answer = Html("Individual"), changeUrl = Some(SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = "settlorAliveYesNo.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorAliveYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualName$prefix.checkYourAnswersLabel", answer = Html("Joe Joseph Bloggs"), changeUrl = Some(SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url)),
+            AnswerRow(label = s"settlorIndividualDateOfBirth$prefix.checkYourAnswersLabel", answer = Html("3 February 1996"), changeUrl = Some(SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualUkCountryOfNationalityYesNo$prefix.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualCountryOfNationality$prefix.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfNationalityController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualCountryOfResidencyYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(CountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualUkCountryOfResidencyYesNo$prefix.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(UkCountryOfResidencyYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualCountryOfResidency$prefix.checkYourAnswersLabel", answer = Html("France"), changeUrl = Some(CountryOfResidencyController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressYesNo$prefix.checkYourAnswersLabel", answer = Html("Yes"), changeUrl = Some(SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressUKYesNo$prefix.checkYourAnswersLabel", answer = Html("No"), changeUrl = Some(SettlorIndividualAddressUKYesNoController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualAddressInternational$prefix.checkYourAnswersLabel", answer = Html("Line 1<br />Line 2<br />Line 3<br />France"), changeUrl = Some(SettlorIndividualAddressInternationalController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString),
+            AnswerRow(label = s"settlorIndividualIDCard$prefix.checkYourAnswersLabel", answer = Html("United Kingdom<br />0987654321<br />3 February 1996"), changeUrl = Some(SettlorIndividualIDCardController.onPageLoad(index, fakeDraftId).url), labelArg = name.toString)
+          )
+
+          val checkDetailsSection = livingSettlorPrintHelper.checkDetailsSection(pagesWithPrefix, name.toString, fakeDraftId, index, Some(prefix))
+
+          checkDetailsSection mustEqual AnswerSection(
+            headingKey = None,
+            rows = expectedAnswerRows,
+            sectionKey = None,
+            headingArgs = Seq(index + 1)
+          )
+        }
+      }
     }
   }
+
 
   private def assertThatUserAnswersProduceExpectedAnswerRows(userAnswers: UserAnswers,
                                                              expectedAnswerRows: Seq[AnswerRow]): Assertion = {

@@ -26,13 +26,20 @@
     heading: Heading
 )
 
-@(form: Form[_], draftId: String, index: Int)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualNamePrefix = @{
+    if({{setUpBeforeSettlorDied}}){
+         "settlorIndividualName"
+    } else {
+        "settlorIndividualNamePastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualName.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualNamePrefix}.title")}",
     showBackLink = true
 ) {
-
     @formHelper(action = SettlorIndividualNameController.onSubmit(index, draftId), 'autoComplete -> "on") {
 
         @error_summary(form.errors)
@@ -40,26 +47,26 @@
     <fieldset class="govuk-fieldset">
 
         <legend class="govuk-fieldset__legend govuk-fieldset__legend--l">
-            @heading("settlorIndividualName.heading")
+            @heading(s"${settlorIndividualNamePrefix}.heading")
         </legend>
 
         @inputText(
             field = form("firstName"),
-            label = messages("settlorIndividualName.firstName"),
+            label = messages(s"${settlorIndividualNamePrefix}.firstName"),
             inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("given-name")
         )
 
         @inputText(
             field = form("middleName"),
-            label = messages("settlorIndividualName.middleName"),
+            label = messages(s"${settlorIndividualNamePrefix}.middleName"),
             inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("additional-name")
         )
 
         @inputText(
             field = form("lastName"),
-            label = messages("settlorIndividualName.lastName"),
+            label = messages(s"${settlorIndividualNamePrefix}.lastName"),
             inputClass = Some("govuk-!-width-one-half"),
             autocomplete = Some("family-name")
         )

@@ -161,6 +161,11 @@ removeSettlor.heading = Are you sure you want to remove {0}?
 removeSettlor.checkYourAnswersLabel = Are you sure you want to remove {0}?
 removeSettlor.error.required = Select yes if you want to remove the settlor
 
+settlorAliveYesNo.title = Is the settlor alive at the time of registration?
+settlorAliveYesNo.heading = Is the settlor alive at the time of registration?
+settlorAliveYesNo.error.required = Select yes if the settlor is alive
+settlorAliveYesNo.checkYourAnswersLabel = Is the settlor alive at the time of registration?
+
 5mld.countryOfResidenceYesNo.title = Do you know the settlor’s last known country of residence?
 5mld.countryOfResidenceYesNo.heading = Do you know {0}’s last known country of residence?
 5mld.countryOfResidenceYesNo.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
@@ -276,11 +281,12 @@ settlorsUKAddress.title = What is the settlor’s last known address?
 settlorsUKAddress.heading = What is {0}’s last known address?
 settlorsUKAddress.checkYourAnswersLabel = What is {0}’s last known address?
 
-setUpAfterSettlorDiedYesNo.title = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.heading = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.checkYourAnswersLabel = Was the trust set up after the settlor died?
-setUpAfterSettlorDiedYesNo.error.required = Select yes if the trust was set up after the settlor died
-setUpAfterSettlorDiedYesNo.hint = This is also known as a will trust.
+setUpByLivingSettlorYesNo.title = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.heading = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.checkYourAnswersLabel = Was the trust set up by a living settlor?
+setUpByLivingSettlorYesNo.error.required = Select yes if the trust was set up by a living settlor
+setUpByLivingSettlorYesNo.yes = Yes, the trust was set up by a living settlor
+setUpByLivingSettlorYesNo.no = No, it is a ''will trust'' or a trust set up after the settlor died
 
 setUpInAdditionToWillTrustYesNo.title = Is this in addition to a will trust?
 setUpInAdditionToWillTrustYesNo.heading = Is this in addition to a will trust?
@@ -317,6 +323,21 @@ settlorIndividualName.error.firstname.invalid = Settlor’s first name must only
 settlorIndividualName.error.middlename.invalid = Settlor’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 settlorIndividualName.error.lastname.invalid = Settlor’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
 
+settlorIndividualNamePastTense.title = What was the settlor’s name?
+settlorIndividualNamePastTense.heading = What was the settlor’s name?
+settlorIndividualNamePastTense.checkYourAnswersLabel = What was the settlor’s name?
+settlorIndividualNamePastTense.firstName = First name
+settlorIndividualNamePastTense.middleName = Middle names (optional)
+settlorIndividualNamePastTense.lastName = Last name
+settlorIndividualNamePastTense.error.firstname.required = Enter the settlor’s first name
+settlorIndividualNamePastTense.error.lastname.required = Enter the settlor’s last name
+settlorIndividualNamePastTense.error.firstname.length = Settlor’s first name must be 35 characters or less
+settlorIndividualNamePastTense.error.middlename.length = Settlor’s middle names must be 35 characters or less
+settlorIndividualNamePastTense.error.lastname.length = Settlor’s last name must be 35 characters or less
+settlorIndividualNamePastTense.error.firstname.invalid = Settlor’s first name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+settlorIndividualNamePastTense.error.middlename.invalid = Settlor’s middle names must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+settlorIndividualNamePastTense.error.lastname.invalid = Settlor’s last name must only include letters a to z, numbers 0 to 9, ampersands (&), apostrophes, commas, forward slashes, full stops, hyphens, round brackets and spaces
+
 settlorIndividualDateOfBirthYesNo.title = Do you know the settlor’s date of birth?
 settlorIndividualDateOfBirthYesNo.heading = Do you know {0}’s date of birth?
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = Do you know {0}’s date of birth?
@@ -326,6 +347,11 @@ settlorIndividualDateOfBirth.title = What is the settlor’s date of birth?
 settlorIndividualDateOfBirth.heading = What is {0}’s date of birth?
 settlorIndividualDateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
 settlorIndividualDateOfBirth.hint = For example, 31 3 1980.
+
+settlorIndividualDateOfBirthPastTense.title = What was the settlor’s date of birth?
+settlorIndividualDateOfBirthPastTense.heading = What was {0}’s date of birth?
+settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = What was {0}’s date of birth?
+settlorIndividualDateOfBirthPastTense.hint = For example, 31 3 1980.
 
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}
@@ -345,6 +371,11 @@ settlorIndividualUkCountryOfNationalityYesNo.heading = Does {0} have UK national
 settlorIndividualUkCountryOfNationalityYesNo.checkYourAnswersLabel = Does {0} have UK nationality?
 settlorIndividualUkCountryOfNationalityYesNo.error.required = Select yes if the settlor has UK nationality
 
+settlorIndividualUkCountryOfNationalityYesNoPastTense.title = Did the settlor have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.heading = Did {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.checkYourAnswersLabel = Did {0} have UK nationality?
+settlorIndividualUkCountryOfNationalityYesNoPastTense.error.required = Select yes if the settlor had UK nationality
+
 settlorIndividualCountryOfNationality.title = What is the settlor’s country of nationality?
 settlorIndividualCountryOfNationality.heading = What is {0}’s country of nationality?
 settlorIndividualCountryOfNationality.checkYourAnswersLabel = What is {0}’s country of nationality?
@@ -352,16 +383,34 @@ settlorIndividualCountryOfNationality.error.required = Enter a country
 settlorIndividualCountryOfNationality.error.length = The country of nationality must be 100 characters or less
 settlorIndividualCountryOfNationality.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
+settlorIndividualCountryOfNationalityPastTense.title = What was the settlor’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.heading = What was {0}’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.checkYourAnswersLabel = What was {0}’s country of nationality?
+settlorIndividualCountryOfNationalityPastTense.error.required = Enter a country
+settlorIndividualCountryOfNationalityPastTense.error.length = The country of nationality must be 100 characters or less
+settlorIndividualCountryOfNationalityPastTense.error.invalidCharacters = The country of nationality must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
 settlorIndividualCountryOfResidencyYesNo.title = Do you know the settlor’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.heading = Do you know {0}’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.checkYourAnswersLabel = Do you know {0}’s country of residence?
 settlorIndividualCountryOfResidencyYesNo.hint = The country of residence is usually where the settlor lives and works most of the time during the tax year.
 settlorIndividualCountryOfResidencyYesNo.error.required = Select yes if you know the settlor’s country of residence
 
+settlorIndividualCountryOfResidencyYesNoPastTense.title = Do you know the settlor’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.heading = Do you know {0}’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known country of residence?
+settlorIndividualCountryOfResidencyYesNoPastTense.hint = The last known country of residence is usually where the settlor lived and worked most of the time during the tax year.
+settlorIndividualCountryOfResidencyYesNoPastTense.error.required = Select yes if you know the settlor’s last known country of residence
+
 settlorIndividualUkCountryOfResidencyYesNo.title = Is the settlor a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.heading = Is {0} a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.checkYourAnswersLabel = Is {0} a UK resident?
 settlorIndividualUkCountryOfResidencyYesNo.error.required = Select yes if the settlor is a UK resident
+
+settlorIndividualUkCountryOfResidencyYesNoPastTense.title = Was the settlor a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.heading = Was {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.checkYourAnswersLabel = Was {0} a UK resident?
+settlorIndividualUkCountryOfResidencyYesNoPastTense.error.required = Select yes if the settlor was a UK resident
 
 settlorIndividualCountryOfResidency.title = What is the settlor’s country of residence?
 settlorIndividualCountryOfResidency.heading = What is {0}’s country of residence?
@@ -369,6 +418,13 @@ settlorIndividualCountryOfResidency.checkYourAnswersLabel = What is {0}’s coun
 settlorIndividualCountryOfResidency.error.required = Enter a country
 settlorIndividualCountryOfResidency.error.length = The country of residence must be 100 characters or less
 settlorIndividualCountryOfResidency.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
+
+settlorIndividualCountryOfResidencyPastTense.title = What was the settlor’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.heading = What was {0}’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.checkYourAnswersLabel = What was {0}’s country of residence?
+settlorIndividualCountryOfResidencyPastTense.error.required = Enter a country
+settlorIndividualCountryOfResidencyPastTense.error.length = The country of residence must be 100 characters or less
+settlorIndividualCountryOfResidencyPastTense.error.invalidCharacters = The country of residence must only include letters a to z, apostrophes, commas, full stops, hyphens, round brackets and spaces
 
 settlorIndividualMentalCapacityYesNo.title = Does the settlor have mental capacity at the time of registration?
 settlorIndividualMentalCapacityYesNo.heading = Does {0} have mental capacity at the time of registration?
@@ -395,6 +451,11 @@ settlorIndividualAddressYesNo.heading = Do you know {0}’s address?
 settlorIndividualAddressYesNo.checkYourAnswersLabel = Do you know {0}’s address?
 settlorIndividualAddressYesNo.error.required = Select yes if you know the settlor’s address
 
+settlorIndividualAddressYesNoPastTense.title = Do you know the settlor’s last known address?
+settlorIndividualAddressYesNoPastTense.heading = Do you know {0}’s last known address?
+settlorIndividualAddressYesNoPastTense.checkYourAnswersLabel = Do you know {0}’s last known address?
+settlorIndividualAddressYesNoPastTense.error.required = Select yes if you know the settlor’s last known address
+
 settlorIndividualNINO.title = What is the settlor’s National Insurance number?
 settlorIndividualNINO.heading = What is {0}’s National Insurance number?
 settlorIndividualNINO.checkYourAnswersLabel = What is {0}’s National Insurance number?
@@ -412,14 +473,27 @@ settlorIndividualAddressInternational.title = What is the settlor’s address?
 settlorIndividualAddressInternational.heading = What is {0}’s address?
 settlorIndividualAddressInternational.checkYourAnswersLabel = What is {0}’s address?
 
+settlorIndividualAddressInternationalPastTense.title = What is the settlor’s last known address?
+settlorIndividualAddressInternationalPastTense.heading = What is {0}’s last known address?
+settlorIndividualAddressInternationalPastTense.checkYourAnswersLabel = What is {0}’s last known address?
+
 settlorIndividualAddressUK.title = What is the settlor’s address?
 settlorIndividualAddressUK.heading = What is {0}’s address?
 settlorIndividualAddressUK.checkYourAnswersLabel = What is {0}’s address?
+
+settlorIndividualAddressUKPastTense.title = What is the settlor’s last known address?
+settlorIndividualAddressUKPastTense.heading = What is {0}’s last known address?
+settlorIndividualAddressUKPastTense.checkYourAnswersLabel = What is {0}’s last known address?
 
 settlorIndividualAddressUKYesNo.title = Does the settlor live in the UK?
 settlorIndividualAddressUKYesNo.heading = Does {0} live in the UK?
 settlorIndividualAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 settlorIndividualAddressUKYesNo.error.required = Select yes if the settlor lives in the UK
+
+settlorIndividualAddressUKYesNoPastTense.title = Was the settlor’s last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.heading = Was {0} last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = Was {0} last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.error.required = Select yes if the settlor’s last known address was in the UK
 
 settlorIndividualIDCard.title = What are the settlor’s ID card details?
 settlorIndividualIDCard.heading = What are {0}’s ID card details?
@@ -440,6 +514,26 @@ settlorIndividualIDCard.expiryDate.error.required = ID card expiry date must inc
 settlorIndividualIDCard.expiryDate.error.invalid = Enter a real date when the settlor’s ID card expires
 settlorIndividualIDCard.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 settlorIndividualIDCard.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+
+settlorIndividualIDCardPastTense.title = What are the details for the settlor’s last ID card?
+settlorIndividualIDCardPastTense.heading = What are the details for {0}’s last ID card?
+settlorIndividualIDCardPastTense.checkYourAnswersLabel = What are the details for {0}’s last ID card?
+settlorIndividualIDCardPastTense.country = ID card country of issue
+settlorIndividualIDCardPastTense.error.country.required = Enter the settlor’s ID card country of issue
+settlorIndividualIDCardPastTense.country.error.required = Enter the settlor’s ID card country of issue
+settlorIndividualIDCardPastTense.country.error.length = The settlor’s ID card country must be 100 characters or less
+settlorIndividualIDCardPastTense.number = ID card number
+settlorIndividualIDCardPastTense.number.error.required = Enter the settlor’s ID card number
+settlorIndividualIDCardPastTense.number.error.length = ID card number must be 30 characters or less
+settlorIndividualIDCardPastTense.number.error.invalid = ID card number can only include letters and numbers
+settlorIndividualIDCardPastTense.expiryDate.title = Expiry date
+settlorIndividualIDCardPastTense.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980.
+settlorIndividualIDCardPastTense.expiryDate.error.required.all = Enter the ID card expiry date
+settlorIndividualIDCardPastTense.expiryDate.error.required.two = ID card expiry date must include a {0} and {1}
+settlorIndividualIDCardPastTense.expiryDate.error.required = ID card expiry date must include a {0}
+settlorIndividualIDCardPastTense.expiryDate.error.invalid = Enter a real date when the settlor’s ID card expires
+settlorIndividualIDCardPastTense.expiryDate.error.future = ID card expiry date must be after 31 December 1499 and before 01 January 2100
+settlorIndividualIDCardPastTense.expiryDate.error.past = ID card expiry date must be after 31 December 1499 and before 01 January 2100
 
 settlorIndividualIDCardYesNo.title = Do you know the settlor’s ID card details?
 settlorIndividualIDCardYesNo.heading = Do you know {0}’s ID card details?
@@ -465,6 +559,26 @@ settlorIndividualPassport.expiryDate.error.required = Passport expiry date must 
 settlorIndividualPassport.expiryDate.error.invalid = Enter a real date when the settlor’s passport expires
 settlorIndividualPassport.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 settlorIndividualPassport.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+
+settlorIndividualPassportPastTense.title = What are the details for the settlor’s last passport?
+settlorIndividualPassportPastTense.heading = What are the details for {0}’s last passport?
+settlorIndividualPassportPastTense.checkYourAnswersLabel = What are the details for {0}’s last passport?
+settlorIndividualPassportPastTense.country = Passport country of issue
+settlorIndividualPassportPastTense.country.error.required = Enter the settlor’s passport country of issue
+settlorIndividualPassportPastTense.country.error.length = The settlor’s passport country must be 100 characters or less
+settlorIndividualPassportPastTense.number = Passport number
+settlorIndividualPassportPastTense.number.hint = For example, 502135326.
+settlorIndividualPassportPastTense.number.error.required = Enter the settlor’s passport number
+settlorIndividualPassportPastTense.number.error.length = Passport number must be 30 characters or less
+settlorIndividualPassportPastTense.number.error.invalid = Passport number can only include letters and numbers
+settlorIndividualPassportPastTense.expiryDate.title = Expiry date
+settlorIndividualPassportPastTense.expiryDate.hint = Expiry date can be in the past. For example, 31 3 1980.
+settlorIndividualPassportPastTense.expiryDate.error.required.all = Enter the passport expiry date
+settlorIndividualPassportPastTense.expiryDate.error.required.two = Passport expiry date must include a {0} and {1}
+settlorIndividualPassportPastTense.expiryDate.error.required = Passport expiry date must include {0}
+settlorIndividualPassportPastTense.expiryDate.error.invalid = Enter a real date when the settlor’s passport expires
+settlorIndividualPassportPastTense.expiryDate.error.future = Passport expiry date must be after 31 December 1499 and before 01 January 2100
+settlorIndividualPassportPastTense.expiryDate.error.past = Passport expiry date must be after 31 December 1499 and before 01 January 2100
 
 settlorIndividualPassportYesNo.title = Do you know the settlor’s passport details?
 settlorIndividualPassportYesNo.heading = Do you know {0}’s passport details?

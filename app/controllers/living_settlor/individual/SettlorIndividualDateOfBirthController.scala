@@ -60,7 +60,7 @@ class SettlorIndividualDateOfBirthController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, index, name))
+      Ok(view(preparedForm, draftId, index, name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
@@ -70,7 +70,7 @@ class SettlorIndividualDateOfBirthController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, request.settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorIndividualDateOfBirthPage(index), value) match {
             case Success(updatedAnswers) =>

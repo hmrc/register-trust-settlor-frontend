@@ -25,24 +25,31 @@ import views.html.living_settlor.individual.SettlorIndividualAddressUKYesNoView
 
 class SettlorIndividualAddressUKYesNoViewSpec extends YesNoViewBehaviours {
 
-  val messageKeyPrefix = "settlorIndividualAddressUKYesNo"
-  val index = 0
-  val name = FullName("First", Some("Middle"), "Last")
-  val form = new YesNoFormProvider().withPrefix(messageKeyPrefix)
+  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualAddressUKYesNo")
+  private val formContentInPastTense: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualAddressUKYesNoPastTense")
+  private val index = 0
+  private val name = FullName("First", Some("Middle"), "Last")
 
-  "SettlorIndividualAddressUKYesNo view" must {
+  Seq(
+    ("settlorIndividualAddressUKYesNo", true, form),
+    ("settlorIndividualAddressUKYesNoPastTense", false, formContentInPastTense)
+  ) foreach {
+    case (messageKey, settlorAliveAtRegistration, formToUse) =>
 
-    val view = viewFor[SettlorIndividualAddressUKYesNoView](Some(emptyUserAnswers))
+      s"SettlorIndividualAddressUKYesNo view where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+        val view = viewFor[SettlorIndividualAddressUKYesNoView](Some(emptyUserAnswers))
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
+        def applyView(form: Form[_]): HtmlFormat.Appendable =
+          view.apply(form, fakeDraftId, index, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-    behave like pageWithBackLink(applyView(form))
+        behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 
-    behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name.toString))
+        behave like pageWithBackLink(applyView(formToUse))
 
-    behave like pageWithASubmitButton(applyView(form))
+        behave like yesNoPage(formToUse, applyView, messageKey, None, Seq(name.toString))
+
+        behave like pageWithASubmitButton(applyView(formToUse))
+      }
   }
 }

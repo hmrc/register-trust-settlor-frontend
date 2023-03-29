@@ -21,6 +21,7 @@ import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.InternationalAddressFormProvider
 import models.pages.InternationalAddress
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorIndividualNamePage}
 import play.api.Logging
@@ -53,7 +54,7 @@ class SettlorIndividualAddressInternationalController @Inject()(
   private val form: Form[InternationalAddress] = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
+    implicit request: SettlorIndividualNameRequest[AnyContent] =>
 
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
@@ -62,7 +63,7 @@ class SettlorIndividualAddressInternationalController @Inject()(
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, index, draftId, name))
+      Ok(view(preparedForm, countryOptions.options, index, draftId, name, request.settlorAliveAtRegistration(index)))
   }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
@@ -72,17 +73,16 @@ class SettlorIndividualAddressInternationalController @Inject()(
 
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, name))),
+          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, name, request.settlorAliveAtRegistration(index)))),
         value => {
           request.userAnswers.set(SettlorAddressInternationalPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(SettlorAddressInternationalPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_) =>
               logger.error("[SettlorIndividualAddressInternationalController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
         }
       )

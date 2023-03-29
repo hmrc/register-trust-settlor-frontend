@@ -18,75 +18,66 @@ package controllers.trust_type
 
 import base.SpecBase
 import controllers.routes._
-import forms.DeedOfVariationFormProvider
-import models.pages.{DeedOfVariation, KindOfTrust}
-import pages.trust_type.{HowDeedOfVariationCreatedPage, SetUpByLivingSettlorYesNoPage}
+import forms.YesNoFormProvider
+import pages.trust_type.SetUpByLivingSettlorYesNoPage
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import views.html.trust_type.HowDeedOfVariationCreatedView
+import views.html.trust_type.SetUpByLivingSettlorView
 
-class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
+class SetUpByLivingSettlorControllerSpec extends SpecBase {
 
-  val index = 0
+  val form = new YesNoFormProvider().withPrefix("setUpByLivingSettlorYesNo")
 
-  lazy val deedOfVariationRoute = routes.HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId).url
+  lazy val setUpByLivingSettlorRoute = routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url
 
-  val formProvider = new DeedOfVariationFormProvider()
-  val form = formProvider()
-
-  "HowDeedOfVariationCreated Controller" must {
+  "SetUpByLivingSettlor Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
-
-      val request = FakeRequest(GET, deedOfVariationRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
       val result = route(application, request).value
 
-      val view = application.injector.instanceOf[HowDeedOfVariationCreatedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId)(request, messages).toString
+        view(form,fakeDraftId, isTaxable = true)(request, messages).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
-        .set(HowDeedOfVariationCreatedPage, DeedOfVariation.values.head).success.value
+      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-      val request = FakeRequest(GET, deedOfVariationRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
-      val view = application.injector.instanceOf[HowDeedOfVariationCreatedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       val result = route(application, request).value
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(DeedOfVariation.values.head), fakeDraftId)(request, messages).toString
+        view(form.fill(true), fakeDraftId, isTaxable = true)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
-
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, deedOfVariationRoute)
-          .withFormUrlEncodedBody(("value", DeedOfVariation.options.head.value))
+        FakeRequest(POST, setUpByLivingSettlorRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -99,24 +90,22 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
-
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
       val request =
-        FakeRequest(POST, deedOfVariationRoute)
-          .withFormUrlEncodedBody(("value", "invalid value"))
+        FakeRequest(POST, setUpByLivingSettlorRoute)
+          .withFormUrlEncodedBody(("value", ""))
 
-      val boundForm = form.bind(Map("value" -> "invalid value"))
+      val boundForm = form.bind(Map("value" -> ""))
 
-      val view = application.injector.instanceOf[HowDeedOfVariationCreatedView]
+      val view = application.injector.instanceOf[SetUpByLivingSettlorView]
 
       val result = route(application, request).value
 
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId, isTaxable = true)(request, messages).toString
 
       application.stop()
     }
@@ -125,11 +114,12 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
 
       val application = applicationBuilder(userAnswers = None).build()
 
-      val request = FakeRequest(GET, deedOfVariationRoute)
+      val request = FakeRequest(GET, setUpByLivingSettlorRoute)
 
       val result = route(application, request).value
 
       status(result) mustEqual SEE_OTHER
+
       redirectLocation(result).value mustEqual SessionExpiredController.onPageLoad.url
 
       application.stop()
@@ -140,8 +130,8 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       val application = applicationBuilder(userAnswers = None).build()
 
       val request =
-        FakeRequest(POST, deedOfVariationRoute)
-          .withFormUrlEncodedBody(("value", KindOfTrust.values.head.toString))
+        FakeRequest(POST, setUpByLivingSettlorRoute)
+          .withFormUrlEncodedBody(("value", "true"))
 
       val result = route(application, request).value
 
@@ -153,4 +143,3 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
     }
   }
 }
-

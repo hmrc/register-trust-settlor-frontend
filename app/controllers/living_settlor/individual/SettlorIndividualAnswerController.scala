@@ -57,7 +57,8 @@ class SettlorIndividualAnswerController @Inject()(
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
     implicit request =>
 
-      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId, index)
+      val messageKeyPrefix =  if(request.settlorAliveAtRegistration(index)) None else Some("PastTense")
+      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId, index, prefix = messageKeyPrefix)
 
       Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), Seq(section)))
   }
@@ -71,10 +72,9 @@ class SettlorIndividualAnswerController @Inject()(
             draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
             Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
           }
-        case Failure(_) => {
+        case Failure(_) =>
           logger.error("[SettlorIndividualAnswerController][onSubmit] Error while storing user answers")
           Future.successful(InternalServerError(technicalErrorView()))
-        }
       }
   }
 

@@ -27,10 +27,19 @@
     select: InputSelect
 )
 
-@(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName,
+settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualCountryOfNationalityPrefix = @{
+    if(settlorAliveAtRegistration){
+        "settlorIndividualCountryOfNationality"
+    } else {
+        "settlorIndividualCountryOfNationalityPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualCountryOfNationality.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualCountryOfNationalityPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -39,7 +48,7 @@
         @error_summary(form.errors)
 
         @select(field = form("value"),
-            label = messages("settlorIndividualCountryOfNationality.heading", name.toString),
+            label = messages(s"${settlorIndividualCountryOfNationalityPrefix}.heading", name.toString),
             labelClasses = Set("govuk-heading-l"),
             labelAsHeading = true,
             options = countryOptions,

@@ -26,10 +26,18 @@
     input_date: InputDate
 )
 
-@(form: Form[_], draftId: String, index: Int, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], draftId: String, index: Int, name: FullName, setUpBeforeSettlorDied: Boolean)(implicit request: Request[_], messages: Messages)
+
+@settlorIndividualDateOfBirthPrefix = @{
+    if({{setUpBeforeSettlorDied}}){
+        "settlorIndividualDateOfBirth"
+    } else {
+        "settlorIndividualDateOfBirthPastTense"
+    }
+}
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("settlorIndividualDateOfBirth.title")}",
+    title = s"${errorPrefix(form)}${messages(s"${settlorIndividualDateOfBirthPrefix}.title")}",
     showBackLink = true
 ) {
 
@@ -39,7 +47,7 @@
 
         @input_date(
             field = form("value"),
-            legend = messages("settlorIndividualDateOfBirth.heading", name),
+            legend = messages(s"${settlorIndividualDateOfBirthPrefix}.heading", name),
             legendClass = "govuk-heading-l",
             legendAsHeading = true,
             hint = Some(messages(s"site.date.hint"))

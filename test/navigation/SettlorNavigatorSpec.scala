@@ -84,7 +84,7 @@ class SettlorNavigatorSpec extends SpecBase {
               }).set(AddASettlorPage, YesNow).success.value
 
               navigator.nextPage(AddASettlorPage, fakeDraftId)(userAnswers)
-                .mustBe(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(MAX, fakeDraftId))
+                .mustBe(controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onPageLoad(MAX, fakeDraftId))
             }
           }
         }
@@ -115,7 +115,7 @@ class SettlorNavigatorSpec extends SpecBase {
           val userAnswers = emptyUserAnswers.set(AddASettlorYesNoPage, true).success.value
 
           navigator.nextPage(AddASettlorYesNoPage, fakeDraftId)(userAnswers)
-            .mustBe(controllers.trust_type.routes.SetUpAfterSettlorDiedController.onPageLoad(fakeDraftId))
+            .mustBe(controllers.trust_type.routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId))
         }
       }
 
@@ -138,7 +138,7 @@ class SettlorNavigatorSpec extends SpecBase {
           val userAnswers = emptyUserAnswers.set(SettlorIndividualOrBusinessPage(index), Individual).success.value
 
           navigator.nextPage(SettlorIndividualOrBusinessPage(index), fakeDraftId)(userAnswers)
-            .mustBe(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId))
+            .mustBe(controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onPageLoad(index, fakeDraftId))
         }
       }
 

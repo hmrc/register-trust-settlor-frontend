@@ -22,7 +22,7 @@ import controllers.routes._
 import forms.YesNoFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import pages.living_settlor.individual.SettlorIndividualNamePage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.living_settlor.individual.mld5.UkCountryOfNationalityYesNoPage
 import play.api.data.Form
 import play.api.test.FakeRequest
@@ -40,13 +40,16 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
 
   private val validAnswer: Boolean = true
 
-  private val baseAnswers: UserAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+    .set(SettlorIndividualNamePage(index), name).success.value
 
   "UkCountryOfNationalityYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = baseAnswers
+      val formContentInPastTense = formProvider.withPrefix("settlorIndividualUkCountryOfNationalityYesNoPastTense")
+
+      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -59,7 +62,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, fakeDraftId, name)(request, messages).toString
+        view(formContentInPastTense, index, fakeDraftId, name, settlorAliveAtRegistration = false)(request, messages).toString
 
       application.stop()
     }
@@ -80,7 +83,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), index, fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), index, fakeDraftId, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }
@@ -121,7 +124,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, name)(request, messages).toString
+        view(boundForm, index, fakeDraftId, name, settlorAliveAtRegistration = true)(request, messages).toString
 
       application.stop()
     }

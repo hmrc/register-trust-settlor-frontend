@@ -17,6 +17,7 @@
 package models.requests
 
 import models.UserAnswers
+import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.mvc.{Request, WrappedRequest}
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolments}
 
@@ -34,4 +35,13 @@ case class RegistrationDataRequest[A](request: Request[A],
                                       affinityGroup: AffinityGroup,
                                       enrolments: Enrolments,
                                       agentARN: Option[String] = None)
-  extends WrappedRequest[A](request)
+  extends WrappedRequest[A](request){
+
+    def settlorAliveAtRegistration(index: Int): Boolean = {
+      userAnswers.get(SettlorAliveYesNoPage(index)) match {
+        case Some(value) => value
+        case None => false
+      }
+    }
+
+}

@@ -28,15 +28,15 @@ import sections.{DeceasedSettlor, LivingSettlors}
 
 import java.time.LocalDate
 
-class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
+class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
 
-  "SetUpAfterSettlorDiedPage" must {
+  "SetUpByLivingSettlorPage" must {
 
-    beRetrievable[Boolean](SetUpAfterSettlorDiedYesNoPage)
+    beRetrievable[Boolean](SetUpByLivingSettlorYesNoPage)
 
-    beSettable[Boolean](SetUpAfterSettlorDiedYesNoPage)
+    beSettable[Boolean](SetUpByLivingSettlorYesNoPage)
 
-    beRemovable[Boolean](SetUpAfterSettlorDiedYesNoPage)
+    beRemovable[Boolean](SetUpByLivingSettlorYesNoPage)
   }
 
   "implement cleanup" when {
@@ -49,13 +49,13 @@ class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[UserAnswers], arbitrary[String]) {
             (initial, str) =>
               val answers: UserAnswers = initial
-                .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+                .set(SetUpByLivingSettlorYesNoPage, false).success.value
                 .set(KindOfTrustPage, KindOfTrust.Deed).success.value
                 .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
                 .set(SettlorsNamePage, FullName(str, None, str)).success.value
                 .set(DeceasedSettlorStatus, Status.Completed).success.value
 
-              val result = answers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+              val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
               result.get(DeceasedSettlor) mustBe defined
           }
@@ -68,11 +68,11 @@ class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
           forAll(arbitrary[UserAnswers], arbitrary[String]) {
             (initial, str) =>
               val answers: UserAnswers = initial
-                .set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+                .set(SetUpByLivingSettlorYesNoPage, false).success.value
                 .set(SettlorsNamePage, FullName(str, None, str)).success.value
                 .set(DeceasedSettlorStatus, Status.Completed).success.value
 
-              val result = answers.set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+              val result = answers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
               result.get(DeceasedSettlor) mustNot be(defined)
           }
@@ -85,7 +85,7 @@ class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
       forAll(arbitrary[UserAnswers], arbitrary[String], arbitrary[LocalDate]) {
         (initial, str, date) =>
           val answers: UserAnswers = initial
-            .set(SetUpAfterSettlorDiedYesNoPage, false).success.value
+            .set(SetUpByLivingSettlorYesNoPage, true).success.value
             .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
             .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
             .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
@@ -97,7 +97,7 @@ class SetUpAfterSettlorDiedYesNoPageSpec extends PageBehaviours {
             .set(SettlorBusinessNamePage(0), str).success.value
             .set(LivingSettlorStatus(1), Status.Completed).success.value
 
-          val result = answers.set(SetUpAfterSettlorDiedYesNoPage, true).success.value
+          val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
           result.get(KindOfTrustPage) mustNot be(defined)
           result.get(SetUpInAdditionToWillTrustYesNoPage) mustNot be(defined)

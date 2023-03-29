@@ -28,20 +28,21 @@
 @(form: Form[_], draftId: String, isTaxable: Boolean)(implicit request: Request[_], messages: Messages)
 
 @main_template(
-    title = s"${errorPrefix(form)}${messages("setUpAfterSettlorDiedYesNo.title")}",
+    title = s"${errorPrefix(form)}${messages("setUpByLivingSettlorYesNo.title")}",
     showBackLink = true
 ) {
 
-    @formHelper(action = SetUpAfterSettlorDiedController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = SetUpByLivingSettlorController.onSubmit(draftId), 'autoComplete -> "off") {
 
         @error_summary(form.errors)
 
         @inputYesNo(
             field = form("value"),
-            label = messages("setUpAfterSettlorDiedYesNo.heading"),
+            label = messages("setUpByLivingSettlorYesNo.heading"),
             legendClass = Some("govuk-heading-l"),
             legendAsHeading = true,
-            hint = if(isTaxable) Some(messages("setUpAfterSettlorDiedYesNo.hint")) else None
+            yesContent = "setUpByLivingSettlorYesNo.yes",
+            noContent = "setUpByLivingSettlorYesNo.no"
         )
 
         @submitButton()
