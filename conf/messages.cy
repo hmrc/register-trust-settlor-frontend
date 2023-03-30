@@ -415,11 +415,6 @@ settlorIndividualDateOfBirth.heading = Beth yw dyddiad geni {0}?
 settlorIndividualDateOfBirth.hint = Er enghraifft, 31 3 1980.
 settlorIndividualDateOfBirth.title = Beth yw dyddiad geni’r setlwr?
 
-settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = Beth oedd dyddiad geni {0}?
-settlorIndividualDateOfBirthPastTense.heading = Beth oedd dyddiad geni {0}?
-settlorIndividualDateOfBirthPastTense.hint = Er enghraifft, 31 3 1980.
-settlorIndividualDateOfBirthPastTense.title = Beth oedd dyddiad geni’r setlwr?
-
 settlorIndividualDateOfBirthYesNo.checkYourAnswersLabel = A ydych yn gwybod dyddiad geni {0}?
 settlorIndividualDateOfBirthYesNo.error.required = Dewiswch ‘Iawn’ os ydych yn gwybod y dyddiad geni
 settlorIndividualDateOfBirthYesNo.heading = A ydych yn gwybod dyddiad geni {0}?

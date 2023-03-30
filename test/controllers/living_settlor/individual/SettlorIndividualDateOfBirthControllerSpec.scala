@@ -20,7 +20,7 @@ import base.SpecBase
 import controllers.routes._
 import forms.DateOfBirthFormProvider
 import models.pages.FullName
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -42,37 +42,31 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
   "SettlorIndividualDateOfBirth Controller" must {
 
-    Seq(true, false)
-      .foreach(setUpBeforeSettlorDied =>
-        s"return OK and the correct view for a GET when the userAnswers SetUpBeforeSettlorDied is set to $setUpBeforeSettlorDied" in {
+    "return OK and the correct view for a GET" in {
 
-          val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-            .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied)
-            .success.value
+      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
-          val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
-          val request = FakeRequest(GET, settlorIndividualDateOfBirthRoute)
+      val request = FakeRequest(GET, settlorIndividualDateOfBirthRoute)
 
-          val result = route(application, request).value
+      val result = route(application, request).value
 
-          val view = application.injector.instanceOf[SettlorIndividualDateOfBirthView]
+      val view = application.injector.instanceOf[SettlorIndividualDateOfBirthView]
 
-          status(result) mustEqual OK
+      status(result) mustEqual OK
 
-          contentAsString(result) mustEqual
-            view(form, fakeDraftId, index, name, setUpBeforeSettlorDied = setUpBeforeSettlorDied)(request, messages).toString
+      contentAsString(result) mustEqual
+        view(form, fakeDraftId, index, name)(request, messages).toString
 
-          application.stop()
-        }
-      )
+      application.stop()
+    }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
         .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
         .set(SettlorIndividualDateOfBirthPage(index), validAnswer).success.value
-        .set(SettlorAliveYesNoPage(index), false).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -85,7 +79,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, name, setUpBeforeSettlorDied = false)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }
@@ -117,7 +111,6 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
-        .set(SettlorAliveYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -135,6 +128,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
+        .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -151,7 +145,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name, setUpBeforeSettlorDied = false)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(request, messages).toString
 
       application.stop()
     }

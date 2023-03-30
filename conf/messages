@@ -348,11 +348,6 @@ settlorIndividualDateOfBirth.heading = What is {0}’s date of birth?
 settlorIndividualDateOfBirth.checkYourAnswersLabel = What is {0}’s date of birth?
 settlorIndividualDateOfBirth.hint = For example, 31 3 1980.
 
-settlorIndividualDateOfBirthPastTense.title = What was the settlor’s date of birth?
-settlorIndividualDateOfBirthPastTense.heading = What was {0}’s date of birth?
-settlorIndividualDateOfBirthPastTense.checkYourAnswersLabel = What was {0}’s date of birth?
-settlorIndividualDateOfBirthPastTense.hint = For example, 31 3 1980.
-
 dateOfBirth.error.required.all = Enter a date of birth
 dateOfBirth.error.required.two = The date of birth must include {0} and {1}
 dateOfBirth.error.required = The date of birth must include {0}
@@ -491,8 +486,8 @@ settlorIndividualAddressUKYesNo.checkYourAnswersLabel = Does {0} live in the UK?
 settlorIndividualAddressUKYesNo.error.required = Select yes if the settlor lives in the UK
 
 settlorIndividualAddressUKYesNoPastTense.title = Was the settlor’s last known address in the UK?
-settlorIndividualAddressUKYesNoPastTense.heading = Was {0} last known address in the UK?
-settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = Was {0} last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.heading = Was {0}’s last known address in the UK?
+settlorIndividualAddressUKYesNoPastTense.checkYourAnswersLabel = Was {0}’s last known address in the UK?
 settlorIndividualAddressUKYesNoPastTense.error.required = Select yes if the settlor’s last known address was in the UK
 
 settlorIndividualIDCard.title = What are the settlor’s ID card details?
