@@ -7,13 +7,13 @@ This service is responsible for collecting details about the settlor of the trus
 To run locally using the micro-service provided by the service manager:
 
 ```
-sm2 --start TRUSTS_ALL -r
+sm2 --start TRUSTS_ALL
 ```
 
 Or
 
 ```
-sm2 --start REGISTER_TRUST_ALL -r
+sm2 --start REGISTER_TRUST_ALL
 ```
 
 
