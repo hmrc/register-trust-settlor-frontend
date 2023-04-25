@@ -29,16 +29,15 @@ import viewmodels.AnswerSection
 
 class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
 
-  private val name: FullName = FullName("Joe", Some("Joseph"), "Bloggs")
+  private val name: FullName       = FullName("Joe", Some("Joseph"), "Bloggs")
   private val businessName: String = "Business Ltd."
 
   private val mockPrintHelpers = mock[PrintHelpers]
 
   private val fakeAnswerSection = AnswerSection()
 
-  override def beforeEach(): Unit = {
+  override def beforeEach(): Unit =
     reset(mockPrintHelpers)
-  }
 
   "CheckYourAnswersHelper" when {
 
@@ -50,7 +49,9 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
             .thenReturn(fakeAnswerSection)
 
           val userAnswers = emptyUserAnswers
-            .set(deceasedPages.SettlorsNamePage, name).success.value
+            .set(deceasedPages.SettlorsNamePage, name)
+            .success
+            .value
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(userAnswers, fakeDraftId)
 
@@ -79,10 +80,18 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
             .thenReturn(fakeAnswerSection)
 
           val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-            .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-            .set(SettlorIndividualOrBusinessPage(1), Business).success.value
-            .set(SettlorBusinessNamePage(1), businessName).success.value
+            .set(SettlorIndividualOrBusinessPage(0), Individual)
+            .success
+            .value
+            .set(individualPages.SettlorIndividualNamePage(0), name)
+            .success
+            .value
+            .set(SettlorIndividualOrBusinessPage(1), Business)
+            .success
+            .value
+            .set(SettlorBusinessNamePage(1), businessName)
+            .success
+            .value
 
           val helper = new CheckYourAnswersHelper(mockPrintHelpers)(userAnswers, fakeDraftId)
 

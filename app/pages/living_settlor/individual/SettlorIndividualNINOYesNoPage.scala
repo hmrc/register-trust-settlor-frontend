@@ -33,7 +33,8 @@ final case class SettlorIndividualNINOYesNoPage(index: Int) extends QuestionPage
     value match {
 
       case Some(true) =>
-        userAnswers.remove(SettlorAddressYesNoPage(index))
+        userAnswers
+          .remove(SettlorAddressYesNoPage(index))
           .flatMap(_.remove(SettlorAddressUKYesNoPage(index)))
           .flatMap(_.remove(SettlorAddressUKPage(index)))
           .flatMap(_.remove(SettlorAddressInternationalPage(index)))

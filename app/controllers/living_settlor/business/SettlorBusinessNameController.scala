@@ -34,49 +34,48 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorBusinessNameController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               registrationsRepository: RegistrationsRepository,
-                                               @BusinessSettlor navigator: Navigator,
-                                               actions: Actions,
-                                               formProvider: SettlorBusinessNameFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: SettlorBusinessNameView,
-                                               technicalErrorView: TechnicalErrorView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging{
+class SettlorBusinessNameController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @BusinessSettlor navigator: Navigator,
+  actions: Actions,
+  formProvider: SettlorBusinessNameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorBusinessNameView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[String] = formProvider()
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(SettlorBusinessNamePage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SettlorBusinessNamePage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, index, draftId))
+    Ok(view(preparedForm, index, draftId))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId))),
-        value => {
-          request.userAnswers.set(SettlorBusinessNamePage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorBusinessNamePage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorBusinessNameController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, index, draftId))),
+          value =>
+            request.userAnswers.set(SettlorBusinessNamePage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorBusinessNamePage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorBusinessNameController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 
 }

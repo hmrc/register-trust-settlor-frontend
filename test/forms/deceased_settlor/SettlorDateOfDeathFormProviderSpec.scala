@@ -40,16 +40,19 @@ class SettlorDateOfDeathFormProviderSpec extends DateBehaviours with FakeTrustsA
 
     behave like mandatoryDateField(form, "value", "settlorDateOfDeath.error.required.all")
 
-    behave like dateFieldWithMax(form, "value",
+    behave like dateFieldWithMax(
+      form,
+      "value",
       max = max,
       FormError("value", s"settlorDateOfDeath.error.future", List("day", "month", "year"))
     )
 
-    behave like dateFieldWithMin(form, "value",
+    behave like dateFieldWithMin(
+      form,
+      "value",
       min = min,
       FormError("value", s"settlorDateOfDeath.error.past", List("day", "month", "year"))
     )
-
 
   }
 }

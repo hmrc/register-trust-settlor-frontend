@@ -30,11 +30,12 @@ class SettlorBusinessAddressUKYesNoControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("settlorBusinessAddressUKYesNo")
-  val index = 0
-  val name = "Business name"
+  val form         = formProvider.withPrefix("settlorBusinessAddressUKYesNo")
+  val index        = 0
+  val name         = "Business name"
 
-  lazy val settlorBusinessAddressUKYesNoRoute = routes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorBusinessAddressUKYesNoRoute =
+    routes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorBusinessAddressUKYesNo Controller" must {
 
@@ -60,8 +61,13 @@ class SettlorBusinessAddressUKYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressUKYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(SettlorBusinessAddressUKYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -100,8 +106,13 @@ class SettlorBusinessAddressUKYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressUKYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(SettlorBusinessAddressUKYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

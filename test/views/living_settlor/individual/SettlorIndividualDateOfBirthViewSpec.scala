@@ -28,8 +28,8 @@ import java.time.LocalDate
 class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
   val messageKeyPrefix = "settlorIndividualDateOfBirth"
-  val index = 0
-  val name = FullName("First", Some("middle"), "Last")
+  val index            = 0
+  val name             = FullName("First", Some("middle"), "Last")
 
   val form = new DateOfBirthFormProvider(frontendAppConfig)()
 
@@ -46,11 +46,7 @@ class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalD
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithDateFields(form, applyViewF,
-      messageKeyPrefix,
-      "value",
-      name.toString
-    )
+    behave like pageWithDateFields(form, applyViewF, messageKeyPrefix, "value", name.toString)
 
     behave like pageWithASubmitButton(applyView(form))
   }

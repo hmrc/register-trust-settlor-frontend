@@ -24,18 +24,20 @@ import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
 
-final case class DeceasedSettlor(name: FullName,
-                                 dateOfDeath: Option[LocalDate],
-                                 dateOfBirth: Option[LocalDate],
-                                 nino: Option[String],
-                                 address: Option[Address],
-                                 countryOfResidence: Option[String],
-                                 nationality: Option[String]) {
+final case class DeceasedSettlor(
+  name: FullName,
+  dateOfDeath: Option[LocalDate],
+  dateOfBirth: Option[LocalDate],
+  nino: Option[String],
+  address: Option[Address],
+  countryOfResidence: Option[String],
+  nationality: Option[String]
+) {
 
   val identification: Option[Identification] = (nino, address) match {
     case (None, None) => None
     case (Some(_), _) => Some(Identification(nino, None))
-    case _ => Some(Identification(None, buildAddress(address)))
+    case _            => Some(Identification(None, buildAddress(address)))
   }
 }
 
@@ -49,6 +51,6 @@ object DeceasedSettlor extends SettlorReads {
       readAddress() and
       (__ \ "countryOfResidence").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String]
-    )(DeceasedSettlor.apply _)
+  )(DeceasedSettlor.apply _)
 
 }

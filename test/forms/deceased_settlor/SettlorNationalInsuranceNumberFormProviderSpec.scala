@@ -23,7 +23,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 
 class SettlorNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey = "settlorNationalInsuranceNumber.error.required"
+  val requiredKey      = "settlorNationalInsuranceNumber.error.required"
   val invalidFormatKey = "settlorNationalInsuranceNumber.error.invalid"
 
   val form = new SettlorNationalInsuranceNumberFormProvider()()
@@ -55,7 +55,6 @@ class SettlorNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviou
       fieldName,
       requiredError = FormError(fieldName, invalidFormatKey, Seq(fieldName))
     )
-
 
   }
 }

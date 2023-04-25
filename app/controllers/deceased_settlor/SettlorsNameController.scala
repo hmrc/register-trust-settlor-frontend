@@ -51,46 +51,45 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorsNameController @Inject()(
-                                        override val messagesApi: MessagesApi,
-                                        registrationsRepository: RegistrationsRepository,
-                                        @DeceasedSettlor navigator: Navigator,
-                                        actions: Actions,
-                                        formProvider: SettlorsNameFormProvider,
-                                        val controllerComponents: MessagesControllerComponents,
-                                        view: SettlorsNameView,
-                                        technicalErrorView: TechnicalErrorView
-                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorsNameController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @DeceasedSettlor navigator: Navigator,
+  actions: Actions,
+  formProvider: SettlorsNameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorsNameView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[FullName] = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(SettlorsNamePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SettlorsNamePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(SettlorsNamePage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(SettlorsNamePage, draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_)              =>
               logger.error("[SettlorsNameController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
       )
   }

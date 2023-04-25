@@ -32,22 +32,25 @@ object KindOfTrust extends Enumerable.Implicits {
   case object HeritageMaintenanceFund extends WithName("Repair") with KindOfTrust
 
   val values: List[KindOfTrust] = List(
-    Intervivos, Deed, Employees, FlatManagement, HeritageMaintenanceFund
+    Intervivos,
+    Deed,
+    Employees,
+    FlatManagement,
+    HeritageMaintenanceFund
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("kindOfTrust", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("kindOfTrust", value.toString)
   }
 
   implicit val enumerable: Enumerable[KindOfTrust] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
-  val typeofTrustReads: Reads[TypeOfTrust] = __.read[KindOfTrust].flatMap[TypeOfTrust] {
-    case Intervivos => Reads(_ => JsSuccess(TypeOfTrust.IntervivosSettlementTrust))
-    case Deed => Reads(_ => JsSuccess(TypeOfTrust.DeedOfVariation))
-    case Employees => Reads(_ => JsSuccess(TypeOfTrust.EmployeeRelated))
-    case FlatManagement => Reads(_ => JsSuccess(TypeOfTrust.FlatManagementTrust))
+  val typeofTrustReads: Reads[TypeOfTrust]         = __.read[KindOfTrust].flatMap[TypeOfTrust] {
+    case Intervivos              => Reads(_ => JsSuccess(TypeOfTrust.IntervivosSettlementTrust))
+    case Deed                    => Reads(_ => JsSuccess(TypeOfTrust.DeedOfVariation))
+    case Employees               => Reads(_ => JsSuccess(TypeOfTrust.EmployeeRelated))
+    case FlatManagement          => Reads(_ => JsSuccess(TypeOfTrust.FlatManagementTrust))
     case HeritageMaintenanceFund => Reads(_ => JsSuccess(TypeOfTrust.HeritageTrust))
   }
 

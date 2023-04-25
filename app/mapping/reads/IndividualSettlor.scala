@@ -24,22 +24,24 @@ import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
 
-final case class IndividualSettlor(aliveAtRegistration: Boolean,
-                                   name: FullName,
-                                   dateOfBirth: Option[LocalDate],
-                                   nino: Option[String],
-                                   address: Option[Address],
-                                   passport: Option[PassportOrIdCardDetails],
-                                   idCard: Option[PassportOrIdCardDetails],
-                                   countryOfResidence: Option[String],
-                                   nationality: Option[String],
-                                   hasMentalCapacity: Option[YesNoDontKnow]) extends Settlor {
+final case class IndividualSettlor(
+  aliveAtRegistration: Boolean,
+  name: FullName,
+  dateOfBirth: Option[LocalDate],
+  nino: Option[String],
+  address: Option[Address],
+  passport: Option[PassportOrIdCardDetails],
+  idCard: Option[PassportOrIdCardDetails],
+  countryOfResidence: Option[String],
+  nationality: Option[String],
+  hasMentalCapacity: Option[YesNoDontKnow]
+) extends Settlor {
 
   def passportOrId: Option[PassportOrIdCardDetails] = if (passport.isDefined) passport else idCard
 
   val identification: Option[IdentificationType] = (nino, passportOrId, address) match {
     case (None, None, None) => None
-    case _ => Some(IdentificationType(nino, buildPassport(passportOrId), buildAddress(address)))
+    case _                  => Some(IdentificationType(nino, buildPassport(passportOrId), buildAddress(address)))
   }
 }
 
@@ -56,6 +58,6 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
       readMentalCapacity
-    ) (IndividualSettlor.apply _)
+  )(IndividualSettlor.apply _)
 
 }

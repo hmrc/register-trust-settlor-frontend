@@ -24,8 +24,8 @@ import views.html.living_settlor.business.mld5.CountryOfResidenceInTheUkYesNoVie
 
 class CountryOfResidenceInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
-  val prefix = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo"
-  val index = 0
+  val prefix    = "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo"
+  val index     = 0
   val trustName = "Test"
 
   val form: Form[Boolean] = new YesNoFormProvider().withPrefix(prefix)

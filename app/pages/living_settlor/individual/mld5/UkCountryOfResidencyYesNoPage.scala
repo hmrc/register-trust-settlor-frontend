@@ -33,11 +33,11 @@ case class UkCountryOfResidencyYesNoPage(index: Int) extends QuestionPage[Boolea
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
     val hasGbCountryOfResidency: Boolean = userAnswers.get(CountryOfResidencyPage(index)).contains(GB)
     value match {
-      case Some(true) =>
+      case Some(true)                             =>
         userAnswers.set(CountryOfResidencyPage(index), GB)
       case Some(false) if hasGbCountryOfResidency =>
         userAnswers.remove(CountryOfResidencyPage(index))
-      case _ =>
+      case _                                      =>
         super.cleanup(value, userAnswers)
     }
   }

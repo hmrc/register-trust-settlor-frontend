@@ -36,18 +36,26 @@ class SettlorBusinessAddressYesNoPageSpec extends PageBehaviours {
       val page = SettlorBusinessAddressYesNoPage(0)
 
       "set to false" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, true).success.value
-              .set(SettlorBusinessAddressUKYesNoPage(0), true).success.value
-              .set(SettlorBusinessAddressInternationalPage(0), InternationalAddress("line1", "line2", None, "France")).success.value
-              .set(SettlorBusinessAddressUKPage(0), UKAddress("line1", "line2", None, None, "NE11NE")).success.value
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, true)
+            .success
+            .value
+            .set(SettlorBusinessAddressUKYesNoPage(0), true)
+            .success
+            .value
+            .set(SettlorBusinessAddressInternationalPage(0), InternationalAddress("line1", "line2", None, "France"))
+            .success
+            .value
+            .set(SettlorBusinessAddressUKPage(0), UKAddress("line1", "line2", None, None, "NE11NE"))
+            .success
+            .value
 
-            val result = answers.set(page, false).success.value
+          val result = answers.set(page, false).success.value
 
-            result.get(SettlorBusinessAddressUKYesNoPage(0)) must not be defined
-            result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
-            result.get(SettlorBusinessAddressUKPage(0)) must not be defined
+          result.get(SettlorBusinessAddressUKYesNoPage(0))       must not be defined
+          result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
+          result.get(SettlorBusinessAddressUKPage(0))            must not be defined
         }
       }
 

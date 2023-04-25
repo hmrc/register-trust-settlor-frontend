@@ -34,9 +34,10 @@ class TrustsStoreConnectorSpec extends SpecBase with Matchers with OptionValues 
     .configure(
       Seq(
         "microservice.services.trusts-store.port" -> server.port(),
-        "auditing.enabled" -> false
+        "auditing.enabled"                        -> false
       ): _*
-    ).build()
+    )
+    .build()
 
   private lazy val connector = app.injector.instanceOf[TrustsStoreConnector]
 

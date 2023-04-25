@@ -34,10 +34,11 @@ final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPag
 
   override def toString: String = "individualOrBusiness"
 
-  override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[IndividualOrBusiness], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(Individual) =>
-        userAnswers.remove(SettlorBusinessNamePage(index))
+        userAnswers
+          .remove(SettlorBusinessNamePage(index))
           .flatMap(_.remove(SettlorBusinessUtrYesNoPage(index)))
           .flatMap(_.remove(SettlorBusinessUtrPage(index)))
           .flatMap(_.remove(SettlorBusinessAddressYesNoPage(index)))
@@ -47,8 +48,9 @@ final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPag
           .flatMap(_.remove(SettlorBusinessTypePage(index)))
           .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
           .flatMap(_.remove(LivingSettlorStatus(index)))
-      case Some(Business) =>
-        userAnswers.remove(SettlorAliveYesNoPage(index))
+      case Some(Business)   =>
+        userAnswers
+          .remove(SettlorAliveYesNoPage(index))
           .flatMap(_.remove(SettlorIndividualNamePage(index)))
           .flatMap(_.remove(SettlorIndividualDateOfBirthYesNoPage(index)))
           .flatMap(_.remove(SettlorIndividualDateOfBirthPage(index)))
@@ -63,8 +65,7 @@ final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPag
           .flatMap(_.remove(SettlorIndividualIDCardYesNoPage(index)))
           .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
           .flatMap(_.remove(LivingSettlorStatus(index)))
-      case _ =>
+      case _                =>
         super.cleanup(value, userAnswers)
     }
-  }
 }

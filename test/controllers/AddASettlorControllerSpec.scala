@@ -48,22 +48,28 @@ import views.html.{AddASettlorView, AddASettlorYesNoView}
 
 import scala.concurrent.Future
 
-class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
+class AddASettlorControllerSpec
+    extends SpecBase
+    with BeforeAndAfterEach
+    with ScalaCheckPropertyChecks
+    with ModelGenerators {
 
-  lazy val getRoute: String = routes.AddASettlorController.onPageLoad(fakeDraftId).url
-  lazy val submitAnotherRoute: String = routes.AddASettlorController.submitAnother(fakeDraftId).url
-  lazy val submitYesNoRoute: String = routes.AddASettlorController.submitOne(fakeDraftId).url
+  lazy val getRoute: String            = routes.AddASettlorController.onPageLoad(fakeDraftId).url
+  lazy val submitAnotherRoute: String  = routes.AddASettlorController.submitAnother(fakeDraftId).url
+  lazy val submitYesNoRoute: String    = routes.AddASettlorController.submitOne(fakeDraftId).url
   lazy val submitCompleteRoute: String = routes.AddASettlorController.submitComplete(fakeDraftId).url
 
   val yesNoForm: Form[Boolean] = new YesNoFormProvider().withPrefix("addASettlorYesNo")
-  val addSettlorForm = new AddASettlorFormProvider()()
+  val addSettlorForm           = new AddASettlorFormProvider()()
 
   val hint = "addASettlor.Lifetime"
 
   val userAnswersWithSettlorsComplete: UserAnswers = emptyUserAnswers
-    .set(KindOfTrustPage, Intervivos).success.value
+    .set(KindOfTrustPage, Intervivos)
+    .success
+    .value
 
-  private val mockTrustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+  private val mockTrustsStoreService: TrustsStoreService     = mock[TrustsStoreService]
   private val mockRegistrationProgress: RegistrationProgress = mock[RegistrationProgress]
 
   override def beforeEach(): Unit = {
@@ -197,7 +203,7 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
         val indName = FullName("Joe", None, "Bloggs")
         val busName = "Amazon"
-        val index = 0
+        val index   = 0
 
         def indRow(i: Int) = AddRow(
           indName.toString,
@@ -220,8 +226,12 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           "taxable" in {
 
             val answers = userAnswersWithSettlorsComplete
-              .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-              .set(SettlorIndividualNamePage(index), indName).success.value
+              .set(SettlorIndividualOrBusinessPage(index), Individual)
+              .success
+              .value
+              .set(SettlorIndividualNamePage(index), indName)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -234,7 +244,10 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", Some(hint), Nil)(request, messages).toString
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", Some(hint), Nil)(
+                request,
+                messages
+              ).toString
 
             application.stop()
           }
@@ -242,8 +255,12 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           "non-taxable" in {
 
             val answers = emptyUserAnswers
-              .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
-              .set(SettlorIndividualNamePage(index), indName).success.value
+              .set(SettlorIndividualOrBusinessPage(index), Individual)
+              .success
+              .value
+              .set(SettlorIndividualNamePage(index), indName)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(answers)).build()
 
@@ -266,15 +283,19 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           "25 individuals" in {
 
-            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil) { (acc, i) =>
               acc :+ indRow(i)
-            })
+            }
 
-            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers) { (acc, i) =>
               acc
-                .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
-                .set(SettlorIndividualNamePage(i), indName).success.value
-            })
+                .set(SettlorIndividualOrBusinessPage(i), Individual)
+                .success
+                .value
+                .set(SettlorIndividualNamePage(i), indName)
+                .success
+                .value
+            }
 
             val application = applicationBuilder(userAnswers = Some(answers))
               .configure("microservice.services.features.count-max-as-combined" -> true)
@@ -291,7 +312,15 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             val content = contentAsString(result)
 
             content mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+              view(
+                addSettlorForm,
+                fakeDraftId,
+                settlors,
+                Nil,
+                "You have added 25 settlors",
+                None,
+                List("Individual", "Business")
+              )(request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -300,15 +329,19 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           "25 businesses" in {
 
-            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil) { (acc, i) =>
               acc :+ busRow(i)
-            })
+            }
 
-            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers) { (acc, i) =>
               acc
-                .set(SettlorIndividualOrBusinessPage(i), Business).success.value
-                .set(SettlorBusinessNamePage(i), busName).success.value
-            })
+                .set(SettlorIndividualOrBusinessPage(i), Business)
+                .success
+                .value
+                .set(SettlorBusinessNamePage(i), busName)
+                .success
+                .value
+            }
 
             val application = applicationBuilder(userAnswers = Some(answers))
               .configure("microservice.services.features.count-max-as-combined" -> true)
@@ -325,7 +358,15 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             val content = contentAsString(result)
 
             content mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+              view(
+                addSettlorForm,
+                fakeDraftId,
+                settlors,
+                Nil,
+                "You have added 25 settlors",
+                None,
+                List("Individual", "Business")
+              )(request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -334,21 +375,29 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           "25 combined" in {
 
-            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil) { (acc, i) =>
               acc :+ (if (i < (MAX / 2).floor) indRow(i) else busRow(i))
-            })
+            }
 
-            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers) { (acc, i) =>
               if (i < (MAX / 2).floor) {
                 acc
-                  .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
-                  .set(SettlorIndividualNamePage(i), indName).success.value
+                  .set(SettlorIndividualOrBusinessPage(i), Individual)
+                  .success
+                  .value
+                  .set(SettlorIndividualNamePage(i), indName)
+                  .success
+                  .value
               } else {
                 acc
-                  .set(SettlorIndividualOrBusinessPage(i), Business).success.value
-                  .set(SettlorBusinessNamePage(i), busName).success.value
+                  .set(SettlorIndividualOrBusinessPage(i), Business)
+                  .success
+                  .value
+                  .set(SettlorBusinessNamePage(i), busName)
+                  .success
+                  .value
               }
-            })
+            }
 
             val application = applicationBuilder(userAnswers = Some(answers))
               .configure("microservice.services.features.count-max-as-combined" -> true)
@@ -365,7 +414,15 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             val content = contentAsString(result)
 
             content mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual", "Business"))(request, messages).toString
+              view(
+                addSettlorForm,
+                fakeDraftId,
+                settlors,
+                Nil,
+                "You have added 25 settlors",
+                None,
+                List("Individual", "Business")
+              )(request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -377,15 +434,19 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           "one type maxed out" in {
 
-            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil) { (acc, i) =>
               acc :+ indRow(i)
-            })
+            }
 
-            val answers = (0 until MAX).foldLeft(emptyUserAnswers)((acc, i) => {
+            val answers = (0 until MAX).foldLeft(emptyUserAnswers) { (acc, i) =>
               acc
-                .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
-                .set(SettlorIndividualNamePage(i), indName).success.value
-            })
+                .set(SettlorIndividualOrBusinessPage(i), Individual)
+                .success
+                .value
+                .set(SettlorIndividualNamePage(i), indName)
+                .success
+                .value
+            }
 
             val application = applicationBuilder(userAnswers = Some(answers))
               .configure("microservice.services.features.count-max-as-combined" -> false)
@@ -402,7 +463,10 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             val content = contentAsString(result)
 
             content mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(request, messages).toString
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(
+                request,
+                messages
+              ).toString
 
             content must include("You cannot add another individual as you have entered a maximum of 25.")
 
@@ -411,21 +475,29 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           "both types maxed out" in {
 
-            lazy val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil)((acc, i) => {
+            lazy val settlors = (0 until MAX * 2).foldLeft[List[AddRow]](Nil) { (acc, i) =>
               acc :+ (if (i < MAX) indRow(i) else busRow(i))
-            })
+            }
 
-            val answers = (0 until MAX * 2).foldLeft(emptyUserAnswers)((acc, i) => {
+            val answers = (0 until MAX * 2).foldLeft(emptyUserAnswers) { (acc, i) =>
               if (i < MAX) {
                 acc
-                  .set(SettlorIndividualOrBusinessPage(i), Individual).success.value
-                  .set(SettlorIndividualNamePage(i), indName).success.value
+                  .set(SettlorIndividualOrBusinessPage(i), Individual)
+                  .success
+                  .value
+                  .set(SettlorIndividualNamePage(i), indName)
+                  .success
+                  .value
               } else {
                 acc
-                  .set(SettlorIndividualOrBusinessPage(i), Business).success.value
-                  .set(SettlorBusinessNamePage(i), busName).success.value
+                  .set(SettlorIndividualOrBusinessPage(i), Business)
+                  .success
+                  .value
+                  .set(SettlorBusinessNamePage(i), busName)
+                  .success
+                  .value
               }
-            })
+            }
 
             val application = applicationBuilder(userAnswers = Some(answers))
               .configure("microservice.services.features.count-max-as-combined" -> false)
@@ -442,7 +514,15 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             val content = contentAsString(result)
 
             content mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 50 settlors", None, List("Individual", "Business"))(request, messages).toString
+              view(
+                addSettlorForm,
+                fakeDraftId,
+                settlors,
+                Nil,
+                "You have added 50 settlors",
+                None,
+                List("Individual", "Business")
+              )(request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 50.")
 
@@ -474,7 +554,9 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
           verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
-          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+          verify(mockRegistrationProgress).settlorsStatus(
+            eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
+          )
 
           application.stop()
         }
@@ -500,7 +582,9 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
           verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
-          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+          verify(mockRegistrationProgress).settlorsStatus(
+            eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
+          )
 
           application.stop()
         }
@@ -528,7 +612,9 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
             redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
             verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
-            verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+            verify(mockRegistrationProgress).settlorsStatus(
+              eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
+            )
 
             application.stop()
           }
@@ -555,7 +641,9 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
               redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
               verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
-              verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value))
+              verify(mockRegistrationProgress).settlorsStatus(
+                eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
+              )
 
               application.stop()
             }
@@ -613,10 +701,14 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
           status(result) mustEqual SEE_OTHER
 
-          redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+          redirectLocation(
+            result
+          ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
           verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
-          verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value))
+          verify(mockRegistrationProgress).settlorsStatus(
+            eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value)
+          )
 
           application.stop()
         }
@@ -639,10 +731,14 @@ class AddASettlorControllerSpec extends SpecBase with BeforeAndAfterEach with Sc
 
             status(result) mustEqual SEE_OTHER
 
-            redirectLocation(result).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
+            redirectLocation(
+              result
+            ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
             verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
-            verify(mockRegistrationProgress).settlorsStatus(eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value))
+            verify(mockRegistrationProgress).settlorsStatus(
+              eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value)
+            )
 
             application.stop()
           }

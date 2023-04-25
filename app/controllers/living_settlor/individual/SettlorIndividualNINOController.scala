@@ -36,54 +36,54 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualNINOController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 registrationsRepository: RegistrationsRepository,
-                                                 @IndividualSettlor navigator: Navigator,
-                                                 actions: Actions,
-                                                 requireName: NameRequiredActionProvider,
-                                                 formProvider: NinoFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: SettlorIndividualNINOView,
-                                                 technicalErrorView: TechnicalErrorView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorIndividualNINOController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  formProvider: NinoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorIndividualNINOView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private def form(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
     formProvider("settlorIndividualNINO", request.userAnswers, index)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
-
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(SettlorIndividualNINOPage(index)) match {
-        case None => form(index)
+        case None        => form(index)
         case Some(value) => form(index).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, name))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
-    implicit request =>
-
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
-      form(index).bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
-        value => {
-          request.userAnswers.set(SettlorIndividualNINOPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorIndividualNINOController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+      form(index)
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          value =>
+            request.userAnswers.set(SettlorIndividualNINOPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorIndividualNINOPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorIndividualNINOController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 }

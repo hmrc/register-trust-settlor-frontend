@@ -26,7 +26,7 @@ import views.html.living_settlor.SettlorIndividualOrBusinessView
 class SettlorIndividualOrBusinessViewSpec extends OptionsViewBehaviours {
 
   val messageKeyPrefix = "settlorIndividualOrBusiness"
-  val index = 0
+  val index            = 0
 
   val form = new SettlorIndividualOrBusinessFormProvider()()
 
@@ -37,7 +37,7 @@ class SettlorIndividualOrBusinessViewSpec extends OptionsViewBehaviours {
 
   "SettlorIndividualOrBusinessView" must {
 
-    behave like normalPage(applyView(form),  messageKeyPrefix)
+    behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
 

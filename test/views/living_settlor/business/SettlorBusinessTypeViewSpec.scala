@@ -28,8 +28,8 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "settlorBusinessType"
 
   val index = 0
-  val name = "Business name"
-  val form = new SettlorBusinessTypeFormProvider()()
+  val name  = "Business name"
+  val form  = new SettlorBusinessTypeFormProvider()()
 
   val view = viewFor[SettlorBusinessTypeView](Some(emptyUserAnswers))
 
@@ -58,14 +58,12 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
 
         val doc = asDocument(applyView(form))
 
-        for (option <- KindOfBusiness.options) {
+        for (option <- KindOfBusiness.options)
           assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
       }
     }
 
-    for (option <- KindOfBusiness.options) {
-
+    for (option <- KindOfBusiness.options)
       s"rendered with a value of '${option.value}'" must {
 
         s"have the '${option.value}' radio button selected" in {
@@ -74,11 +72,9 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
 
           assertContainsRadioButton(doc, option.id, "value", option.value, true)
 
-          for (unselectedOption <- KindOfBusiness.options.filterNot(o => o == option)) {
+          for (unselectedOption <- KindOfBusiness.options.filterNot(o => o == option))
             assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
         }
       }
-    }
   }
 }

@@ -25,8 +25,8 @@ import views.html.living_settlor.business.SettlorBusinessAddressUKView
 class SettlorBusinessAddressUKViewSpec extends UkAddressViewBehaviours {
 
   val messageKeyPrefix = "settlorBusinessAddressUK"
-  val index = 0
-  val name = "Business name"
+  val index            = 0
+  val name             = "Business name"
 
   override val form = new UKAddressFormProvider()()
 
@@ -36,7 +36,6 @@ class SettlorBusinessAddressUKViewSpec extends UkAddressViewBehaviours {
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
-
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name)
 

@@ -23,61 +23,62 @@ import play.api.libs.json._
 
 import java.time.LocalDate
 
-case class Settlors(settlor: Option[List[Settlor]],
-                    settlorCompany: Option[List[SettlorCompany]])
+case class Settlors(settlor: Option[List[Settlor]], settlorCompany: Option[List[SettlorCompany]])
 
 object Settlors {
   implicit val settlorsFormat: Format[Settlors] = Json.format[Settlors]
 }
 
-case class Settlor(aliveAtRegistration: Boolean,
-                   name: FullName,
-                   dateOfBirth: Option[LocalDate],
-                   identification: Option[IdentificationType],
-                   countryOfResidence: Option[String],
-                   nationality: Option[String],
-                   legallyIncapable: Option[Boolean])
+case class Settlor(
+  aliveAtRegistration: Boolean,
+  name: FullName,
+  dateOfBirth: Option[LocalDate],
+  identification: Option[IdentificationType],
+  countryOfResidence: Option[String],
+  nationality: Option[String],
+  legallyIncapable: Option[Boolean]
+)
 
 object Settlor {
   implicit val settlorFormat: Format[Settlor] = Json.format[Settlor]
 }
 
-case class SettlorCompany(name: String,
-                          companyType: Option[String],
-                          companyTime: Option[Boolean],
-                          identification: Option[IdentificationOrgType],
-                          countryOfResidence: Option[String])
+case class SettlorCompany(
+  name: String,
+  companyType: Option[String],
+  companyTime: Option[Boolean],
+  identification: Option[IdentificationOrgType],
+  countryOfResidence: Option[String]
+)
 
 object SettlorCompany {
   implicit val settlorCompanyFormat: Format[SettlorCompany] = Json.format[SettlorCompany]
 }
 
-case class IdentificationOrgType(utr: Option[String],
-                                 address: Option[AddressType])
+case class IdentificationOrgType(utr: Option[String], address: Option[AddressType])
 
 object IdentificationOrgType {
   implicit val trustBeneficiaryIdentificationFormat: Format[IdentificationOrgType] = Json.format[IdentificationOrgType]
 }
 
-case class Identification(nino: Option[String],
-                          address: Option[AddressType])
+case class Identification(nino: Option[String], address: Option[AddressType])
 
 object Identification {
   implicit val identificationFormat: Format[Identification] = Json.format[Identification]
 }
 
-case class IdentificationType(nino: Option[String],
-                              passport: Option[PassportType],
-                              address: Option[AddressType])
+case class IdentificationType(nino: Option[String], passport: Option[PassportType], address: Option[AddressType])
 
 object IdentificationType {
   implicit val identificationTypeFormat: Format[IdentificationType] = Json.format[IdentificationType]
 }
 
-case class TrustDetailsType(typeOfTrust: TypeOfTrust,
-                            deedOfVariation: Option[DeedOfVariation],
-                            interVivos: Option[Boolean],
-                            efrbsStartDate: Option[LocalDate])
+case class TrustDetailsType(
+  typeOfTrust: TypeOfTrust,
+  deedOfVariation: Option[DeedOfVariation],
+  interVivos: Option[Boolean],
+  efrbsStartDate: Option[LocalDate]
+)
 
 object TrustDetailsType {
 
@@ -88,35 +89,36 @@ object TrustDetailsType {
       DeedOfVariation.uaReads and
       (__ \ 'holdoverReliefYesNo).readNullable[Boolean] and
       (__ \ 'efrbsStartDate).readNullable[LocalDate]
-    )(TrustDetailsType.apply _)
+  )(TrustDetailsType.apply _)
 }
 
-case class PassportType(number: String,
-                        expirationDate: LocalDate,
-                        countryOfIssue: String)
+case class PassportType(number: String, expirationDate: LocalDate, countryOfIssue: String)
 
 object PassportType {
   implicit val passportTypeFormat: Format[PassportType] = Json.format[PassportType]
 }
 
-case class AddressType(line1: String,
-                       line2: String,
-                       line3: Option[String],
-                       line4: Option[String],
-                       postCode: Option[String],
-                       country: String)
+case class AddressType(
+  line1: String,
+  line2: String,
+  line3: Option[String],
+  line4: Option[String],
+  postCode: Option[String],
+  country: String
+)
 
 object AddressType {
   implicit val addressTypeFormat: Format[AddressType] = Json.format[AddressType]
 }
 
-
-case class WillType(name: FullName,
-                    dateOfBirth: Option[LocalDate],
-                    dateOfDeath: Option[LocalDate],
-                    identification: Option[Identification],
-                    countryOfResidence: Option[String],
-                    nationality: Option[String])
+case class WillType(
+  name: FullName,
+  dateOfBirth: Option[LocalDate],
+  dateOfDeath: Option[LocalDate],
+  identification: Option[Identification],
+  countryOfResidence: Option[String],
+  nationality: Option[String]
+)
 
 object WillType {
   implicit val willTypeFormat: Format[WillType] = Json.format[WillType]

@@ -34,29 +34,29 @@ class SettlorIndividualNameViewSpec extends QuestionViewBehaviours[FullName] {
   Seq(
     ("settlorIndividualName", true),
     ("settlorIndividualNamePastTense", false)
-  ) foreach {
-    case (setUpBeforeSettlorMessage, setUpBeforeSettlorDiedBool) =>
-      s"SettlorIndividualNameView view (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
+  ) foreach { case (setUpBeforeSettlorMessage, setUpBeforeSettlorDiedBool) =>
+    s"SettlorIndividualNameView view (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
 
-        val userAnswers: UserAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDiedBool).success.value
+      val userAnswers: UserAnswers =
+        emptyUserAnswers.set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDiedBool).success.value
 
-        val view = viewFor[SettlorIndividualNameView](Some(userAnswers))
+      val view = viewFor[SettlorIndividualNameView](Some(userAnswers))
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDiedBool)(fakeRequest, messages)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-        behave like normalPage(applyView(form), setUpBeforeSettlorMessage)
+      behave like normalPage(applyView(form), setUpBeforeSettlorMessage)
 
-        behave like pageWithBackLink(applyView(form))
+      behave like pageWithBackLink(applyView(form))
 
-        behave like pageWithTextFields(
-          form,
-          applyView,
-          setUpBeforeSettlorMessage,
-          Seq(("firstName", None), ("middleName", None), ("lastName", None))
-        )
+      behave like pageWithTextFields(
+        form,
+        applyView,
+        setUpBeforeSettlorMessage,
+        Seq(("firstName", None), ("middleName", None), ("lastName", None))
+      )
 
-        behave like pageWithASubmitButton(applyView(form))
-      }
+      behave like pageWithASubmitButton(applyView(form))
+    }
   }
 }

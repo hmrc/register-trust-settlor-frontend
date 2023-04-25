@@ -32,6 +32,7 @@ class NinoFormProvider @Inject() extends Mappings {
             isNotEmpty("value", s"$messagePrefix.error.required"),
             isNinoValid("value", s"$messagePrefix.error.invalidFormat"),
             isNinoDuplicated(userAnswers, index, s"$messagePrefix.error.duplicate")
-          ))
+          )
+        )
     )
 }

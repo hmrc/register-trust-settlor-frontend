@@ -30,12 +30,10 @@ class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
       identification = settlor.identification,
       countryOfResidence = settlor.countryOfResidence,
       nationality = settlor.nationality,
-      legallyIncapable = {
-        (settlor.aliveAtRegistration, settlor.hasMentalCapacity) match {
-          case (true, Some(Yes)) => Some(false)
-          case (true, Some(No)) => Some(true)
-          case (_, _) => None
-        }
+      legallyIncapable = (settlor.aliveAtRegistration, settlor.hasMentalCapacity) match {
+        case (true, Some(Yes)) => Some(false)
+        case (true, Some(No))  => Some(true)
+        case (_, _)            => None
       }
     )
 }

@@ -35,33 +35,52 @@ import scala.concurrent.Future
 
 class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
-  val formProvider = new YesNoFormProvider()
-  val prefix: String = "settlors.removeYesNo"
+  val formProvider        = new YesNoFormProvider()
+  val prefix: String      = "settlors.removeYesNo"
   val form: Form[Boolean] = formProvider.withPrefix(prefix)
-  val index: Int = 0
+  val index: Int          = 0
 
-  lazy val removeLivingSettlorYesNoRoute: String = routes.RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val removeLivingSettlorYesNoRoute: String =
+    routes.RemoveSettlorYesNoController.onPageLoad(index, fakeDraftId).url
 
-  val defaultName: String = "the settlor"
-  val name: FullName = FullName("John", None, "Doe")
+  val defaultName: String  = "the settlor"
+  val name: FullName       = FullName("John", None, "Doe")
   val businessName: String = "Google Ltd"
 
   val baseIndividualUserAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorIndividualOrBusinessPage(index), Individual).success.value
+    .set(SettlorIndividualOrBusinessPage(index), Individual)
+    .success
+    .value
 
   val individualUserAnswers: UserAnswers = baseIndividualUserAnswers
-    .set(SettlorIndividualNamePage(index), name).success.value
-    .set(SettlorIndividualDateOfBirthYesNoPage(index), false).success.value
-    .set(SettlorIndividualNINOYesNoPage(index), true).success.value
-    .set(SettlorIndividualNINOPage(index), "nino").success.value
+    .set(SettlorIndividualNamePage(index), name)
+    .success
+    .value
+    .set(SettlorIndividualDateOfBirthYesNoPage(index), false)
+    .success
+    .value
+    .set(SettlorIndividualNINOYesNoPage(index), true)
+    .success
+    .value
+    .set(SettlorIndividualNINOPage(index), "nino")
+    .success
+    .value
 
   val baseBusinessUserAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorIndividualOrBusinessPage(index), Business).success.value
+    .set(SettlorIndividualOrBusinessPage(index), Business)
+    .success
+    .value
 
   val businessUserAnswers: UserAnswers = baseBusinessUserAnswers
-    .set(SettlorBusinessNamePage(index), businessName).success.value
-    .set(SettlorBusinessUtrYesNoPage(index), true).success.value
-    .set(SettlorBusinessUtrPage(index), "utr").success.value
+    .set(SettlorBusinessNamePage(index), businessName)
+    .success
+    .value
+    .set(SettlorBusinessUtrYesNoPage(index), true)
+    .success
+    .value
+    .set(SettlorBusinessUtrPage(index), "utr")
+    .success
+    .value
 
   "RemoveSettlorYesNoController" must {
 

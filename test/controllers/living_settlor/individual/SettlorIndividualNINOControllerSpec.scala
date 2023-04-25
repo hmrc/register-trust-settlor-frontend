@@ -29,11 +29,12 @@ import views.html.living_settlor.individual.SettlorIndividualNINOView
 class SettlorIndividualNINOControllerSpec extends SpecBase {
 
   private val formProvider: NinoFormProvider = new NinoFormProvider()
-  private val index: Int = 0
-  private val form: Form[String] = formProvider("settlorIndividualNINO", emptyUserAnswers, index)
-  private val name: FullName = FullName("First", Some("Middle"), "Last")
+  private val index: Int                     = 0
+  private val form: Form[String]             = formProvider("settlorIndividualNINO", emptyUserAnswers, index)
+  private val name: FullName                 = FullName("First", Some("Middle"), "Last")
 
-  private lazy val settlorIndividualNINORoute: String = routes.SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url
+  private lazy val settlorIndividualNINORoute: String =
+    routes.SettlorIndividualNINOController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualNINO Controller" must {
 
@@ -59,8 +60,13 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualNINOPage(index), "answer").success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualNINOPage(index), "answer")
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,8 +86,13 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualNINOYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualNINOYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -100,7 +111,9 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNINOPage(index), "CC123456A").success.value
+        .set(SettlorIndividualNINOPage(index), "CC123456A")
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -118,8 +131,7 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
     "return a Bad Request and errors" when {
       "invalid data is submitted" in {
 
-        val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index),
-          name).success.value
+        val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -146,8 +158,12 @@ class SettlorIndividualNINOControllerSpec extends SpecBase {
         val nino = "JH123456C"
 
         val userAnswers = emptyUserAnswers
-          .set(SettlorIndividualNamePage(index), name).success.value
-          .set(SettlorIndividualNINOPage(index + 1), nino).success.value
+          .set(SettlorIndividualNamePage(index), name)
+          .success
+          .value
+          .set(SettlorIndividualNINOPage(index + 1), nino)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

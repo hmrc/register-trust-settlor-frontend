@@ -28,8 +28,8 @@ import views.html.living_settlor.business.SettlorBusinessNameView
 class SettlorBusinessNameControllerSpec extends SpecBase {
 
   val formProvider = new SettlorBusinessNameFormProvider()
-  val form = formProvider()
-  val index = 0
+  val form         = formProvider()
+  val index        = 0
 
   lazy val settlorBusinesNameRoute = businessRoutes.SettlorBusinessNameController.onPageLoad(index, fakeDraftId).url
 

@@ -28,8 +28,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
   "TrusteeIndividual reads" must {
 
     "parse the old mental capacity question" in {
-      val json = Json.parse(
-        """
+      val json = Json.parse("""
           |{
           | "aliveAtRegistration": true,
           | "name": {
@@ -55,8 +54,7 @@ class IndividualSettlorSpec extends SpecBase with Matchers with OptionValues {
     }
 
     "parse the new mental capacity question" in {
-      val json = Json.parse(
-        """
+      val json = Json.parse("""
           |{
           | "aliveAtRegistration": true,
           | "name": {

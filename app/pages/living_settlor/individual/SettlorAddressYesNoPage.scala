@@ -31,13 +31,15 @@ final case class SettlorAddressYesNoPage(index: Int) extends QuestionPage[Boolea
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(SettlorAddressUKYesNoPage(index))
-        .flatMap(_.remove(SettlorAddressInternationalPage(index)))
-        .flatMap(_.remove(SettlorAddressUKPage(index)))
-        .flatMap(_.remove(SettlorIndividualPassportYesNoPage(index)))
-        .flatMap(_.remove(SettlorIndividualPassportPage(index)))
-        .flatMap(_.remove(SettlorIndividualIDCardYesNoPage(index)))
-        .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(SettlorAddressUKYesNoPage(index))
+          .flatMap(_.remove(SettlorAddressInternationalPage(index)))
+          .flatMap(_.remove(SettlorAddressUKPage(index)))
+          .flatMap(_.remove(SettlorIndividualPassportYesNoPage(index)))
+          .flatMap(_.remove(SettlorIndividualPassportPage(index)))
+          .flatMap(_.remove(SettlorIndividualIDCardYesNoPage(index)))
+          .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
+      case _           => super.cleanup(value, userAnswers)
     }
 }

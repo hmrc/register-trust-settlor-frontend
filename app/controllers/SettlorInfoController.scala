@@ -25,21 +25,21 @@ import views.html._
 
 import javax.inject.Inject
 
-class SettlorInfoController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       actions: Actions,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: SettlorInfoView
-                                     ) extends FrontendBaseController with I18nSupport {
+class SettlorInfoController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorInfoView
+) extends FrontendBaseController
+    with I18nSupport {
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
-      val userAnswers: UserAnswers = request.userAnswers
-        Ok(view(draftId, userAnswers.isTaxable))
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val userAnswers: UserAnswers = request.userAnswers
+    Ok(view(draftId, userAnswers.isTaxable))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-      Redirect(controllers.trust_type.routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+    Redirect(controllers.trust_type.routes.SetUpByLivingSettlorController.onPageLoad(draftId))
   }
 
 }

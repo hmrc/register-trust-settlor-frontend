@@ -37,53 +37,54 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class KindOfTrustController @Inject()(
-                                       override val messagesApi: MessagesApi,
-                                       registrationsRepository: RegistrationsRepository,
-                                       @TrustType navigator: Navigator,
-                                       standardActions: Actions,
-                                       formProvider: KindOfTrustFormProvider,
-                                       val controllerComponents: MessagesControllerComponents,
-                                       view: KindOfTrustView,
-                                       requiredAnswer: RequiredAnswerActionProvider,
-                                       technicalErrorView: TechnicalErrorView
-                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
+class KindOfTrustController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @TrustType navigator: Navigator,
+  standardActions: Actions,
+  formProvider: KindOfTrustFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: KindOfTrustView,
+  requiredAnswer: RequiredAnswerActionProvider,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits
+    with Logging {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId)))
+      requiredAnswer(
+        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+      )
 
   private val form: Form[KindOfTrust] = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(KindOfTrustPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(KindOfTrustPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value => {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        value =>
           request.userAnswers.set(KindOfTrustPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(KindOfTrustPage, draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_)              =>
               logger.error("[KindOfTrustController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
-        }
       )
   }
 }

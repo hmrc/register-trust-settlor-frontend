@@ -67,7 +67,9 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
         .thenReturn(fakeAnswerSection)
 
       val answers: UserAnswers = emptyUserAnswers
-        .set(SettlorsNamePage, name).success.value
+        .set(SettlorsNamePage, name)
+        .success
+        .value
 
       val application: Application = applicationBuilder(userAnswers = Some(answers))
         .overrides(bind[DeceasedSettlorPrintHelper].toInstance(mockPrintHelper))
@@ -135,7 +137,9 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
     "remove living settlors mapped piece for a POST" in {
 
       val userAnswers: UserAnswers = emptyUserAnswers
-        .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
+        .set(SettlorsNamePage, FullName("First", None, "Last"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))

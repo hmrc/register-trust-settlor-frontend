@@ -28,7 +28,7 @@ import views.html.deceased_settlor.SettlorsUKAddressView
 class SettlorsUKAddressControllerSpec extends SpecBase {
 
   val formProvider = new UKAddressFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   lazy val settlorsUKAddressRoute = routes.SettlorsUKAddressController.onPageLoad(fakeDraftId).url
 
@@ -38,8 +38,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -59,8 +58,12 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
       val userAnswers = emptyUserAnswers
-        .set(SettlorsUKAddressPage, UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")).success.value.set(SettlorsNamePage,
-        name).success.value
+        .set(SettlorsUKAddressPage, UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5"))
+        .success
+        .value
+        .set(SettlorsNamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -73,22 +76,24 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"),"line 5")), fakeDraftId, name)(request, messages).toString
+        view(form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")), fakeDraftId, name)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, settlorsUKAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
 
@@ -101,8 +106,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -144,7 +148,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
       val request =
         FakeRequest(POST, settlorsUKAddressRoute)
-          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"),("postcode", "NE1 1ZZ"))
+          .withFormUrlEncodedBody(("line1", "value 1"), ("line2", "value 2"), ("postcode", "NE1 1ZZ"))
 
       val result = route(application, request).value
 

@@ -33,14 +33,15 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
   )
 
   private val livingSettlors: (List[(SettlorViewModel, Int)], List[(SettlorViewModel, Int)]) =
-    userAnswers.get(LivingSettlors)
+    userAnswers
+      .get(LivingSettlors)
       .toList
       .flatten
       .zipWithIndex
       .partition(_._1.status == Completed)
 
   private def parseSettlor(settlor: (SettlorViewModel, Int)): Option[AddRow] = {
-    val vm = settlor._1
+    val vm    = settlor._1
     val index = settlor._2
 
     parseToRow(vm, index)
@@ -48,34 +49,38 @@ class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit 
 
   private val defaultName = messages("entities.no.name.added")
 
-  private def parseToRow(vm: SettlorViewModel, index: Int): Option[AddRow] = {
-
+  private def parseToRow(vm: SettlorViewModel, index: Int): Option[AddRow] =
     vm match {
 
-      case SettlorIndividualViewModel(_, name, status) => Some(AddRow(
-        name = name.getOrElse(defaultName),
-        typeLabel = messages("entity.settlor.individual"),
-        changeUrl = if (status == InProgress) {
-          individualRoutes.SettlorIndividualNameController.onPageLoad(index, draftId).url
-        } else {
-          individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
-        },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
-      ))
+      case SettlorIndividualViewModel(_, name, status) =>
+        Some(
+          AddRow(
+            name = name.getOrElse(defaultName),
+            typeLabel = messages("entity.settlor.individual"),
+            changeUrl = if (status == InProgress) {
+              individualRoutes.SettlorIndividualNameController.onPageLoad(index, draftId).url
+            } else {
+              individualRoutes.SettlorIndividualAnswerController.onPageLoad(index, draftId).url
+            },
+            removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
+          )
+        )
 
-      case SettlorBusinessViewModel(_, name, status) => Some(AddRow(
-        name = name.getOrElse(defaultName),
-        typeLabel = messages("entity.settlor.business"),
-        changeUrl = if (status == InProgress) {
-          businessRoutes.SettlorBusinessNameController.onPageLoad(index, draftId).url
-        } else {
-          businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId).url
-        },
-        removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
-      ))
+      case SettlorBusinessViewModel(_, name, status) =>
+        Some(
+          AddRow(
+            name = name.getOrElse(defaultName),
+            typeLabel = messages("entity.settlor.business"),
+            changeUrl = if (status == InProgress) {
+              businessRoutes.SettlorBusinessNameController.onPageLoad(index, draftId).url
+            } else {
+              businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId).url
+            },
+            removeUrl = routes.RemoveSettlorYesNoController.onPageLoad(index, draftId).url
+          )
+        )
 
       case _ =>
         None
     }
-  }
 }

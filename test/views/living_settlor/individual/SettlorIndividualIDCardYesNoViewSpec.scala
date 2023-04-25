@@ -26,8 +26,8 @@ import views.html.living_settlor.individual.SettlorIndividualIDCardYesNoView
 class SettlorIndividualIDCardYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "settlorIndividualIDCardYesNo"
-  val index = 0
-  val name = FullName("First", Some("middle"), "Last")
+  val index            = 0
+  val name             = FullName("First", Some("middle"), "Last")
 
   val form = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 

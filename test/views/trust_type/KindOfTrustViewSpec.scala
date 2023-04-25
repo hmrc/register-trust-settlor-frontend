@@ -52,14 +52,12 @@ class KindOfTrustViewSpec extends ViewBehaviours {
 
         val doc = asDocument(applyView(form))
 
-        for (option <- KindOfTrust.options) {
+        for (option <- KindOfTrust.options)
           assertContainsRadioButton(doc, option.id, "value", option.value, false)
-        }
       }
     }
 
-    for (option <- KindOfTrust.options) {
-
+    for (option <- KindOfTrust.options)
       s"rendered with a value of '${option.value}'" must {
 
         s"have the '${option.value}' radio button selected" in {
@@ -68,11 +66,9 @@ class KindOfTrustViewSpec extends ViewBehaviours {
 
           assertContainsRadioButton(doc, option.id, "value", option.value, true)
 
-          for (unselectedOption <- KindOfTrust.options.filterNot(o => o == option)) {
+          for (unselectedOption <- KindOfTrust.options.filterNot(o => o == option))
             assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
-          }
         }
       }
-    }
   }
 }

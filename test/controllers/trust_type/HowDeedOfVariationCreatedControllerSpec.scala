@@ -32,7 +32,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
   lazy val deedOfVariationRoute = routes.HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId).url
 
   val formProvider = new DeedOfVariationFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   "HowDeedOfVariationCreated Controller" must {
 
@@ -58,8 +58,13 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
-        .set(HowDeedOfVariationCreatedPage, DeedOfVariation.values.head).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(HowDeedOfVariationCreatedPage, DeedOfVariation.values.head)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -153,4 +158,3 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
     }
   }
 }
-

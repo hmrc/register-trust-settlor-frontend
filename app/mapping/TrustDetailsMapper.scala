@@ -21,12 +21,11 @@ import sections.{Settlors => section}
 
 class TrustDetailsMapper {
 
-  def build(userAnswers: UserAnswers): Option[TrustDetailsType] = {
+  def build(userAnswers: UserAnswers): Option[TrustDetailsType] =
     if (userAnswers.isTaxable) {
       userAnswers.getAtPath(section.path)(TrustDetailsType.uaReads)
     } else {
       None
     }
-  }
 
 }

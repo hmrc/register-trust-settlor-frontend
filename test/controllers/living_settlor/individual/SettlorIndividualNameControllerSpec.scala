@@ -32,11 +32,10 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new SettlorIndividualNameFormProvider()
-  val form = formProvider()
-  val index = 0
+  val form         = formProvider()
+  val index        = 0
 
   lazy val settlorIndividualNameRoute = routes.SettlorIndividualNameController.onPageLoad(index, fakeDraftId).url
-
 
   "SettlorIndividualName Controller" must {
 
@@ -45,7 +44,9 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
         s"return OK and the correct view for a GET when the userAnswers SetUpBeforeSettlorDied is set to $setUpBeforeSettlorDied" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
+            .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied)
+            .success
+            .value
 
           val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -67,7 +68,9 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNamePage(index), FullName("first name", Some("middle name"), "last name")).success.value
+        .set(SettlorIndividualNamePage(index), FullName("first name", Some("middle name"), "last name"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -80,7 +83,12 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FullName("first name", Some("middle name"), "last name")), fakeDraftId, index, setUpBeforeSettlorDied = false)(request, messages).toString
+        view(
+          form.fill(FullName("first name", Some("middle name"), "last name")),
+          fakeDraftId,
+          index,
+          setUpBeforeSettlorDied = false
+        )(request, messages).toString
 
       application.stop()
     }

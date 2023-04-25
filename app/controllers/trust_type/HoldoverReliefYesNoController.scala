@@ -34,53 +34,53 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class HoldoverReliefYesNoController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               registrationsRepository: RegistrationsRepository,
-                                               @TrustType navigator: Navigator,
-                                               standardActions: Actions,
-                                               requiredAnswer: RequiredAnswerActionProvider,
-                                               yesNoFormProvider: YesNoFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: HoldoverReliefYesNoView,
-                                               technicalErrorView: TechnicalErrorView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class HoldoverReliefYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @TrustType navigator: Navigator,
+  standardActions: Actions,
+  requiredAnswer: RequiredAnswerActionProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: HoldoverReliefYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")
 
   private def actions(draftId: String) =
     standardActions.authWithData(draftId) andThen
-      requiredAnswer(RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId)))
+      requiredAnswer(
+        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+      )
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(HoldoverReliefYesNoPage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(HoldoverReliefYesNoPage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value => {
+  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        value =>
           request.userAnswers.set(HoldoverReliefYesNoPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_)              =>
               logger.error("[HoldoverReliefYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
-        }
       )
   }
 }

@@ -31,9 +31,11 @@ final case class SettlorBusinessAddressYesNoPage(index: Int) extends QuestionPag
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(SettlorBusinessAddressUKYesNoPage(index))
-        .flatMap(_.remove(SettlorBusinessAddressInternationalPage(index)))
-        .flatMap(_.remove(SettlorBusinessAddressUKPage(index)))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(SettlorBusinessAddressUKYesNoPage(index))
+          .flatMap(_.remove(SettlorBusinessAddressInternationalPage(index)))
+          .flatMap(_.remove(SettlorBusinessAddressUKPage(index)))
+      case _           => super.cleanup(value, userAnswers)
     }
 }

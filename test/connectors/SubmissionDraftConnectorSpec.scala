@@ -39,17 +39,15 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq(
-      "microservice.services.trusts.port" -> server.port(),
-      "auditing.enabled" -> false): _*
-    ).build()
+    .configure(Seq("microservice.services.trusts.port" -> server.port(), "auditing.enabled" -> false): _*)
+    .build()
 
   private lazy val connector = app.injector.instanceOf[SubmissionDraftConnector]
 
-  private val testDraftId = "draftId"
-  private val testSection = "section"
-  private val submissionsUrl = s"/trusts/register/submission-drafts"
-  private val submissionUrl = s"$submissionsUrl/$testDraftId/$testSection"
+  private val testDraftId      = "draftId"
+  private val testSection      = "section"
+  private val submissionsUrl   = s"/trusts/register/submission-drafts"
+  private val submissionUrl    = s"$submissionsUrl/$testDraftId/$testSection"
   private val setSubmissionUrl = s"$submissionsUrl/$testDraftId/set/$testSection"
 
   "SubmissionDraftConnector" when {
@@ -58,18 +56,14 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
 
       "set data for section set" in {
 
-        val sectionData = Json.parse(
-          """
+        val sectionData = Json.parse("""
             |{
             | "field1": "value1",
             | "field2": "value2"
             |}
             |""".stripMargin)
 
-        val submissionDraftSetData = RegistrationSubmission.DataSet(
-          sectionData,
-          List.empty,
-          List.empty)
+        val submissionDraftSetData = RegistrationSubmission.DataSet(sectionData, List.empty, List.empty)
 
         server.stubFor(
           post(urlEqualTo(setSubmissionUrl))
@@ -81,14 +75,14 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
             )
         )
 
-        val result = Await.result(connector.setDraftSection(testDraftId, testSection, submissionDraftSetData), Duration.Inf)
+        val result =
+          Await.result(connector.setDraftSection(testDraftId, testSection, submissionDraftSetData), Duration.Inf)
         result.status mustBe Status.OK
       }
 
       "get data for section" in {
 
-        val draftData = Json.parse(
-          """
+        val draftData = Json.parse("""
             |{
             | "field1": "value1",
             | "field2": "value2"
@@ -115,7 +109,8 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
             )
         )
 
-        val result: SubmissionDraftResponse = Await.result(connector.getDraftSection(testDraftId, testSection), Duration.Inf)
+        val result: SubmissionDraftResponse =
+          Await.result(connector.getDraftSection(testDraftId, testSection), Duration.Inf)
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
         result.data mustBe draftData
       }
@@ -126,8 +121,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
       "search absolute path" when {
 
         "there are individuals without roleInCompany defined" in {
-          val data = Json.parse(
-            """
+          val data = Json.parse("""
               |{
               |  "createdAt": "2021-11-08T11:46:59.505",
               |  "data": {
@@ -193,8 +187,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
         }
 
         "return NoIndividualBeneficiaries when there are no individuals" in {
-          val data = Json.parse(
-            """
+          val data = Json.parse("""
               |{
               |  "data": {
               |    "beneficiaries": {
@@ -223,8 +216,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
         }
 
         "return NotAllRolesAnswered where some individuals do not have role in company" in {
-          val data = Json.parse(
-            """
+          val data = Json.parse("""
               |{
               |  "data": {
               |    "beneficiaries": {
@@ -270,8 +262,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
         }
 
         "return AllRolesAnswered where all individuals have role in company answered" in {
-          val data = Json.parse(
-            """
+          val data = Json.parse("""
               |{
               |  "data": {
               |    "beneficiaries": {
@@ -317,7 +308,6 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
           result mustBe RolesInCompanies.AllRolesAnswered
         }
       }
-
 
     }
 

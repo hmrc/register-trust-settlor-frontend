@@ -22,16 +22,18 @@ import models.pages.Address
 import play.api.libs.functional.syntax._
 import play.api.libs.json.{Reads, __}
 
-final case class BusinessSettlor(name: String,
-                                 utr: Option[String],
-                                 countryOfResidence: Option[String],
-                                 address: Option[Address],
-                                 companyType: Option[String],
-                                 companyTime: Option[Boolean]) extends Settlor {
+final case class BusinessSettlor(
+  name: String,
+  utr: Option[String],
+  countryOfResidence: Option[String],
+  address: Option[Address],
+  companyType: Option[String],
+  companyTime: Option[Boolean]
+) extends Settlor {
 
   val identification: Option[IdentificationOrgType] = (utr, address) match {
     case (None, None) => None
-    case _ => Some(IdentificationOrgType(utr, buildAddress(address)))
+    case _            => Some(IdentificationOrgType(utr, buildAddress(address)))
   }
 }
 
@@ -44,6 +46,6 @@ object BusinessSettlor extends SettlorReads {
       readAddress() and
       (__ \ "companyType").readNullable[String] and
       (__ \ "companyTime").readNullable[Boolean]
-    )(BusinessSettlor.apply _)
+  )(BusinessSettlor.apply _)
 
 }

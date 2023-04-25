@@ -65,24 +65,21 @@ trait UserAnswersGenerator extends TryValues {
       arbitrary[(AddASettlorPage.type, JsValue)] ::
       Nil
 
-  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] = {
-
+  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] =
     Arbitrary {
       for {
-        id      <- nonEmptyString
-        data    <- generators match {
-          case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
-          case _   => Gen.mapOf(oneOf(generators))
-        }
+        id         <- nonEmptyString
+        data       <- generators match {
+                        case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
+                        case _   => Gen.mapOf(oneOf(generators))
+                      }
         internalId <- nonEmptyString
-      } yield UserAnswers (
+      } yield UserAnswers(
         draftId = id,
-        data = data.foldLeft(Json.obj()) {
-          case (obj, (path, value)) =>
-            obj.setObject(path.path, value).get
+        data = data.foldLeft(Json.obj()) { case (obj, (path, value)) =>
+          obj.setObject(path.path, value).get
         },
         internalAuthId = internalId
       )
     }
-  }
 }

@@ -22,8 +22,7 @@ import sections.{DeceasedSettlor => entity}
 
 class DeceasedSettlorMapper extends {
 
-  def build(userAnswers: UserAnswers): Option[WillType] = {
-
+  def build(userAnswers: UserAnswers): Option[WillType] =
     userAnswers.getAtPath(entity.path)(DeceasedSettlor.reads) map { settlor =>
       WillType(
         name = settlor.name,
@@ -34,6 +33,5 @@ class DeceasedSettlorMapper extends {
         nationality = settlor.nationality
       )
     }
-  }
 
 }

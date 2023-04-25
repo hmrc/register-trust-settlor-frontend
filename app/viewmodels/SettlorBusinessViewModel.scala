@@ -20,9 +20,11 @@ import models.pages.IndividualOrBusiness.Business
 import models.pages.{IndividualOrBusiness, Status}
 import models.pages.Status.InProgress
 
-final case class SettlorBusinessViewModel(`type`: IndividualOrBusiness,
-                                          name: Option[String],
-                                          override val status: Status) extends SettlorViewModel
+final case class SettlorBusinessViewModel(
+  `type`: IndividualOrBusiness,
+  name: Option[String],
+  override val status: Status
+) extends SettlorViewModel
 
 object SettlorBusinessViewModel {
 
@@ -33,6 +35,6 @@ object SettlorBusinessViewModel {
     (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Business) and
       (__ \ "businessName").readNullable[String] and
       (__ \ "status").readWithDefault[Status](InProgress)
-    )(SettlorBusinessViewModel.apply _)
+  )(SettlorBusinessViewModel.apply _)
 
 }

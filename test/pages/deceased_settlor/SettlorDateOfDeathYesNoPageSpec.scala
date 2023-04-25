@@ -34,12 +34,11 @@ class SettlorDateOfDeathYesNoPageSpec extends PageBehaviours {
   }
 
   "remove SettlorDateOfDeath when SettlorDateOfDeathPage is set to false" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(SettlorDateOfDeathPage, LocalDate.now).success.value
-        val result = answers.set(SettlorDateOfDeathYesNoPage, false).success.value
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial.set(SettlorDateOfDeathPage, LocalDate.now).success.value
+      val result               = answers.set(SettlorDateOfDeathYesNoPage, false).success.value
 
-        result.get(SettlorDateOfDeathPage) mustNot be(defined)
+      result.get(SettlorDateOfDeathPage) mustNot be(defined)
     }
   }
 }

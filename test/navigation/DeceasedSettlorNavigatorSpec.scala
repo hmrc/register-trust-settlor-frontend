@@ -32,7 +32,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
 
     "SettlorsNamePage" must {
       "redirect to date of death yes/no" in {
-        navigator.nextPage(SettlorsNamePage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorsNamePage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.SettlorDateOfDeathYesNoController.onPageLoad(fakeDraftId))
       }
     }
@@ -43,7 +44,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to date of death" in {
           val userAnswers = emptyUserAnswers.set(SettlorDateOfDeathYesNoPage, true).success.value
 
-          navigator.nextPage(SettlorDateOfDeathYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorDateOfDeathYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.SettlorDateOfDeathController.onPageLoad(fakeDraftId))
         }
       }
@@ -52,7 +54,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to date of birth yes/no" in {
           val userAnswers = emptyUserAnswers.set(SettlorDateOfDeathYesNoPage, false).success.value
 
-          navigator.nextPage(SettlorDateOfDeathYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorDateOfDeathYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.SettlorDateOfBirthYesNoController.onPageLoad(fakeDraftId))
         }
       }
@@ -60,15 +63,16 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
 
     "SettlorDateOfDeathPage" must {
       "redirect to date of birth yes/no" in {
-        navigator.nextPage(SettlorDateOfDeathPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorDateOfDeathPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.SettlorDateOfBirthYesNoController.onPageLoad(fakeDraftId))
       }
     }
 
-
     "SettlorsDateOfBirthPage" must {
       "redirect to Country of nationality yes/no" in {
-        navigator.nextPage(SettlorsDateOfBirthPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorsDateOfBirthPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId))
       }
     }
@@ -79,7 +83,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to NINO" in {
           val userAnswers = emptyUserAnswers.set(SettlorsNationalInsuranceYesNoPage, true).success.value
 
-          navigator.nextPage(SettlorsNationalInsuranceYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorsNationalInsuranceYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.SettlorNationalInsuranceNumberController.onPageLoad(fakeDraftId))
         }
       }
@@ -88,7 +93,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to country of residence yes/no" in {
           val userAnswers = emptyUserAnswers.set(SettlorsNationalInsuranceYesNoPage, false).success.value
 
-          navigator.nextPage(SettlorsNationalInsuranceYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorsNationalInsuranceYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
         }
       }
@@ -96,7 +102,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
 
     "SettlorNationalInsuranceNumberPage" must {
       "redirect to country of residence yes/no" in {
-        navigator.nextPage(SettlorNationalInsuranceNumberPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorNationalInsuranceNumberPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
       }
     }
@@ -107,7 +114,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to address UK yes/no" in {
           val userAnswers = emptyUserAnswers.set(SettlorsLastKnownAddressYesNoPage, true).success.value
 
-          navigator.nextPage(SettlorsLastKnownAddressYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorsLastKnownAddressYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.WasSettlorsAddressUKYesNoController.onPageLoad(fakeDraftId))
         }
       }
@@ -116,7 +124,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to check answers" in {
           val userAnswers = emptyUserAnswers.set(SettlorsLastKnownAddressYesNoPage, false).success.value
 
-          navigator.nextPage(SettlorsLastKnownAddressYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(SettlorsLastKnownAddressYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId))
         }
       }
@@ -128,7 +137,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to UK address" in {
           val userAnswers = emptyUserAnswers.set(WasSettlorsAddressUKYesNoPage, true).success.value
 
-          navigator.nextPage(WasSettlorsAddressUKYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(WasSettlorsAddressUKYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.SettlorsUKAddressController.onPageLoad(fakeDraftId))
         }
       }
@@ -137,7 +147,8 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
         "redirect to international address" in {
           val userAnswers = emptyUserAnswers.set(WasSettlorsAddressUKYesNoPage, false).success.value
 
-          navigator.nextPage(WasSettlorsAddressUKYesNoPage, fakeDraftId)(userAnswers)
+          navigator
+            .nextPage(WasSettlorsAddressUKYesNoPage, fakeDraftId)(userAnswers)
             .mustBe(routes.SettlorsInternationalAddressController.onPageLoad(fakeDraftId))
         }
       }
@@ -145,21 +156,24 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
 
     "SettlorsUKAddressPage" must {
       "redirect to check answers" in {
-        navigator.nextPage(SettlorsUKAddressPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorsUKAddressPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId))
       }
     }
 
     "SettlorsInternationalAddressPage" must {
       "redirect to check answers" in {
-        navigator.nextPage(SettlorsInternationalAddressPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(SettlorsInternationalAddressPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId))
       }
     }
 
     "DeceasedSettlorAnswerPage" must {
       "redirect to task list" in {
-        navigator.nextPage(DeceasedSettlorAnswerPage, fakeDraftId)(emptyUserAnswers)
+        navigator
+          .nextPage(DeceasedSettlorAnswerPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(fakeDraftId)))
       }
     }
@@ -168,9 +182,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "SettlorsDateOfBirthYesNoPage -> Yes -> SettlorsDateOfBirth page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorDateOfBirthYesNoPage, true).success.value
+          .set(SettlorDateOfBirthYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsDateOfBirthController.onPageLoad(draftId))
 
       }
@@ -178,9 +195,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "SettlorsDateOfBirthYesNoPage -> No -> CountryOfNationality Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorDateOfBirthYesNoPage, false).success.value
+          .set(SettlorDateOfBirthYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId))
 
       }
@@ -188,9 +208,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityYesNoPage -> Yes -> CountryOfNationalityInTheUk Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfNationalityYesNoPage, true).success.value
+          .set(CountryOfNationalityYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(draftId))
 
       }
@@ -198,9 +221,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityYesNoPage -> No -> SettlorsNINo Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfNationalityYesNoPage, false).success.value
+          .set(CountryOfNationalityYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(draftId))
 
       }
@@ -208,9 +234,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityInTheUk -> Yes -> SettlorsNINo Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
+          .set(CountryOfNationalityInTheUkYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(draftId))
 
       }
@@ -218,9 +247,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityInTheUk -> No -> CountryOfNationality page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+          .set(CountryOfNationalityInTheUkYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityController.onPageLoad(draftId))
 
       }
@@ -228,9 +260,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationality -> SettlorsNINo Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfNationalityPage, "ES").success.value
+          .set(CountryOfNationalityPage, "ES")
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityPage, draftId)(answers)
           .mustBe(routes.SettlorsNINoYesNoController.onPageLoad(draftId))
 
       }
@@ -238,9 +273,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceYesNoPage -> Yes -> CountryOfResidenceInTheUk Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfResidenceYesNoPage, true).success.value
+          .set(CountryOfResidenceYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(draftId))
 
       }
@@ -248,10 +286,15 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceYesNoPage -> No (with Nino) -> DeceasedSettlorAnswer page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(CountryOfResidenceYesNoPage, false).success.value
+          .set(SettlorsNationalInsuranceYesNoPage, true)
+          .success
+          .value
+          .set(CountryOfResidenceYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }
@@ -259,10 +302,15 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceYesNoPage -> No (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(CountryOfResidenceYesNoPage, false).success.value
+          .set(SettlorsNationalInsuranceYesNoPage, false)
+          .success
+          .value
+          .set(CountryOfResidenceYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId))
 
       }
@@ -270,21 +318,28 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceInTheUk -> No -> CountryOfResidence page" in {
 
         val answers = emptyUserAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage, false).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(draftId))
 
       }
 
-
       "CountryOfResidenceInTheUk -> Yes (with Nino) -> DeceasedSettlorAnswer page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+          .set(SettlorsNationalInsuranceYesNoPage, true)
+          .success
+          .value
+          .set(CountryOfResidenceInTheUkYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }
@@ -292,10 +347,15 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceInTheUk -> Yes (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+          .set(SettlorsNationalInsuranceYesNoPage, false)
+          .success
+          .value
+          .set(CountryOfResidenceInTheUkYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId))
 
       }
@@ -303,10 +363,15 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidence (with Nino) -> DeceasedSettlorAnswer page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-          .set(CountryOfResidencePage, "ES").success.value
+          .set(SettlorsNationalInsuranceYesNoPage, true)
+          .success
+          .value
+          .set(CountryOfResidencePage, "ES")
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidencePage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidencePage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }
@@ -314,10 +379,15 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidence (with No Nino) -> SettlorsLastKnownAddress Yes No page" in {
 
         val answers = emptyUserAnswers
-          .set(SettlorsNationalInsuranceYesNoPage, false).success.value
-          .set(CountryOfResidencePage, "ES").success.value
+          .set(SettlorsNationalInsuranceYesNoPage, false)
+          .success
+          .value
+          .set(CountryOfResidencePage, "ES")
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidencePage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidencePage, draftId)(answers)
           .mustBe(routes.SettlorsLastKnownAddressYesNoController.onPageLoad(draftId))
 
       }
@@ -329,9 +399,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "SettlorsDateOfBirthYesNoPage -> Yes -> SettlorsDateOfBirth page" in {
 
         val answers = baseAnswers
-          .set(SettlorDateOfBirthYesNoPage, true).success.value
+          .set(SettlorDateOfBirthYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
           .mustBe(routes.SettlorsDateOfBirthController.onPageLoad(draftId))
 
       }
@@ -339,9 +412,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "SettlorsDateOfBirthYesNoPage -> No -> CountryOfNationality Yes No page" in {
 
         val answers = baseAnswers
-          .set(SettlorDateOfBirthYesNoPage, false).success.value
+          .set(SettlorDateOfBirthYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(SettlorDateOfBirthYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId))
 
       }
@@ -349,9 +425,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityYesNoPage -> Yes -> CountryOfNationalityInTheUk Yes No page" in {
 
         val answers = baseAnswers
-          .set(CountryOfNationalityYesNoPage, true).success.value
+          .set(CountryOfNationalityYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityInTheUkYesNoController.onPageLoad(draftId))
 
       }
@@ -359,9 +438,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityYesNoPage -> No -> CountryOfResidence Yes No page" in {
 
         val answers = baseAnswers
-          .set(CountryOfNationalityYesNoPage, false).success.value
+          .set(CountryOfNationalityYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
 
       }
@@ -369,9 +451,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityInTheUk -> Yes -> CountryOfResidence Yes No page" in {
 
         val answers = baseAnswers
-          .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
+          .set(CountryOfNationalityInTheUkYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
 
       }
@@ -379,9 +464,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationalityInTheUk -> No -> CountryOfNationality page" in {
 
         val answers = baseAnswers
-          .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
+          .set(CountryOfNationalityInTheUkYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityInTheUkYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfNationalityController.onPageLoad(draftId))
 
       }
@@ -389,9 +477,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfNationality -> CountryOfResidence Yes No page" in {
 
         val answers = baseAnswers
-          .set(CountryOfNationalityPage, "ES").success.value
+          .set(CountryOfNationalityPage, "ES")
+          .success
+          .value
 
-        navigator.nextPage(CountryOfNationalityPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfNationalityPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
 
       }
@@ -399,9 +490,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceYesNoPage -> Yes -> CountryOfResidenceInTheUk Yes No page" in {
 
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage, true).success.value
+          .set(CountryOfResidenceYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceInTheUkYesNoController.onPageLoad(draftId))
 
       }
@@ -409,9 +503,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceYesNoPage -> No -> DeceasedSettlorAnswer page" in {
 
         val answers = baseAnswers
-          .set(CountryOfResidenceYesNoPage, false).success.value
+          .set(CountryOfResidenceYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceYesNoPage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }
@@ -419,20 +516,25 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidenceInTheUk -> No -> CountryOfResidence page" in {
 
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage, false).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage, false)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
           .mustBe(mld5Rts.CountryOfResidenceController.onPageLoad(draftId))
 
       }
 
-
       "CountryOfResidenceInTheUk -> Yes -> DeceasedSettlorAnswer page" in {
 
         val answers = baseAnswers
-          .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+          .set(CountryOfResidenceInTheUkYesNoPage, true)
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidenceInTheUkYesNoPage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }
@@ -440,9 +542,12 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       "CountryOfResidence -> DeceasedSettlorAnswer page" in {
 
         val answers = baseAnswers
-          .set(CountryOfResidencePage, "ES").success.value
+          .set(CountryOfResidencePage, "ES")
+          .success
+          .value
 
-        navigator.nextPage(CountryOfResidencePage, draftId)(answers)
+        navigator
+          .nextPage(CountryOfResidencePage, draftId)(answers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(draftId))
 
       }

@@ -29,21 +29,21 @@ case class TelephoneNumber(value: String) {
 object TelephoneNumber extends (String => TelephoneNumber) {
 
   implicit val writes: Writes[TelephoneNumber] = new SimpleObjectWrites[TelephoneNumber](_.value)
-  implicit val reads: Reads[TelephoneNumber] = new SimpleObjectReads[TelephoneNumber]("value", TelephoneNumber.apply)
+  implicit val reads: Reads[TelephoneNumber]   = new SimpleObjectReads[TelephoneNumber]("value", TelephoneNumber.apply)
 
   implicit class TelephoneNumberRequirements(tel: String) {
 
     /** Removes instances of (0) in a telephone number
-     *
-     * We allow numbers like +44(0)151 666 1337 for user convenience (see TRUS-2545)
-     * Any instances of (0) then get removed in the JsonOps applyRules method in the backend before submitting to DES
-     */
+      *
+      * We allow numbers like +44(0)151 666 1337 for user convenience (see TRUS-2545)
+      * Any instances of (0) then get removed in the JsonOps applyRules method in the backend before submitting to DES
+      */
     def removeParentheses(): String = tel.replaceFirst("\\(0\\)", "")
 
     /** Verifies that the telephone number contains at least six digits
-     *
-     * The regex in the schema does not enforce this, but we deem numbers with less than six digits to be invalid (see TRUS-3123)
-     */
+      *
+      * The regex in the schema does not enforce this, but we deem numbers with less than six digits to be invalid (see TRUS-3123)
+      */
     def hasMinimumOfSixDigits: Boolean = {
       def digit: Regex = "[0-9]".r
       digit.findAllIn(tel).length >= 6

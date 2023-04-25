@@ -26,13 +26,13 @@ class DeedOfVariationFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "howDeedOfVariationCreated.error.required"
 
     behave like optionsField[DeedOfVariation](
       form,
       fieldName,
-      validValues  = DeedOfVariation.values.toSet,
+      validValues = DeedOfVariation.values.toSet,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

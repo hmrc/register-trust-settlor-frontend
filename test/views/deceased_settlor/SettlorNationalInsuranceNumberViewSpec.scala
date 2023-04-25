@@ -42,7 +42,13 @@ class SettlorNationalInsuranceNumberViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like stringPageWithDynamicTitle(form, applyView, messageKeyPrefix, name.toString, Some(s"$messageKeyPrefix.hint"))
+    behave like stringPageWithDynamicTitle(
+      form,
+      applyView,
+      messageKeyPrefix,
+      name.toString,
+      Some(s"$messageKeyPrefix.hint")
+    )
 
     behave like pageWithASubmitButton(applyView(form))
   }

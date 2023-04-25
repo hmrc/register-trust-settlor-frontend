@@ -25,31 +25,30 @@ import views.html.living_settlor.individual.SettlorIndividualAddressYesNoView
 
 class SettlorIndividualAddressYesNoViewSpec extends YesNoViewBehaviours {
 
-  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualAddressYesNo")
-  private val formContentInPastTense: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualAddressYesNoPastTense")
-  private val index = 0
-  private val name = FullName("First", Some("Middle"), "Last")
+  override val form: Form[Boolean]                  = new YesNoFormProvider().withPrefix("settlorIndividualAddressYesNo")
+  private val formContentInPastTense: Form[Boolean] =
+    new YesNoFormProvider().withPrefix("settlorIndividualAddressYesNoPastTense")
+  private val index                                 = 0
+  private val name                                  = FullName("First", Some("Middle"), "Last")
 
   Seq(
     ("settlorIndividualAddressYesNo", true, form),
     ("settlorIndividualAddressYesNoPastTense", false, formContentInPastTense)
-  ) foreach {
-    case (messageKey, settlorAliveAtRegistration, formToUse) =>
+  ) foreach { case (messageKey, settlorAliveAtRegistration, formToUse) =>
+    s"SettlorIndividualAddressYesNo view where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-      s"SettlorIndividualAddressYesNo view where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
+      val view = viewFor[SettlorIndividualAddressYesNoView](Some(emptyUserAnswers))
 
-        val view = viewFor[SettlorIndividualAddressYesNoView](Some(emptyUserAnswers))
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, fakeDraftId, index, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, fakeDraftId, index, name, settlorAliveAtRegistration)(fakeRequest, messages)
+      behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 
-        behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
+      behave like pageWithBackLink(applyView(formToUse))
 
-        behave like pageWithBackLink(applyView(formToUse))
+      behave like yesNoPage(formToUse, applyView, messageKey, None, Seq(name.toString))
 
-        behave like yesNoPage(formToUse, applyView, messageKey, None, Seq(name.toString))
-
-        behave like pageWithASubmitButton(applyView(formToUse))
-      }
+      behave like pageWithASubmitButton(applyView(formToUse))
+    }
   }
 }

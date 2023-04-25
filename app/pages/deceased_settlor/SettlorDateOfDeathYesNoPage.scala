@@ -29,11 +29,10 @@ case object SettlorDateOfDeathYesNoPage extends QuestionPage[Boolean] {
 
   override def toString: String = "dateOfDeathYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers.remove(SettlorDateOfDeathPage)
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 }

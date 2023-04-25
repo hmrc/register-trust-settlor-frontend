@@ -21,10 +21,12 @@ import models.pages.IndividualOrBusiness
 import utils.Constants.MAX
 import viewmodels.{RadioOption, SettlorBusinessViewModel, SettlorIndividualViewModel}
 
-case class LivingSettlors(individuals: List[SettlorIndividualViewModel] = Nil,
-                          businesses: List[SettlorBusinessViewModel] = Nil) {
+case class LivingSettlors(
+  individuals: List[SettlorIndividualViewModel] = Nil,
+  businesses: List[SettlorBusinessViewModel] = Nil
+) {
 
-  type SettlorOption = (Int, IndividualOrBusiness)
+  type SettlorOption  = (Int, IndividualOrBusiness)
   type SettlorOptions = List[SettlorOption]
 
   private val options: SettlorOptions = List(
@@ -39,8 +41,8 @@ case class LivingSettlors(individuals: List[SettlorIndividualViewModel] = Nil,
       options.filter(_._1 >= MAX)
     }
 
-    filteredOptions.map {
-      x => RadioOption(IndividualOrBusiness.prefix, x._2.toString)
+    filteredOptions.map { x =>
+      RadioOption(IndividualOrBusiness.prefix, x._2.toString)
     }
   }
 

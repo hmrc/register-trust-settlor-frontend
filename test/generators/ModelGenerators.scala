@@ -39,21 +39,18 @@ trait ModelGenerators {
       } yield PassportOrIdCardDetails(field1, field2, field3)
     }
 
-  implicit lazy val arbitraryFullName: Arbitrary[FullName] = {
+  implicit lazy val arbitraryFullName: Arbitrary[FullName] =
     Arbitrary {
       for {
         str <- arbitrary[String]
-      } yield {
-        FullName(str, Some(str), str)
-      }
+      } yield FullName(str, Some(str), str)
     }
-  }
 
   implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
     Arbitrary {
       for {
         str <- arbitrary[String]
-      } yield InternationalAddress(str,str,Some(str),str)
+      } yield InternationalAddress(str, str, Some(str), str)
     }
 
   implicit lazy val arbitraryAddASettlor: Arbitrary[AddASettlor] =
@@ -64,10 +61,10 @@ trait ModelGenerators {
   implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
     Arbitrary {
       for {
-        line1 <- arbitrary[String]
-        line2 <- arbitrary[String]
-        line3 <- arbitrary[String]
-        line4 <- arbitrary[String]
+        line1    <- arbitrary[String]
+        line2    <- arbitrary[String]
+        line3    <- arbitrary[String]
+        line4    <- arbitrary[String]
         postcode <- arbitrary[String]
       } yield UKAddress(line1, line2, Some(line3), Some(line4), postcode)
     }

@@ -32,11 +32,11 @@ import java.time.LocalDate
 
 class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new SettlorsDateOfBirthFormProvider(frontendAppConfig)
+  val formProvider           = new SettlorsDateOfBirthFormProvider(frontendAppConfig)
   val dateOfDeath: LocalDate = LocalDate.parse("2019-02-03")
-  val form: Form[LocalDate] = formProvider.withConfig()
+  val form: Form[LocalDate]  = formProvider.withConfig()
 
-  val validAnswer: LocalDate = LocalDate.parse("2000-02-03")
+  val validAnswer: LocalDate   = LocalDate.parse("2000-02-03")
   val invalidAnswer: LocalDate = LocalDate.parse("2020-02-03")
 
   lazy val settlorsDateOfBirthRoute: String = routes.SettlorsDateOfBirthController.onPageLoad(fakeDraftId).url
@@ -44,8 +44,12 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
   val name: FullName = FullName("first name", None, "Last name")
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorsNamePage, name).success.value
-    .set(SettlorDateOfDeathPage, dateOfDeath).success.value
+    .set(SettlorsNamePage, name)
+    .success
+    .value
+    .set(SettlorDateOfDeathPage, dateOfDeath)
+    .success
+    .value
 
   "SettlorsDateOfBirth Controller" must {
 
@@ -62,7 +66,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form,fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -70,7 +74,9 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(SettlorsDateOfBirthPage, validAnswer).success.value
+        .set(SettlorsDateOfBirthPage, validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,7 +89,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer),fakeDraftId, name)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -146,11 +152,13 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
             "value.year"  -> invalidAnswer.getYear.toString
           )
 
-      val boundForm = form.bind(Map(
-        "value.day"   -> invalidAnswer.getDayOfMonth.toString,
-        "value.month" -> invalidAnswer.getMonthValue.toString,
-        "value.year"  -> invalidAnswer.getYear.toString
-      ))
+      val boundForm = form.bind(
+        Map(
+          "value.day"   -> invalidAnswer.getDayOfMonth.toString,
+          "value.month" -> invalidAnswer.getMonthValue.toString,
+          "value.year"  -> invalidAnswer.getYear.toString
+        )
+      )
 
       val view = application.injector.instanceOf[SettlorsDateOfBirthView]
 
@@ -200,7 +208,6 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
     }
 
     "redirect to SettlorNamePage when settlor name is not answered" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 

@@ -41,13 +41,16 @@ import scala.concurrent.Future
 class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
   private val settlorName: FullName = FullName("first name", Some("middle name"), "last name")
-  private val index: Int = 0
+  private val index: Int            = 0
 
-  private lazy val settlorIndividualAnswerRoute: String = routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
-  private lazy val onSubmit: Call = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
+  private lazy val settlorIndividualAnswerRoute: String =
+    routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
+  private lazy val onSubmit: Call                       = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorIndividualNamePage(index), settlorName).success.value
+    .set(SettlorIndividualNamePage(index), settlorName)
+    .success
+    .value
 
   private val answerRow = AnswerRow(
     label = "settlorIndividualName.checkYourAnswersLabel",
@@ -59,7 +62,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET where messageKeyPrefix is None" in {
 
-      val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
+      val userAnswers     = baseAnswers.set(SettlorAliveYesNoPage(index), true).success.value
       val mockPrintHelper = mock[LivingSettlorPrintHelper]
 
       val fakeAnswerSection = AnswerSection(rows = Seq(answerRow))
@@ -87,11 +90,12 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET where messageKeyPrefix is defined" in {
 
-      val userAnswers = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
-      val prefix = "PastTense"
+      val userAnswers     = baseAnswers.set(SettlorAliveYesNoPage(index), false).success.value
+      val prefix          = "PastTense"
       val mockPrintHelper = mock[LivingSettlorPrintHelper]
 
-      val fakeAnswerSection = AnswerSection(rows = Seq(answerRow.copy(label = s"settlorIndividualName$prefix.checkYourAnswersLabel")))
+      val fakeAnswerSection =
+        AnswerSection(rows = Seq(answerRow.copy(label = s"settlorIndividualName$prefix.checkYourAnswersLabel")))
 
       when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
         .thenReturn(fakeAnswerSection)
@@ -133,8 +137,12 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       reset(mockCreateDraftRegistrationService)
 
       val userAnswers = baseAnswers
-        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-        .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Employees)
+        .success
+        .value
 
       when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
         .thenReturn(Future.successful(()))
@@ -151,7 +159,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(any())
       verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
@@ -162,8 +170,12 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       reset(mockCreateDraftRegistrationService)
 
       val userAnswers = baseAnswers
-        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual).success.value
-        .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Individual)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Deed)
+        .success
+        .value
 
       when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
         .thenReturn(Future.successful(()))
@@ -180,7 +192,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(any())
       verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()

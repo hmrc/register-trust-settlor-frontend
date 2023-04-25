@@ -21,12 +21,12 @@ import play.api.data.{Form, FormError}
 
 class UtrFormProviderSpec extends StringFieldBehaviours {
 
-  val messageKeyPrefix = "trusteeUtr"
-  val requiredKey = s"$messageKeyPrefix.error.required"
-  val lengthKey = s"$messageKeyPrefix.error.length"
-  val notUniqueKey = s"$messageKeyPrefix.error.notUnique"
+  val messageKeyPrefix  = "trusteeUtr"
+  val requiredKey       = s"$messageKeyPrefix.error.required"
+  val lengthKey         = s"$messageKeyPrefix.error.length"
+  val notUniqueKey      = s"$messageKeyPrefix.error.notUnique"
   val sameAsTrustUtrKey = s"$messageKeyPrefix.error.sameAsTrustUtr"
-  val utrLength = 10
+  val utrLength         = 10
 
   val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers, 0)
 

@@ -28,12 +28,13 @@ object AddASettlor extends Enumerable.Implicits {
   case object NoComplete extends WithName("no-complete") with AddASettlor
 
   val values: List[AddASettlor] = List(
-    YesNow, YesLater, NoComplete
+    YesNow,
+    YesLater,
+    NoComplete
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("addASettlor", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("addASettlor", value.toString)
   }
 
   implicit val enumerable: Enumerable[AddASettlor] =
@@ -43,12 +44,12 @@ object AddASettlor extends Enumerable.Implicits {
 object AddAnotherSettlor {
 
   val values: List[AddASettlor] = List(
-    AddASettlor.YesNow, AddASettlor.NoComplete
+    AddASettlor.YesNow,
+    AddASettlor.NoComplete
   )
 
-  val options: List[RadioOption] = values.map {
-    value =>
-      RadioOption("addASettlorYesNo", value.toString)
+  val options: List[RadioOption] = values.map { value =>
+    RadioOption("addASettlorYesNo", value.toString)
   }
 
   implicit val enumerable: Enumerable[AddASettlor] =

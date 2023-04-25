@@ -39,13 +39,16 @@ import scala.concurrent.Future
 class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
   private val settlorName: String = "Settlor Org"
-  private val index: Int = 0
+  private val index: Int          = 0
 
-  private lazy val settlorBusinessAnswerRoute: String = routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
-  private lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
+  private lazy val settlorBusinessAnswerRoute: String =
+    routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
+  private lazy val onSubmit: Call                     = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
 
   val baseAnswers: UserAnswers = emptyUserAnswers
-    .set(SettlorBusinessNamePage(index), settlorName).success.value
+    .set(SettlorBusinessNamePage(index), settlorName)
+    .success
+    .value
 
   "SettlorBusinessAnswer Controller" must {
 
@@ -95,10 +98,14 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       reset(mockCreateDraftRegistrationService)
 
       val userAnswers = baseAnswers
-        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-        .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Employees)
+        .success
+        .value
 
-      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(),any ())(any()))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
         .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
@@ -113,7 +120,7 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(),any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(any())
       verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
 
       application.stop()
@@ -124,10 +131,14 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       reset(mockCreateDraftRegistrationService)
 
       val userAnswers = baseAnswers
-        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business).success.value
-        .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Deed)
+        .success
+        .value
 
-      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(),any ())(any()))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
         .thenReturn(Future.successful(()))
 
       when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))

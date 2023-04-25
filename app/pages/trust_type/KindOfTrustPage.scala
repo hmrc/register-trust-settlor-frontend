@@ -32,52 +32,58 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
 
   override def toString: String = "kindOfTrust"
 
-  override def cleanup(value: Option[KindOfTrust], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[KindOfTrust], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(Deed) =>
-        userAnswers.remove(HoldoverReliefYesNoPage)
+      case Some(Deed)                                           =>
+        userAnswers
+          .remove(HoldoverReliefYesNoPage)
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(removeCompanyTypeAndTimeAnswers)
-      case Some(Intervivos) =>
-        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+      case Some(Intervivos)                                     =>
+        userAnswers
+          .remove(SetUpInAdditionToWillTrustYesNoPage)
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(removeCompanyTypeAndTimeAnswers)
           .flatMap(_.remove(DeceasedSettlor))
       case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
-        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+        userAnswers
+          .remove(SetUpInAdditionToWillTrustYesNoPage)
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(HoldoverReliefYesNoPage))
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(removeCompanyTypeAndTimeAnswers)
           .flatMap(_.remove(DeceasedSettlor))
-      case Some(Employees) =>
-        userAnswers.remove(SetUpInAdditionToWillTrustYesNoPage)
+      case Some(Employees)                                      =>
+        userAnswers
+          .remove(SetUpInAdditionToWillTrustYesNoPage)
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(HoldoverReliefYesNoPage))
           .flatMap(_.remove(DeceasedSettlor))
-      case _ =>
+      case _                                                    =>
         super.cleanup(value, userAnswers)
     }
-  }
 
   private def removeCompanyTypeAndTimeAnswers(userAnswers: UserAnswers): Try[UserAnswers] = {
 
-    val numberOfLivingSettlorsCompleteOrInProgress = userAnswers.data.transform((__ \ 'settlors \ 'living).json.pick) match {
-      case JsSuccess(value, _) => value match {
-        case JsArray(value) => value.size
-        case _ => 0
+    val numberOfLivingSettlorsCompleteOrInProgress =
+      userAnswers.data.transform((__ \ 'settlors \ 'living).json.pick) match {
+        case JsSuccess(value, _) =>
+          value match {
+            case JsArray(value) => value.size
+            case _              => 0
+          }
+        case _                   => 0
       }
-      case _ => 0
-    }
 
-    (0 until numberOfLivingSettlorsCompleteOrInProgress).foldLeft[Try[UserAnswers]](Success(userAnswers))((ua, index) => {
-      ua
-        .flatMap(_.remove(SettlorBusinessTypePage(index)))
-        .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
-    })
+    (0 until numberOfLivingSettlorsCompleteOrInProgress).foldLeft[Try[UserAnswers]](Success(userAnswers)) {
+      (ua, index) =>
+        ua
+          .flatMap(_.remove(SettlorBusinessTypePage(index)))
+          .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
+    }
   }
 }

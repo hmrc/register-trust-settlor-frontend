@@ -27,10 +27,10 @@ class SettlorsNameFormProviderSpec extends StringFieldBehaviours {
 
   ".firstName" must {
 
-    val fieldName = "firstName"
+    val fieldName   = "firstName"
     val requiredKey = "settlorsName.error.firstName.required"
-    val lengthKey = "settlorsName.error.firstName.length"
-    val maxLength = 35
+    val lengthKey   = "settlorsName.error.firstName.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,
@@ -95,10 +95,10 @@ class SettlorsNameFormProviderSpec extends StringFieldBehaviours {
 
   ".lastName" must {
 
-    val fieldName = "lastName"
+    val fieldName   = "lastName"
     val requiredKey = "settlorsName.error.lastName.required"
-    val lengthKey = "settlorsName.error.lastName.length"
-    val maxLength = 35
+    val lengthKey   = "settlorsName.error.lastName.length"
+    val maxLength   = 35
 
     behave like fieldThatBindsValidData(
       form,

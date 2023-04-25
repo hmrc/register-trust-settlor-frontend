@@ -30,36 +30,34 @@ class SettlorIndividualAddressInternationalViewSpec extends InternationalAddress
 
   override val form = new InternationalAddressFormProvider()()
   private val index = 0
-  private val name = FullName("First", None, "Last")
+  private val name  = FullName("First", None, "Last")
 
   Seq(
     ("settlorIndividualAddressInternational", true),
     ("settlorIndividualAddressInternationalPastTense", false)
-  ) foreach {
-    case (messageKey, settlorAliveAtRegistration) =>
+  ) foreach { case (messageKey, settlorAliveAtRegistration) =>
+    s"SettlorIndividualAddressInternationalView where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-      s"SettlorIndividualAddressInternationalView where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
+      val view = viewFor[SettlorIndividualAddressInternationalView](Some(emptyUserAnswers))
 
-        val view = viewFor[SettlorIndividualAddressInternationalView](Some(emptyUserAnswers))
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, countryOptions, index, fakeDraftId, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, countryOptions, index, fakeDraftId, name, settlorAliveAtRegistration)(fakeRequest, messages)
+      behave like dynamicTitlePage(applyView(form), messageKey, name.toString)
 
-        behave like dynamicTitlePage(applyView(form), messageKey, name.toString)
+      behave like pageWithBackLink(applyView(form))
 
-        behave like pageWithBackLink(applyView(form))
+      behave like internationalAddress(
+        applyView,
+        Some("taskList.settlors.label"),
+        Some(messageKey),
+        routes.SettlorIndividualAddressInternationalController.onSubmit(index, fakeDraftId).url,
+        name.toString
+      )
 
-        behave like internationalAddress(
-          applyView,
-          Some("taskList.settlors.label"),
-          Some(messageKey),
-          routes.SettlorIndividualAddressInternationalController.onSubmit(index, fakeDraftId).url,
-          name.toString
-        )
-
-        behave like pageWithASubmitButton(applyView(form))
-      }
+      behave like pageWithASubmitButton(applyView(form))
+    }
   }
 }

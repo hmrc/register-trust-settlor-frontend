@@ -24,18 +24,22 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrustsStoreConnector @Inject()(http: HttpClient, config: FrontendAppConfig) {
+class TrustsStoreConnector @Inject() (http: HttpClient, config: FrontendAppConfig) {
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
-  def updateTaskStatus(draftId: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def updateTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse] = {
     val url: String = s"$baseUrl/register/tasks/update-settlors/$draftId"
     http.POST[TaskStatus, HttpResponse](url, taskStatus)
   }
 
-  def updateBeneficiaryTaskStatus(draftId: String, taskStatus: TaskStatus)
-                      (implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  def updateBeneficiaryTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit
+    hc: HeaderCarrier,
+    ec: ExecutionContext
+  ): Future[HttpResponse] = {
     val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$draftId"
     http.POST[TaskStatus, HttpResponse](url, taskStatus)
   }

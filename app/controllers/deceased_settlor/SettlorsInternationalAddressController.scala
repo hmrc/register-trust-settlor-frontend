@@ -37,53 +37,55 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorsInternationalAddressController @Inject()(
-                                                        override val messagesApi: MessagesApi,
-                                                        registrationsRepository: RegistrationsRepository,
-                                                        @DeceasedSettlor navigator: Navigator,
-                                                        actions: Actions,
-                                                        requireName: NameRequiredActionProvider,
-                                                        formProvider: InternationalAddressFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: SettlorsInternationalAddressView,
-                                                        val countryOptions: CountryOptionsNonUK,
-                                                        technicalErrorView: TechnicalErrorView
-                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorsInternationalAddressController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @DeceasedSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  formProvider: InternationalAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorsInternationalAddressView,
+  val countryOptions: CountryOptionsNonUK,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[InternationalAddress] = formProvider()
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
-
       val name = request.userAnswers.get(SettlorsNamePage).get
 
       val preparedForm = request.userAnswers.get(SettlorsInternationalAddressPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, countryOptions.options, draftId, name))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
-    implicit request =>
-
+  def onSubmit(draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, name))),
-        value =>
-          request.userAnswers.set(SettlorsInternationalAddressPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorsInternationalAddressPage, draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorsInternationalAddressController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, name))),
+          value =>
+            request.userAnswers.set(SettlorsInternationalAddressPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorsInternationalAddressPage, draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorsInternationalAddressController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-      )
-  }
+        )
+    }
 }

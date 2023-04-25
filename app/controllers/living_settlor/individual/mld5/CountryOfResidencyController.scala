@@ -37,53 +37,72 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class CountryOfResidencyController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              @IndividualSettlor navigator: Navigator,
-                                              actions: Actions,
-                                              requireName: NameRequiredActionProvider,
-                                              countryFormProvider: CountryFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: CountryOfResidencyView,
-                                              countryOptions: CountryOptionsNonUK,
-                                              technicalErrorView: TechnicalErrorView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfResidencyController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  countryFormProvider: CountryFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CountryOfResidencyView,
+  countryOptions: CountryOptionsNonUK,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[String] = countryFormProvider.withPrefix("settlorIndividualCountryOfResidency")
 
-  private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
+  private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)
+
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(CountryOfResidencyPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(
+      view(
+        preparedForm,
+        index,
+        draftId,
+        countryOptions.options(),
+        request.name,
+        request.settlorAliveAtRegistration(index)
+      )
+    )
   }
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
-    implicit request =>
-
-      val preparedForm = request.userAnswers.get(CountryOfResidencyPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))
-  }
-
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, countryOptions.options(), request.name, request.settlorAliveAtRegistration(index)))),
-        value => {
+          Future.successful(
+            BadRequest(
+              view(
+                formWithErrors,
+                index,
+                draftId,
+                countryOptions.options(),
+                request.name,
+                request.settlorAliveAtRegistration(index)
+              )
+            )
+          ),
+        value =>
           request.userAnswers.set(CountryOfResidencyPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(CountryOfResidencyPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[CountryOfResidencyController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
           }
-        }
       )
   }
 }

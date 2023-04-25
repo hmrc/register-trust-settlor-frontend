@@ -30,14 +30,13 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("employerFinancedRbsYesNo")
+  val form         = formProvider.withPrefix("employerFinancedRbsYesNo")
 
   lazy val EmployerFinancedRbsYesNoRoute = routes.EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId).url
 
   "EmployerFinancedRbsYesNo Controller" must {
 
     "return OK and the correct view for a GET" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 

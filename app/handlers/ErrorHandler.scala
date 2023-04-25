@@ -25,13 +25,16 @@ import views.html.{ErrorTemplate, PageNotFoundView}
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class ErrorHandler @Inject()(
-                              val messagesApi: MessagesApi,
-                              view: ErrorTemplate,
-                              notFoundView: PageNotFoundView
-                            ) extends FrontendErrorHandler with I18nSupport {
+class ErrorHandler @Inject() (
+  val messagesApi: MessagesApi,
+  view: ErrorTemplate,
+  notFoundView: PageNotFoundView
+) extends FrontendErrorHandler
+    with I18nSupport {
 
-  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit rh: Request[_]): Html =
+  override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
+    rh: Request[_]
+  ): Html =
     view(pageTitle, heading, message)
 
   override def notFoundTemplate(implicit request: Request[_]): Html =

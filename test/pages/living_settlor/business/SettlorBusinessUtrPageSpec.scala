@@ -18,7 +18,6 @@ package pages.living_settlor.business
 
 import pages.behaviours.PageBehaviours
 
-
 class SettlorBusinessUtrPageSpec extends PageBehaviours {
 
   "SettlorBusinessUtrPage" must {

@@ -32,16 +32,22 @@ import views.html.living_settlor.individual.mld5.UkCountryOfNationalityYesNoView
 class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
 
   private val formProvider: YesNoFormProvider = new YesNoFormProvider()
-  private val form: Form[Boolean] = formProvider.withPrefix("settlorIndividualUkCountryOfNationalityYesNo")
-  private val index: Int = 0
-  private val name: FullName = FullName("First", Some("Middle"), "Last")
+  private val form: Form[Boolean]             = formProvider.withPrefix("settlorIndividualUkCountryOfNationalityYesNo")
+  private val index: Int                      = 0
+  private val name: FullName                  = FullName("First", Some("Middle"), "Last")
 
-  private lazy val onPageLoadRoute: String = routes.UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val onPageLoadRoute: String =
+    routes.UkCountryOfNationalityYesNoController.onPageLoad(index, fakeDraftId).url
 
   private val validAnswer: Boolean = true
 
-  private val baseAnswers: UserAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
-    .set(SettlorIndividualNamePage(index), name).success.value
+  private val baseAnswers: UserAnswers = emptyUserAnswers
+    .set(SettlorAliveYesNoPage(index), true)
+    .success
+    .value
+    .set(SettlorIndividualNamePage(index), name)
+    .success
+    .value
 
   "UkCountryOfNationalityYesNo Controller" must {
 
@@ -62,7 +68,10 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(formContentInPastTense, index, fakeDraftId, name, settlorAliveAtRegistration = false)(request, messages).toString
+        view(formContentInPastTense, index, fakeDraftId, name, settlorAliveAtRegistration = false)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
@@ -70,7 +79,9 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(UkCountryOfNationalityYesNoPage(index), true).success.value
+        .set(UkCountryOfNationalityYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

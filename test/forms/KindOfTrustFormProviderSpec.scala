@@ -26,13 +26,13 @@ class KindOfTrustFormProviderSpec extends OptionFieldBehaviours {
 
   ".value" must {
 
-    val fieldName = "value"
+    val fieldName   = "value"
     val requiredKey = "kindOfTrust.error.required"
 
     behave like optionsField[KindOfTrust](
       form,
       fieldName,
-      validValues  = KindOfTrust.values.toSet,
+      validValues = KindOfTrust.values.toSet,
       invalidError = FormError(fieldName, "error.invalid")
     )
 

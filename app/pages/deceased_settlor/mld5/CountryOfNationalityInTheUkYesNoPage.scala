@@ -24,7 +24,7 @@ import utils.Constants.GB
 
 import scala.util.Try
 
-case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
+case object CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = DeceasedSettlor.path \ toString
 
@@ -33,6 +33,6 @@ case object  CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(true) => userAnswers.set(CountryOfNationalityPage, GB)
-      case _ => super.cleanup(value, userAnswers)
+      case _          => super.cleanup(value, userAnswers)
     }
 }

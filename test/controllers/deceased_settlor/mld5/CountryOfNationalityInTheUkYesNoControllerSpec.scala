@@ -32,7 +32,8 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
   val form = new YesNoFormProvider().withPrefix("5mld.countryOfNationalityInTheUkYesNo")
 
-  lazy val countryOfNationalityInTheUkYesNoRoute = CountryOfNationalityInTheUkYesNoController.onPageLoad(fakeDraftId).url
+  lazy val countryOfNationalityInTheUkYesNoRoute =
+    CountryOfNationalityInTheUkYesNoController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -40,8 +41,7 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -61,8 +61,13 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(CountryOfNationalityInTheUkYesNoPage, true).success.value.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(CountryOfNationalityInTheUkYesNoPage, true)
+        .success
+        .value
+        .set(SettlorsNamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -75,15 +80,14 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true),fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -103,8 +107,7 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -121,7 +124,7 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm,fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -159,7 +162,6 @@ class CountryOfNationalityInTheUkYesNoControllerSpec extends SpecBase {
     }
 
     "redirect to SettlorNamePage when settlor name is not answered" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 

@@ -24,8 +24,8 @@ import wolfendale.scalacheck.regexp.RegexpGen
 class SettlorBusinessNameFormProviderSpec extends StringFieldBehaviours {
 
   val requiredKey = "settlorBusinessName.error.required"
-  val lengthKey = "settlorBusinessName.error.length"
-  val maxLength = 105
+  val lengthKey   = "settlorBusinessName.error.length"
+  val maxLength   = 105
 
   val form = new SettlorBusinessNameFormProvider()()
 

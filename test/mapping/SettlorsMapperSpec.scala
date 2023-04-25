@@ -24,7 +24,7 @@ import org.mockito.ArgumentMatchers.any
 class SettlorsMapperSpec extends SpecBase {
 
   private val mockIndividualMapper: IndividualSettlorsMapper = mock[IndividualSettlorsMapper]
-  private val mockBusinessMapper: BusinessSettlorsMapper = mock[BusinessSettlorsMapper]
+  private val mockBusinessMapper: BusinessSettlorsMapper     = mock[BusinessSettlorsMapper]
 
   private val individualSettlor: Settlor = Settlor(
     aliveAtRegistration = true,
@@ -71,10 +71,12 @@ class SettlorsMapperSpec extends SpecBase {
 
           val result = mapper.build(arbitraryUserAnswers)
 
-          result mustBe Some(Settlors(
-            settlor = Some(List(individualSettlor)),
-            settlorCompany = None
-          ))
+          result mustBe Some(
+            Settlors(
+              settlor = Some(List(individualSettlor)),
+              settlorCompany = None
+            )
+          )
         }
 
         "business" in {
@@ -84,10 +86,12 @@ class SettlorsMapperSpec extends SpecBase {
 
           val result = mapper.build(arbitraryUserAnswers)
 
-          result mustBe Some(Settlors(
-            settlor = None,
-            settlorCompany = Some(List(businessSettlor))
-          ))
+          result mustBe Some(
+            Settlors(
+              settlor = None,
+              settlorCompany = Some(List(businessSettlor))
+            )
+          )
         }
       }
 
@@ -98,10 +102,12 @@ class SettlorsMapperSpec extends SpecBase {
 
         val result = mapper.build(arbitraryUserAnswers)
 
-        result mustBe Some(Settlors(
-          settlor = Some(List(individualSettlor)),
-          settlorCompany = Some(List(businessSettlor))
-        ))
+        result mustBe Some(
+          Settlors(
+            settlor = Some(List(individualSettlor)),
+            settlorCompany = Some(List(businessSettlor))
+          )
+        )
       }
     }
   }

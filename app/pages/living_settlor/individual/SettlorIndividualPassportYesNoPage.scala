@@ -31,10 +31,12 @@ final case class SettlorIndividualPassportYesNoPage(index: Int) extends Question
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) => userAnswers.remove(SettlorIndividualIDCardYesNoPage(index))
-        .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
+      case Some(true)  =>
+        userAnswers
+          .remove(SettlorIndividualIDCardYesNoPage(index))
+          .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
       case Some(false) => userAnswers.remove(SettlorIndividualPassportPage(index))
-      case None => super.cleanup(value, userAnswers)
+      case None        => super.cleanup(value, userAnswers)
     }
 
 }

@@ -31,13 +31,13 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
 
   val index = 0
 
-  lazy val settlorBusinessTypeRoute = routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorBusinessTypeRoute      = routes.SettlorBusinessTypeController.onPageLoad(index, fakeDraftId).url
   lazy val settlorBusinessTimeYesNoRoute = routes.SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId).url
 
   val formProvider = new SettlorBusinessTypeFormProvider()
-  val form = formProvider()
-  val name = "Business name"
-  
+  val form         = formProvider()
+  val name         = "Business name"
+
   "SettlorBusinessType Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -62,8 +62,13 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessTypePage(index), KindOfBusiness.values.head).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(SettlorBusinessTypePage(index), KindOfBusiness.values.head)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -83,8 +88,13 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(KindOfTrustPage, Employees).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(KindOfTrustPage, Employees)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()

@@ -22,20 +22,25 @@ import viewmodels.AnswerSection
 
 import javax.inject.Inject
 
-class PrintHelpers @Inject()(deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
-                             livingSettlorPrintHelper: LivingSettlorPrintHelper,
-                             businessSettlorPrintHelper: BusinessSettlorPrintHelper) {
+class PrintHelpers @Inject() (
+  deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
+  livingSettlorPrintHelper: LivingSettlorPrintHelper,
+  businessSettlorPrintHelper: BusinessSettlorPrintHelper
+) {
 
-  def deceasedSettlorSection(userAnswers: UserAnswers, name: String, draftId: String)
-                            (implicit messages: Messages): AnswerSection =
+  def deceasedSettlorSection(userAnswers: UserAnswers, name: String, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     deceasedSettlorPrintHelper.printSection(userAnswers, name, draftId)
 
-  def livingSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                          (implicit messages: Messages): AnswerSection =
+  def livingSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     livingSettlorPrintHelper.printSection(userAnswers, name, draftId, index)
 
-  def businessSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)
-                            (implicit messages: Messages): AnswerSection =
+  def businessSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+    messages: Messages
+  ): AnswerSection =
     businessSettlorPrintHelper.printSection(userAnswers, name, draftId, index)
 
 }

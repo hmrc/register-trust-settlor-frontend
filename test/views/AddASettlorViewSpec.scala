@@ -46,12 +46,22 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, Nil, Nil, "Add a settlor", Some(hint), Nil)(fakeRequest, messages)
 
-  def applyView(form: Form[_], inProgressAssets: Seq[AddRow], completeAssets: Seq[AddRow], count: Int): HtmlFormat.Appendable = {
+  def applyView(
+    form: Form[_],
+    inProgressAssets: Seq[AddRow],
+    completeAssets: Seq[AddRow],
+    count: Int
+  ): HtmlFormat.Appendable = {
     val title = if (count > 1) s"You have added $count settlors" else "Add a settlor"
     view.apply(form, fakeDraftId, inProgressAssets, completeAssets, title, Some(hint), Nil)(fakeRequest, messages)
   }
 
-  def applyView(form: Form[_], completeAssets: Seq[AddRow], count: Int, maxedOut: List[String]): HtmlFormat.Appendable = {
+  def applyView(
+    form: Form[_],
+    completeAssets: Seq[AddRow],
+    count: Int,
+    maxedOut: List[String]
+  ): HtmlFormat.Appendable = {
     val title = if (count > 1) s"You have added $count settlors" else "Add a settlor"
     view.apply(form, fakeDraftId, Nil, completeAssets, title, Some(hint), maxedOut)(fakeRequest, messages)
   }
@@ -110,7 +120,10 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
       "render content" in {
         val doc = asDocument(viewWithData)
         assertContainsText(doc, "You cannot add another individual as you have entered a maximum of 25.")
-        assertContainsText(doc, "Check the settlors you have added. If you have further settlors to add, write to HMRC with their details.")
+        assertContainsText(
+          doc,
+          "Check the settlors you have added. If you have further settlors to add, write to HMRC with their details."
+        )
       }
     }
 
@@ -129,7 +142,10 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
       "render content" in {
         val doc = asDocument(viewWithData)
         assertContainsText(doc, "You cannot enter another settlor as you have entered a maximum of 25.")
-        assertContainsText(doc, "Check the settlors you have added. If you have further settlors to add, write to HMRC with their details.")
+        assertContainsText(
+          doc,
+          "Check the settlors you have added. If you have further settlors to add, write to HMRC with their details."
+        )
       }
     }
 

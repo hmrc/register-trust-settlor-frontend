@@ -32,6 +32,6 @@ object IndividualBeneficiaryViewModel {
   implicit val reads: Reads[IndividualBeneficiaryViewModel] = (
     (__ \ "name").readNullable[FullName] and
       (__ \ "status").readWithDefault[Status](Status.InProgress)
-    )(IndividualBeneficiaryViewModel.apply _)
+  )(IndividualBeneficiaryViewModel.apply _)
 
 }

@@ -36,7 +36,6 @@ class SettlorsNameViewSpec extends QuestionViewBehaviours[FullName] {
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId)(fakeRequest, messages)
 
-
     behave like normalPage(applyView(form), messageKeyPrefix)
 
     behave like pageWithBackLink(applyView(form))
@@ -45,7 +44,7 @@ class SettlorsNameViewSpec extends QuestionViewBehaviours[FullName] {
       form,
       applyView,
       messageKeyPrefix,
-      Seq(("firstName",None),("middleName",None),("lastName", None))
+      Seq(("firstName", None), ("middleName", None), ("lastName", None))
     )
   }
 }

@@ -30,10 +30,10 @@ import viewmodels.{AddRow, AddToRows}
 class AddASettlorViewHelperSpec extends SpecBase {
 
   private val individualName: FullName = FullName("Joe", None, "Bloggs")
-  private val businessName: String = "Business Ltd."
+  private val businessName: String     = "Business Ltd."
 
   private val individualLabel: String = "Individual Settlor"
-  private val businessLabel: String = "Business Settlor"
+  private val businessLabel: String   = "Business Settlor"
 
   "AddASettlor view helper" must {
 
@@ -54,8 +54,12 @@ class AddASettlorViewHelperSpec extends SpecBase {
         "in progress" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-            .set(ind.SettlorIndividualNamePage(0), individualName).success.value
+            .set(SettlorIndividualOrBusinessPage(0), Individual)
+            .success
+            .value
+            .set(ind.SettlorIndividualNamePage(0), individualName)
+            .success
+            .value
 
           val helper = new AddASettlorViewHelper(userAnswers, fakeDraftId)
 
@@ -75,12 +79,24 @@ class AddASettlorViewHelperSpec extends SpecBase {
         "complete" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-            .set(ind.SettlorIndividualNamePage(0), individualName).success.value
-            .set(ind.SettlorIndividualDateOfBirthYesNoPage(0), false).success.value
-            .set(ind.SettlorIndividualNINOYesNoPage(0), false).success.value
-            .set(ind.SettlorAddressYesNoPage(0), false).success.value
-            .set(LivingSettlorStatus(0), Completed).success.value
+            .set(SettlorIndividualOrBusinessPage(0), Individual)
+            .success
+            .value
+            .set(ind.SettlorIndividualNamePage(0), individualName)
+            .success
+            .value
+            .set(ind.SettlorIndividualDateOfBirthYesNoPage(0), false)
+            .success
+            .value
+            .set(ind.SettlorIndividualNINOYesNoPage(0), false)
+            .success
+            .value
+            .set(ind.SettlorAddressYesNoPage(0), false)
+            .success
+            .value
+            .set(LivingSettlorStatus(0), Completed)
+            .success
+            .value
 
           val helper = new AddASettlorViewHelper(userAnswers, fakeDraftId)
 
@@ -103,8 +119,12 @@ class AddASettlorViewHelperSpec extends SpecBase {
         "in progress" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(0), Business).success.value
-            .set(bus.SettlorBusinessNamePage(0), businessName).success.value
+            .set(SettlorIndividualOrBusinessPage(0), Business)
+            .success
+            .value
+            .set(bus.SettlorBusinessNamePage(0), businessName)
+            .success
+            .value
 
           val helper = new AddASettlorViewHelper(userAnswers, fakeDraftId)
 
@@ -124,11 +144,21 @@ class AddASettlorViewHelperSpec extends SpecBase {
         "complete" in {
 
           val userAnswers = emptyUserAnswers
-            .set(SettlorIndividualOrBusinessPage(0), Business).success.value
-            .set(bus.SettlorBusinessNamePage(0), businessName).success.value
-            .set(bus.SettlorBusinessUtrYesNoPage(0), false).success.value
-            .set(bus.SettlorBusinessAddressYesNoPage(0), false).success.value
-            .set(LivingSettlorStatus(0), Completed).success.value
+            .set(SettlorIndividualOrBusinessPage(0), Business)
+            .success
+            .value
+            .set(bus.SettlorBusinessNamePage(0), businessName)
+            .success
+            .value
+            .set(bus.SettlorBusinessUtrYesNoPage(0), false)
+            .success
+            .value
+            .set(bus.SettlorBusinessAddressYesNoPage(0), false)
+            .success
+            .value
+            .set(LivingSettlorStatus(0), Completed)
+            .success
+            .value
 
           val helper = new AddASettlorViewHelper(userAnswers, fakeDraftId)
 
@@ -145,28 +175,55 @@ class AddASettlorViewHelperSpec extends SpecBase {
           )
         }
       }
-      
+
       "individual and business settlors" in {
 
         val userAnswers = emptyUserAnswers
-          .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-          .set(ind.SettlorIndividualNamePage(0), individualName).success.value
-
-          .set(SettlorIndividualOrBusinessPage(1), Individual).success.value
-          .set(ind.SettlorIndividualNamePage(1), individualName).success.value
-          .set(ind.SettlorIndividualDateOfBirthYesNoPage(1), false).success.value
-          .set(ind.SettlorIndividualNINOYesNoPage(1), false).success.value
-          .set(ind.SettlorAddressYesNoPage(1), false).success.value
-          .set(LivingSettlorStatus(1), Completed).success.value
-
-          .set(SettlorIndividualOrBusinessPage(2), Business).success.value
-          .set(bus.SettlorBusinessNamePage(2), businessName).success.value
-
-          .set(SettlorIndividualOrBusinessPage(3), Business).success.value
-          .set(bus.SettlorBusinessNamePage(3), businessName).success.value
-          .set(bus.SettlorBusinessUtrYesNoPage(3), false).success.value
-          .set(bus.SettlorBusinessAddressYesNoPage(3), false).success.value
-          .set(LivingSettlorStatus(3), Completed).success.value
+          .set(SettlorIndividualOrBusinessPage(0), Individual)
+          .success
+          .value
+          .set(ind.SettlorIndividualNamePage(0), individualName)
+          .success
+          .value
+          .set(SettlorIndividualOrBusinessPage(1), Individual)
+          .success
+          .value
+          .set(ind.SettlorIndividualNamePage(1), individualName)
+          .success
+          .value
+          .set(ind.SettlorIndividualDateOfBirthYesNoPage(1), false)
+          .success
+          .value
+          .set(ind.SettlorIndividualNINOYesNoPage(1), false)
+          .success
+          .value
+          .set(ind.SettlorAddressYesNoPage(1), false)
+          .success
+          .value
+          .set(LivingSettlorStatus(1), Completed)
+          .success
+          .value
+          .set(SettlorIndividualOrBusinessPage(2), Business)
+          .success
+          .value
+          .set(bus.SettlorBusinessNamePage(2), businessName)
+          .success
+          .value
+          .set(SettlorIndividualOrBusinessPage(3), Business)
+          .success
+          .value
+          .set(bus.SettlorBusinessNamePage(3), businessName)
+          .success
+          .value
+          .set(bus.SettlorBusinessUtrYesNoPage(3), false)
+          .success
+          .value
+          .set(bus.SettlorBusinessAddressYesNoPage(3), false)
+          .success
+          .value
+          .set(LivingSettlorStatus(3), Completed)
+          .success
+          .value
 
         val helper = new AddASettlorViewHelper(userAnswers, fakeDraftId)
 

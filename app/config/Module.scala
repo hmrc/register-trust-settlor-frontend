@@ -30,9 +30,18 @@ class Module extends AbstractModule {
     bind(classOf[DraftIdRetrievalActionProvider]).to(classOf[DraftIdDataRetrievalActionProviderImpl]).asEagerSingleton()
 
     bind(classOf[Navigator]).to(classOf[SettlorNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[IndividualSettlor]).to(classOf[IndividualSettlorNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[BusinessSettlor]).to(classOf[BusinessSettlorNavigator]).asEagerSingleton()
-    bind(classOf[Navigator]).annotatedWith(classOf[DeceasedSettlor]).to(classOf[DeceasedSettlorNavigator]).asEagerSingleton()
+    bind(classOf[Navigator])
+      .annotatedWith(classOf[IndividualSettlor])
+      .to(classOf[IndividualSettlorNavigator])
+      .asEagerSingleton()
+    bind(classOf[Navigator])
+      .annotatedWith(classOf[BusinessSettlor])
+      .to(classOf[BusinessSettlorNavigator])
+      .asEagerSingleton()
+    bind(classOf[Navigator])
+      .annotatedWith(classOf[DeceasedSettlor])
+      .to(classOf[DeceasedSettlorNavigator])
+      .asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[TrustType]).to(classOf[TrustTypeNavigator]).asEagerSingleton()
   }
 }

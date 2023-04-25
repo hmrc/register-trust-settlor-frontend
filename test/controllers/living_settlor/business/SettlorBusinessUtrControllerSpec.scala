@@ -27,12 +27,12 @@ import views.html.living_settlor.business.SettlorBusinessUtrView
 
 class SettlorBusinessUtrControllerSpec extends SpecBase {
 
-  val index = 0
-  val formProvider = new UtrFormProvider()
+  val index              = 0
+  val formProvider       = new UtrFormProvider()
   val form: Form[String] = formProvider("settlorBusinessUtr", emptyUserAnswers, index)
 
   val fakeBusinessName = "Business name"
-  val fakeUtr = "1234567890"
+  val fakeUtr          = "1234567890"
 
   lazy val settlorBusinessUtrRoute = routes.SettlorBusinessUtrController.onPageLoad(index, fakeDraftId).url
 
@@ -41,7 +41,9 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), fakeBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), fakeBusinessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -62,8 +64,12 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), fakeBusinessName).success.value
-        .set(SettlorBusinessUtrPage(index), fakeUtr).success.value
+        .set(SettlorBusinessNamePage(index), fakeBusinessName)
+        .success
+        .value
+        .set(SettlorBusinessUtrPage(index), fakeUtr)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -99,7 +105,9 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), fakeBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), fakeBusinessName)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -119,7 +127,9 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), fakeBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), fakeBusinessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

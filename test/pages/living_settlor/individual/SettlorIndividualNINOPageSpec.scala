@@ -18,7 +18,6 @@ package pages.living_settlor.individual
 
 import pages.behaviours.PageBehaviours
 
-
 class SettlorIndividualNINOPageSpec extends PageBehaviours {
 
   "SettlorIndividualNINOPage" must {

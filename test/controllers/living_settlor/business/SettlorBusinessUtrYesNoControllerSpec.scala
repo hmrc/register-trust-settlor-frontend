@@ -25,17 +25,16 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers.{route, _}
 import views.html.living_settlor.business.SettlorBusinessUtrYesNoView
 
-
 class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("settlorBusinessUtrYesNo")
+  val form         = formProvider.withPrefix("settlorBusinessUtrYesNo")
 
-  val index = 0
+  val index                    = 0
   val emptySettlorBusinessName = ""
-  val settlorBusinessName = "Business name"
+  val settlorBusinessName      = "Business name"
 
   lazy val settlorBusinessUtrYesNoRoute = routes.SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId).url
 
@@ -44,7 +43,9 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), settlorBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), settlorBusinessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -65,8 +66,12 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), settlorBusinessName).success.value
-        .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+        .set(SettlorBusinessNamePage(index), settlorBusinessName)
+        .success
+        .value
+        .set(SettlorBusinessUtrYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,7 +91,9 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
 
     "redirect to SettlorBusinessName page when SettlorBusinessName is not answered" in {
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessUtrYesNoPage(index), true).success.value
+        .set(SettlorBusinessUtrYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -104,7 +111,9 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), settlorBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), settlorBusinessName)
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -112,7 +121,6 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, settlorBusinessUtrYesNoRoute)
           .withFormUrlEncodedBody(("value", "true"))
-
 
       val result = route(application, request).value
 
@@ -126,7 +134,9 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), settlorBusinessName).success.value
+        .set(SettlorBusinessNamePage(index), settlorBusinessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

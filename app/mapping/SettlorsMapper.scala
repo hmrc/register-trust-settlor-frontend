@@ -19,16 +19,16 @@ package mapping
 import javax.inject.Inject
 import models.{Settlors, UserAnswers}
 
-class SettlorsMapper @Inject()(individualSettlorsMapper: IndividualSettlorsMapper,
-                               businessSettlorsMapper: BusinessSettlorsMapper) {
+class SettlorsMapper @Inject() (
+  individualSettlorsMapper: IndividualSettlorsMapper,
+  businessSettlorsMapper: BusinessSettlorsMapper
+) {
 
-   def build(userAnswers: UserAnswers): Option[Settlors] = {
-
-     (individualSettlorsMapper.build(userAnswers), businessSettlorsMapper.build(userAnswers)) match {
-       case (None, None) =>
-         None
-       case (individuals, businesses) =>
-         Some(Settlors(individuals, businesses))
-     }
-  }
+  def build(userAnswers: UserAnswers): Option[Settlors] =
+    (individualSettlorsMapper.build(userAnswers), businessSettlorsMapper.build(userAnswers)) match {
+      case (None, None)              =>
+        None
+      case (individuals, businesses) =>
+        Some(Settlors(individuals, businesses))
+    }
 }

@@ -32,7 +32,7 @@ class KindOfTrustControllerSpec extends SpecBase {
   lazy val kindOfTrustRoute = routes.KindOfTrustController.onPageLoad(fakeDraftId).url
 
   val formProvider = new KindOfTrustFormProvider()
-  val form = formProvider()
+  val form         = formProvider()
 
   "KindOfTrust Controller" must {
 
@@ -58,8 +58,13 @@ class KindOfTrustControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
-        .set(KindOfTrustPage, KindOfTrust.values.head).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.values.head)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

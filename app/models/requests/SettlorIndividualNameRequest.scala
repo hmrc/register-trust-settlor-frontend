@@ -21,13 +21,13 @@ import models.pages.FullName
 import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.mvc.WrappedRequest
 
-case class SettlorIndividualNameRequest[T](request: RegistrationDataRequest[T], name: FullName) extends WrappedRequest[T](request){
-  val userAnswers:UserAnswers = request.userAnswers
+case class SettlorIndividualNameRequest[T](request: RegistrationDataRequest[T], name: FullName)
+    extends WrappedRequest[T](request) {
+  val userAnswers: UserAnswers = request.userAnswers
 
-  def settlorAliveAtRegistration(index: Int): Boolean = {
+  def settlorAliveAtRegistration(index: Int): Boolean =
     userAnswers.get(SettlorAliveYesNoPage(index)) match {
       case Some(value) => value
-      case None => false
+      case None        => false
     }
-  }
 }

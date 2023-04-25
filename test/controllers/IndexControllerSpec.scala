@@ -38,9 +38,9 @@ import scala.concurrent.Future
 class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
   private val name: FullName = FullName("Joe", None, "Bloggs")
-  private val utr: String = "1234567890"
+  private val utr: String    = "1234567890"
 
-  private val trustsStoreService: TrustsStoreService = mock[TrustsStoreService]
+  private val trustsStoreService: TrustsStoreService             = mock[TrustsStoreService]
   private val submissionDraftConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
 
   override def beforeEach(): Unit = {
@@ -60,9 +60,15 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
           "in progress" in {
 
             val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-              .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-              .set(LivingSettlorStatus(0), InProgress).success.value
+              .set(SettlorIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(individualPages.SettlorIndividualNamePage(0), name)
+              .success
+              .value
+              .set(LivingSettlorStatus(0), InProgress)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(userAnswers))
               .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))
@@ -89,9 +95,15 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
           "completed" in {
 
             val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualOrBusinessPage(0), Individual).success.value
-              .set(individualPages.SettlorIndividualNamePage(0), name).success.value
-              .set(LivingSettlorStatus(0), Completed).success.value
+              .set(SettlorIndividualOrBusinessPage(0), Individual)
+              .success
+              .value
+              .set(individualPages.SettlorIndividualNamePage(0), name)
+              .success
+              .value
+              .set(LivingSettlorStatus(0), Completed)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(userAnswers))
               .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))
@@ -120,8 +132,12 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       "redirect to deceased settlor check answers if there is a Completed deceased settlor" in {
 
         val userAnswers = emptyUserAnswers
-          .set(deceasedPages.SettlorsNamePage, name).success.value
-          .set(DeceasedSettlorStatus, Completed).success.value
+          .set(deceasedPages.SettlorsNamePage, name)
+          .success
+          .value
+          .set(DeceasedSettlorStatus, Completed)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers))
           .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))
@@ -138,7 +154,9 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).get mustBe controllers.deceased_settlor.routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId).url
+        redirectLocation(result).get mustBe controllers.deceased_settlor.routes.DeceasedSettlorAnswerController
+          .onPageLoad(fakeDraftId)
+          .url
 
         verify(trustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
 
@@ -150,8 +168,12 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
         "there is an in-progress deceased settlor" in {
 
           val userAnswers = emptyUserAnswers
-            .set(deceasedPages.SettlorsNamePage, name).success.value
-            .set(DeceasedSettlorStatus, InProgress).success.value
+            .set(deceasedPages.SettlorsNamePage, name)
+            .success
+            .value
+            .set(DeceasedSettlorStatus, InProgress)
+            .success
+            .value
 
           val application = applicationBuilder(userAnswers = Some(userAnswers))
             .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))

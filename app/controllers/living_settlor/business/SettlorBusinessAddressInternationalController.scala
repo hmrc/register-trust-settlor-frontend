@@ -37,50 +37,54 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorBusinessAddressInternationalController @Inject()(
-                                                               override val messagesApi: MessagesApi,
-                                                               registrationsRepository: RegistrationsRepository,
-                                                               @BusinessSettlor navigator: Navigator,
-                                                               actions: Actions,
-                                                               requireName: NameRequiredActionProvider,
-                                                               formProvider: InternationalAddressFormProvider,
-                                                               val controllerComponents: MessagesControllerComponents,
-                                                               view: SettlorBusinessAddressInternationalView,
-                                                               val countryOptions: CountryOptionsNonUK,
-                                                               technicalErrorView: TechnicalErrorView
-                                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorBusinessAddressInternationalController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @BusinessSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  formProvider: InternationalAddressFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorBusinessAddressInternationalView,
+  val countryOptions: CountryOptionsNonUK,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[InternationalAddress] = formProvider()
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
-
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val preparedForm = request.userAnswers.get(SettlorBusinessAddressInternationalPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, countryOptions.options, index, draftId, request.businessName))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.businessName))),
-        value => {
-          request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorBusinessAddressInternationalController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(
+              BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.businessName))
+            ),
+          value =>
+            request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorBusinessAddressInternationalPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger
+                  .error("[SettlorBusinessAddressInternationalController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 }

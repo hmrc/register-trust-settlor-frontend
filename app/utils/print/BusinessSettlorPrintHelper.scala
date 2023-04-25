@@ -26,26 +26,82 @@ import pages.living_settlor.business.mld5._
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
-class BusinessSettlorPrintHelper @Inject()(answerRowConverter: AnswerRowConverter,
-                                           trustTypePrintHelper: TrustTypePrintHelper)
-  extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
+class BusinessSettlorPrintHelper @Inject() (
+  answerRowConverter: AnswerRowConverter,
+  trustTypePrintHelper: TrustTypePrintHelper
+) extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
 
-  override def answerRows(index: Int, draftId: String, prefix: Option[String] = None)
-                         (bound: AnswerRowConverter#Bound)
-                         (implicit messages: Messages): Seq[Option[AnswerRow]] = Seq(
-    bound.enumQuestion(SettlorIndividualOrBusinessPage(index), "settlorIndividualOrBusiness", SettlorIndividualOrBusinessController.onPageLoad(index, draftId).url, "settlorIndividualOrBusiness"),
-    bound.stringQuestion(SettlorBusinessNamePage(index), "settlorBusinessName", SettlorBusinessNameController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(SettlorBusinessUtrYesNoPage(index), "settlorBusinessUtrYesNo", SettlorBusinessUtrYesNoController.onPageLoad(index, draftId).url),
-    bound.stringQuestion(SettlorBusinessUtrPage(index), "settlorBusinessUtr", SettlorBusinessUtrController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(CountryOfResidenceYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceYesNo", CountryOfResidenceYesNoController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo", CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url),
-    bound.countryQuestion(CountryOfResidencePage(index), CountryOfResidenceInTheUkYesNoPage(index), "settlorBusiness.5mld.countryOfResidence", CountryOfResidenceController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(SettlorBusinessAddressYesNoPage(index), "settlorBusinessAddressYesNo", SettlorBusinessAddressYesNoController.onPageLoad(index, draftId).url),
-    bound.yesNoQuestion(SettlorBusinessAddressUKYesNoPage(index), "settlorBusinessAddressUKYesNo", SettlorBusinessAddressUKYesNoController.onPageLoad(index, draftId).url),
-    bound.addressQuestion(SettlorBusinessAddressUKPage(index), "settlorBusinessAddressUK", SettlorBusinessAddressUKController.onPageLoad(index, draftId).url),
-    bound.addressQuestion(SettlorBusinessAddressInternationalPage(index), "settlorBusinessAddressInternational", SettlorBusinessAddressInternationalController.onPageLoad(index, draftId).url),
-    bound.enumQuestion(SettlorBusinessTypePage(index), "settlorBusinessType", SettlorBusinessTypeController.onPageLoad(index, draftId).url, "kindOfBusiness"),
-    bound.yesNoQuestion(SettlorBusinessTimeYesNoPage(index), "settlorBusinessTimeYesNo", SettlorBusinessTimeYesNoController.onPageLoad(index, draftId).url)
+  override def answerRows(index: Int, draftId: String, prefix: Option[String] = None)(bound: AnswerRowConverter#Bound)(
+    implicit messages: Messages
+  ): Seq[Option[AnswerRow]] = Seq(
+    bound.enumQuestion(
+      SettlorIndividualOrBusinessPage(index),
+      "settlorIndividualOrBusiness",
+      SettlorIndividualOrBusinessController.onPageLoad(index, draftId).url,
+      "settlorIndividualOrBusiness"
+    ),
+    bound.stringQuestion(
+      SettlorBusinessNamePage(index),
+      "settlorBusinessName",
+      SettlorBusinessNameController.onPageLoad(index, draftId).url
+    ),
+    bound.yesNoQuestion(
+      SettlorBusinessUtrYesNoPage(index),
+      "settlorBusinessUtrYesNo",
+      SettlorBusinessUtrYesNoController.onPageLoad(index, draftId).url
+    ),
+    bound.stringQuestion(
+      SettlorBusinessUtrPage(index),
+      "settlorBusinessUtr",
+      SettlorBusinessUtrController.onPageLoad(index, draftId).url
+    ),
+    bound.yesNoQuestion(
+      CountryOfResidenceYesNoPage(index),
+      "settlorBusiness.5mld.countryOfResidenceYesNo",
+      CountryOfResidenceYesNoController.onPageLoad(index, draftId).url
+    ),
+    bound.yesNoQuestion(
+      CountryOfResidenceInTheUkYesNoPage(index),
+      "settlorBusiness.5mld.countryOfResidenceInTheUkYesNo",
+      CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId).url
+    ),
+    bound.countryQuestion(
+      CountryOfResidencePage(index),
+      CountryOfResidenceInTheUkYesNoPage(index),
+      "settlorBusiness.5mld.countryOfResidence",
+      CountryOfResidenceController.onPageLoad(index, draftId).url
+    ),
+    bound.yesNoQuestion(
+      SettlorBusinessAddressYesNoPage(index),
+      "settlorBusinessAddressYesNo",
+      SettlorBusinessAddressYesNoController.onPageLoad(index, draftId).url
+    ),
+    bound.yesNoQuestion(
+      SettlorBusinessAddressUKYesNoPage(index),
+      "settlorBusinessAddressUKYesNo",
+      SettlorBusinessAddressUKYesNoController.onPageLoad(index, draftId).url
+    ),
+    bound.addressQuestion(
+      SettlorBusinessAddressUKPage(index),
+      "settlorBusinessAddressUK",
+      SettlorBusinessAddressUKController.onPageLoad(index, draftId).url
+    ),
+    bound.addressQuestion(
+      SettlorBusinessAddressInternationalPage(index),
+      "settlorBusinessAddressInternational",
+      SettlorBusinessAddressInternationalController.onPageLoad(index, draftId).url
+    ),
+    bound.enumQuestion(
+      SettlorBusinessTypePage(index),
+      "settlorBusinessType",
+      SettlorBusinessTypeController.onPageLoad(index, draftId).url,
+      "kindOfBusiness"
+    ),
+    bound.yesNoQuestion(
+      SettlorBusinessTimeYesNoPage(index),
+      "settlorBusinessTimeYesNo",
+      SettlorBusinessTimeYesNoController.onPageLoad(index, draftId).url
+    )
   )
 
 }

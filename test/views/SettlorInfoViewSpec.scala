@@ -30,7 +30,9 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
-      behave like normalPageTitleWithSectionSubheading(applyView, "5mld.settlorInfo",
+      behave like normalPageTitleWithSectionSubheading(
+        applyView,
+        "5mld.settlorInfo",
         "caption",
         "subheading1",
         "paragraph1",
@@ -79,7 +81,9 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
-      behave like normalPageTitleWithSectionSubheading(applyView, "5mld.settlorInfo",
+      behave like normalPageTitleWithSectionSubheading(
+        applyView,
+        "5mld.settlorInfo",
         "caption",
         "subheading1",
         "paragraph1",

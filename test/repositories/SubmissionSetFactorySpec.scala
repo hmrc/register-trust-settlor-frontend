@@ -29,7 +29,7 @@ class SubmissionSetFactorySpec extends SpecBase {
 
   private val factory: SubmissionSetFactory = injector.instanceOf[SubmissionSetFactory]
 
-  private val name: FullName = FullName("Joe", Some("Joseph"), "Bloggs")
+  private val name: FullName       = FullName("Joe", Some("Joseph"), "Bloggs")
   private val businessName: String = "Business Ltd."
 
   "Submission set factory" when {
@@ -52,10 +52,10 @@ class SubmissionSetFactorySpec extends SpecBase {
 
         val arbitraryUserAnswers: UserAnswers = emptyUserAnswers
 
-        val mockSettlorsMapper: SettlorsMapper = mock[SettlorsMapper]
+        val mockSettlorsMapper: SettlorsMapper               = mock[SettlorsMapper]
         val mockDeceasedSettlorMapper: DeceasedSettlorMapper = mock[DeceasedSettlorMapper]
-        val mockTrustDetailsMapper: TrustDetailsMapper = mock[TrustDetailsMapper]
-        val printHelpers: PrintHelpers = injector.instanceOf[PrintHelpers]
+        val mockTrustDetailsMapper: TrustDetailsMapper       = mock[TrustDetailsMapper]
+        val printHelpers: PrintHelpers                       = injector.instanceOf[PrintHelpers]
 
         val factory = new SubmissionSetFactory(
           settlorsMapper = mockSettlorsMapper,
@@ -89,9 +89,11 @@ class SubmissionSetFactorySpec extends SpecBase {
           "individual" in {
 
             val settlors: Settlors = Settlors(
-              settlor = Some(List(
-                Settlor(aliveAtRegistration = true, name, None, None, None, None, None)
-              )),
+              settlor = Some(
+                List(
+                  Settlor(aliveAtRegistration = true, name, None, None, None, None, None)
+                )
+              ),
               settlorCompany = None
             )
 
@@ -117,9 +119,11 @@ class SubmissionSetFactorySpec extends SpecBase {
 
             val settlors: Settlors = Settlors(
               settlor = None,
-              settlorCompany = Some(List(
-                SettlorCompany(businessName, None, None, None, None)
-              ))
+              settlorCompany = Some(
+                List(
+                  SettlorCompany(businessName, None, None, None, None)
+                )
+              )
             )
 
             when(mockTrustDetailsMapper.build(any())).thenReturn(None)

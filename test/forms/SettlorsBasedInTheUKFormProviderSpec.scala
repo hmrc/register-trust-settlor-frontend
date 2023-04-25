@@ -22,7 +22,7 @@ import play.api.data.FormError
 class SettlorsBasedInTheUKFormProviderSpec extends BooleanFieldBehaviours {
 
   val requiredKey = "settlorsBasedInTheUK.error.required"
-  val invalidKey = "error.boolean"
+  val invalidKey  = "error.boolean"
 
   val form = new SettlorsBasedInTheUKFormProvider()()
 

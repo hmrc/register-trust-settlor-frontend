@@ -25,34 +25,33 @@ import views.html.living_settlor.individual.mld5.CountryOfResidencyYesNoView
 
 class CountryOfResidencyYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val index: Int = 0
+  private val index: Int     = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualCountryOfResidencyYesNo")
-  private val formContentInPastTense: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualCountryOfResidencyYesNoPastTense")
+  override val form: Form[Boolean]                  = new YesNoFormProvider().withPrefix("settlorIndividualCountryOfResidencyYesNo")
+  private val formContentInPastTense: Form[Boolean] =
+    new YesNoFormProvider().withPrefix("settlorIndividualCountryOfResidencyYesNoPastTense")
 
   Seq(
     ("settlorIndividualCountryOfResidencyYesNo", true, form),
     ("settlorIndividualCountryOfResidencyYesNoPastTense", false, formContentInPastTense)
-  ) foreach {
-    case (messageKey, settlorAliveAtRegistration, formToUse) =>
+  ) foreach { case (messageKey, settlorAliveAtRegistration, formToUse) =>
+    s"CountryOfResidencyYesNo View where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-      s"CountryOfResidencyYesNo View where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
+      val view = viewFor[CountryOfResidencyYesNoView](Some(emptyUserAnswers))
 
-        val view = viewFor[CountryOfResidencyYesNoView](Some(emptyUserAnswers))
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, index, fakeDraftId, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, index, fakeDraftId, name, settlorAliveAtRegistration)(fakeRequest, messages)
+      behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 
-        behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
+      behave like pageWithBackLink(applyView(formToUse))
 
-        behave like pageWithBackLink(applyView(formToUse))
+      behave like yesNoPage(formToUse, applyView, messageKey, Some(messageKey), Seq(name.toString))
 
-        behave like yesNoPage(formToUse, applyView, messageKey, Some(messageKey), Seq(name.toString))
+      behave like pageWithASubmitButton(applyView(formToUse))
 
-        behave like pageWithASubmitButton(applyView(formToUse))
-
-        behave like pageWithHint(applyView(formToUse), expectedHintKey = s"$messageKey.hint")
-      }
+      behave like pageWithHint(applyView(formToUse), expectedHintKey = s"$messageKey.hint")
+    }
   }
 }

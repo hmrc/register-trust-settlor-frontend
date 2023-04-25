@@ -25,7 +25,7 @@ import viewmodels.SettlorViewModel
 
 import javax.inject.Inject
 
-class RegistrationProgress @Inject()() {
+class RegistrationProgress @Inject() () {
 
   def settlorsStatus(userAnswers: UserAnswers): Option[Status] = {
 
@@ -44,22 +44,17 @@ class RegistrationProgress @Inject()() {
     }
   }
 
-  private def statusForNonWillTrust(userAnswers: UserAnswers,
-                                    deceasedStatus: Option[Status]
-                                   ): Option[Status] = {
+  private def statusForNonWillTrust(userAnswers: UserAnswers, deceasedStatus: Option[Status]): Option[Status] =
     userAnswers
       .get(LivingSettlors)
       .getOrElse(Nil) match {
-        case Nil =>
-          statusForInAdditionToWill(userAnswers, deceasedStatus)
-        case settlors =>
-          statusForLivingSettlors(userAnswers, settlors)
+      case Nil      =>
+        statusForInAdditionToWill(userAnswers, deceasedStatus)
+      case settlors =>
+        statusForLivingSettlors(userAnswers, settlors)
     }
-  }
 
-  private def statusForLivingSettlors(userAnswers: UserAnswers,
-                                       living: List[SettlorViewModel]
-                                      ): Option[Status] = {
+  private def statusForLivingSettlors(userAnswers: UserAnswers, living: List[SettlorViewModel]): Option[Status] = {
     val noMoreToAdd = userAnswers
       .get(AddASettlorPage)
       .contains(AddASettlor.NoComplete)
@@ -68,9 +63,7 @@ class RegistrationProgress @Inject()() {
     determineStatus(isComplete && noMoreToAdd)
   }
 
-  private def statusForInAdditionToWill(userAnswers: UserAnswers,
-                                       deceasedStatus: Option[Status]
-                                      ): Option[Status] = {
+  private def statusForInAdditionToWill(userAnswers: UserAnswers, deceasedStatus: Option[Status]): Option[Status] = {
     val inAdditionToWillTrust =
       userAnswers
         .get(SetUpInAdditionToWillTrustYesNoPage)
@@ -83,12 +76,11 @@ class RegistrationProgress @Inject()() {
     }
   }
 
-  private def determineStatus(complete: Boolean): Option[Status] = {
+  private def determineStatus(complete: Boolean): Option[Status] =
     if (complete) {
       Some(Completed)
     } else {
       Some(InProgress)
     }
-  }
 
 }
