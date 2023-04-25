@@ -41,7 +41,7 @@ class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportO
 
         val view = viewFor[SettlorIndividualPassportView](Some(emptyUserAnswers))
 
-        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
         def applyView(form: Form[_]): HtmlFormat.Appendable =
           view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)

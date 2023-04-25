@@ -40,7 +40,7 @@
     title = s"${errorPrefix(form)}${messages(s"${settlorIndividualNamePrefix}.title")}",
     showBackLink = true
 ) {
-    @formHelper(action = SettlorIndividualNameController.onSubmit(index, draftId), 'autoComplete -> "on") {
+    @formHelper(action = SettlorIndividualNameController.onSubmit(index, draftId), Symbol("autoComplete") -> "on") {
 
         @error_summary(form.errors)
 

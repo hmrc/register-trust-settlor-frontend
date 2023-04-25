@@ -26,7 +26,7 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
 
   val answer = "ES"
 
-  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+  val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
   def selectCountryPage(form: Form[String],
                  createView: Form[String] => HtmlFormat.Appendable,

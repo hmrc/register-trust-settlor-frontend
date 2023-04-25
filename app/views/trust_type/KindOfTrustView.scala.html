@@ -34,7 +34,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = KindOfTrustController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = KindOfTrustController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors, KindOfTrust.options)
 

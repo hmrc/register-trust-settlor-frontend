@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = SettlorBusinessAddressYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = SettlorBusinessAddressYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

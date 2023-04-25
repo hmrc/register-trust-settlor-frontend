@@ -63,7 +63,7 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual OK
 
@@ -118,7 +118,7 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual BAD_REQUEST
 

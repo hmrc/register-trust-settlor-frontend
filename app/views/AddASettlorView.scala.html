@@ -50,7 +50,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = if (settlorsMaxedOut) AddASettlorController.submitComplete(draftId) else AddASettlorController.submitAnother(draftId), 'autoComplete -> "off") {
+    @formHelper(action = if (settlorsMaxedOut) AddASettlorController.submitComplete(draftId) else AddASettlorController.submitAnother(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors, AddASettlor.options)
 

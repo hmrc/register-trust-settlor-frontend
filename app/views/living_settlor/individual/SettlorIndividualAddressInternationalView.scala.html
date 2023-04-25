@@ -43,7 +43,7 @@ settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Mes
     showBackLink = true
 ) {
 
-    @formHelper(action = SettlorIndividualAddressInternationalController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = SettlorIndividualAddressInternationalController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

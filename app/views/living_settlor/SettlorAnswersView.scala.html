@@ -35,7 +35,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = onSubmit, 'autoComplete -> "off") {
+    @formHelper(action = onSubmit, Symbol("autoComplete") -> "off") {
 
         @heading("settlorAnswers.heading")
 

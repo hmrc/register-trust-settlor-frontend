@@ -41,7 +41,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = UkCountryOfResidencyYesNoController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = UkCountryOfResidencyYesNoController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

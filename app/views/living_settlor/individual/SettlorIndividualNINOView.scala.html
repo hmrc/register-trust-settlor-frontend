@@ -33,7 +33,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = SettlorIndividualNINOController.onSubmit(index, draftId), 'autoComplete -> "off") {
+    @formHelper(action = SettlorIndividualNINOController.onSubmit(index, draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 
