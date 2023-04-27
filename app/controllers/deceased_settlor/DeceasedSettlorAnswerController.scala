@@ -38,30 +38,32 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class DeceasedSettlorAnswerController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 registrationsRepository: RegistrationsRepository,
-                                                 @DeceasedSettlor navigator: Navigator,
-                                                 actions: Actions,
-                                                 requireName: NameRequiredActionProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: DeceasedSettlorAnswerView,
-                                                 draftRegistrationService: DraftRegistrationService,
-                                                 deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
-                                                 trustsStoreService: TrustsStoreService,
-                                                 technicalErrorView: TechnicalErrorView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class DeceasedSettlorAnswerController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @DeceasedSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: DeceasedSettlorAnswerView,
+  draftRegistrationService: DraftRegistrationService,
+  deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
+  trustsStoreService: TrustsStoreService,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
-
       val section = deceasedSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId)
 
       Ok(view(draftId, Seq(section)))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
-    implicit request =>
+  def onSubmit(draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       request.userAnswers.set(DeceasedSettlorStatus, Completed) match {
         case Success(updatedAnswers) =>
           registrationsRepository.set(updatedAnswers).map { _ =>
@@ -69,10 +71,9 @@ class DeceasedSettlorAnswerController @Inject()(
             trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
             Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
           }
-        case Failure(_) => {
+        case Failure(_)              =>
           logger.error("[DeceasedSettlorAnswerController][onSubmit] Error while storing user answers")
           Future.successful(InternalServerError(technicalErrorView()))
-        }
       }
-  }
+    }
 }

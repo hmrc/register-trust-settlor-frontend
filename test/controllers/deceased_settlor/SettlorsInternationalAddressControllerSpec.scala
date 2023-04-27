@@ -35,10 +35,11 @@ import scala.concurrent.Future
 
 class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
-  val formProvider = new InternationalAddressFormProvider()
+  val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
 
-  lazy val settlorsInternationalAddressRoute: String = routes.SettlorsInternationalAddressController.onPageLoad(fakeDraftId).url
+  lazy val settlorsInternationalAddressRoute: String =
+    routes.SettlorsInternationalAddressController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -46,8 +47,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers: UserAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers: UserAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -57,7 +57,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
       val result: Future[Result] = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -70,8 +70,12 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorsInternationalAddressPage, InternationalAddress("line 1", "line 2", None, "country")).success.value.set(SettlorsNamePage,
-        name).success.value
+        .set(SettlorsInternationalAddressPage, InternationalAddress("line 1", "line 2", None, "country"))
+        .success
+        .value
+        .set(SettlorsNamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -81,20 +85,22 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1", "line 2", None, "country")), countryOptions, fakeDraftId, name)(request, messages).toString
+        view(form.fill(InternationalAddress("line 1", "line 2", None, "country")), countryOptions, fakeDraftId, name)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -114,8 +120,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -129,7 +134,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual BAD_REQUEST
 
@@ -171,7 +176,6 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
     }
 
     "redirect to SettlorNamePage when settlor name is not answered" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 

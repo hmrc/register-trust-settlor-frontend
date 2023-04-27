@@ -36,49 +36,51 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class CountryOfNationalityController @Inject()(
-                                                override val messagesApi: MessagesApi,
-                                                registrationsRepository: RegistrationsRepository,
-                                                @DeceasedSettlor navigator: Navigator,
-                                                actions: Actions,
-                                                requireName: NameRequiredActionProvider,
-                                                formProvider: CountryFormProvider,
-                                                val controllerComponents: MessagesControllerComponents,
-                                                view: CountryOfNationalityView,
-                                                val countryOptions: CountryOptionsNonUK,
-                                                technicalErrorView: TechnicalErrorView
-                                              )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class CountryOfNationalityController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @DeceasedSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  formProvider: CountryFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: CountryOfNationalityView,
+  val countryOptions: CountryOptionsNonUK,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[String] = formProvider.withPrefix("5mld.countryOfNationality")
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
-
       val preparedForm = request.userAnswers.get(CountryOfNationalityPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, countryOptions.options, draftId, request.name))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, request.name))),
-        value =>
-          request.userAnswers.set(CountryOfNationalityPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(CountryOfNationalityPage, draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[CountryOfNationalityController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+  def onSubmit(draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, request.name))),
+          value =>
+            request.userAnswers.set(CountryOfNationalityPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(CountryOfNationalityPage, draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[CountryOfNationalityController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-      )
-  }
+        )
+    }
 }

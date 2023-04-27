@@ -24,10 +24,10 @@ import views.html.living_settlor.business.SettlorBusinessUtrView
 
 class SettlorBusinessUtrViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "settlorBusinessUtr"
-  val index = 0
+  val messageKeyPrefix            = "settlorBusinessUtr"
+  val index                       = 0
   val settlorBusinessBusinessName = "BusinessName"
-  val hintKey = s"$messageKeyPrefix.hint"
+  val hintKey                     = s"$messageKeyPrefix.hint"
 
   val form: Form[String] = new UtrFormProvider().apply(messageKeyPrefix, emptyUserAnswers, index)
 
@@ -40,7 +40,9 @@ class SettlorBusinessUtrViewSpec extends StringViewBehaviours {
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, settlorBusinessBusinessName, "hint")
 
-    behave like stringPageWithDynamicTitle(form, applyView,
+    behave like stringPageWithDynamicTitle(
+      form,
+      applyView,
       messageKeyPrefix,
       settlorBusinessBusinessName,
       Some(hintKey)

@@ -36,7 +36,7 @@
     showBackLink = true
 ) {
 
-@formHelper(action = DeceasedSettlorAnswerController.onSubmit(draftId), 'autoComplete -> "off") {
+@formHelper(action = DeceasedSettlorAnswerController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
 
     @heading("deceasedSettlorAnswer.heading")
 

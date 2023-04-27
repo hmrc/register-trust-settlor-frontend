@@ -33,8 +33,7 @@ class SettlorViewModelSpec extends SpecBase {
 
           "in progress" in {
 
-            val json = Json.parse(
-              """
+            val json = Json.parse("""
                 |{
                 | "individualOrBusiness": "individual"
                 |}
@@ -47,8 +46,7 @@ class SettlorViewModelSpec extends SpecBase {
 
           "completed" in {
 
-            val json = Json.parse(
-              """
+            val json = Json.parse("""
                 |{
                 | "individualOrBusiness": "individual",
                 | "name": {
@@ -72,8 +70,7 @@ class SettlorViewModelSpec extends SpecBase {
 
           "in progress" in {
 
-            val json = Json.parse(
-              """
+            val json = Json.parse("""
                 |{
                 | "individualOrBusiness": "business"
                 |}
@@ -86,8 +83,7 @@ class SettlorViewModelSpec extends SpecBase {
 
           "completed" in {
 
-            val json = Json.parse(
-              """
+            val json = Json.parse("""
                 |{
                 | "individualOrBusiness": "business",
                 | "businessName": "Business Ltd.",
@@ -108,8 +104,7 @@ class SettlorViewModelSpec extends SpecBase {
 
         "in progress" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               | "name": {
               |   "firstName": "Joe",
@@ -125,8 +120,7 @@ class SettlorViewModelSpec extends SpecBase {
 
         "completed" in {
 
-          val json = Json.parse(
-            """
+          val json = Json.parse("""
               |{
               | "name": {
               |   "firstName": "Joe",

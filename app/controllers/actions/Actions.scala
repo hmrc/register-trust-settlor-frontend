@@ -20,11 +20,11 @@ import com.google.inject.Inject
 import models.requests.{OptionalRegistrationDataRequest, RegistrationDataRequest}
 import play.api.mvc.{ActionBuilder, AnyContent}
 
-class Actions @Inject()(
-                         identify: RegistrationIdentifierAction,
-                         getData: DraftIdRetrievalActionProvider,
-                         requireData: RegistrationDataRequiredAction
-                       ) {
+class Actions @Inject() (
+  identify: RegistrationIdentifierAction,
+  getData: DraftIdRetrievalActionProvider,
+  requireData: RegistrationDataRequiredAction
+) {
 
   def authWithSession(draftId: String): ActionBuilder[OptionalRegistrationDataRequest, AnyContent] =
     identify andThen getData(draftId)

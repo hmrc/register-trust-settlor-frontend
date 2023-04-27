@@ -35,52 +35,53 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorDateOfBirthYesNoController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   registrationsRepository: RegistrationsRepository,
-                                                   @DeceasedSettlor navigator: Navigator,
-                                                   actions: Actions,
-                                                   requireName: NameRequiredActionProvider,
-                                                   yesNoFormProvider: YesNoFormProvider,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   view: SettlorDateOfBirthYesNoView,
-                                                   technicalErrorView: TechnicalErrorView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorDateOfBirthYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @DeceasedSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorDateOfBirthYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorDateOfBirthYesNo")
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
-
       val name = request.userAnswers.get(SettlorsNamePage).get
 
       val preparedForm = request.userAnswers.get(SettlorDateOfBirthYesNoPage) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, draftId, name))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)).async {
-    implicit request =>
-
+  def onSubmit(draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, name))),
-        value =>
-          request.userAnswers.set(SettlorDateOfBirthYesNoPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorDateOfBirthYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+          value =>
+            request.userAnswers.set(SettlorDateOfBirthYesNoPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorDateOfBirthYesNoPage, draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorDateOfBirthYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-      )
-  }
+        )
+    }
 }

@@ -28,34 +28,35 @@ import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DefaultRegistrationsRepository @Inject()(submissionDraftConnector: SubmissionDraftConnector,
-                                               config: FrontendAppConfig,
-                                               submissionSetFactory: SubmissionSetFactory
-                                        )(implicit ec: ExecutionContext) extends RegistrationsRepository {
+class DefaultRegistrationsRepository @Inject() (
+  submissionDraftConnector: SubmissionDraftConnector,
+  config: FrontendAppConfig,
+  submissionSetFactory: SubmissionSetFactory
+)(implicit ec: ExecutionContext)
+    extends RegistrationsRepository {
 
   private val userAnswersSection = config.repositoryKey
 
-  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] = {
-    submissionDraftConnector.setDraftSection(
-      userAnswers.draftId,
-      userAnswersSection,
-      submissionSetFactory.createFrom(userAnswers)
-    ).map {
-      response => response.status == http.Status.OK
-    }
-  }
+  override def set(userAnswers: UserAnswers)(implicit hc: HeaderCarrier, messages: Messages): Future[Boolean] =
+    submissionDraftConnector
+      .setDraftSection(
+        userAnswers.draftId,
+        userAnswersSection,
+        submissionSetFactory.createFrom(userAnswers)
+      )
+      .map { response =>
+        response.status == http.Status.OK
+      }
 
-  override def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] = {
-    submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map {
-      response =>
-        response.data.validate[UserAnswers] match {
-          case JsSuccess(userAnswers, _) => Some(userAnswers)
-          case _ => None
-        }
+  override def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]] =
+    submissionDraftConnector.getDraftSection(draftId, userAnswersSection).map { response =>
+      response.data.validate[UserAnswers] match {
+        case JsSuccess(userAnswers, _) => Some(userAnswers)
+        case _                         => None
+      }
     }
-  }
 
-  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]] =
+  def getTrustSetupDate(draftId: String)(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     submissionDraftConnector.getTrustSetupDate(draftId)
 }
 
@@ -65,5 +66,5 @@ trait RegistrationsRepository {
 
   def get(draftId: String)(implicit hc: HeaderCarrier): Future[Option[UserAnswers]]
 
-  def getTrustSetupDate(draftId: String)(implicit hc:HeaderCarrier): Future[Option[LocalDate]]
+  def getTrustSetupDate(draftId: String)(implicit hc: HeaderCarrier): Future[Option[LocalDate]]
 }

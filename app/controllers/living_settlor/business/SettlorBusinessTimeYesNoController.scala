@@ -35,49 +35,50 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorBusinessTimeYesNoController @Inject()(
-                                                    override val messagesApi: MessagesApi,
-                                                    registrationsRepository: RegistrationsRepository,
-                                                    @BusinessSettlor navigator: Navigator,
-                                                    actions: Actions,
-                                                    requireName: NameRequiredActionProvider,
-                                                    yesNoFormProvider: YesNoFormProvider,
-                                                    val controllerComponents: MessagesControllerComponents,
-                                                    view: SettlorBusinessTimeYesNoView,
-                                                    technicalErrorView: TechnicalErrorView
-                                                  )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorBusinessTimeYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @BusinessSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorBusinessTimeYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessTimeYesNo")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
-
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val preparedForm = request.userAnswers.get(SettlorBusinessTimeYesNoPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.businessName))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
-        value => {
-          request.userAnswers.set(SettlorBusinessTimeYesNoPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorBusinessTimeYesNoPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorBusinessTimeYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
+          value =>
+            request.userAnswers.set(SettlorBusinessTimeYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorBusinessTimeYesNoPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorBusinessTimeYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 }

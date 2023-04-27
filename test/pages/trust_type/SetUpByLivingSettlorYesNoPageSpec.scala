@@ -46,18 +46,27 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
       "SetUpInAdditionToWillTrustYesNoPage is Some(true)" must {
         "not implement cleanup" in {
 
-          forAll(arbitrary[UserAnswers], arbitrary[String]) {
-            (initial, str) =>
-              val answers: UserAnswers = initial
-                .set(SetUpByLivingSettlorYesNoPage, false).success.value
-                .set(KindOfTrustPage, KindOfTrust.Deed).success.value
-                .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
-                .set(SettlorsNamePage, FullName(str, None, str)).success.value
-                .set(DeceasedSettlorStatus, Status.Completed).success.value
+          forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+            val answers: UserAnswers = initial
+              .set(SetUpByLivingSettlorYesNoPage, false)
+              .success
+              .value
+              .set(KindOfTrustPage, KindOfTrust.Deed)
+              .success
+              .value
+              .set(SetUpInAdditionToWillTrustYesNoPage, true)
+              .success
+              .value
+              .set(SettlorsNamePage, FullName(str, None, str))
+              .success
+              .value
+              .set(DeceasedSettlorStatus, Status.Completed)
+              .success
+              .value
 
-              val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
+            val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-              result.get(DeceasedSettlor) mustBe defined
+            result.get(DeceasedSettlor) mustBe defined
           }
         }
       }
@@ -65,16 +74,21 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
       "SetUpInAdditionToWillTrustYesNoPage is not Some(true)" must {
         "implement cleanup" in {
 
-          forAll(arbitrary[UserAnswers], arbitrary[String]) {
-            (initial, str) =>
-              val answers: UserAnswers = initial
-                .set(SetUpByLivingSettlorYesNoPage, false).success.value
-                .set(SettlorsNamePage, FullName(str, None, str)).success.value
-                .set(DeceasedSettlorStatus, Status.Completed).success.value
+          forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+            val answers: UserAnswers = initial
+              .set(SetUpByLivingSettlorYesNoPage, false)
+              .success
+              .value
+              .set(SettlorsNamePage, FullName(str, None, str))
+              .success
+              .value
+              .set(DeceasedSettlorStatus, Status.Completed)
+              .success
+              .value
 
-              val result = answers.set(SetUpByLivingSettlorYesNoPage, true).success.value
+            val result = answers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
-              result.get(DeceasedSettlor) mustNot be(defined)
+            result.get(DeceasedSettlor) mustNot be(defined)
           }
         }
       }
@@ -82,30 +96,51 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
 
     "yes selected" in {
 
-      forAll(arbitrary[UserAnswers], arbitrary[String], arbitrary[LocalDate]) {
-        (initial, str, date) =>
-          val answers: UserAnswers = initial
-            .set(SetUpByLivingSettlorYesNoPage, true).success.value
-            .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-            .set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
-            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-            .set(HoldoverReliefYesNoPage, true).success.value
-            .set(EfrbsYesNoPage, true).success.value
-            .set(EfrbsStartDatePage, date).success.value
-            .set(SettlorIndividualNamePage(0), FullName(str, None, str)).success.value
-            .set(LivingSettlorStatus(0), Status.Completed).success.value
-            .set(SettlorBusinessNamePage(0), str).success.value
-            .set(LivingSettlorStatus(1), Status.Completed).success.value
+      forAll(arbitrary[UserAnswers], arbitrary[String], arbitrary[LocalDate]) { (initial, str, date) =>
+        val answers: UserAnswers = initial
+          .set(SetUpByLivingSettlorYesNoPage, true)
+          .success
+          .value
+          .set(KindOfTrustPage, KindOfTrust.Intervivos)
+          .success
+          .value
+          .set(SetUpInAdditionToWillTrustYesNoPage, false)
+          .success
+          .value
+          .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill)
+          .success
+          .value
+          .set(HoldoverReliefYesNoPage, true)
+          .success
+          .value
+          .set(EfrbsYesNoPage, true)
+          .success
+          .value
+          .set(EfrbsStartDatePage, date)
+          .success
+          .value
+          .set(SettlorIndividualNamePage(0), FullName(str, None, str))
+          .success
+          .value
+          .set(LivingSettlorStatus(0), Status.Completed)
+          .success
+          .value
+          .set(SettlorBusinessNamePage(0), str)
+          .success
+          .value
+          .set(LivingSettlorStatus(1), Status.Completed)
+          .success
+          .value
 
-          val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
+        val result = answers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-          result.get(KindOfTrustPage) mustNot be(defined)
-          result.get(SetUpInAdditionToWillTrustYesNoPage) mustNot be(defined)
-          result.get(HowDeedOfVariationCreatedPage) mustNot be(defined)
-          result.get(HoldoverReliefYesNoPage) mustNot be(defined)
-          result.get(EfrbsYesNoPage) mustNot be(defined)
-          result.get(EfrbsStartDatePage) mustNot be(defined)
-          result.get(LivingSettlors) mustNot be(defined)
+        result.get(KindOfTrustPage) mustNot be(defined)
+        result.get(SetUpInAdditionToWillTrustYesNoPage) mustNot be(defined)
+        result.get(HowDeedOfVariationCreatedPage) mustNot be(defined)
+        result.get(HoldoverReliefYesNoPage) mustNot be(defined)
+        result.get(EfrbsYesNoPage) mustNot be(defined)
+        result.get(EfrbsStartDatePage) mustNot be(defined)
+        result.get(LivingSettlors) mustNot be(defined)
       }
     }
   }

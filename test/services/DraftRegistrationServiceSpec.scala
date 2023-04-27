@@ -33,7 +33,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
   implicit lazy val hc: HeaderCarrier = HeaderCarrier()
 
   private val mockConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
-  private val mockTrustStore: TrustsStoreService = mock[TrustsStoreService]
+  private val mockTrustStore: TrustsStoreService      = mock[TrustsStoreService]
 
   private val service = new DraftRegistrationService(mockConnector, mockTrustStore)
 
@@ -49,7 +49,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
           reset(mockConnector)
 
           val userAnswers = emptyUserAnswers
-            .set(KindOfTrustPage, KindOfTrust.Deed).success.value
+            .set(KindOfTrustPage, KindOfTrust.Deed)
+            .success
+            .value
 
           when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
             .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
@@ -73,7 +75,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
             reset(mockConnector)
 
             val userAnswers = emptyUserAnswers
-              .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+              .set(KindOfTrustPage, KindOfTrust.Employees)
+              .success
+              .value
 
             when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
               .thenReturn(Future.successful(NoIndividualBeneficiaries))
@@ -94,7 +98,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
             reset(mockConnector)
 
             val userAnswers = emptyUserAnswers
-              .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+              .set(KindOfTrustPage, KindOfTrust.Employees)
+              .success
+              .value
 
             when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
               .thenReturn(Future.successful(CouldNotDetermine))
@@ -116,7 +122,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
               reset(mockConnector)
 
               val userAnswers = emptyUserAnswers
-                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+                .set(KindOfTrustPage, KindOfTrust.Employees)
+                .success
+                .value
 
               when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
                 .thenReturn(Future.successful(AllRolesAnswered))
@@ -137,7 +145,9 @@ class DraftRegistrationServiceSpec extends SpecBase {
               reset(mockConnector)
 
               val userAnswers = emptyUserAnswers
-                .set(KindOfTrustPage, KindOfTrust.Employees).success.value
+                .set(KindOfTrustPage, KindOfTrust.Employees)
+                .success
+                .value
 
               when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
                 .thenReturn(Future.successful(NotAllRolesAnswered))

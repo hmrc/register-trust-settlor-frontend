@@ -37,48 +37,47 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class MentalCapacityYesNoController @Inject()(
-                                               override val messagesApi: MessagesApi,
-                                               registrationsRepository: RegistrationsRepository,
-                                               @IndividualSettlor navigator: Navigator,
-                                               actions: Actions,
-                                               requireName: NameRequiredActionProvider,
-                                               yesNoFormProvider: YesNoDontKnowFormProvider,
-                                               val controllerComponents: MessagesControllerComponents,
-                                               view: MentalCapacityYesNoView,
-                                               technicalErrorView: TechnicalErrorView
-                                             )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class MentalCapacityYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  yesNoFormProvider: YesNoDontKnowFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: MentalCapacityYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[YesNoDontKnow] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
 
-  private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] = {
+  private def action(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)
+
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
+
+    Ok(view(preparedForm, index, draftId, request.name))
   }
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) {
-    implicit request =>
-
-      val preparedForm = request.userAnswers.get(MentalCapacityYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, index, draftId, request.name))
-  }
-
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
         value =>
           request.userAnswers.set(MentalCapacityYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(MentalCapacityYesNoPage(index), draftId)(updatedAnswers))
               }
-            case Failure(_) =>
+            case Failure(_)              =>
               logger.error("[MentalCapacityYesNoController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
           }

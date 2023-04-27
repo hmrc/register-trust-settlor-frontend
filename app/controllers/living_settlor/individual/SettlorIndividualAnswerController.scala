@@ -38,44 +38,50 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualAnswerController @Inject()(
-                                                   override val messagesApi: MessagesApi,
-                                                   registrationsRepository: RegistrationsRepository,
-                                                   draftRegistrationService: DraftRegistrationService,
-                                                   @IndividualSettlor navigator: Navigator,
-                                                   actions: Actions,
-                                                   requireName: NameRequiredActionProvider,
-                                                   view: SettlorAnswersView,
-                                                   val controllerComponents: MessagesControllerComponents,
-                                                   livingSettlorPrintHelper: LivingSettlorPrintHelper,
-                                                   technicalErrorView: TechnicalErrorView
-                                                 )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging{
+class SettlorIndividualAnswerController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  draftRegistrationService: DraftRegistrationService,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  view: SettlorAnswersView,
+  val controllerComponents: MessagesControllerComponents,
+  livingSettlorPrintHelper: LivingSettlorPrintHelper,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId) { implicit request =>
+    val messageKeyPrefix = if (request.settlorAliveAtRegistration(index)) None else Some("PastTense")
+    val section          = livingSettlorPrintHelper.checkDetailsSection(
+      request.userAnswers,
+      request.name.toString,
+      draftId,
+      index,
+      prefix = messageKeyPrefix
+    )
 
-      val messageKeyPrefix =  if(request.settlorAliveAtRegistration(index)) None else Some("PastTense")
-      val section = livingSettlorPrintHelper.checkDetailsSection(request.userAnswers, request.name.toString, draftId, index, prefix = messageKeyPrefix)
-
-      Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), Seq(section)))
+    Ok(view(routes.SettlorIndividualAnswerController.onSubmit(index, draftId), Seq(section)))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async {
-    implicit request =>
-      request.userAnswers.set(LivingSettlorStatus(index), Completed) match {
-        case Success(updatedAnswers) =>
-          registrationsRepository.set(updatedAnswers).map { _ =>
-            draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
-            draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
-            Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
-          }
-        case Failure(_) =>
-          logger.error("[SettlorIndividualAnswerController][onSubmit] Error while storing user answers")
-          Future.successful(InternalServerError(technicalErrorView()))
-      }
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
+    request.userAnswers.set(LivingSettlorStatus(index), Completed) match {
+      case Success(updatedAnswers) =>
+        registrationsRepository.set(updatedAnswers).map { _ =>
+          draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
+          draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
+          Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
+        }
+      case Failure(_)              =>
+        logger.error("[SettlorIndividualAnswerController][onSubmit] Error while storing user answers")
+        Future.successful(InternalServerError(technicalErrorView()))
+    }
   }
 
 }

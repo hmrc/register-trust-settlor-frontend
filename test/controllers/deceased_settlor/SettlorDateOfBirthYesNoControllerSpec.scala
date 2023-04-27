@@ -37,8 +37,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,8 +57,8 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorDateOfBirthYesNoPage, true).success.value.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers =
+        emptyUserAnswers.set(SettlorDateOfBirthYesNoPage, true).success.value.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -72,7 +71,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true),fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -99,8 +98,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -117,7 +115,7 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm,fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(request, messages).toString
 
       application.stop()
     }
@@ -155,7 +153,6 @@ class SettlorDateOfBirthYesNoControllerSpec extends SpecBase {
     }
 
     "redirect to SettlorNamePage when settlor name is not answered" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 

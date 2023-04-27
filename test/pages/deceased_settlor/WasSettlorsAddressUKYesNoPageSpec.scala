@@ -33,22 +33,22 @@ class WasSettlorsAddressUKYesNoPageSpec extends PageBehaviours {
   }
 
   "remove DeceasedSettlorUkAddress when WasSettlorsAddressUKYesNoPage is set to false" in {
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(SettlorsUKAddressPage, UKAddress(str, str, Some(str), Some(str), str)).success.value
-        val result = answers.set(WasSettlorsAddressUKYesNoPage, false).success.value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers =
+        initial.set(SettlorsUKAddressPage, UKAddress(str, str, Some(str), Some(str), str)).success.value
+      val result               = answers.set(WasSettlorsAddressUKYesNoPage, false).success.value
 
-        result.get(SettlorsUKAddressPage) mustNot be (defined)
+      result.get(SettlorsUKAddressPage) mustNot be(defined)
     }
   }
 
   "remove DeceasedSettlorInternationalAddress when WasSettlorsAddressUKYesNoPage is set to true" in {
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial.set(SettlorsInternationalAddressPage, InternationalAddress(str, str, Some(str), str)).success.value
-        val result = answers.set(WasSettlorsAddressUKYesNoPage, true).success.value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers =
+        initial.set(SettlorsInternationalAddressPage, InternationalAddress(str, str, Some(str), str)).success.value
+      val result               = answers.set(WasSettlorsAddressUKYesNoPage, true).success.value
 
-        result.get(SettlorsInternationalAddressPage) mustNot be(defined)
+      result.get(SettlorsInternationalAddressPage) mustNot be(defined)
     }
   }
 

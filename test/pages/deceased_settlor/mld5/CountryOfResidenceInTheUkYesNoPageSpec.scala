@@ -32,26 +32,34 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
   }
 
   "Yes selected - set CountryOfResidencePage to 'GB' " in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage, true).success.value
-          .set(CountryOfResidencePage, "ES").success.value
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(CountryOfResidenceYesNoPage, true)
+        .success
+        .value
+        .set(CountryOfResidencePage, "ES")
+        .success
+        .value
 
-        val result = answers.set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+      val result = answers.set(CountryOfResidenceInTheUkYesNoPage, true).success.value
 
-        result.get(CountryOfResidencePage).get mustBe "GB"
+      result.get(CountryOfResidencePage).get mustBe "GB"
     }
   }
 
   "No selected" in {
-    forAll(arbitrary[UserAnswers]) {
-      initial =>
-        val answers: UserAnswers = initial.set(CountryOfResidenceYesNoPage, true).success.value
-          .set(CountryOfResidencePage, "ES").success.value
+    forAll(arbitrary[UserAnswers]) { initial =>
+      val answers: UserAnswers = initial
+        .set(CountryOfResidenceYesNoPage, true)
+        .success
+        .value
+        .set(CountryOfResidencePage, "ES")
+        .success
+        .value
 
-        val result = answers.set(CountryOfResidenceInTheUkYesNoPage, false).success.value
+      val result = answers.set(CountryOfResidenceInTheUkYesNoPage, false).success.value
 
-        result.get(CountryOfResidencePage).get mustBe "ES"
+      result.get(CountryOfResidencePage).get mustBe "ES"
     }
   }
 }

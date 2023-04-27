@@ -31,68 +31,72 @@ import javax.inject.Singleton
 @Singleton
 class BusinessSettlorNavigator extends Navigator {
 
-  override def nextPage(page: Page,
-                        draftId: String): UserAnswers => Call = route(draftId)(page)
+  override def nextPage(page: Page, draftId: String): UserAnswers => Call = route(draftId)(page)
 
-  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] =
     linearNavigation(draftId) orElse
       yesNoNavigation(draftId)
-  }
 
   private def linearNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorBusinessNamePage(index) => ua =>
-      if (ua.isTaxable) {
-        businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(index, draftId)
-      } else {
-        business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-      }
-    case SettlorBusinessUtrPage(index) => _ =>
-      business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    case CountryOfResidencePage(index) => ua =>
-      navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
-    case SettlorBusinessAddressUKPage(index) =>
+    case SettlorBusinessNamePage(index)                 =>
+      ua =>
+        if (ua.isTaxable) {
+          businessRoutes.SettlorBusinessUtrYesNoController.onPageLoad(index, draftId)
+        } else {
+          business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        }
+    case SettlorBusinessUtrPage(index)                  =>
+      _ => business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+    case CountryOfResidencePage(index)                  => ua => navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
+    case SettlorBusinessAddressUKPage(index)            =>
       navigateToAnswersOrEmployeeTypeQuestions(draftId, index)
     case SettlorBusinessAddressInternationalPage(index) =>
       navigateToAnswersOrEmployeeTypeQuestions(draftId, index)
-    case SettlorBusinessTypePage(index) => _ =>
-      businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(index, draftId)
-    case SettlorBusinessTimeYesNoPage(index) => _ =>
-      businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
-    case SettlorBusinessAnswerPage => _ =>
-      controllers.routes.AddASettlorController.onPageLoad(draftId)
+    case SettlorBusinessTypePage(index)                 =>
+      _ => businessRoutes.SettlorBusinessTimeYesNoController.onPageLoad(index, draftId)
+    case SettlorBusinessTimeYesNoPage(index)            =>
+      _ => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
+    case SettlorBusinessAnswerPage                      => _ => controllers.routes.AddASettlorController.onPageLoad(draftId)
   }
 
   private def yesNoNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorBusinessUtrYesNoPage(index) => ua => yesNoNav(
-      fromPage = SettlorBusinessUtrYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(index, draftId),
-      noCall = business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
-    )(ua)
-    case CountryOfResidenceYesNoPage(index) => ua =>
+    case SettlorBusinessUtrYesNoPage(index)        =>
+      ua =>
+        yesNoNav(
+          fromPage = SettlorBusinessUtrYesNoPage(index),
+          yesCall = businessRoutes.SettlorBusinessUtrController.onPageLoad(index, draftId),
+          noCall = business5mldRoutes.CountryOfResidenceYesNoController.onPageLoad(index, draftId)
+        )(ua)
+    case CountryOfResidenceYesNoPage(index)        =>
+      ua =>
+        yesNoNav(
+          fromPage = CountryOfResidenceYesNoPage(index),
+          yesCall = business5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
+          noCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
+        )(ua)
+    case CountryOfResidenceInTheUkYesNoPage(index) =>
+      ua =>
+        yesNoNav(
+          fromPage = CountryOfResidenceInTheUkYesNoPage(index),
+          yesCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua),
+          noCall = business5mldRoutes.CountryOfResidenceController.onPageLoad(index, draftId)
+        )(ua)
+    case SettlorBusinessAddressYesNoPage(index)    =>
+      ua =>
+        yesNoNav(
+          fromPage = SettlorBusinessAddressYesNoPage(index),
+          yesCall = businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, draftId),
+          noCall = navigateToAnswersOrEmployeeTypeQuestions(draftId, index)(ua)
+        )(ua)
+    case SettlorBusinessAddressUKYesNoPage(index)  =>
       yesNoNav(
-        fromPage = CountryOfResidenceYesNoPage(index),
-        yesCall = business5mldRoutes.CountryOfResidenceInTheUkYesNoController.onPageLoad(index, draftId),
-        noCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua)
-      )(ua)
-    case CountryOfResidenceInTheUkYesNoPage(index) => ua =>
-      yesNoNav(
-        fromPage = CountryOfResidenceInTheUkYesNoPage(index),
-        yesCall = navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId, index)(ua),
-        noCall = business5mldRoutes.CountryOfResidenceController.onPageLoad(index, draftId)
-      )(ua)
-    case SettlorBusinessAddressYesNoPage(index) => ua => yesNoNav(
-      fromPage = SettlorBusinessAddressYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessAddressUKYesNoController.onPageLoad(index, draftId),
-      noCall = navigateToAnswersOrEmployeeTypeQuestions(draftId, index)(ua)
-    )(ua)
-    case SettlorBusinessAddressUKYesNoPage(index) => yesNoNav(
-      fromPage = SettlorBusinessAddressUKYesNoPage(index),
-      yesCall = businessRoutes.SettlorBusinessAddressUKController.onPageLoad(index, draftId),
-      noCall = businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(index, draftId)
-    )
+        fromPage = SettlorBusinessAddressUKYesNoPage(index),
+        yesCall = businessRoutes.SettlorBusinessAddressUKController.onPageLoad(index, draftId),
+        noCall = businessRoutes.SettlorBusinessAddressInternationalController.onPageLoad(index, draftId)
+      )
   }
 
-  private def navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId: String, index: Int)(ua: UserAnswers): Call = {
+  private def navigateToAddressQuestionsIfTaxableAndUtrUnknown(draftId: String, index: Int)(ua: UserAnswers): Call =
     if (ua.isTaxable) {
       yesNoNav(
         fromPage = SettlorBusinessUtrYesNoPage(index),
@@ -102,12 +106,11 @@ class BusinessSettlorNavigator extends Navigator {
     } else {
       businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
     }
-  }
 
   private def navigateToAnswersOrEmployeeTypeQuestions(draftId: String, index: Int)(ua: UserAnswers): Call =
     ua.get(KindOfTrustPage) match {
       case Some(Employees) => businessRoutes.SettlorBusinessTypeController.onPageLoad(index, draftId)
-      case Some(_) => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
-      case None => controllers.routes.SessionExpiredController.onPageLoad
+      case Some(_)         => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
+      case None            => controllers.routes.SessionExpiredController.onPageLoad
     }
 }

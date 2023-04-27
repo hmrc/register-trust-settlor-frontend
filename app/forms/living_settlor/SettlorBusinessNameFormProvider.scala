@@ -25,11 +25,12 @@ class SettlorBusinessNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[String] =
     Form(
-
       "value" -> text("settlorBusinessName.error.required")
-      .verifying(
-                firstError(
-                maxLength(105, "settlorBusinessName.error.length"),
-                regexp(Validation.nameRegex, s"settlorBusinessName.error.invalid")
-    )))
+        .verifying(
+          firstError(
+            maxLength(105, "settlorBusinessName.error.length"),
+            regexp(Validation.nameRegex, s"settlorBusinessName.error.invalid")
+          )
+        )
+    )
 }

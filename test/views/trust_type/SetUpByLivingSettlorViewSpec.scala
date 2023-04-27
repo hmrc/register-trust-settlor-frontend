@@ -26,7 +26,6 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "setUpByLivingSettlorYesNo"
 
-
   val form = new YesNoFormProvider().withPrefix("setUpByLivingSettlorYesNo")
 
   "SetUpByLivingSettlor view" when {
@@ -40,7 +39,6 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
       behave like normalPage(applyView(form), messageKeyPrefix)
 
       behave like pageWithBackLink(applyView(form))
-
 
       behave like yesNoPage(form, applyView, messageKeyPrefix)
 
@@ -56,7 +54,6 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
       behave like normalPage(applyView(form), messageKeyPrefix)
 
       behave like pageWithBackLink(applyView(form))
-
 
       behave like yesNoPage(form, applyView, messageKeyPrefix, None)
 

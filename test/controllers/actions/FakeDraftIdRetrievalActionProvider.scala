@@ -24,11 +24,13 @@ import repositories.RegistrationsRepository
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FakeDraftIdRetrievalActionProvider(draftId: String,
-                                         status:  Status = Status.InProgress,
-                                         dataToReturn: Option[UserAnswers],
-                                         registrationsRepository: RegistrationsRepository)
-  extends DraftIdRetrievalActionProvider with MockitoSugar {
+class FakeDraftIdRetrievalActionProvider(
+  draftId: String,
+  status: Status = Status.InProgress,
+  dataToReturn: Option[UserAnswers],
+  registrationsRepository: RegistrationsRepository
+) extends DraftIdRetrievalActionProvider
+    with MockitoSugar {
 
   implicit val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
@@ -40,7 +42,3 @@ class FakeDraftIdRetrievalActionProvider(draftId: String,
   override def apply(draftId: String) = new DraftIdDataRetrievalAction(draftId, mockedRepository, executionContext)
 
 }
-
-
-
-

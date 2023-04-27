@@ -30,24 +30,29 @@ class DeedOfVariationSpec extends AnyWordSpec with Matchers with ScalaCheckPrope
 
     "deserialise valid values" in {
       JsString("Replaced the will trust").validate[DeedOfVariation].asOpt.value mustEqual ReplacedWill
-      JsString("Previously there was only an absolute interest under the will").validate[DeedOfVariation].asOpt.value mustEqual ReplaceAbsolute
+      JsString("Previously there was only an absolute interest under the will")
+        .validate[DeedOfVariation]
+        .asOpt
+        .value mustEqual ReplaceAbsolute
     }
 
     "fail to deserialise invalid values" in {
 
       val gen = arbitrary[String] suchThat (!DeedOfVariation.values.map(_.toString).contains(_))
 
-      forAll(gen) {
-        invalidValue =>
-
-          JsString(invalidValue).validate[DeedOfVariation] mustEqual JsError("error.invalid")
+      forAll(gen) { invalidValue =>
+        JsString(invalidValue).validate[DeedOfVariation] mustEqual JsError("error.invalid")
       }
     }
 
     "serialise" in {
       Json.toJson(ReplacedWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Replaced the will trust")
-      Json.toJson(AdditionToWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Addition to the will trust")
-      Json.toJson(ReplaceAbsolute: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Previously there was only an absolute interest under the will")
+      Json.toJson(AdditionToWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString(
+        "Addition to the will trust"
+      )
+      Json.toJson(ReplaceAbsolute: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString(
+        "Previously there was only an absolute interest under the will"
+      )
     }
   }
 

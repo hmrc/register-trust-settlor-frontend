@@ -46,11 +46,7 @@ class SettlorDateOfDeathViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithDateFields(form, applyViewF,
-      messageKeyPrefix,
-      "value",
-      name.toString
-    )
+    behave like pageWithDateFields(form, applyViewF, messageKeyPrefix, "value", name.toString)
 
     behave like pageWithASubmitButton(applyView(form))
   }

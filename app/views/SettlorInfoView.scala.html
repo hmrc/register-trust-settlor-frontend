@@ -117,7 +117,7 @@
         )
     )
 
-    @formHelper(action = SettlorInfoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = SettlorInfoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
         @submit_button(Some(messages("site.onlyContinue")))
     }
 }

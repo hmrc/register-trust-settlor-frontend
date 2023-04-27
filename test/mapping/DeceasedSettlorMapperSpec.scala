@@ -25,7 +25,7 @@ import pages.deceased_settlor.mld5._
 class DeceasedSettlorMapperSpec extends SpecBase {
 
   private val name: FullName = FullName("Joe", None, "Bloggs")
-  private val nino: String = "AA000000A"
+  private val nino: String   = "AA000000A"
 
   "DeceasedSettlor mapper" must {
 
@@ -38,13 +38,27 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         "country of nationality and residency unknown" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorsNamePage, name).success.value
-            .set(SettlorDateOfDeathYesNoPage, false).success.value
-            .set(SettlorDateOfBirthYesNoPage, false).success.value
-            .set(CountryOfNationalityYesNoPage, false).success.value
-            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-            .set(SettlorNationalInsuranceNumberPage, nino).success.value
-            .set(CountryOfResidenceYesNoPage, false).success.value
+            .set(SettlorsNamePage, name)
+            .success
+            .value
+            .set(SettlorDateOfDeathYesNoPage, false)
+            .success
+            .value
+            .set(SettlorDateOfBirthYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, false)
+            .success
+            .value
+            .set(SettlorsNationalInsuranceYesNoPage, true)
+            .success
+            .value
+            .set(SettlorNationalInsuranceNumberPage, nino)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, false)
+            .success
+            .value
 
           val result = mapper.build(userAnswers).get
 
@@ -52,10 +66,12 @@ class DeceasedSettlorMapperSpec extends SpecBase {
             name = name,
             dateOfBirth = None,
             dateOfDeath = None,
-            identification = Some(Identification(
-              nino = Some(nino),
-              address = None
-            )),
+            identification = Some(
+              Identification(
+                nino = Some(nino),
+                address = None
+              )
+            ),
             countryOfResidence = None,
             nationality = None
           )
@@ -65,15 +81,33 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         "UK country of nationality and residency" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorsNamePage, name).success.value
-            .set(SettlorDateOfDeathYesNoPage, false).success.value
-            .set(SettlorDateOfBirthYesNoPage, false).success.value
-            .set(CountryOfNationalityYesNoPage, true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage, true).success.value
-            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-            .set(SettlorNationalInsuranceNumberPage, nino).success.value
-            .set(CountryOfResidenceYesNoPage, true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage, true).success.value
+            .set(SettlorsNamePage, name)
+            .success
+            .value
+            .set(SettlorDateOfDeathYesNoPage, false)
+            .success
+            .value
+            .set(SettlorDateOfBirthYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage, true)
+            .success
+            .value
+            .set(SettlorsNationalInsuranceYesNoPage, true)
+            .success
+            .value
+            .set(SettlorNationalInsuranceNumberPage, nino)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage, true)
+            .success
+            .value
 
           val result = mapper.build(userAnswers).get
 
@@ -81,10 +115,12 @@ class DeceasedSettlorMapperSpec extends SpecBase {
             name = name,
             dateOfBirth = None,
             dateOfDeath = None,
-            identification = Some(Identification(
-              nino = Some(nino),
-              address = None
-            )),
+            identification = Some(
+              Identification(
+                nino = Some(nino),
+                address = None
+              )
+            ),
             countryOfResidence = Some("GB"),
             nationality = Some("GB")
           )
@@ -94,17 +130,39 @@ class DeceasedSettlorMapperSpec extends SpecBase {
         "Non-UK country of nationality and residency" in {
 
           val userAnswers: UserAnswers = emptyUserAnswers
-            .set(SettlorsNamePage, name).success.value
-            .set(SettlorDateOfDeathYesNoPage, false).success.value
-            .set(SettlorDateOfBirthYesNoPage, false).success.value
-            .set(CountryOfNationalityYesNoPage, true).success.value
-            .set(CountryOfNationalityInTheUkYesNoPage, false).success.value
-            .set(CountryOfNationalityPage, "ES").success.value
-            .set(SettlorsNationalInsuranceYesNoPage, true).success.value
-            .set(SettlorNationalInsuranceNumberPage, nino).success.value
-            .set(CountryOfResidenceYesNoPage, true).success.value
-            .set(CountryOfResidenceInTheUkYesNoPage, false).success.value
-            .set(CountryOfResidencePage, "FR").success.value
+            .set(SettlorsNamePage, name)
+            .success
+            .value
+            .set(SettlorDateOfDeathYesNoPage, false)
+            .success
+            .value
+            .set(SettlorDateOfBirthYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfNationalityInTheUkYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfNationalityPage, "ES")
+            .success
+            .value
+            .set(SettlorsNationalInsuranceYesNoPage, true)
+            .success
+            .value
+            .set(SettlorNationalInsuranceNumberPage, nino)
+            .success
+            .value
+            .set(CountryOfResidenceYesNoPage, true)
+            .success
+            .value
+            .set(CountryOfResidenceInTheUkYesNoPage, false)
+            .success
+            .value
+            .set(CountryOfResidencePage, "FR")
+            .success
+            .value
 
           val result = mapper.build(userAnswers).get
 
@@ -112,10 +170,12 @@ class DeceasedSettlorMapperSpec extends SpecBase {
             name = name,
             dateOfBirth = None,
             dateOfDeath = None,
-            identification = Some(Identification(
-              nino = Some(nino),
-              address = None
-            )),
+            identification = Some(
+              Identification(
+                nino = Some(nino),
+                address = None
+              )
+            ),
             countryOfResidence = Some("FR"),
             nationality = Some("ES")
           )

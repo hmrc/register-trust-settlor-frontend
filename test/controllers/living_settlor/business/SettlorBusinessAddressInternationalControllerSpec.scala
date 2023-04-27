@@ -37,13 +37,13 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
 
   def onwardRoute = Call("GET", "/foo")
 
-  val formProvider = new InternationalAddressFormProvider()
+  val formProvider                     = new InternationalAddressFormProvider()
   val form: Form[InternationalAddress] = formProvider()
-  val index = 0
-  val name = "Business name"
+  val index                            = 0
+  val name                             = "Business name"
 
-  lazy val settlorBusinessAddressInternationalRoute: String = routes.SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url
-
+  lazy val settlorBusinessAddressInternationalRoute: String =
+    routes.SettlorBusinessAddressInternationalController.onPageLoad(index, fakeDraftId).url
 
   "SettlorBusinessAddressInternational Controller" must {
 
@@ -55,11 +55,12 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
 
       val request = FakeRequest(GET, settlorBusinessAddressInternationalRoute)
 
-      val view: SettlorBusinessAddressInternationalView = application.injector.instanceOf[SettlorBusinessAddressInternationalView]
+      val view: SettlorBusinessAddressInternationalView =
+        application.injector.instanceOf[SettlorBusinessAddressInternationalView]
 
       val result: Future[Result] = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -71,8 +72,16 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(
+          SettlorBusinessAddressInternationalPage(index),
+          InternationalAddress("line 1", "line 2", Some("line 3"), "country")
+        )
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,15 +96,29 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")), countryOptions, index, fakeDraftId, name)(request, messages).toString
+        view(
+          form.fill(InternationalAddress("line 1", "line 2", Some("line 3"), "country")),
+          countryOptions,
+          index,
+          fakeDraftId,
+          name
+        )(request, messages).toString
 
       application.stop()
     }
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressInternationalPage(index), InternationalAddress("line 1", "line 2", Some("line 3"), "country")).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(
+          SettlorBusinessAddressInternationalPage(index),
+          InternationalAddress("line 1", "line 2", Some("line 3"), "country")
+        )
+        .success
+        .value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -144,7 +167,7 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
 
       val result = route(application, request).value
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual BAD_REQUEST
 

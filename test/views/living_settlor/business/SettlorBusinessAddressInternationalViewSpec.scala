@@ -28,8 +28,8 @@ import views.html.living_settlor.business.SettlorBusinessAddressInternationalVie
 class SettlorBusinessAddressInternationalViewSpec extends InternationalAddressViewBehaviours {
 
   val messageKeyPrefix = "settlorBusinessAddressInternational"
-  val index = 0
-  val name = "Business name"
+  val index            = 0
+  val name             = "Business name"
 
   override val form = new InternationalAddressFormProvider()()
 
@@ -37,7 +37,7 @@ class SettlorBusinessAddressInternationalViewSpec extends InternationalAddressVi
 
     val view = viewFor[SettlorBusinessAddressInternationalView](Some(emptyUserAnswers))
 
-    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+    val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, index, fakeDraftId, name)(fakeRequest, messages)

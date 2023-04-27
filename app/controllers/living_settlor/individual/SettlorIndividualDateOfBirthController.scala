@@ -36,53 +36,53 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualDateOfBirthController @Inject()(
-                                                        override val messagesApi: MessagesApi,
-                                                        registrationsRepository: RegistrationsRepository,
-                                                        @IndividualSettlor navigator: Navigator,
-                                                        actions: Actions,
-                                                        requireName: NameRequiredActionProvider,
-                                                        formProvider: DateOfBirthFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: SettlorIndividualDateOfBirthView,
-                                                        technicalErrorView: TechnicalErrorView
-                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorIndividualDateOfBirthController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  formProvider: DateOfBirthFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorIndividualDateOfBirthView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private def form: Form[LocalDate] = formProvider()
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
-
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
       val preparedForm = request.userAnswers.get(SettlorIndividualDateOfBirthPage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, name))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
-    implicit request =>
-
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
-        value => {
-          request.userAnswers.set(SettlorIndividualDateOfBirthPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorIndividualDateOfBirthPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorIndividualDateOfBirthController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          value =>
+            request.userAnswers.set(SettlorIndividualDateOfBirthPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorIndividualDateOfBirthPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorIndividualDateOfBirthController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 }

@@ -35,23 +35,28 @@ import java.time.{LocalDate, ZoneOffset}
 class SettlorIndividualPassportControllerSpec extends SpecBase {
 
   private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualPassport")
-  private val index: Int = 0
-  private val name: FullName = FullName("First", Some("Middle"), "Last")
-  private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
+  private val form: Form[PassportOrIdCardDetails]        = formProvider("settlorIndividualPassport")
+  private val index: Int                                 = 0
+  private val name: FullName                             = FullName("First", Some("Middle"), "Last")
+  private val validAnswer: LocalDate                     = LocalDate.now(ZoneOffset.UTC)
 
-  private lazy val settlorIndividualPassportRoute: String = routes.SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url
+  private lazy val settlorIndividualPassportRoute: String =
+    routes.SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualPassport Controller" must {
 
     Seq(true, false)
-      .foreach(setUpBeforeSettlorDied => {
+      .foreach { setUpBeforeSettlorDied =>
         s"when the settlor decided question been answered $setUpBeforeSettlorDied" should {
 
           "return OK and the correct view for a GET" in {
             val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualNamePage(index), name).success.value
-              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
+              .set(SettlorIndividualNamePage(index), name)
+              .success
+              .value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -61,7 +66,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual OK
 
@@ -74,8 +79,12 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
           "return a Bad Request and errors when invalid data is submitted" in {
 
             val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualNamePage(index), name).success.value
-              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
+              .set(SettlorIndividualNamePage(index), name)
+              .success
+              .value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -89,12 +98,15 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual BAD_REQUEST
 
             contentAsString(result) mustEqual
-              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
+              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(
+                request,
+                messages
+              ).toString
 
             application.stop()
           }
@@ -102,10 +114,15 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
           "populate the view correctly on a GET when the question has previously been answered" in {
 
             val userAnswers = emptyUserAnswers
-              .set(SettlorIndividualNamePage(index), name).success.value
-              .set(SettlorIndividualPassportPage(index),
-                PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)).success.value
-              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied).success.value
+              .set(SettlorIndividualNamePage(index), name)
+              .success
+              .value
+              .set(SettlorIndividualPassportPage(index), PassportOrIdCardDetails("Field 1", "Field 2", validAnswer))
+              .success
+              .value
+              .set(SettlorAliveYesNoPage(index), setUpBeforeSettlorDied)
+              .success
+              .value
 
             val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -115,26 +132,33 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(form.fill(PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)),
-                countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
+              view(
+                form.fill(PassportOrIdCardDetails("Field 1", "Field 2", validAnswer)),
+                countryOptions,
+                fakeDraftId,
+                index,
+                name,
+                setUpBeforeSettlorDied
+              )(request, messages).toString
 
             application.stop()
           }
         }
       }
-    )
 
     "redirect to the next page when valid data is submitted" in {
 
       val mockFeatureFlagService: TrustsStoreService = mock[TrustsStoreService]
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualNamePage(index),name).success.value
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers))
         .overrides(bind[TrustsStoreService].toInstance(mockFeatureFlagService))
@@ -143,11 +167,12 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
       val request =
         FakeRequest(POST, settlorIndividualPassportRoute)
           .withFormUrlEncodedBody(
-            "country" -> "country",
-            "number" -> "123456",
+            "country"          -> "country",
+            "number"           -> "123456",
             "expiryDate.day"   -> validAnswer.getDayOfMonth.toString,
             "expiryDate.month" -> validAnswer.getMonthValue.toString,
-            "expiryDate.year"  -> validAnswer.getYear.toString)
+            "expiryDate.year"  -> validAnswer.getYear.toString
+          )
 
       val result = route(application, request).value
 

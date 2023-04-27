@@ -37,7 +37,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Deceased Settlor Name" in {
             val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
@@ -46,7 +47,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Kind of Trust" in {
             val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
-            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.KindOfTrustController.onPageLoad(fakeDraftId))
           }
         }
@@ -58,7 +60,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Set up in addition to will trust" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Deed).success.value
 
-            navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.AdditionToWillTrustYesNoController.onPageLoad(fakeDraftId))
           }
         }
@@ -67,7 +70,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Holdover relief yes/no" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Intervivos).success.value
 
-            navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.HoldoverReliefYesNoController.onPageLoad(fakeDraftId))
           }
         }
@@ -76,8 +80,11 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Individual or Business" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, FlatManagement).success.value
 
-            navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            navigator
+              .nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
+              .mustBe(
+                controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId)
+              )
           }
         }
 
@@ -85,8 +92,11 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Individual or Business" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, HeritageMaintenanceFund).success.value
 
-            navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            navigator
+              .nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
+              .mustBe(
+                controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId)
+              )
           }
         }
 
@@ -94,7 +104,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to EFRBS yes/no" in {
             val userAnswers = baseAnswers.set(KindOfTrustPage, Employees).success.value
 
-            navigator.nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(KindOfTrustPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId))
           }
         }
@@ -106,7 +117,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to EFRBS start date" in {
             val userAnswers = baseAnswers.set(EfrbsYesNoPage, true).success.value
 
-            navigator.nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(fakeDraftId))
           }
         }
@@ -115,8 +127,11 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Individual or Business" in {
             val userAnswers = baseAnswers.set(EfrbsYesNoPage, false).success.value
 
-            navigator.nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            navigator
+              .nextPage(EfrbsYesNoPage, fakeDraftId)(userAnswers)
+              .mustBe(
+                controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId)
+              )
           }
         }
       }
@@ -127,7 +142,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Deceased Settlor Name" in {
             val userAnswers = baseAnswers.set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
 
-            navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
@@ -136,7 +152,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to How was deed of variation created" in {
             val userAnswers = baseAnswers.set(SetUpInAdditionToWillTrustYesNoPage, false).success.value
 
-            navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(SetUpInAdditionToWillTrustYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.trust_type.routes.HowDeedOfVariationCreatedController.onPageLoad(fakeDraftId))
           }
         }
@@ -144,21 +161,24 @@ class TrustTypeNavigatorSpec extends SpecBase {
 
       "EfrbsStartDatePage" must {
         "redirect to Individual or Business" in {
-          navigator.nextPage(EfrbsStartDatePage, fakeDraftId)(baseAnswers)
+          navigator
+            .nextPage(EfrbsStartDatePage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
         }
       }
 
       "HowDeedOfVariationCreatedPage" must {
         "redirect to Individual or Business" in {
-          navigator.nextPage(HowDeedOfVariationCreatedPage, fakeDraftId)(baseAnswers)
+          navigator
+            .nextPage(HowDeedOfVariationCreatedPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
         }
       }
 
       "HoldoverReliefYesNoPage" must {
         "redirect to Individual or Business" in {
-          navigator.nextPage(HoldoverReliefYesNoPage, fakeDraftId)(baseAnswers)
+          navigator
+            .nextPage(HoldoverReliefYesNoPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
         }
       }
@@ -174,7 +194,8 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Deceased Settlor Name" in {
             val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value
 
-            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
+            navigator
+              .nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
               .mustBe(controllers.deceased_settlor.routes.SettlorsNameController.onPageLoad(fakeDraftId))
           }
         }
@@ -183,8 +204,11 @@ class TrustTypeNavigatorSpec extends SpecBase {
           "redirect to Individual or Business" in {
             val userAnswers = baseAnswers.set(SetUpByLivingSettlorYesNoPage, true).success.value
 
-            navigator.nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
-              .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
+            navigator
+              .nextPage(SetUpByLivingSettlorYesNoPage, fakeDraftId)(userAnswers)
+              .mustBe(
+                controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId)
+              )
           }
         }
       }

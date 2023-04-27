@@ -35,48 +35,46 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class EmployerFinancedRbsStartDateController @Inject()(
-                                                        override val messagesApi: MessagesApi,
-                                                        registrationsRepository: RegistrationsRepository,
-                                                        @TrustType navigator: Navigator,
-                                                        actions: Actions,
-                                                        formProvider: EfrbsStartDateFormProvider,
-                                                        val controllerComponents: MessagesControllerComponents,
-                                                        view: EmployerFinancedRbsStartDateView,
-                                                        technicalErrorView: TechnicalErrorView
-                                                      )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class EmployerFinancedRbsStartDateController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @TrustType navigator: Navigator,
+  actions: Actions,
+  formProvider: EfrbsStartDateFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: EmployerFinancedRbsStartDateView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[LocalDate] = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(EfrbsStartDatePage) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(EfrbsStartDatePage) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value => {
+  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
+    form
+      .bindFromRequest()
+      .fold(
+        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        value =>
           request.userAnswers.set(EfrbsStartDatePage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
                 Redirect(navigator.nextPage(EfrbsStartDatePage, draftId)(updatedAnswers))
               }
-            case Failure(_) => {
+            case Failure(_)              =>
               logger.error("[EmployerFinancedRbsStartDateController][onSubmit] Error while storing user answers")
               Future.successful(InternalServerError(technicalErrorView()))
-            }
           }
-        }
       )
   }
 }

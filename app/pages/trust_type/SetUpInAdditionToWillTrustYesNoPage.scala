@@ -29,15 +29,15 @@ case object SetUpInAdditionToWillTrustYesNoPage extends QuestionPage[Boolean] {
 
   override def toString: String = "setUpInAdditionToWillTrustYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers.remove(DeceasedSettlor)
-      case Some(true) =>
-        userAnswers.remove(HowDeedOfVariationCreatedPage)
+      case Some(true)  =>
+        userAnswers
+          .remove(HowDeedOfVariationCreatedPage)
           .flatMap(_.remove(LivingSettlors))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 
 }

@@ -32,9 +32,9 @@ import views.html.living_settlor.individual.mld5.MentalCapacityYesNoView
 class MentalCapacityYesNoControllerSpec extends SpecBase {
 
   private val formProvider: YesNoDontKnowFormProvider = new YesNoDontKnowFormProvider()
-  private val form: Form[YesNoDontKnow] = formProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
-  private val index: Int = 0
-  private val name: FullName = FullName("First", Some("Middle"), "Last")
+  private val form: Form[YesNoDontKnow]               = formProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
+  private val index: Int                              = 0
+  private val name: FullName                          = FullName("First", Some("Middle"), "Last")
 
   private lazy val onPageLoadRoute: String = routes.MentalCapacityYesNoController.onPageLoad(index, fakeDraftId).url
 
@@ -65,7 +65,9 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = baseAnswers
-        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes).success.value
+        .set(MentalCapacityYesNoPage(index), YesNoDontKnow.Yes)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

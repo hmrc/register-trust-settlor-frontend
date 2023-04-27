@@ -30,13 +30,12 @@ final case class SettlorAliveYesNoPage(index: Int) extends QuestionPage[Boolean]
 
   override def toString: String = "aliveAtRegistration"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers
           .remove(MentalCapacityYesNoPage(index))
-      case _ =>
+      case _           =>
         super.cleanup(value, userAnswers)
     }
-  }
 }

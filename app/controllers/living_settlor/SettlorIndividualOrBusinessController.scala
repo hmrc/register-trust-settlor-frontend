@@ -35,47 +35,48 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualOrBusinessController @Inject()(
-                                                       override val messagesApi: MessagesApi,
-                                                       registrationsRepository: RegistrationsRepository,
-                                                       navigator: Navigator,
-                                                       actions: Actions,
-                                                       formProvider: SettlorIndividualOrBusinessFormProvider,
-                                                       val controllerComponents: MessagesControllerComponents,
-                                                       view: SettlorIndividualOrBusinessView,
-                                                       technicalErrorView: TechnicalErrorView
-                                                     )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
+class SettlorIndividualOrBusinessController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  navigator: Navigator,
+  actions: Actions,
+  formProvider: SettlorIndividualOrBusinessFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorIndividualOrBusinessView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Enumerable.Implicits
+    with Logging {
 
   private val form: Form[IndividualOrBusiness] = formProvider()
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(SettlorIndividualOrBusinessPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SettlorIndividualOrBusinessPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-        value => {
-          request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) =>
-              logger.error("[SettlorIndividualOrBusinessController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-        }
-      )
-  }
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value =>
+            request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorIndividualOrBusinessPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorIndividualOrBusinessController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
+    }
 }

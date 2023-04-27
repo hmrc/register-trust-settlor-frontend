@@ -36,49 +36,49 @@ import play.api.Logging
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualNameController @Inject()(
-                                                 override val messagesApi: MessagesApi,
-                                                 registrationsRepository: RegistrationsRepository,
-                                                 @IndividualSettlor navigator: Navigator,
-                                                 actions: Actions,
-                                                 formProvider: SettlorIndividualNameFormProvider,
-                                                 val controllerComponents: MessagesControllerComponents,
-                                                 view: SettlorIndividualNameView
-                                               )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorIndividualNameController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  formProvider: SettlorIndividualNameFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorIndividualNameView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[FullName] = formProvider()
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request: RegistrationDataRequest[AnyContent] => {
-
+    implicit request: RegistrationDataRequest[AnyContent] =>
       val preparedForm = request.userAnswers.get(SettlorIndividualNamePage(index)) match {
-        case None => form
+        case None        => form
         case Some(value) => form.fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, request.settlorAliveAtRegistration(index)))
-    }
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request: RegistrationDataRequest[AnyContent] =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, request.settlorAliveAtRegistration(index)))),
-
-        value => {
-          request.userAnswers.set(SettlorIndividualNamePage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorIndividualNamePage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) => {
-              logger.error("[SettlorIndividualNameController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError("ok"))
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request: RegistrationDataRequest[AnyContent] =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future
+              .successful(BadRequest(view(formWithErrors, draftId, index, request.settlorAliveAtRegistration(index)))),
+          value =>
+            request.userAnswers.set(SettlorIndividualNamePage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorIndividualNamePage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorIndividualNameController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError("ok"))
             }
-          }
-        }
-      )
-  }
+        )
+    }
 }

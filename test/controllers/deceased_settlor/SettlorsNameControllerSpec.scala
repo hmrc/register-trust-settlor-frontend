@@ -33,7 +33,6 @@ class SettlorsNameControllerSpec extends SpecBase {
 
   lazy val settlorsNameRoute = routes.SettlorsNameController.onPageLoad(fakeDraftId).url
 
-
   "SettlorsName Controller" must {
 
     "return OK and the correct view for a GET" in {
@@ -57,7 +56,9 @@ class SettlorsNameControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorsNamePage, FullName("First", None, "Last")).success.value
+        .set(SettlorsNamePage, FullName("First", None, "Last"))
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -70,7 +71,7 @@ class SettlorsNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(FullName("First",None, "Last")), fakeDraftId)(request, messages).toString
+        view(form.fill(FullName("First", None, "Last")), fakeDraftId)(request, messages).toString
 
       application.stop()
     }

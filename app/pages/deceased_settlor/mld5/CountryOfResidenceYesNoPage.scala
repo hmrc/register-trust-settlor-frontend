@@ -23,7 +23,7 @@ import sections.DeceasedSettlor
 
 import scala.util.Try
 
-case object  CountryOfResidenceYesNoPage extends QuestionPage[Boolean] {
+case object CountryOfResidenceYesNoPage extends QuestionPage[Boolean] {
 
   override def path: JsPath = DeceasedSettlor.path \ toString
 
@@ -31,8 +31,10 @@ case object  CountryOfResidenceYesNoPage extends QuestionPage[Boolean] {
 
   override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(false) => userAnswers.remove(CountryOfResidenceInTheUkYesNoPage)
-        .flatMap(_.remove(CountryOfResidencePage))
-      case _ => super.cleanup(value, userAnswers)
+      case Some(false) =>
+        userAnswers
+          .remove(CountryOfResidenceInTheUkYesNoPage)
+          .flatMap(_.remove(CountryOfResidencePage))
+      case _           => super.cleanup(value, userAnswers)
     }
 }

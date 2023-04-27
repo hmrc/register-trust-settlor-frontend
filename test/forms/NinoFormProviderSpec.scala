@@ -23,9 +23,9 @@ import wolfendale.scalacheck.regexp.RegexpGen
 class NinoFormProviderSpec extends StringFieldBehaviours {
 
   val messageKeyPrefix = "trusteesNino"
-  val requiredKey = "trusteesNino.error.required"
+  val requiredKey      = "trusteesNino.error.required"
   val invalidFormatKey = "trusteesNino.error.invalidFormat"
-  val index: Int = 0
+  val index: Int       = 0
 
   val form = new NinoFormProvider()(messageKeyPrefix, emptyUserAnswers, index)
 

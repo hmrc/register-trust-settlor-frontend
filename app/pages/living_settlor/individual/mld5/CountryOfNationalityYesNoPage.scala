@@ -29,14 +29,13 @@ case class CountryOfNationalityYesNoPage(index: Int) extends QuestionPage[Boolea
 
   override def toString: String = "countryOfNationalityYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
       case Some(false) =>
         userAnswers
           .remove(UkCountryOfNationalityYesNoPage(index))
           .flatMap(_.remove(CountryOfNationalityPage(index)))
-      case _ =>
+      case _           =>
         super.cleanup(value, userAnswers)
     }
-  }
 }

@@ -26,11 +26,13 @@ import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class DraftRegistrationService @Inject()(submissionDraftConnector: SubmissionDraftConnector,
-                                         trustsStoreService: TrustsStoreService)
-                                        (implicit ec: ExecutionContext) extends Logging {
+class DraftRegistrationService @Inject() (
+  submissionDraftConnector: SubmissionDraftConnector,
+  trustsStoreService: TrustsStoreService
+)(implicit ec: ExecutionContext)
+    extends Logging {
 
-  def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Unit] = {
+  def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Unit] =
     if (userAnswers.get(KindOfTrustPage).contains(Employees)) {
 
       logger.info(s"[DraftRegistrationService] trust is Employee related")
@@ -39,17 +41,18 @@ class DraftRegistrationService @Inject()(submissionDraftConnector: SubmissionDra
         case RolesInCompanies.AllRolesAnswered | RolesInCompanies.NoIndividualBeneficiaries =>
           logger.info(s"[DraftRegistrationService] trust has all director/employee roles answered or no individuals")
           Future.successful(())
-        case RolesInCompanies.NotAllRolesAnswered =>
-          logger.info(s"[DraftRegistrationService] trust has beneficiaries with not all director/employee roles answered")
+        case RolesInCompanies.NotAllRolesAnswered                                           =>
+          logger.info(
+            s"[DraftRegistrationService] trust has beneficiaries with not all director/employee roles answered"
+          )
           trustsStoreService.updateBeneficiaryTaskStatus(draftId, TaskStatus.InProgress).map(_ => ())
-        case RolesInCompanies.CouldNotDetermine =>
+        case RolesInCompanies.CouldNotDetermine                                             =>
           logger.info(s"[DraftRegistrationService] could not determine the roles for individual beneficiaries")
           Future.successful(())
       }
     } else {
       removeBeneficiaryRoleInCompanyAnswers(draftId).map(_ => ())
     }
-  }
 
   def removeBeneficiaryRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeRoleInCompanyAnswers(draftId)
@@ -59,5 +62,5 @@ class DraftRegistrationService @Inject()(submissionDraftConnector: SubmissionDra
 
   def removeLivingSettlorsMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeLivingSettlorsMappedPiece(draftId)
-    
+
 }

@@ -24,8 +24,8 @@ import views.html.living_settlor.individual.SettlorAliveYesNoView
 
 class SettlorAliveYesNoViewSpec extends YesNoViewBehaviours {
 
-  private val messageKeyPrefix = "settlorAliveYesNo"
-  private val index = 0
+  private val messageKeyPrefix     = "settlorAliveYesNo"
+  private val index                = 0
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 
   "SettlorAliveYesNo view" must {

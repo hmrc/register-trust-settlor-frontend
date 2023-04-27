@@ -35,54 +35,62 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorIndividualAddressYesNoController @Inject()(
-                                                         override val messagesApi: MessagesApi,
-                                                         registrationsRepository: RegistrationsRepository,
-                                                         @IndividualSettlor navigator: Navigator,
-                                                         actions: Actions,
-                                                         requireName: NameRequiredActionProvider,
-                                                         yesNoFormProvider: YesNoFormProvider,
-                                                         val controllerComponents: MessagesControllerComponents,
-                                                         view: SettlorIndividualAddressYesNoView,
-                                                         technicalErrorView: TechnicalErrorView
-                                                       )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging{
+class SettlorIndividualAddressYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  @IndividualSettlor navigator: Navigator,
+  actions: Actions,
+  requireName: NameRequiredActionProvider,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: SettlorIndividualAddressYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private def form(messageKey: String): Form[Boolean] = yesNoFormProvider.withPrefix(messageKey)
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)) {
-    implicit request =>
-
-      val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
-      val messageKeyPrefix = if(request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo" else "settlorIndividualAddressYesNoPastTense"
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
+      val name             = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+      val messageKeyPrefix =
+        if (request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo"
+        else "settlorIndividualAddressYesNoPastTense"
 
       val preparedForm = request.userAnswers.get(SettlorAddressYesNoPage(index)) match {
-        case None => form(messageKeyPrefix)
+        case None        => form(messageKeyPrefix)
         case Some(value) => form(messageKeyPrefix).fill(value)
       }
 
       Ok(view(preparedForm, draftId, index, name, request.settlorAliveAtRegistration(index)))
-  }
+    }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(index, draftId)).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
+      val name             = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+      val messageKeyPrefix =
+        if (request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo"
+        else "settlorIndividualAddressYesNoPastTense"
 
-      val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
-      val messageKeyPrefix = if(request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo" else "settlorIndividualAddressYesNoPastTense"
-
-      form(messageKeyPrefix).bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index, name, request.settlorAliveAtRegistration(index)))),
-        value => {
-          request.userAnswers.set(SettlorAddressYesNoPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorAddressYesNoPage(index), draftId)(updatedAnswers))
-              }
-            case Failure(_) =>
-              logger.error("[SettlorIndividualAddressYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-        }
-      )
-  }
+      form(messageKeyPrefix)
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(
+              BadRequest(view(formWithErrors, draftId, index, name, request.settlorAliveAtRegistration(index)))
+            ),
+          value =>
+            request.userAnswers.set(SettlorAddressYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorAddressYesNoPage(index), draftId)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SettlorIndividualAddressYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
+    }
 }

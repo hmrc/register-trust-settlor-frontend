@@ -29,24 +29,24 @@ case object SetUpByLivingSettlorYesNoPage extends QuestionPage[Boolean] {
 
   override def toString: String = "setUpByLivingSettlorYesNo"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
+  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] =
     value match {
-      case Some(true) =>
+      case Some(true)  =>
         userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
           case Some(true) =>
             Success(userAnswers)
-          case _ =>
+          case _          =>
             userAnswers.remove(DeceasedSettlor)
         }
       case Some(false) =>
-        userAnswers.remove(KindOfTrustPage)
+        userAnswers
+          .remove(KindOfTrustPage)
           .flatMap(_.remove(SetUpInAdditionToWillTrustYesNoPage))
           .flatMap(_.remove(HowDeedOfVariationCreatedPage))
           .flatMap(_.remove(HoldoverReliefYesNoPage))
           .flatMap(_.remove(EfrbsYesNoPage))
           .flatMap(_.remove(EfrbsStartDatePage))
           .flatMap(_.remove(LivingSettlors))
-      case _ => super.cleanup(value, userAnswers)
+      case _           => super.cleanup(value, userAnswers)
     }
-  }
 }

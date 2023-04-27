@@ -27,10 +27,9 @@ import play.api.data.Forms._
 
 class SettlorIndividualNameFormProvider @Inject() extends Mappings {
 
-
   def apply(): Form[FullName] = Form(
     mapping(
-      "firstName" -> text(s"settlorIndividualName.error.firstname.required")
+      "firstName"  -> text(s"settlorIndividualName.error.firstname.required")
         .verifying(
           firstError(
             maxLength(35, s"settlorIndividualName.error.firstname.length"),
@@ -38,15 +37,17 @@ class SettlorIndividualNameFormProvider @Inject() extends Mappings {
             regexp(Validation.nameRegex, s"settlorIndividualName.error.firstname.invalid")
           )
         ),
-      "middleName" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(35, s"settlorIndividualName.error.middlename.length"),
-            regexp(Validation.nameRegex, s"settlorIndividualName.error.middlename.invalid"))
-        )
+      "middleName" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(35, s"settlorIndividualName.error.middlename.length"),
+              regexp(Validation.nameRegex, s"settlorIndividualName.error.middlename.invalid")
+            )
+          )
       ).transform(emptyToNone, identity[Option[String]]),
-      "lastName" -> text(s"settlorIndividualName.error.lastname.required")
+      "lastName"   -> text(s"settlorIndividualName.error.lastname.required")
         .verifying(
           firstError(
             maxLength(35, s"settlorIndividualName.error.lastname.length"),

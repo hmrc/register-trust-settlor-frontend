@@ -41,37 +41,53 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
       val page = SetUpInAdditionToWillTrustYesNoPage
 
       "set to false" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, true).success.value
-              .set(pages.deceased_settlor.SettlorsNamePage, name).success.value
-              .set(DeceasedSettlorStatus, Completed).success.value
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, true)
+            .success
+            .value
+            .set(pages.deceased_settlor.SettlorsNamePage, name)
+            .success
+            .value
+            .set(DeceasedSettlorStatus, Completed)
+            .success
+            .value
 
-            val result = answers.set(page, false).success.value
+          val result = answers.set(page, false).success.value
 
-            result.get(DeceasedSettlor) must not be defined
+          result.get(DeceasedSettlor) must not be defined
         }
       }
 
-        "set to true" in {
-          forAll(arbitrary[UserAnswers]) {
-            initial =>
-              val answers: UserAnswers = initial.set(page, false).success.value
-                .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill).success.value
-                .set(pages.living_settlor.individual.SettlorIndividualNamePage(0), name).success.value
-                .set(LivingSettlorStatus(0), Completed).success.value
-                .set(pages.living_settlor.business.SettlorBusinessNamePage(1), name.toString).success.value
-                .set(LivingSettlorStatus(1), Completed).success.value
+      "set to true" in {
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, false)
+            .success
+            .value
+            .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill)
+            .success
+            .value
+            .set(pages.living_settlor.individual.SettlorIndividualNamePage(0), name)
+            .success
+            .value
+            .set(LivingSettlorStatus(0), Completed)
+            .success
+            .value
+            .set(pages.living_settlor.business.SettlorBusinessNamePage(1), name.toString)
+            .success
+            .value
+            .set(LivingSettlorStatus(1), Completed)
+            .success
+            .value
 
-              val result = answers.set(page, true).success.value
+          val result = answers.set(page, true).success.value
 
-              result.get(HowDeedOfVariationCreatedPage) must not be defined
-              result.get(LivingSettlors) must not be defined
-          }
+          result.get(HowDeedOfVariationCreatedPage) must not be defined
+          result.get(LivingSettlors)                must not be defined
         }
-
       }
+
     }
   }
-
-
+}

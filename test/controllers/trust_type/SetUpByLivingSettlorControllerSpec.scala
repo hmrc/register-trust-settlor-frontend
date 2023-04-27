@@ -45,7 +45,7 @@ class SetUpByLivingSettlorControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form,fakeDraftId, isTaxable = true)(request, messages).toString
+        view(form, fakeDraftId, isTaxable = true)(request, messages).toString
 
       application.stop()
     }

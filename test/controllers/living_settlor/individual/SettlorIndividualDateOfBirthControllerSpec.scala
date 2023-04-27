@@ -31,14 +31,15 @@ import java.time.{LocalDate, ZoneOffset}
 class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
   private val formProvider: DateOfBirthFormProvider = new DateOfBirthFormProvider(frontendAppConfig)
-  private val form: Form[LocalDate] = formProvider()
-  private val index: Int = 0
+  private val form: Form[LocalDate]                 = formProvider()
+  private val index: Int                            = 0
 
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
   private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
 
-  private lazy val settlorIndividualDateOfBirthRoute: String = routes.SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url
+  private lazy val settlorIndividualDateOfBirthRoute: String =
+    routes.SettlorIndividualDateOfBirthController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualDateOfBirth Controller" must {
 
@@ -64,9 +65,16 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
-        .set(SettlorIndividualDateOfBirthPage(index), validAnswer).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualDateOfBirthYesNoPage(index), true)
+        .success
+        .value
+        .set(SettlorIndividualDateOfBirthPage(index), validAnswer)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -86,17 +94,22 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualDateOfBirthYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
       val request =
         FakeRequest(POST, settlorIndividualDateOfBirthRoute)
           .withFormUrlEncodedBody(
-            "value.day" -> validAnswer.getDayOfMonth.toString,
+            "value.day"   -> validAnswer.getDayOfMonth.toString,
             "value.month" -> validAnswer.getMonthValue.toString,
-            "value.year" -> validAnswer.getYear.toString
+            "value.year"  -> validAnswer.getYear.toString
           )
 
       val result = route(application, request).value
@@ -127,8 +140,13 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualDateOfBirthYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualDateOfBirthYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

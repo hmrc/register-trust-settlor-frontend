@@ -27,11 +27,12 @@ import views.html.living_settlor.SettlorIndividualOrBusinessView
 
 class SettlorIndividualOrBusinessControllerSpec extends SpecBase {
 
-  lazy val settlorIndividualOrBusinessRoute = routes.SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorIndividualOrBusinessRoute =
+    routes.SettlorIndividualOrBusinessController.onPageLoad(index, fakeDraftId).url
 
   val formProvider = new SettlorIndividualOrBusinessFormProvider()
-  val form = formProvider()
-  val index = 0
+  val form         = formProvider()
+  val index        = 0
 
   "SettlorIndividualOrBusiness Controller" must {
 
@@ -55,7 +56,8 @@ class SettlorIndividualOrBusinessControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
+      val userAnswers =
+        emptyUserAnswers.set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.values.head).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

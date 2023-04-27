@@ -34,7 +34,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = HowDeedOfVariationCreatedController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = HowDeedOfVariationCreatedController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors, DeedOfVariation.options)
 

@@ -37,14 +37,18 @@ class SettlorAliveYesNoPageSpec extends PageBehaviours {
     val page = SettlorAliveYesNoPage(0)
 
     "set to false" in {
-      forAll(arbitrary[UserAnswers]) {
-        initial =>
-          val answers: UserAnswers = initial.set(page, true).success.value
-            .set(MentalCapacityYesNoPage(0), YesNoDontKnow.Yes).success.value
+      forAll(arbitrary[UserAnswers]) { initial =>
+        val answers: UserAnswers = initial
+          .set(page, true)
+          .success
+          .value
+          .set(MentalCapacityYesNoPage(0), YesNoDontKnow.Yes)
+          .success
+          .value
 
-          val result = answers.set(page, false).success.value
+        val result = answers.set(page, false).success.value
 
-          result.get(MentalCapacityYesNoPage(0)) must not be defined
+        result.get(MentalCapacityYesNoPage(0)) must not be defined
       }
     }
   }

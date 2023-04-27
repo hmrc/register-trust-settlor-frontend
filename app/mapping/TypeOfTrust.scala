@@ -30,7 +30,7 @@ object TypeOfTrust extends Enumerable.Implicits {
 
   case object IntervivosSettlementTrust extends WithName("Inter vivos Settlement") with TypeOfTrust
 
-  case object FlatManagementTrust extends  WithName("Flat Management Company or Sinking Fund") with TypeOfTrust
+  case object FlatManagementTrust extends WithName("Flat Management Company or Sinking Fund") with TypeOfTrust
 
   case object HeritageTrust extends WithName("Heritage Maintenance Fund") with TypeOfTrust
 
@@ -50,15 +50,15 @@ object TypeOfTrust extends Enumerable.Implicits {
   implicit val enumerable: Enumerable[TypeOfTrust] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
-  val uaReads: Reads[TypeOfTrust] = (
+  val uaReads: Reads[TypeOfTrust]                  = (
     (__ \ 'living).readWithDefault[List[mapping.reads.Settlor]](Nil) and
       (__ \ 'deceased).readNullable[DeceasedSettlor]
-    ).tupled
+  ).tupled
     .flatMap {
       case (_ :: _, None) | (Nil, Some(_)) =>
         (__ \ 'kindOfTrust).read[TypeOfTrust](KindOfTrust.typeofTrustReads) orElse
           Reads(_ => JsSuccess(WillTrustOrIntestacyTrust))
-      case _ =>
+      case _                               =>
         Reads(_ => JsError("User answers are in an invalid state."))
     }
 

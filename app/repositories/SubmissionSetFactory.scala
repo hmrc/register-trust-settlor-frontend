@@ -26,68 +26,75 @@ import viewmodels.{AnswerRow, AnswerSection}
 
 import javax.inject.Inject
 
-class SubmissionSetFactory @Inject()(settlorsMapper: SettlorsMapper,
-                                     deceasedSettlorMapper: DeceasedSettlorMapper,
-                                     trustDetailsMapper: TrustDetailsMapper,
-                                     printHelpers: PrintHelpers) {
+class SubmissionSetFactory @Inject() (
+  settlorsMapper: SettlorsMapper,
+  deceasedSettlorMapper: DeceasedSettlorMapper,
+  trustDetailsMapper: TrustDetailsMapper,
+  printHelpers: PrintHelpers
+) {
 
   private def mappedPiece(path: String, json: JsValue) =
     List(RegistrationSubmission.MappedPiece(path, json))
 
-  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet = {
+  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet =
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
       registrationPieces = mappedDataIfCompleted(userAnswers),
       answerSections = answerSectionsIfCompleted(userAnswers)
     )
-  }
 
   private def mappedDataIfCompleted(userAnswers: UserAnswers): List[RegistrationSubmission.MappedPiece] = {
 
-    val tdMappedPiece = trustDetailsMapper.build(userAnswers)
+    val tdMappedPiece = trustDetailsMapper
+      .build(userAnswers)
       .map(td => mappedPiece("trust/details/", Json.toJson(td)))
       .getOrElse(List.empty)
 
     val sMappedPiece = (
-        settlorsMapper.build(userAnswers),
-        deceasedSettlorMapper.build(userAnswers)
-      ) match {
+      settlorsMapper.build(userAnswers),
+      deceasedSettlorMapper.build(userAnswers)
+    ) match {
       case (None, Some(ds)) =>
         mappedPiece("trust/entities/deceased", Json.toJson(ds))
-      case (Some(s), None) =>
+      case (Some(s), None)  =>
         mappedPiece("trust/entities/settlors", Json.toJson(s))
-      case _ =>
+      case _                =>
         List.empty
     }
 
     tdMappedPiece ++ sMappedPiece
   }
 
-  def answerSectionsIfCompleted(userAnswers: UserAnswers)
-                               (implicit messages: Messages): Seq[RegistrationSubmission.AnswerSection] = {
+  def answerSectionsIfCompleted(
+    userAnswers: UserAnswers
+  )(implicit messages: Messages): Seq[RegistrationSubmission.AnswerSection] = {
     val cyaHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId)
 
-    val settlorRows = settlorsMapper.build(userAnswers).map { _ =>
-      cyaHelper.livingSettlors
-    }.getOrElse(Nil)
+    val settlorRows = settlorsMapper
+      .build(userAnswers)
+      .map { _ =>
+        cyaHelper.livingSettlors
+      }
+      .getOrElse(Nil)
 
-    val deceasedRows = deceasedSettlorMapper.build(userAnswers).map { _ =>
-      cyaHelper.deceasedSettlor
-    }.getOrElse(Nil)
+    val deceasedRows = deceasedSettlorMapper
+      .build(userAnswers)
+      .map { _ =>
+        cyaHelper.deceasedSettlor
+      }
+      .getOrElse(Nil)
 
     (deceasedRows ++ settlorRows).map(convertForSubmission)
   }
 
-  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection = {
+  private def convertForSubmission(section: AnswerSection): RegistrationSubmission.AnswerSection =
     RegistrationSubmission.AnswerSection(
       headingKey = section.headingKey,
       rows = section.rows.map(convertForSubmission),
       sectionKey = section.sectionKey,
       headingArgs = section.headingArgs.map(_.toString)
     )
-  }
 
-  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow = {
+  private def convertForSubmission(row: AnswerRow): RegistrationSubmission.AnswerRow =
     RegistrationSubmission.AnswerRow(row.label, row.answer.toString, row.labelArg)
-  }
 }

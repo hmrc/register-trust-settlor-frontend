@@ -33,7 +33,7 @@ import scala.concurrent.Future
 class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
   val formProvider = new SettlorDateOfDeathFormProvider(frontendAppConfig)
-  val form = formProvider.withConfig()
+  val form         = formProvider.withConfig()
 
   val validAnswer = LocalDate.now(ZoneOffset.UTC)
 
@@ -44,9 +44,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
   "SettlorDateOfDeath Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        fullName).success.value
-
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, fullName).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -66,8 +64,13 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorDateOfDeathPage, validAnswer)
-        .success.value.set(SettlorsNamePage, fullName).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorDateOfDeathPage, validAnswer)
+        .success
+        .value
+        .set(SettlorsNamePage, fullName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -87,9 +90,13 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorDateOfDeathPage, validAnswer)
-        .success.value.set(SettlorsNamePage,
-        fullName).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorDateOfDeathPage, validAnswer)
+        .success
+        .value
+        .set(SettlorsNamePage, fullName)
+        .success
+        .value
 
       when(registrationsRepository.getTrustSetupDate(any())(any())).thenReturn(Future.successful(Some(validAnswer)))
 
@@ -113,9 +120,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
 
-
     "redirect to SettlorNamePage when settlor name is not answered" in {
-
 
       val application = applicationBuilder(userAnswers = Some(emptyUserAnswers)).build()
 
@@ -132,9 +137,13 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorDateOfDeathPage, validAnswer)
-        .success.value.set(SettlorsNamePage,
-        fullName).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorDateOfDeathPage, validAnswer)
+        .success
+        .value
+        .set(SettlorsNamePage, fullName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -162,13 +171,18 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
         val submittedDate = LocalDate.parse("2020-02-03")
 
-        when(registrationsRepository.getTrustSetupDate(any())(any())).thenReturn(Future.successful(Some(mockedTrustStartDate)))
+        when(registrationsRepository.getTrustSetupDate(any())(any()))
+          .thenReturn(Future.successful(Some(mockedTrustStartDate)))
 
         val form = formProvider.withConfig((mockedTrustStartDate, "afterTrustStartDate"))
 
         val userAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, fullName).success.value
-          .set(SettlorDateOfDeathPage, submittedDate).success.value
+          .set(SettlorsNamePage, fullName)
+          .success
+          .value
+          .set(SettlorDateOfDeathPage, submittedDate)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -180,11 +194,13 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
               "value.year"  -> submittedDate.getYear.toString
             )
 
-        val boundForm = form.bind(Map(
-          "value.day"   -> submittedDate.getDayOfMonth.toString,
-          "value.month" -> submittedDate.getMonthValue.toString,
-          "value.year"  -> submittedDate.getYear.toString
-        ))
+        val boundForm = form.bind(
+          Map(
+            "value.day"   -> submittedDate.getDayOfMonth.toString,
+            "value.month" -> submittedDate.getMonthValue.toString,
+            "value.year"  -> submittedDate.getYear.toString
+          )
+        )
 
         val view = application.injector.instanceOf[SettlorDateOfDeathView]
 
@@ -200,15 +216,21 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
       "submitted date is before date of birth" in {
 
-        val dateOfBirth = LocalDate.parse("2020-02-03")
+        val dateOfBirth   = LocalDate.parse("2020-02-03")
         val submittedDate = LocalDate.parse("2019-02-03")
 
         val form = formProvider.withConfig(minimumDate = (dateOfBirth, "beforeDateOfBirth"))
 
         val userAnswers = emptyUserAnswers
-          .set(SettlorsNamePage, fullName).success.value
-          .set(SettlorDateOfDeathPage, submittedDate).success.value
-          .set(SettlorsDateOfBirthPage, dateOfBirth).success.value
+          .set(SettlorsNamePage, fullName)
+          .success
+          .value
+          .set(SettlorDateOfDeathPage, submittedDate)
+          .success
+          .value
+          .set(SettlorsDateOfBirthPage, dateOfBirth)
+          .success
+          .value
 
         val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -220,11 +242,13 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
               "value.year"  -> submittedDate.getYear.toString
             )
 
-        val boundForm = form.bind(Map(
-          "value.day"   -> submittedDate.getDayOfMonth.toString,
-          "value.month" -> submittedDate.getMonthValue.toString,
-          "value.year"  -> submittedDate.getYear.toString
-        ))
+        val boundForm = form.bind(
+          Map(
+            "value.day"   -> submittedDate.getDayOfMonth.toString,
+            "value.month" -> submittedDate.getMonthValue.toString,
+            "value.year"  -> submittedDate.getYear.toString
+          )
+        )
 
         val view = application.injector.instanceOf[SettlorDateOfDeathView]
 

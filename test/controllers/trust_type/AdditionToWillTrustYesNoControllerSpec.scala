@@ -27,7 +27,7 @@ import views.html.trust_type.AdditionToWillTrustYesNoView
 class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
+  val form         = formProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
   lazy val additionToWillTrustYesNoRoute = routes.AdditionToWillTrustYesNoController.onPageLoad(fakeDraftId).url
 
@@ -56,8 +56,12 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
     "populate the view correctly on a GET when the question has previously been answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SetUpByLivingSettlorYesNoPage, false).success.value
-        .set(SetUpInAdditionToWillTrustYesNoPage, true).success.value
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(SetUpInAdditionToWillTrustYesNoPage, true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

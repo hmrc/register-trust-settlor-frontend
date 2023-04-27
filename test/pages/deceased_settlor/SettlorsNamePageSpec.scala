@@ -19,7 +19,7 @@ package pages.deceased_settlor
 import models.pages.FullName
 import pages.behaviours.PageBehaviours
 
-class SettlorsNamePageSpec extends PageBehaviours   {
+class SettlorsNamePageSpec extends PageBehaviours {
 
   "SettlorsNamePage" must {
 

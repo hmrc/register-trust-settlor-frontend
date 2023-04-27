@@ -26,8 +26,8 @@ import views.html.living_settlor.individual.mld5.CountryOfNationalityYesNoView
 class CountryOfNationalityYesNoViewSpec extends YesNoViewBehaviours {
 
   private val messageKeyPrefix: String = "settlorIndividualCountryOfNationalityYesNo"
-  private val index: Int = 0
-  private val name: FullName = FullName("First", None, "Last")
+  private val index: Int               = 0
+  private val name: FullName           = FullName("First", None, "Last")
 
   override val form: Form[Boolean] = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 

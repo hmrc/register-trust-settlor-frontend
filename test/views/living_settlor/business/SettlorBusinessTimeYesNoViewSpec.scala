@@ -25,8 +25,8 @@ import views.html.living_settlor.business.SettlorBusinessTimeYesNoView
 class SettlorBusinessTimeYesNoViewSpec extends YesNoViewBehaviours {
 
   val messageKeyPrefix = "settlorBusinessTimeYesNo"
-  val index = 0
-  val name = "Business name"
+  val index            = 0
+  val name             = "Business name"
 
   val form = new YesNoFormProvider().withPrefix(messageKeyPrefix)
 

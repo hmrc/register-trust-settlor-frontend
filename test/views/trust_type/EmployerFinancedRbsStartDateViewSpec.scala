@@ -43,10 +43,7 @@ class EmployerFinancedRbsStartDateViewSpec extends QuestionViewBehaviours[LocalD
 
     behave like pageWithBackLink(applyView(form))
 
-    behave like pageWithDateFields(form, applyViewF,
-      messageKeyPrefix,
-      "value"
-    )
+    behave like pageWithDateFields(form, applyViewF, messageKeyPrefix, "value")
 
     behave like pageWithASubmitButton(applyView(form))
   }

@@ -27,7 +27,7 @@ import views.html.trust_type.HoldoverReliefYesNoView
 class HoldoverReliefYesNoControllerSpec extends SpecBase {
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("holdoverReliefYesNo")
+  val form         = formProvider.withPrefix("holdoverReliefYesNo")
 
   lazy val holdoverReliefYesNoRoute = routes.HoldoverReliefYesNoController.onPageLoad(fakeDraftId).url
 
@@ -55,7 +55,13 @@ class HoldoverReliefYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SetUpByLivingSettlorYesNoPage, false).success.value.set(HoldoverReliefYesNoPage, true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(HoldoverReliefYesNoPage, true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

@@ -33,7 +33,7 @@ class MessagesSpec extends SpecBase {
 
   override implicit lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en"), Lang("cy")))
 
-  val MatchSingleQuoteOnly: Regex = """\w+'{1}\w+""".r
+  val MatchSingleQuoteOnly: Regex   = """\w+'{1}\w+""".r
   val MatchBacktickQuoteOnly: Regex = """`+""".r
 
   "Application" should {
@@ -78,9 +78,9 @@ class MessagesSpec extends SpecBase {
     }
     "have a resolvable message for keys which take args" in {
       val englishWithArgsMsgKeys = defaultMessages collect { case (key, value) if countArgs(value) > 0 => key }
-      val welshWithArgsMsgKeys = welshMessages collect { case (key, value) if countArgs(value) > 0     => key }
-      val missingFromEnglish = englishWithArgsMsgKeys.toList diff welshWithArgsMsgKeys.toList
-      val missingFromWelsh = welshWithArgsMsgKeys.toList diff englishWithArgsMsgKeys.toList
+      val welshWithArgsMsgKeys   = welshMessages collect { case (key, value) if countArgs(value) > 0 => key }
+      val missingFromEnglish     = englishWithArgsMsgKeys.toList diff welshWithArgsMsgKeys.toList
+      val missingFromWelsh       = welshWithArgsMsgKeys.toList diff englishWithArgsMsgKeys.toList
       missingFromEnglish foreach { key =>
         println(s"Key which has arguments in English but not in Welsh: $key")
       }
@@ -93,17 +93,17 @@ class MessagesSpec extends SpecBase {
       val englishWithArgsMsgKeysAndArgList = defaultMessages collect {
         case (key, value) if countArgs(value) > 0 => (key, listArgs(value))
       }
-      val welshWithArgsMsgKeysAndArgList = welshMessages collect {
+      val welshWithArgsMsgKeysAndArgList   = welshMessages collect {
         case (key, value) if countArgs(value) > 0 => (key, listArgs(value))
       }
-      val mismatchedArgSequences = englishWithArgsMsgKeysAndArgList collect {
+      val mismatchedArgSequences           = englishWithArgsMsgKeysAndArgList collect {
         case (key, engArgSeq) if engArgSeq != welshWithArgsMsgKeysAndArgList(key) =>
           (key, engArgSeq, welshWithArgsMsgKeysAndArgList(key))
       }
-      mismatchedArgSequences foreach {
-        case (key, engArgSeq, welshArgSeq) =>
-          println(
-            s"key which has different arguments or order of arguments between English and Welsh: $key -- English arg seq=$engArgSeq and Welsh arg seq=$welshArgSeq")
+      mismatchedArgSequences foreach { case (key, engArgSeq, welshArgSeq) =>
+        println(
+          s"key which has different arguments or order of arguments between English and Welsh: $key -- English arg seq=$engArgSeq and Welsh arg seq=$welshArgSeq"
+        )
       }
       mismatchedArgSequences.size mustBe 0
     }
@@ -157,7 +157,8 @@ class MessagesSpec extends SpecBase {
       listMissingMessageKeys("The following message keys are missing from Welsh Set:", defaultKeySet.diff(welshKeySet))
     val test2 = listMissingMessageKeys(
       "The following message keys are missing from English Set:",
-      welshKeySet.diff(defaultKeySet))
+      welshKeySet.diff(defaultKeySet)
+    )
 
     test1 ++ test2
   }

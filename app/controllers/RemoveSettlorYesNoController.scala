@@ -32,73 +32,73 @@ import views.html.RemoveSettlorYesNoView
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class RemoveSettlorYesNoController @Inject()(
-                                              override val messagesApi: MessagesApi,
-                                              registrationsRepository: RegistrationsRepository,
-                                              actions: Actions,
-                                              yesNoFormProvider: YesNoFormProvider,
-                                              val controllerComponents: MessagesControllerComponents,
-                                              view: RemoveSettlorYesNoView
-                                            )(implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport {
+class RemoveSettlorYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  registrationsRepository: RegistrationsRepository,
+  actions: Actions,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  view: RemoveSettlorYesNoView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlors.removeYesNo")
 
   private def path(index: Int): JsPath = LivingSettlors.path \ index
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
-
-      Ok(view(
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    Ok(
+      view(
         form,
         index,
         draftId,
         label(request.userAnswers.data, path(index))
-      ))
-  }
-
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
-
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(
-            formWithErrors,
-            index,
-            draftId,
-            label(request.userAnswers.data, path(index))
-          ))),
-
-        remove => {
-          if (remove) {
-            for {
-              updatedAnswers <- Future.fromTry(
-                request.userAnswers.deleteAtPath(path(index))
-              )
-              _ <- registrationsRepository.set(updatedAnswers)
-            } yield {
-              Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
-            }
-          } else {
-            Future.successful(Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId)))
-          }
-        }
       )
+    )
   }
 
-  private def label(json: JsValue, path: JsPath)
-                   (implicit request: RegistrationDataRequest[AnyContent]): String = {
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) =>
+            Future.successful(
+              BadRequest(
+                view(
+                  formWithErrors,
+                  index,
+                  draftId,
+                  label(request.userAnswers.data, path(index))
+                )
+              )
+            ),
+          remove =>
+            if (remove) {
+              for {
+                updatedAnswers <- Future.fromTry(
+                                    request.userAnswers.deleteAtPath(path(index))
+                                  )
+                _              <- registrationsRepository.set(updatedAnswers)
+              } yield Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId))
+            } else {
+              Future.successful(Redirect(controllers.routes.AddASettlorController.onPageLoad(draftId)))
+            }
+        )
+    }
+
+  private def label(json: JsValue, path: JsPath)(implicit request: RegistrationDataRequest[AnyContent]): String = {
 
     val default: String = request.messages(messagesApi)("settlors.defaultText")
 
     (for {
-      pick <- json.transform(path.json.pick)
+      pick    <- json.transform(path.json.pick)
       settlor <- pick.validate[SettlorViewModel]
-    } yield {
-      settlor match {
-        case individual: SettlorIndividualViewModel => individual.name.getOrElse(default)
-        case business: SettlorBusinessViewModel => business.name.getOrElse(default)
-        case _ => default
-      }
+    } yield settlor match {
+      case individual: SettlorIndividualViewModel => individual.name.getOrElse(default)
+      case business: SettlorBusinessViewModel     => business.name.getOrElse(default)
+      case _                                      => default
     }).getOrElse(default)
 
   }

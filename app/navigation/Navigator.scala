@@ -26,9 +26,9 @@ trait Navigator {
 
   def nextPage(page: Page, draftId: String): UserAnswers => Call
 
-  def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call = {
-    answers.get(fromPage)
+  def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call =
+    answers
+      .get(fromPage)
       .map(if (_) yesCall else noCall)
       .getOrElse(controllers.routes.SessionExpiredController.onPageLoad)
-  }
 }

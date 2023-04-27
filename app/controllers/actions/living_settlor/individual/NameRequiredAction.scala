@@ -25,21 +25,25 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
-  extends ActionRefiner[RegistrationDataRequest, SettlorIndividualNameRequest] {
+    extends ActionRefiner[RegistrationDataRequest, SettlorIndividualNameRequest] {
 
-    override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, SettlorIndividualNameRequest[A]]] = {
+  override protected def refine[A](
+    request: RegistrationDataRequest[A]
+  ): Future[Either[Result, SettlorIndividualNameRequest[A]]] =
+    Future.successful(
+      request.userAnswers.get(SettlorIndividualNamePage(index)) match {
+        case None       =>
+          Left(
+            Redirect(
+              controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(index, draftId)
+            )
+          )
+        case Some(name) =>
+          Right(SettlorIndividualNameRequest(request, name))
+      }
+    )
+}
 
-      Future.successful(
-        request.userAnswers.get(SettlorIndividualNamePage(index)) match {
-          case None =>
-            Left(Redirect(controllers.living_settlor.individual.routes.SettlorIndividualNameController.onPageLoad(index, draftId)))
-          case Some(name) =>
-            Right(SettlorIndividualNameRequest(request, name))
-        }
-      )
-    }
-  }
-
-class NameRequiredActionProvider @Inject()(implicit val executionContext: ExecutionContext) {
+class NameRequiredActionProvider @Inject() (implicit val executionContext: ExecutionContext) {
   def apply(index: Int, draftId: String) = new NameRequiredAction(index, draftId)
 }

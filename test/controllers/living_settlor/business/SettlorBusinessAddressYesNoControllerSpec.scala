@@ -30,11 +30,12 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("settlorBusinessAddressYesNo")
-  val index = 0
-  val name = "Business name"
+  val form         = formProvider.withPrefix("settlorBusinessAddressYesNo")
+  val index        = 0
+  val name         = "Business name"
 
-  lazy val settlorBusinessAddressYesNoRoute = routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorBusinessAddressYesNoRoute =
+    routes.SettlorBusinessAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorBusinessAddressYesNo Controller" must {
 
@@ -60,8 +61,13 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(SettlorBusinessAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -81,8 +87,13 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
-        .set(SettlorBusinessAddressYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), name)
+        .success
+        .value
+        .set(SettlorBusinessAddressYesNoPage(index), true)
+        .success
+        .value
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -102,7 +113,9 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessAddressYesNoPage(index), true).success.value
+        .set(SettlorBusinessAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -119,8 +132,7 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index),
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

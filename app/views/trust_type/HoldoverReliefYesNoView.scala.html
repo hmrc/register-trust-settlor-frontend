@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = HoldoverReliefYesNoController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = HoldoverReliefYesNoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

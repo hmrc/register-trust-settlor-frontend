@@ -29,7 +29,8 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
 
   val form = new YesNoFormProvider().withPrefix("settlorsLastKnownAddressYesNo")
 
-  lazy val settlorsLastKnownAddressYesNoRoute = routes.SettlorsLastKnownAddressYesNoController.onPageLoad(fakeDraftId).url
+  lazy val settlorsLastKnownAddressYesNoRoute =
+    routes.SettlorsLastKnownAddressYesNoController.onPageLoad(fakeDraftId).url
 
   val name = FullName("first name", None, "Last name")
 
@@ -37,8 +38,7 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
 
     "return OK and the correct view for a GET" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -58,8 +58,13 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsLastKnownAddressYesNoPage, true).success.value.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorsLastKnownAddressYesNoPage, true)
+        .success
+        .value
+        .set(SettlorsNamePage, name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -79,8 +84,7 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -100,8 +104,7 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorsNamePage,
-        name).success.value
+      val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

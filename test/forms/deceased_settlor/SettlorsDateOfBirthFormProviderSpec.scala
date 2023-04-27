@@ -40,12 +40,16 @@ class SettlorsDateOfBirthFormProviderSpec extends DateBehaviours with FakeTrusts
 
     behave like mandatoryDateField(form, "value", "settlorsDateOfBirth.error.required.all")
 
-    behave like dateFieldWithMax(form, "value",
+    behave like dateFieldWithMax(
+      form,
+      "value",
       max = max,
       FormError("value", s"settlorsDateOfBirth.error.future", List("day", "month", "year"))
     )
 
-    behave like dateFieldWithMin(form, "value",
+    behave like dateFieldWithMin(
+      form,
+      "value",
       min = min,
       FormError("value", s"settlorsDateOfBirth.error.past", List("day", "month", "year"))
     )

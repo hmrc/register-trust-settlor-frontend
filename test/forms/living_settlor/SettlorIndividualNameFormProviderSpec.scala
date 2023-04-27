@@ -25,106 +25,106 @@ class SettlorIndividualNameFormProviderSpec extends StringFieldBehaviours {
 
   val form = new SettlorIndividualNameFormProvider()()
 
-    ".firstName" must {
+  ".firstName" must {
 
-      val fieldName = "firstName"
-      val requiredKey = "settlorIndividualName.error.firstname.required"
-      val lengthKey = "settlorIndividualName.error.firstname.length"
-      val maxLength = 35
+    val fieldName   = "firstName"
+    val requiredKey = "settlorIndividualName.error.firstname.required"
+    val lengthKey   = "settlorIndividualName.error.firstname.length"
+    val maxLength   = 35
 
-      behave like fieldThatBindsValidData(
-        form,
-        fieldName,
-        RegexpGen.from(Validation.nameRegex)
-      )
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      RegexpGen.from(Validation.nameRegex)
+    )
 
-      behave like fieldWithMaxLength(
-        form,
-        fieldName,
-        maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-      )
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
 
-      behave like mandatoryField(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, requiredKey)
-      )
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
 
-      behave like nonEmptyField(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-      )
+    behave like nonEmptyField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+    )
+  }
+
+  ".middleName" must {
+
+    val fieldName = "middleName"
+    val lengthKey = "settlorIndividualName.error.middlename.length"
+    val maxLength = 35
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like optionalField(
+      form,
+      fieldName,
+      validDataGenerator = RegexpGen.from(Validation.nameRegex)
+    )
+
+    "bind whitespace trim values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe Some("middle")
     }
 
-    ".middleName" must {
-
-      val fieldName = "middleName"
-      val lengthKey = "settlorIndividualName.error.middlename.length"
-      val maxLength = 35
-
-      behave like fieldWithMaxLength(
-        form,
-        fieldName,
-        maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-      )
-
-      behave like optionalField(
-        form,
-        fieldName,
-        validDataGenerator = RegexpGen.from(Validation.nameRegex)
-      )
-
-      "bind whitespace trim values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  middle  ", "lastName" -> "lastName"))
-        result.value.value.middleName mustBe Some("middle")
-      }
-
-      "bind whitespace blank values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  ", "lastName" -> "lastName"))
-        result.value.value.middleName mustBe None
-      }
-
-      "bind whitespace no values" in {
-        val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "", "lastName" -> "lastName"))
-        result.value.value.middleName mustBe None
-      }
-
+    "bind whitespace blank values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "  ", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe None
     }
 
-    ".lastName" must {
-
-      val fieldName = "lastName"
-      val requiredKey = "settlorIndividualName.error.lastname.required"
-      val lengthKey = "settlorIndividualName.error.lastname.length"
-      val maxLength = 35
-
-      behave like fieldThatBindsValidData(
-        form,
-        fieldName,
-        RegexpGen.from(Validation.nameRegex)
-      )
-
-      behave like fieldWithMaxLength(
-        form,
-        fieldName,
-        maxLength = maxLength,
-        lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
-      )
-
-      behave like mandatoryField(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, requiredKey)
-      )
-
-      behave like nonEmptyField(
-        form,
-        fieldName,
-        requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
-      )
+    "bind whitespace no values" in {
+      val result = form.bind(Map("firstName" -> "firstName", "middleName" -> "", "lastName" -> "lastName"))
+      result.value.value.middleName mustBe None
     }
 
   }
+
+  ".lastName" must {
+
+    val fieldName   = "lastName"
+    val requiredKey = "settlorIndividualName.error.lastname.required"
+    val lengthKey   = "settlorIndividualName.error.lastname.length"
+    val maxLength   = 35
+
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      RegexpGen.from(Validation.nameRegex)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+
+    behave like nonEmptyField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey, Seq(fieldName))
+    )
+  }
+
+}

@@ -28,51 +28,46 @@ import views.html.living_settlor.individual.SettlorIndividualPassportView
 class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportOrIdCardDetails] {
 
   val index = 0
-  val name = FullName("First", Some("Middle"), "Last")
+  val name  = FullName("First", Some("Middle"), "Last")
 
   override val form = new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport")
 
   Seq(
     ("settlorIndividualPassport", true),
     ("settlorIndividualPassportPastTense", false)
-  ) foreach {
-    case (settlorIndividualPassportMessage, setUpBeforeSettlorDiedBool) =>
-      s"SettlorIndividualPassportView (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
+  ) foreach { case (settlorIndividualPassportMessage, setUpBeforeSettlorDiedBool) =>
+    s"SettlorIndividualPassportView (when setUpBeforeSettlorDied is $setUpBeforeSettlorDiedBool)" must {
 
-        val view = viewFor[SettlorIndividualPassportView](Some(emptyUserAnswers))
+      val view = viewFor[SettlorIndividualPassportView](Some(emptyUserAnswers))
 
-        val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-        val applyViewF = (form: Form[_]) => applyView(form)
+      val applyViewF = (form: Form[_]) => applyView(form)
 
-        behave like dynamicTitlePage(applyView(form), settlorIndividualPassportMessage, name.toString)
+      behave like dynamicTitlePage(applyView(form), settlorIndividualPassportMessage, name.toString)
 
-        behave like pageWithBackLink(applyView(form))
+      behave like pageWithBackLink(applyView(form))
 
-        "date fields" must {
+      "date fields" must {
 
-          behave like pageWithDateFields(form, applyViewF,
-            settlorIndividualPassportMessage,
-            "expiryDate",
-            name.toString
-          )
-        }
-
-        "text fields" must {
-
-          behave like pageWithTextFields(
-            form,
-            applyView,
-            settlorIndividualPassportMessage,
-            Seq(("number", None)),
-            name.toString
-          )
-        }
-
-        behave like pageWithASubmitButton(applyView(form))
+        behave like pageWithDateFields(form, applyViewF, settlorIndividualPassportMessage, "expiryDate", name.toString)
       }
+
+      "text fields" must {
+
+        behave like pageWithTextFields(
+          form,
+          applyView,
+          settlorIndividualPassportMessage,
+          Seq(("number", None)),
+          name.toString
+        )
+      }
+
+      behave like pageWithASubmitButton(applyView(form))
+    }
   }
 }

@@ -30,10 +30,10 @@ import views.html.living_settlor.business.mld5.CountryOfResidenceView
 
 class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
-  val formProvider = new CountryFormProvider()
+  val formProvider       = new CountryFormProvider()
   val form: Form[String] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidence")
-  val index: Int = 0
-  val businessName = "Test"
+  val index: Int         = 0
+  val businessName       = "Test"
 
   lazy val countryOfResidence: String = routes.CountryOfResidenceController.onPageLoad(index, draftId).url
 
@@ -42,7 +42,9 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return OK and the correct view for a GET" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), businessName).success.value
+        .set(SettlorBusinessNamePage(index), businessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -52,7 +54,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
       val view = application.injector.instanceOf[CountryOfResidenceView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 
@@ -64,8 +66,13 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorBusinessNamePage(index), businessName).success.value
-        .set(CountryOfResidencePage(index), "Spain").success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorBusinessNamePage(index), businessName)
+        .success
+        .value
+        .set(CountryOfResidencePage(index), "Spain")
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -88,7 +95,9 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "redirect to the next page when valid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), businessName).success.value
+        .set(SettlorBusinessNamePage(index), businessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -108,7 +117,9 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     "return a Bad Request and errors when invalid data is submitted" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorBusinessNamePage(index), businessName).success.value
+        .set(SettlorBusinessNamePage(index), businessName)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -120,7 +131,7 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
 
       val view = application.injector.instanceOf[CountryOfResidenceView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       val result = route(application, request).value
 
@@ -165,4 +176,3 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
     }
   }
 }
-

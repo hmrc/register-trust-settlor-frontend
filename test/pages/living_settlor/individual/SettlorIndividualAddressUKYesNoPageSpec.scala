@@ -23,7 +23,7 @@ import pages.behaviours.PageBehaviours
 
 class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
 
-  private val ukAddress: UKAddress = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
+  private val ukAddress: UKAddress                       = UKAddress("Line 1", "Line 2", None, None, "POSTCODE")
   private val internationalAddress: InternationalAddress = InternationalAddress("Line 1", "Line 2", None, "COUNTRY")
 
   "SettlorIndividualAddressUKYesNoPage" must {
@@ -37,24 +37,30 @@ class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
     "implement cleanup logic" when {
 
       "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(SettlorAddressInternationalPage(0), internationalAddress).success.value
-              .set(SettlorAddressUKYesNoPage(0), true).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(SettlorAddressInternationalPage(0), internationalAddress)
+            .success
+            .value
+            .set(SettlorAddressUKYesNoPage(0), true)
+            .success
+            .value
 
-            result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
+          result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
         }
       }
 
       "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(SettlorAddressUKPage(0), ukAddress).success.value
-              .set(SettlorAddressUKYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(SettlorAddressUKPage(0), ukAddress)
+            .success
+            .value
+            .set(SettlorAddressUKYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(SettlorAddressUKPage(0)) mustNot be(defined)
+          result.get(SettlorAddressUKPage(0)) mustNot be(defined)
         }
       }
     }
@@ -62,24 +68,30 @@ class SettlorIndividualAddressUKYesNoPageSpec extends PageBehaviours {
     "not implement cleanup logic" when {
 
       "previous selection YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(SettlorAddressUKPage(0), ukAddress).success.value
-              .set(SettlorAddressUKYesNoPage(0), true).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(SettlorAddressUKPage(0), ukAddress)
+            .success
+            .value
+            .set(SettlorAddressUKYesNoPage(0), true)
+            .success
+            .value
 
-            result.get(SettlorAddressUKPage(0)).get mustBe ukAddress
+          result.get(SettlorAddressUKPage(0)).get mustBe ukAddress
         }
       }
 
       "previous selection NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(SettlorAddressInternationalPage(0), internationalAddress).success.value
-              .set(SettlorAddressUKYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(SettlorAddressInternationalPage(0), internationalAddress)
+            .success
+            .value
+            .set(SettlorAddressUKYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(SettlorAddressInternationalPage(0)).get mustBe internationalAddress
+          result.get(SettlorAddressInternationalPage(0)).get mustBe internationalAddress
         }
       }
     }

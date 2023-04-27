@@ -29,28 +29,32 @@ class SettlorsNameFormProvider @Inject() extends Mappings {
 
   def apply(): Form[FullName] = Form(
     mapping(
-
-      "firstName" -> text("settlorsName.error.firstName.required")
+      "firstName"  -> text("settlorsName.error.firstName.required")
         .verifying(
           firstError(
             maxLength(35, s"settlorsName.error.firstName.length"),
             isNotEmpty("firstName", s"settlorsName.error.firstName.required"),
             regexp(Validation.nameRegex, s"settlorsName.error.firstName.invalid")
-          )),
-      "middleName" -> optional(text()
-        .transform(trimWhitespace, identity[String])
-        .verifying(
-          firstError(
-            maxLength(35, s"settlorsName.error.middleName.length"),
-            regexp(Validation.nameRegex, s"settlorsName.error.middleName.invalid"))
-        )).transform(emptyToNone, identity[Option[String]]),
-      "lastName" -> text("settlorsName.error.lastName.required")
+          )
+        ),
+      "middleName" -> optional(
+        text()
+          .transform(trimWhitespace, identity[String])
+          .verifying(
+            firstError(
+              maxLength(35, s"settlorsName.error.middleName.length"),
+              regexp(Validation.nameRegex, s"settlorsName.error.middleName.invalid")
+            )
+          )
+      ).transform(emptyToNone, identity[Option[String]]),
+      "lastName"   -> text("settlorsName.error.lastName.required")
         .verifying(
           firstError(
             maxLength(35, s"settlorsName.error.lastName.length"),
             isNotEmpty("lastName", s"settlorsName.error.lastName.required"),
             regexp(Validation.nameRegex, s"settlorsName.error.lastName.invalid")
-          ))
+          )
+        )
     )(FullName.apply)(FullName.unapply)
   )
 }

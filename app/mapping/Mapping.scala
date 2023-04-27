@@ -26,12 +26,11 @@ import scala.reflect.ClassTag
 
 abstract class Mapping[A, B <: Settlor: ClassTag] {
 
-  def build(userAnswers: UserAnswers): Option[List[A]] = {
+  def build(userAnswers: UserAnswers): Option[List[A]] =
     settlors(userAnswers) match {
-      case Nil => None
+      case Nil  => None
       case list => Some(list.map(settlorType))
     }
-  }
 
   private def settlors(userAnswers: UserAnswers): List[B] = {
     val runtimeClass = implicitly[ClassTag[B]].runtimeClass

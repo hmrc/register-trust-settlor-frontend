@@ -34,5 +34,6 @@ trait Mocked extends MockitoSugar {
   val mockCreateDraftRegistrationService: DraftRegistrationService = mock[DraftRegistrationService]
 
   val mockedTrustStartDate: LocalDate = LocalDate.parse("2019-02-03")
-  when(registrationsRepository.getTrustSetupDate(any())(any())).thenReturn(Future.successful(Some(mockedTrustStartDate)))
+  when(registrationsRepository.getTrustSetupDate(any())(any()))
+    .thenReturn(Future.successful(Some(mockedTrustStartDate)))
 }

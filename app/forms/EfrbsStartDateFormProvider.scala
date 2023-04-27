@@ -23,18 +23,20 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import play.api.data.Form
 
-class EfrbsStartDateFormProvider @Inject()(appConfig: FrontendAppConfig) extends Mappings {
+class EfrbsStartDateFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings {
 
   def apply(): Form[LocalDate] =
     Form(
       "value" -> localDate(
-        invalidKey     = "employerFinancedRbsStartDate.error.invalid",
+        invalidKey = "employerFinancedRbsStartDate.error.invalid",
         allRequiredKey = "employerFinancedRbsStartDate.error.required.all",
         twoRequiredKey = "employerFinancedRbsStartDate.error.required.two",
-        requiredKey    = "employerFinancedRbsStartDate.error.required"
-      ).verifying(firstError(
-        maxDate(LocalDate.now, "employerFinancedRbsStartDate.error.future", "day", "month", "year"),
-        minDate(appConfig.minDate, "employerFinancedRbsStartDate.error.past", "day", "month", "year")
-      ))
+        requiredKey = "employerFinancedRbsStartDate.error.required"
+      ).verifying(
+        firstError(
+          maxDate(LocalDate.now, "employerFinancedRbsStartDate.error.future", "day", "month", "year"),
+          minDate(appConfig.minDate, "employerFinancedRbsStartDate.error.past", "day", "month", "year")
+        )
+      )
     )
 }

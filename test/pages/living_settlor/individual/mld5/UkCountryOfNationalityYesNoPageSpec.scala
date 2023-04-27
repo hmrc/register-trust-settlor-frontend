@@ -22,7 +22,7 @@ import pages.behaviours.PageBehaviours
 
 class UkCountryOfNationalityYesNoPageSpec extends PageBehaviours {
 
-  private val gbCountry: String = "GB"
+  private val gbCountry: String    = "GB"
   private val nonGbCountry: String = "FR"
 
   "UkCountryOfNationalityYesNoPage" must {
@@ -35,13 +35,16 @@ class UkCountryOfNationalityYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
       "NO selected and previous selection was YES" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CountryOfNationalityPage(0), gbCountry).success.value
-              .set(UkCountryOfNationalityYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CountryOfNationalityPage(0), gbCountry)
+            .success
+            .value
+            .set(UkCountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(CountryOfNationalityPage(0)) mustNot be(defined)
+          result.get(CountryOfNationalityPage(0)) mustNot be(defined)
         }
       }
     }
@@ -49,37 +52,42 @@ class UkCountryOfNationalityYesNoPageSpec extends PageBehaviours {
     "not implement cleanup logic" when {
 
       "NO selected and previous selection was NO" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(CountryOfNationalityPage(0), nonGbCountry).success.value
-              .set(UkCountryOfNationalityYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(CountryOfNationalityPage(0), nonGbCountry)
+            .success
+            .value
+            .set(UkCountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(CountryOfNationalityPage(0)) must be(defined)
-            result.get(CountryOfNationalityPage(0)).get mustBe nonGbCountry
+          result.get(CountryOfNationalityPage(0)) must be(defined)
+          result.get(CountryOfNationalityPage(0)).get mustBe nonGbCountry
         }
       }
 
       "NO selected and no previous selection" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(UkCountryOfNationalityYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(UkCountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(CountryOfNationalityPage(0)) mustNot be(defined)
+          result.get(CountryOfNationalityPage(0)) mustNot be(defined)
         }
       }
     }
 
     "set CountryOfNationalityPage to GB" when {
       "YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(UkCountryOfNationalityYesNoPage(0), true).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(UkCountryOfNationalityYesNoPage(0), true)
+            .success
+            .value
 
-            result.get(CountryOfNationalityPage(0)) must be(defined)
-            result.get(CountryOfNationalityPage(0)).get mustBe gbCountry
+          result.get(CountryOfNationalityPage(0)) must be(defined)
+          result.get(CountryOfNationalityPage(0)).get mustBe gbCountry
         }
       }
     }

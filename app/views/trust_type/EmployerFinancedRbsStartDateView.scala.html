@@ -32,7 +32,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = EmployerFinancedRbsStartDateController.onSubmit(draftId), 'autoComplete -> "off") {
+    @formHelper(action = EmployerFinancedRbsStartDateController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

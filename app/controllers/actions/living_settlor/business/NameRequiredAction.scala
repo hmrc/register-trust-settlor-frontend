@@ -25,21 +25,25 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class NameRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
-  extends ActionRefiner[RegistrationDataRequest, SettlorBusinessNameRequest] {
+    extends ActionRefiner[RegistrationDataRequest, SettlorBusinessNameRequest] {
 
-  override protected def refine[A](request: RegistrationDataRequest[A]): Future[Either[Result, SettlorBusinessNameRequest[A]]] = {
-
+  override protected def refine[A](
+    request: RegistrationDataRequest[A]
+  ): Future[Either[Result, SettlorBusinessNameRequest[A]]] =
     Future.successful(
       request.userAnswers.get(SettlorBusinessNamePage(index)) match {
-        case None =>
-          Left(Redirect(controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad(index, draftId)))
+        case None       =>
+          Left(
+            Redirect(
+              controllers.living_settlor.business.routes.SettlorBusinessNameController.onPageLoad(index, draftId)
+            )
+          )
         case Some(name) =>
           Right(SettlorBusinessNameRequest(request, name))
       }
     )
-  }
 }
 
-class NameRequiredActionProvider @Inject()(implicit val executionContext: ExecutionContext) {
+class NameRequiredActionProvider @Inject() (implicit val executionContext: ExecutionContext) {
   def apply(index: Int, draftId: String) = new NameRequiredAction(index, draftId)
 }

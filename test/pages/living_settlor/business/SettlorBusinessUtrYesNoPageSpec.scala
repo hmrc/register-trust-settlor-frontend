@@ -36,31 +36,43 @@ class SettlorBusinessUtrYesNoPageSpec extends PageBehaviours {
       val page = SettlorBusinessUtrYesNoPage(0)
 
       "set to true" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, false).success.value
-              .set(SettlorBusinessAddressYesNoPage(0), true).success.value
-              .set(SettlorBusinessAddressUKYesNoPage(0), true).success.value
-              .set(SettlorBusinessAddressUKPage(0), UKAddress("line 1", "line 2", None, None, "AB11AB")).success.value
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, false)
+            .success
+            .value
+            .set(SettlorBusinessAddressYesNoPage(0), true)
+            .success
+            .value
+            .set(SettlorBusinessAddressUKYesNoPage(0), true)
+            .success
+            .value
+            .set(SettlorBusinessAddressUKPage(0), UKAddress("line 1", "line 2", None, None, "AB11AB"))
+            .success
+            .value
 
-            val result = answers.set(page, true).success.value
+          val result = answers.set(page, true).success.value
 
-            result.get(SettlorBusinessAddressYesNoPage(0)) must not be defined
-            result.get(SettlorBusinessAddressUKYesNoPage(0)) must not be defined
-            result.get(SettlorBusinessAddressUKPage(0)) must not be defined
-            result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
+          result.get(SettlorBusinessAddressYesNoPage(0))         must not be defined
+          result.get(SettlorBusinessAddressUKYesNoPage(0))       must not be defined
+          result.get(SettlorBusinessAddressUKPage(0))            must not be defined
+          result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
         }
       }
 
       "set to false" in {
-        forAll(arbitrary[UserAnswers]) {
-          initial =>
-            val answers: UserAnswers = initial.set(page, true).success.value
-              .set(SettlorBusinessUtrPage(0), "1234567890").success.value
+        forAll(arbitrary[UserAnswers]) { initial =>
+          val answers: UserAnswers = initial
+            .set(page, true)
+            .success
+            .value
+            .set(SettlorBusinessUtrPage(0), "1234567890")
+            .success
+            .value
 
-            val result = answers.set(page, false).success.value
+          val result = answers.set(page, false).success.value
 
-            result.get(SettlorBusinessUtrPage(0)) must not be defined
+          result.get(SettlorBusinessUtrPage(0)) must not be defined
         }
       }
 

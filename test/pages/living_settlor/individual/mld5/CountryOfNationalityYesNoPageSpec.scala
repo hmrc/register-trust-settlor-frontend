@@ -32,30 +32,40 @@ class CountryOfNationalityYesNoPageSpec extends PageBehaviours {
 
     "implement cleanup logic" when {
       "NO selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(UkCountryOfNationalityYesNoPage(0), false).success.value
-              .set(CountryOfNationalityPage(0), "FR").success.value
-              .set(CountryOfNationalityYesNoPage(0), false).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(UkCountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
+            .set(CountryOfNationalityPage(0), "FR")
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
 
-            result.get(UkCountryOfNationalityYesNoPage(0)) mustNot be(defined)
-            result.get(CountryOfNationalityPage(0)) mustNot be(defined)
+          result.get(UkCountryOfNationalityYesNoPage(0)) mustNot be(defined)
+          result.get(CountryOfNationalityPage(0)) mustNot be(defined)
         }
       }
     }
 
     "not implement cleanup logic" when {
       "previous selection YES selected" in {
-        forAll(arbitrary[UserAnswers]) {
-          userAnswers =>
-            val result: UserAnswers = userAnswers
-              .set(UkCountryOfNationalityYesNoPage(0), false).success.value
-              .set(CountryOfNationalityPage(0), "FR").success.value
-              .set(CountryOfNationalityYesNoPage(0), true).success.value
+        forAll(arbitrary[UserAnswers]) { userAnswers =>
+          val result: UserAnswers = userAnswers
+            .set(UkCountryOfNationalityYesNoPage(0), false)
+            .success
+            .value
+            .set(CountryOfNationalityPage(0), "FR")
+            .success
+            .value
+            .set(CountryOfNationalityYesNoPage(0), true)
+            .success
+            .value
 
-            result.get(UkCountryOfNationalityYesNoPage(0)) must be(defined)
-            result.get(CountryOfNationalityPage(0)) must be(defined)
+          result.get(UkCountryOfNationalityYesNoPage(0)) must be(defined)
+          result.get(CountryOfNationalityPage(0))        must be(defined)
         }
       }
     }

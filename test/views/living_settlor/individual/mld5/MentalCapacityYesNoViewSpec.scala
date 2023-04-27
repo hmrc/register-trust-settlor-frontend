@@ -28,8 +28,8 @@ import views.html.living_settlor.individual.mld5.MentalCapacityYesNoView
 class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] with OptionsViewBehaviours {
 
   private val messageKeyPrefix: String = "settlorIndividualMentalCapacityYesNo"
-  private val index: Int = 0
-  private val name: FullName = FullName("First", None, "Last")
+  private val index: Int               = 0
+  private val name: FullName           = FullName("First", None, "Last")
 
   override val form: Form[YesNoDontKnow] = new YesNoDontKnowFormProvider().withPrefix(messageKeyPrefix)
 
@@ -40,13 +40,22 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
     def applyView(form: Form[_]): HtmlFormat.Appendable =
       view.apply(form, index, fakeDraftId, name)(fakeRequest, messages)
 
-    behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString,"p1", "bulletpoint1", "bulletpoint2", "bulletpoint3", "bulletpoint4")
+    behave like dynamicTitlePage(
+      applyView(form),
+      messageKeyPrefix,
+      name.toString,
+      "p1",
+      "bulletpoint1",
+      "bulletpoint2",
+      "bulletpoint3",
+      "bulletpoint4"
+    )
 
     behave like pageWithBackLink(applyView(form))
 
     val options = List(
       RadioOption(id = "value-yes", value = YesNoDontKnow.Yes.toString, messageKey = "site.yes"),
-      RadioOption(id = "value-no",  value = YesNoDontKnow.No.toString, messageKey = "site.no"),
+      RadioOption(id = "value-no", value = YesNoDontKnow.No.toString, messageKey = "site.no"),
       RadioOption(id = "value-dontKnow", value = YesNoDontKnow.DontKnow.toString, messageKey = "site.dontKnow")
     )
 

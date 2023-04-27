@@ -39,64 +39,100 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
   }
 
   "remove business related data when changing to individual" in {
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial
-          .set(SetUpByLivingSettlorYesNoPage, false).success.value
-          .set(KindOfTrustPage, KindOfTrust.Employees).success.value
-          .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business).success.value
-          .set(SettlorBusinessNamePage(0), "AWS").success.value
-          .set(SettlorBusinessUtrYesNoPage(0), false).success.value
-          .set(SettlorBusinessAddressYesNoPage(0), true).success.value
-          .set(SettlorBusinessAddressUKYesNoPage(0), true).success.value
-          .set(SettlorBusinessAddressUKPage(0), UKAddress("line1", "line2", None, None, "AB11AB")).success.value
-          .set(SettlorBusinessTypePage(0), Trading).success.value
-          .set(SettlorBusinessTimeYesNoPage(0), true).success.value
-          .set(LivingSettlorStatus(0), InProgress).success.value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers = initial
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Employees)
+        .success
+        .value
+        .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business)
+        .success
+        .value
+        .set(SettlorBusinessNamePage(0), "AWS")
+        .success
+        .value
+        .set(SettlorBusinessUtrYesNoPage(0), false)
+        .success
+        .value
+        .set(SettlorBusinessAddressYesNoPage(0), true)
+        .success
+        .value
+        .set(SettlorBusinessAddressUKYesNoPage(0), true)
+        .success
+        .value
+        .set(SettlorBusinessAddressUKPage(0), UKAddress("line1", "line2", None, None, "AB11AB"))
+        .success
+        .value
+        .set(SettlorBusinessTypePage(0), Trading)
+        .success
+        .value
+        .set(SettlorBusinessTimeYesNoPage(0), true)
+        .success
+        .value
+        .set(LivingSettlorStatus(0), InProgress)
+        .success
+        .value
 
-        val result = answers.set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
+      val result = answers.set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
 
-        result.get(SettlorBusinessNamePage(0)) mustNot be(defined)
-        result.get(SettlorBusinessUtrYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorBusinessUtrPage(0)) mustNot be(defined)
-        result.get(SettlorBusinessAddressYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorBusinessAddressUKYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorAddressUKPage(0)) mustNot be(defined)
-        result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
-        result.get(SettlorBusinessTypePage(0)) mustNot be(defined)
-        result.get(SettlorBusinessTimeYesNoPage(0)) mustNot be(defined)
-        result.get(LivingSettlorStatus(0)) mustNot be(defined)
+      result.get(SettlorBusinessNamePage(0)) mustNot be(defined)
+      result.get(SettlorBusinessUtrYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorBusinessUtrPage(0)) mustNot be(defined)
+      result.get(SettlorBusinessAddressYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorBusinessAddressUKYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorAddressUKPage(0)) mustNot be(defined)
+      result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
+      result.get(SettlorBusinessTypePage(0)) mustNot be(defined)
+      result.get(SettlorBusinessTimeYesNoPage(0)) mustNot be(defined)
+      result.get(LivingSettlorStatus(0)) mustNot be(defined)
     }
   }
 
   "remove individual related data when changing to business" in {
-    forAll(arbitrary[UserAnswers], arbitrary[String]) {
-      (initial, str) =>
-        val answers: UserAnswers = initial
-          .set(SetUpByLivingSettlorYesNoPage, false).success.value
-          .set(KindOfTrustPage, KindOfTrust.Intervivos).success.value
-          .set(HoldoverReliefYesNoPage, true).success.value
-          .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual).success.value
-          .set(SettlorAliveYesNoPage(0), true).success.value
-          .set(SettlorIndividualNamePage(0), FullName("First", None, "Last")).success.value
-          .set(SettlorIndividualDateOfBirthYesNoPage(0), true).success.value
-          .set(LivingSettlorStatus(0), InProgress).success.value
+    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+      val answers: UserAnswers = initial
+        .set(SetUpByLivingSettlorYesNoPage, false)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Intervivos)
+        .success
+        .value
+        .set(HoldoverReliefYesNoPage, true)
+        .success
+        .value
+        .set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Individual)
+        .success
+        .value
+        .set(SettlorAliveYesNoPage(0), true)
+        .success
+        .value
+        .set(SettlorIndividualNamePage(0), FullName("First", None, "Last"))
+        .success
+        .value
+        .set(SettlorIndividualDateOfBirthYesNoPage(0), true)
+        .success
+        .value
+        .set(LivingSettlorStatus(0), InProgress)
+        .success
+        .value
 
-        val result = answers.set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business).success.value
+      val result = answers.set(SettlorIndividualOrBusinessPage(0), IndividualOrBusiness.Business).success.value
 
-        result.get(SettlorIndividualDateOfBirthYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualDateOfBirthPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualNINOYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualNINOPage(0)) mustNot be(defined)
-        result.get(SettlorAddressYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorAddressUKYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorAddressUKPage(0)) mustNot be(defined)
-        result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualPassportYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualPassportPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualIDCardYesNoPage(0)) mustNot be(defined)
-        result.get(SettlorIndividualIDCardPage(0)) mustNot be(defined)
-        result.get(LivingSettlorStatus(0)) mustNot be(defined)
+      result.get(SettlorIndividualDateOfBirthYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualDateOfBirthPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualNINOYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualNINOPage(0)) mustNot be(defined)
+      result.get(SettlorAddressYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorAddressUKYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorAddressUKPage(0)) mustNot be(defined)
+      result.get(SettlorAddressInternationalPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualPassportYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualPassportPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualIDCardYesNoPage(0)) mustNot be(defined)
+      result.get(SettlorIndividualIDCardPage(0)) mustNot be(defined)
+      result.get(LivingSettlorStatus(0)) mustNot be(defined)
     }
   }
 

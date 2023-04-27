@@ -31,11 +31,12 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
   def onwardRoute = Call("GET", "/foo")
 
   val formProvider = new YesNoFormProvider()
-  val form = formProvider.withPrefix("settlorIndividualPassportYesNo")
-  val index = 0
-  val name = FullName("First", Some("Middle"), "Last")
+  val form         = formProvider.withPrefix("settlorIndividualPassportYesNo")
+  val index        = 0
+  val name         = FullName("First", Some("Middle"), "Last")
 
-  lazy val settlorIndividualPassportYesNoRoute = routes.SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url
+  lazy val settlorIndividualPassportYesNoRoute =
+    routes.SettlorIndividualPassportYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualPassportYesNo Controller" must {
 
@@ -61,8 +62,13 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualPassportYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualPassportYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -101,8 +107,13 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorIndividualPassportYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorIndividualPassportYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -127,7 +138,9 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
       val userAnswers = emptyUserAnswers
-        .set(SettlorIndividualPassportYesNoPage(index), true).success.value
+        .set(SettlorIndividualPassportYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

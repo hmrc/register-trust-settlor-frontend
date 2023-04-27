@@ -35,7 +35,7 @@ object RolesInCompanies extends Logging {
   final case object NoIndividualBeneficiaries extends RolesInCompaniesAnswered
   final case object CouldNotDetermine extends RolesInCompaniesAnswered
 
-  implicit lazy val httpReads : HttpReads[RolesInCompaniesAnswered] =
+  implicit lazy val httpReads: HttpReads[RolesInCompaniesAnswered] =
     (_: String, _: String, response: HttpResponse) => {
       response.status match {
         case Status.OK =>
@@ -46,15 +46,14 @@ object RolesInCompanies extends Logging {
 
             response.json.validate[Seq[RoleInCompany]](jsonReads) match {
               case JsSuccess(_, _) => AllRolesAnswered
-              case JsError(_) => NotAllRolesAnswered
+              case JsError(_)      => NotAllRolesAnswered
             }
           } else {
             NoIndividualBeneficiaries
           }
-        case _ =>
+        case _         =>
           CouldNotDetermine
       }
-  }
-
+    }
 
 }

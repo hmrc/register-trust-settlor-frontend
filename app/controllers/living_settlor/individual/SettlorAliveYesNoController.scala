@@ -34,47 +34,49 @@ import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class SettlorAliveYesNoController @Inject()(override val messagesApi: MessagesApi,
-                                            actions: Actions,
-                                            @IndividualSettlor navigator: Navigator,
-                                            yesNoFormProvider: YesNoFormProvider,
-                                            val controllerComponents: MessagesControllerComponents,
-                                            registrationsRepository: RegistrationsRepository,
-                                            view: SettlorAliveYesNoView,
-                                            technicalErrorView: TechnicalErrorView)
-                                           (implicit ec: ExecutionContext) extends FrontendBaseController with I18nSupport with Logging {
+class SettlorAliveYesNoController @Inject() (
+  override val messagesApi: MessagesApi,
+  actions: Actions,
+  @IndividualSettlor navigator: Navigator,
+  yesNoFormProvider: YesNoFormProvider,
+  val controllerComponents: MessagesControllerComponents,
+  registrationsRepository: RegistrationsRepository,
+  view: SettlorAliveYesNoView,
+  technicalErrorView: TechnicalErrorView
+)(implicit ec: ExecutionContext)
+    extends FrontendBaseController
+    with I18nSupport
+    with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorAliveYesNo")
 
-  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) {
-    implicit request =>
+  def onPageLoad(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
+    val preparedForm = request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
+      case None        => form
+      case Some(value) => form.fill(value)
+    }
 
-      val preparedForm = request.userAnswers.get(SettlorAliveYesNoPage(index)) match {
-        case None => form
-        case Some(value) => form.fill(value)
-      }
-
-      Ok(view(preparedForm, draftId, index))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions.authWithData(draftId).async {
-    implicit request =>
+  def onSubmit(index: Int, draftId: String): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value =>
+            request.userAnswers.set(SettlorAliveYesNoPage(index), value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SettlorAliveYesNoPage(index), draftId)(updatedAnswers))
+                }
 
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, index))),
-        value =>
-          request.userAnswers.set(SettlorAliveYesNoPage(index), value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SettlorAliveYesNoPage(index), draftId)(updatedAnswers))
-              }
-
-            case Failure(_) =>
-              logger.error("[SettlorAliveYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-      )
-  }
+              case Failure(_) =>
+                logger.error("[SettlorAliveYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
+    }
 
 }

@@ -29,12 +29,12 @@ object IndividualOrBusiness extends Enumerable.Implicits {
   case object Business extends WithName("business") with IndividualOrBusiness
 
   val values: Set[IndividualOrBusiness] = Set(
-    Individual, Business
+    Individual,
+    Business
   )
 
-  val options: Set[RadioOption] = values.map {
-    value =>
-      RadioOption(prefix, value.toString)
+  val options: Set[RadioOption] = values.map { value =>
+    RadioOption(prefix, value.toString)
   }
 
   implicit val enumerable: Enumerable[IndividualOrBusiness] =

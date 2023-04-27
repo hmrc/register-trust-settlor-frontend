@@ -18,6 +18,6 @@ package utils
 
 object Constants {
 
-  final val GB = "GB"
+  final val GB  = "GB"
   final val MAX = 25
 }

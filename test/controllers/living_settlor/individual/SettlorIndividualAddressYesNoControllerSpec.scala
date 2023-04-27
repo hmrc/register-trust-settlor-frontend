@@ -27,12 +27,13 @@ import views.html.living_settlor.individual.SettlorIndividualAddressYesNoView
 
 class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
-  private val formProvider = new YesNoFormProvider()
-  private val form = formProvider.withPrefix("settlorIndividualAddressYesNo")
-  private val index = 0
+  private val formProvider   = new YesNoFormProvider()
+  private val form           = formProvider.withPrefix("settlorIndividualAddressYesNo")
+  private val index          = 0
   private val name: FullName = FullName("First", Some("Middle"), "Last")
 
-  private lazy val settlorIndividualAddressYesNoRoute: String = routes.SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url
+  private lazy val settlorIndividualAddressYesNoRoute: String =
+    routes.SettlorIndividualAddressYesNoController.onPageLoad(index, fakeDraftId).url
 
   "SettlorIndividualAddressYesNo Controller" must {
 
@@ -52,16 +53,26 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(formContentInPastTense, fakeDraftId, index, name, settlorAliveAtRegistration = false)(request, messages).toString
+        view(formContentInPastTense, fakeDraftId, index, name, settlorAliveAtRegistration = false)(
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
-        .set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorAddressYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorAliveYesNoPage(index), true)
+        .success
+        .value
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -81,9 +92,16 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to the next page when valid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
-        .set(SettlorIndividualNamePage(index), name).success.value
-        .set(SettlorAddressYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorAliveYesNoPage(index), true)
+        .success
+        .value
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
+        .set(SettlorAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -102,8 +120,13 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "redirect to Settlors Name page when Settlors name is not answered" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
-        .set(SettlorAddressYesNoPage(index), true).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorAliveYesNoPage(index), true)
+        .success
+        .value
+        .set(SettlorAddressYesNoPage(index), true)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 
@@ -120,8 +143,13 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
 
     "return a Bad Request and errors when invalid data is submitted" in {
 
-      val userAnswers = emptyUserAnswers.set(SettlorAliveYesNoPage(index), true).success.value
-        .set(SettlorIndividualNamePage(index), name).success.value
+      val userAnswers = emptyUserAnswers
+        .set(SettlorAliveYesNoPage(index), true)
+        .success
+        .value
+        .set(SettlorIndividualNamePage(index), name)
+        .success
+        .value
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
 

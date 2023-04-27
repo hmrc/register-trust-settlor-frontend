@@ -25,32 +25,31 @@ import views.html.living_settlor.individual.mld5.CountryOfNationalityView
 
 class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
 
-  private val index: Int = 0
+  private val index: Int     = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationality")
-  val formContentInPastTense: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationalityPastTense")
+  override val form: Form[String]          = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationality")
+  val formContentInPastTense: Form[String] =
+    new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationalityPastTense")
 
   Seq(
     ("settlorIndividualCountryOfNationality", true, form),
     ("settlorIndividualCountryOfNationalityPastTense", false, formContentInPastTense)
-  ) foreach {
-    case (messageKey, settlorAliveAtRegistration, formToUse) =>
+  ) foreach { case (messageKey, settlorAliveAtRegistration, formToUse) =>
+    s"CountryOfNationality View where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
 
-      s"CountryOfNationality View where settlorAliveAtRegistration = $settlorAliveAtRegistration" must {
+      val view = viewFor[CountryOfNationalityView](Some(emptyUserAnswers))
 
-        val view = viewFor[CountryOfNationalityView](Some(emptyUserAnswers))
+      def applyView(form: Form[_]): HtmlFormat.Appendable =
+        view.apply(form, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration)(fakeRequest, messages)
 
-        def applyView(form: Form[_]): HtmlFormat.Appendable =
-          view.apply(form, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration)(fakeRequest, messages)
+      behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 
-        behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
+      behave like pageWithBackLink(applyView(formToUse))
 
-        behave like pageWithBackLink(applyView(formToUse))
+      behave like selectCountryPage(formToUse, applyView, messageKey, name.toString)
 
-        behave like selectCountryPage(formToUse, applyView, messageKey, name.toString)
-
-        behave like pageWithASubmitButton(applyView(formToUse))
-      }
+      behave like pageWithASubmitButton(applyView(formToUse))
+    }
   }
 }

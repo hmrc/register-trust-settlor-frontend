@@ -26,6 +26,6 @@ class YesNoDontKnowFormProvider @Inject() extends Mappings {
 
   def withPrefix(prefix: String): Form[YesNoDontKnow] =
     Form(
-      "value" -> enumerable[YesNoDontKnow](requiredKey =  s"$prefix.error.required")
+      "value" -> enumerable[YesNoDontKnow](requiredKey = s"$prefix.error.required")
     )
 }
