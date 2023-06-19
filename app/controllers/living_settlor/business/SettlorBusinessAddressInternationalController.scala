@@ -62,7 +62,7 @@ class SettlorBusinessAddressInternationalController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, index, draftId, request.businessName))
+      Ok(view(preparedForm, countryOptions.options(), index, draftId, request.businessName))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -72,7 +72,7 @@ class SettlorBusinessAddressInternationalController @Inject() (
         .fold(
           (formWithErrors: Form[_]) =>
             Future.successful(
-              BadRequest(view(formWithErrors, countryOptions.options, index, draftId, request.businessName))
+              BadRequest(view(formWithErrors, countryOptions.options(), index, draftId, request.businessName))
             ),
           value =>
             request.userAnswers.set(SettlorBusinessAddressInternationalPage(index), value) match {

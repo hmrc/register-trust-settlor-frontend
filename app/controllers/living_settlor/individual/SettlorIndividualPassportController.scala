@@ -20,7 +20,7 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.PassportOrIdCardFormProvider
-import models.pages.PassportOrIdCardDetails
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualNamePage, SettlorIndividualPassportPage}
 import play.api.Logging
@@ -53,23 +53,28 @@ class SettlorIndividualPassportController @Inject() (
     with I18nSupport
     with Logging {
 
-  private val form: Form[PassportOrIdCardDetails] = formProvider("settlorIndividualPassport")
+  private def getForm(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
+    formProvider("settlorIndividualPassport", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+
+      val form = getForm(index)
 
       val preparedForm = request.userAnswers.get(SettlorIndividualPassportPage(index)) match {
         case None        => form
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, index, name, request.settlorAliveAtRegistration(index)))
+      Ok(view(preparedForm, countryOptions.options(), draftId, index, name, request.settlorAliveAtRegistration(index)))
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
     (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorIndividualNamePage(index)).get
+
+      val form = getForm(index)
 
       form
         .bindFromRequest()
@@ -79,7 +84,7 @@ class SettlorIndividualPassportController @Inject() (
               BadRequest(
                 view(
                   formWithErrors,
-                  countryOptions.options,
+                  countryOptions.options(),
                   draftId,
                   index,
                   name,

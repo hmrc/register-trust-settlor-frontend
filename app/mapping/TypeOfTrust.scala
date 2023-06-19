@@ -51,12 +51,12 @@ object TypeOfTrust extends Enumerable.Implicits {
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
   val uaReads: Reads[TypeOfTrust]                  = (
-    (__ \ 'living).readWithDefault[List[mapping.reads.Settlor]](Nil) and
-      (__ \ 'deceased).readNullable[DeceasedSettlor]
+    (__ \ Symbol("living")).readWithDefault[List[mapping.reads.Settlor]](Nil) and
+      (__ \ Symbol("deceased")).readNullable[DeceasedSettlor]
   ).tupled
     .flatMap {
       case (_ :: _, None) | (Nil, Some(_)) =>
-        (__ \ 'kindOfTrust).read[TypeOfTrust](KindOfTrust.typeofTrustReads) orElse
+        (__ \ Symbol("kindOfTrust")).read[TypeOfTrust](KindOfTrust.typeofTrustReads) orElse
           Reads(_ => JsSuccess(WillTrustOrIntestacyTrust))
       case _                               =>
         Reads(_ => JsError("User answers are in an invalid state."))

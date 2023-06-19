@@ -29,9 +29,10 @@ class PassportOrIdCardFormProviderSpec
     with DateBehaviours
     with FakeTrustsApp {
 
+  val index  = 0
   val prefix = "passport"
 
-  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix)
+  val form = new PassportOrIdCardFormProvider(frontendAppConfig)(prefix, emptyUserAnswers, index)
 
   ".country" must {
 

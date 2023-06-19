@@ -34,11 +34,12 @@ import java.time.{LocalDate, ZoneOffset}
 
 class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
-  private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  private val form: Form[PassportOrIdCardDetails]        = formProvider("settlorIndividualIDCard")
-  private val index: Int                                 = 0
-  private val name: FullName                             = FullName("First", Some("Middle"), "Last")
-  private val validAnswer: LocalDate                     = LocalDate.now(ZoneOffset.UTC)
+  private val index: Int             = 0
+  private val name: FullName         = FullName("First", Some("Middle"), "Last")
+  private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
+
+  private val form: Form[PassportOrIdCardDetails] =
+    new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport", emptyUserAnswers, index)
 
   private lazy val settlorIndividualIDCardRoute: String =
     routes.SettlorIndividualIDCardController.onPageLoad(index, fakeDraftId).url
@@ -98,7 +99,7 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
             val result = route(application, request).value
 
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options
+            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual OK
 
@@ -131,21 +132,13 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
               FakeRequest(POST, settlorIndividualIDCardRoute)
                 .withFormUrlEncodedBody(("value", "invalid value"))
 
-            val boundForm = form.bind(Map("value" -> "invalid value"))
-
-            val view = application.injector.instanceOf[SettlorIndividualIDCardView]
-
             val result = route(application, request).value
-
-            val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptions].options()
 
             status(result) mustEqual BAD_REQUEST
 
-            contentAsString(result) mustEqual
-              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(
-                request,
-                messages
-              ).toString
+            contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.country.error.required"))
+            contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.number.error.required"))
+            contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.expiryDate.error.required.all"))
 
             application.stop()
           }

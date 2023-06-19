@@ -30,7 +30,8 @@ class SettlorIndividualIDCardViewSpec extends QuestionViewBehaviours[PassportOrI
   val index = 0
   val name  = FullName("First", Some("Middle"), "Last")
 
-  override val form = new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport")
+  override val form =
+    new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport", emptyUserAnswers, index)
 
   Seq(
     ("settlorIndividualIDCard", true),

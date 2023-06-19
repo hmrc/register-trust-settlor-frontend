@@ -28,12 +28,12 @@ trait SettlorReads {
       Reads(_ => JsSuccess(None: Option[Address]))
 
   def readMentalCapacity: Reads[Option[YesNoDontKnow]] =
-    (__ \ 'mentalCapacityYesNo)
+    (__ \ Symbol("mentalCapacityYesNo"))
       .readNullable[Boolean]
       .flatMap[Option[YesNoDontKnow]] { x: Option[Boolean] =>
         Reads(_ => JsSuccess(YesNoDontKnow.fromBoolean(x)))
       }
       .orElse {
-        (__ \ 'mentalCapacityYesNo).readNullable[YesNoDontKnow]
+        (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
       }
 }

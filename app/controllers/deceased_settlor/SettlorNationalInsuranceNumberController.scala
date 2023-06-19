@@ -20,6 +20,7 @@ import config.annotations.DeceasedSettlor
 import controllers.actions._
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
+import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
 import play.api.Logging
@@ -27,6 +28,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.RegistrationsRepository
+import services.DraftRegistrationService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.deceased_settlor.SettlorNationalInsuranceNumberView
 import views.html.errors.TechnicalErrorView
@@ -44,44 +46,69 @@ class SettlorNationalInsuranceNumberController @Inject() (
   formProvider: SettlorNationalInsuranceNumberFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SettlorNationalInsuranceNumberView,
-  technicalErrorView: TechnicalErrorView
+  technicalErrorView: TechnicalErrorView,
+  draftRegistrationService: DraftRegistrationService
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController
     with I18nSupport
     with Logging {
 
-  private val form: Form[String] = formProvider()
+  private def getForm(draftId: String)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
+    for {
+      existingTrusteeNinos     <- getTrusteeNinos(draftId)
+      existingBeneficiaryNinos <- getBeneficiaryNinos(draftId)
+      existingProtectorNinos   <- getProtectorNinos(draftId)
 
-  def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
-    implicit request =>
+    } yield formProvider(existingTrusteeNinos, existingBeneficiaryNinos, existingProtectorNinos)
+
+  private def getTrusteeNinos(draftId: String)(implicit
+    request: SettlorIndividualNameRequest[AnyContent]
+  ): Future[collection.IndexedSeq[String]] =
+    draftRegistrationService.retrieveTrusteeNinos(draftId)
+
+  private def getBeneficiaryNinos(draftId: String)(implicit
+    request: SettlorIndividualNameRequest[AnyContent]
+  ): Future[collection.IndexedSeq[String]] =
+    draftRegistrationService.retrieveBeneficiaryNinos(draftId)
+  private def getProtectorNinos(draftId: String)(implicit
+    request: SettlorIndividualNameRequest[AnyContent]
+  ): Future[collection.IndexedSeq[String]] =
+    draftRegistrationService.retrieveProtectorNinos(draftId)
+
+  def onPageLoad(draftId: String): Action[AnyContent] =
+    (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      val preparedForm = request.userAnswers.get(SettlorNationalInsuranceNumberPage) match {
-        case None        => form
-        case Some(value) => form.fill(value)
-      }
+      getForm(draftId).map { form =>
+        val preparedForm = request.userAnswers.get(SettlorNationalInsuranceNumberPage) match {
+          case None        => form
+          case Some(value) => form.fill(value)
+        }
 
-      Ok(view(preparedForm, draftId, name))
-  }
+        Ok(view(preparedForm, draftId, name))
+      }
+    }
 
   def onSubmit(draftId: String): Action[AnyContent] =
     (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       val name = request.userAnswers.get(SettlorsNamePage).get
 
-      form
-        .bindFromRequest()
-        .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
-          value =>
-            request.userAnswers.set(SettlorNationalInsuranceNumberPage, value) match {
-              case Success(updatedAnswers) =>
-                registrationsRepository.set(updatedAnswers).map { _ =>
-                  Redirect(navigator.nextPage(SettlorNationalInsuranceNumberPage, draftId)(updatedAnswers))
-                }
-              case Failure(_)              =>
-                logger.error("[SettlorNationalInsuranceNumberController][onSubmit] Error while storing user answers")
-                Future.successful(InternalServerError(technicalErrorView()))
-            }
-        )
+      getForm(draftId).flatMap { form =>
+        form
+          .bindFromRequest()
+          .fold(
+            (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+            value =>
+              request.userAnswers.set(SettlorNationalInsuranceNumberPage, value) match {
+                case Success(updatedAnswers) =>
+                  registrationsRepository.set(updatedAnswers).map { _ =>
+                    Redirect(navigator.nextPage(SettlorNationalInsuranceNumberPage, draftId)(updatedAnswers))
+                  }
+                case Failure(_)              =>
+                  logger.error("[SettlorNationalInsuranceNumberController][onSubmit] Error while storing user answers")
+                  Future.successful(InternalServerError(technicalErrorView()))
+              }
+          )
+      }
     }
 }

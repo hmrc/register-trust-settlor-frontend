@@ -65,7 +65,8 @@ trait SpecBase
     userAnswers: Option[UserAnswers] = None,
     affinityGroup: AffinityGroup = AffinityGroup.Organisation,
     enrolments: Enrolments = Enrolments(Set.empty[Enrolment]),
-    navigator: Navigator = fakeNavigator
+    navigator: Navigator = fakeNavigator,
+    draftRegistrationService: DraftRegistrationService = mockCreateDraftRegistrationService
   ): GuiceApplicationBuilder =
     new GuiceApplicationBuilder()
       .overrides(
@@ -80,7 +81,7 @@ trait SpecBase
         ),
         bind[DraftIdRetrievalActionProvider].toInstance(fakeDraftIdAction(userAnswers)),
         bind[RegistrationsRepository].toInstance(registrationsRepository),
-        bind[DraftRegistrationService].toInstance(mockCreateDraftRegistrationService),
+        bind[DraftRegistrationService].toInstance(draftRegistrationService),
         bind[AffinityGroup].toInstance(Organisation)
       )
 }

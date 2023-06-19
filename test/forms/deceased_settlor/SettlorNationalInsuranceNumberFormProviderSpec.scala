@@ -18,15 +18,22 @@ package forms.deceased_settlor
 
 import forms.Validation
 import forms.behaviours.StringFieldBehaviours
-import play.api.data.FormError
+import play.api.data.{Form, FormError}
 import wolfendale.scalacheck.regexp.RegexpGen
 
 class SettlorNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviours {
 
-  val requiredKey      = "settlorNationalInsuranceNumber.error.required"
-  val invalidFormatKey = "settlorNationalInsuranceNumber.error.invalid"
+  val requiredKey              = "settlorNationalInsuranceNumber.error.required"
+  val invalidFormatKey         = "settlorNationalInsuranceNumber.error.invalid"
+  val existingTrusteeNinos     = Seq("")
+  val existingBeneficiaryNinos = Seq("")
+  val existingProtectorNinos   = Seq("")
 
-  val form = new SettlorNationalInsuranceNumberFormProvider()()
+  val form: Form[String] = new SettlorNationalInsuranceNumberFormProvider()(
+    existingTrusteeNinos,
+    existingBeneficiaryNinos,
+    existingProtectorNinos
+  )
 
   ".value" must {
 

@@ -25,9 +25,16 @@ import views.html.deceased_settlor.SettlorNationalInsuranceNumberView
 
 class SettlorNationalInsuranceNumberViewSpec extends StringViewBehaviours {
 
-  val messageKeyPrefix = "settlorNationalInsuranceNumber"
+  val messageKeyPrefix         = "settlorNationalInsuranceNumber"
+  val existingTrusteeNinos     = Seq("")
+  val existingBeneficiaryNinos = Seq("")
+  val existingProtectorNinos   = Seq("")
 
-  val form = new SettlorNationalInsuranceNumberFormProvider()()
+  val form: Form[String] = new SettlorNationalInsuranceNumberFormProvider()(
+    existingTrusteeNinos,
+    existingBeneficiaryNinos,
+    existingProtectorNinos
+  )
 
   "SettlorNationalInsuranceNumberView view" must {
 

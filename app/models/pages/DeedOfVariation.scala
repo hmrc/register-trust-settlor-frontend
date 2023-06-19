@@ -72,8 +72,8 @@ object DeedOfVariation {
   }
 
   val uaReads: Reads[Option[DeedOfVariation]] = {
-    (__ \ 'howDeedOfVariationCreated).read[DeedOfVariation].map(Some(_)) or
-      (__ \ 'setUpInAdditionToWillTrustYesNo).readNullable[Boolean].flatMap {
+    (__ \ Symbol("howDeedOfVariationCreated")).read[DeedOfVariation].map(Some(_)) or
+      (__ \ Symbol("setUpInAdditionToWillTrustYesNo")).readNullable[Boolean].flatMap {
         case Some(true) => Reads(_ => JsSuccess(Some(AdditionToWill)))
         case _          => Reads(_ => JsSuccess(None))
       }

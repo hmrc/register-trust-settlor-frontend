@@ -48,6 +48,16 @@ final case class UserAnswers(
   existingTrustUtr: Option[String] = None
 ) extends Logging {
 
+  def checkDeceasedSettlorNino(
+    deceasedSettlorNino: String,
+    existingTrusteeNino: Option[String] = None,
+    existingBeneficiaryNino: Option[String] = None,
+    existingProtectorNino: Option[String] = None
+  ): Boolean =
+    existingTrusteeNino.contains(deceasedSettlorNino) || existingBeneficiaryNino.contains(
+      deceasedSettlorNino
+    ) || existingProtectorNino.contains(deceasedSettlorNino)
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     getAtPath(page.path)
 

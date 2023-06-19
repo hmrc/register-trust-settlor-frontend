@@ -87,8 +87,8 @@ object TrustDetailsType {
   val uaReads: Reads[TrustDetailsType] = (
     TypeOfTrust.uaReads and
       DeedOfVariation.uaReads and
-      (__ \ 'holdoverReliefYesNo).readNullable[Boolean] and
-      (__ \ 'efrbsStartDate).readNullable[LocalDate]
+      (__ \ Symbol("holdoverReliefYesNo")).readNullable[Boolean] and
+      (__ \ Symbol("efrbsStartDate")).readNullable[LocalDate]
   )(TrustDetailsType.apply _)
 }
 

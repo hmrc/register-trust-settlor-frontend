@@ -438,6 +438,7 @@ settlorIndividualIDCard.number = Rhif y cerdyn adnabod
 settlorIndividualIDCard.number.error.invalid = Gall rhif y cerdyn adnabod gynnwys llythrennau a rhifau yn unig
 settlorIndividualIDCard.number.error.length = Mae’n rhaid i rif y cerdyn adnabod fod yn 30 o gymeriadau neu lai
 settlorIndividualIDCard.number.error.required = Nodwch rif cerdyn adnabod y setlwr
+settlorIndividualIDCard.number.error.duplicate = Mae’n rhaid i rif cerdyn adnabod cenedlaethol y setlwr fod yn unigryw
 settlorIndividualIDCard.title = Beth yw manylion cerdyn adnabod y setlwr?
 
 settlorIndividualIDCardPastTense.checkYourAnswersLabel = Beth yw manylion cerdyn ID diwethaf {0}?
@@ -515,6 +516,9 @@ settlorIndividualNINO.checkYourAnswersLabel = Beth yw rhif Yswiriant Gwladol {0}
 settlorIndividualNINO.error.invalidFormat = Nodwch rif Yswiriant Gwladol y setlwr yn y fformat cywir
 settlorIndividualNINO.error.required = Nodwch rif Yswiriant Gwladol y setlwr
 settlorIndividualNINO.error.duplicate = Nodwch rif Yswiriant Gwladol nad yw wedi’i ddefnyddio eisoes i ychwanegu setlwr
+settlorIndividualNINO.error.uniqueTrustee = Mae’n rhaid i rif Yswiriant Gwladol y setlwr fod yn wahanol i rif Yswiriant Gwladol ymddiriedolwr
+settlorIndividualNINO.error.uniqueBeneficiary = Mae’n rhaid i rif Yswiriant Gwladol y setlwr fod yn wahanol i rif Yswiriant Gwladol y buddiolwr
+settlorIndividualNINO.error.uniqueProtector = Mae’n rhaid i rif Yswiriant Gwladol y setlwr fod yn wahanol i rif Yswiriant Gwladol yr amddiffynnydd
 settlorIndividualNINO.heading = Beth yw rhif Yswiriant Gwladol {0}?
 settlorIndividualNINO.hint = Mae hwn ar ei gerdyn Yswiriant Gwladol, llythyr ynghylch budd-daliadau, slip cyflog neu P60. Er enghraifft, ‘QQ 12 34 56 C’.
 
@@ -549,6 +553,7 @@ settlorIndividualPassport.number = Rhif pasbort
 settlorIndividualPassport.number.error.invalid = Gall y rhif pasbort gynnwys llythrennau a rhifau yn unig
 settlorIndividualPassport.number.error.length = Mae’n rhaid i’r rhif pasbort fod yn 30 o gymeriadau neu lai
 settlorIndividualPassport.number.error.required = Nodwch rif pasbort y setlwr
+settlorIndividualPassport.number.error.duplicate = Mae’n rhaid i rif y pasbort ar gyfer pob setlwr fod yn unigryw
 settlorIndividualPassport.number.hint = Er enghraifft, 502135326.
 settlorIndividualPassport.title = Beth yw manylion pasbort y setlwr?
 

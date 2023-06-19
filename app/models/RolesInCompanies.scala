@@ -41,7 +41,7 @@ object RolesInCompanies extends Logging {
         case Status.OK =>
           if (response.json.\\("individualBeneficiaries").nonEmpty) {
             val jsonReads =
-              (__ \\ 'individualBeneficiaries)
+              (__ \\ Symbol("individualBeneficiaries"))
                 .read[Seq[RoleInCompany]]
 
             response.json.validate[Seq[RoleInCompany]](jsonReads) match {

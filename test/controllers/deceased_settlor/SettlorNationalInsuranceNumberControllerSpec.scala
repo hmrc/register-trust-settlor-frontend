@@ -20,15 +20,26 @@ import base.SpecBase
 import controllers.routes._
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
 import models.pages.FullName
+import org.mockito.ArgumentMatchers.any
 import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.DraftRegistrationService
 import views.html.deceased_settlor.SettlorNationalInsuranceNumberView
+
+import scala.concurrent.Future
 
 class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
-  val formProvider = new SettlorNationalInsuranceNumberFormProvider()
-  val form         = formProvider()
+  val existingTrusteeNinos     = Seq("")
+  val existingBeneficiaryNinos = Seq("")
+  val existingProtectorNinos   = Seq("")
+
+  val form = new SettlorNationalInsuranceNumberFormProvider()(
+    existingTrusteeNinos,
+    existingBeneficiaryNinos,
+    existingProtectorNinos
+  )
 
   lazy val settlorNationalInsuranceNumberRoute =
     routes.SettlorNationalInsuranceNumberController.onPageLoad(fakeDraftId).url
@@ -41,7 +52,19 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      val sequence: IndexedSeq[String] = IndexedSeq("")
+
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
+          .build()
 
       val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
 
@@ -67,7 +90,19 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
         .success
         .value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      val sequence: IndexedSeq[String] = IndexedSeq("")
+
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
+          .build()
 
       val request = FakeRequest(GET, settlorNationalInsuranceNumberRoute)
 
@@ -87,8 +122,19 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      val sequence: IndexedSeq[String] = IndexedSeq("")
+
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+
       val application =
-        applicationBuilder(userAnswers = Some(userAnswers)).build()
+        applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
+          .build()
 
       val request =
         FakeRequest(POST, settlorNationalInsuranceNumberRoute)
@@ -106,7 +152,19 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val userAnswers = emptyUserAnswers.set(SettlorsNamePage, name).success.value
 
-      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+      val mockDraftRegistrationService = mock[DraftRegistrationService]
+
+      val sequence: IndexedSeq[String] = IndexedSeq("")
+
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+
+      val application =
+        applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
+          .build()
 
       val request =
         FakeRequest(POST, settlorNationalInsuranceNumberRoute)
