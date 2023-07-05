@@ -66,7 +66,9 @@ class SettlorIndividualAddressInternationalController @Inject() (
           case Some(value) => form.fill(value)
         }
 
-        Ok(view(preparedForm, countryOptions.options, index, draftId, name, request.settlorAliveAtRegistration(index)))
+        Ok(
+          view(preparedForm, countryOptions.options(), index, draftId, name, request.settlorAliveAtRegistration(index))
+        )
     }
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] =
@@ -81,7 +83,7 @@ class SettlorIndividualAddressInternationalController @Inject() (
               BadRequest(
                 view(
                   formWithErrors,
-                  countryOptions.options,
+                  countryOptions.options(),
                   index,
                   draftId,
                   name,

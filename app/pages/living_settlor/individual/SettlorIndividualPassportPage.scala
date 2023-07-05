@@ -27,3 +27,8 @@ final case class SettlorIndividualPassportPage(index: Int) extends QuestionPage[
 
   override def toString: String = "passport"
 }
+
+object SettlorIndividualPassportPage {
+  val key               = "passport"
+  val passportNumberKey = "cardNumber"
+}

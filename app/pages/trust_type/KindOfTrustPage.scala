@@ -70,7 +70,7 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
   private def removeCompanyTypeAndTimeAnswers(userAnswers: UserAnswers): Try[UserAnswers] = {
 
     val numberOfLivingSettlorsCompleteOrInProgress =
-      userAnswers.data.transform((__ \ 'settlors \ 'living).json.pick) match {
+      userAnswers.data.transform((__ \ Symbol("settlors") \ Symbol("living")).json.pick) match {
         case JsSuccess(value, _) =>
           value match {
             case JsArray(value) => value.size

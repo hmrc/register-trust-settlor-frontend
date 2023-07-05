@@ -22,13 +22,18 @@ import play.api.data.Form
 
 class SettlorNationalInsuranceNumberFormProvider @Inject() extends Mappings {
 
-  def apply(): Form[String] =
+  def apply(
+    existingTrusteeNinos: collection.Seq[String],
+    existingBeneficiaryNinos: collection.Seq[String],
+    existingProtectorNinos: collection.Seq[String]
+  ): Form[String] =
     Form(
       "value" -> nino("settlorNationalInsuranceNumber.error.required")
         .verifying(
           firstError(
             isNotEmpty("value", "settlorNationalInsuranceNumber.error.required"),
-            isNinoValid("value", "settlorNationalInsuranceNumber.error.invalid")
+            isNinoValid("value", "settlorNationalInsuranceNumber.error.invalid"),
+            uniqueNino(existingTrusteeNinos, existingBeneficiaryNinos, existingProtectorNinos)
           )
         )
     )

@@ -54,7 +54,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
 
       val view = application.injector.instanceOf[CountryOfNationalityView]
 
-      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options
+      val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       status(result) mustEqual OK
 

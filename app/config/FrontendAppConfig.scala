@@ -31,7 +31,10 @@ class FrontendAppConfig @Inject() (configuration: Configuration, contactFrontend
   final val ENGLISH = "en"
   final val WELSH   = "cy"
 
-  val repositoryKey: String = "settlors"
+  val repositoryKey: String              = "settlors"
+  val repositoryKeyTrustees: String      = "trustees"
+  val repositoryKeyBeneficiaries: String = "beneficiaries"
+  val repositoryKeyProtectors: String    = "protectors"
 
   val appName: String       = configuration.get[String]("appName")
   val analyticsHost: String = configuration.get[String](s"google-analytics.host")

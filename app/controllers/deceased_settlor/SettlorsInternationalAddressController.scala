@@ -64,7 +64,7 @@ class SettlorsInternationalAddressController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, countryOptions.options, draftId, name))
+      Ok(view(preparedForm, countryOptions.options(), draftId, name))
   }
 
   def onSubmit(draftId: String): Action[AnyContent] =
@@ -75,7 +75,7 @@ class SettlorsInternationalAddressController @Inject() (
         .bindFromRequest()
         .fold(
           (formWithErrors: Form[_]) =>
-            Future.successful(BadRequest(view(formWithErrors, countryOptions.options, draftId, name))),
+            Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, name))),
           value =>
             request.userAnswers.set(SettlorsInternationalAddressPage, value) match {
               case Success(updatedAnswers) =>

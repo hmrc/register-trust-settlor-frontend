@@ -27,3 +27,8 @@ final case class SettlorIndividualIDCardPage(index: Int) extends QuestionPage[Pa
 
   override def toString: String = "idCard"
 }
+
+object SettlorIndividualIDCardPage {
+  val key         = "idCard"
+  val idNumberKey = "cardNumber"
+}

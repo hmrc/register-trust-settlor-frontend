@@ -35,7 +35,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
   private val mockConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
   private val mockTrustStore: TrustsStoreService      = mock[TrustsStoreService]
 
-  private val service = new DraftRegistrationService(mockConnector, mockTrustStore)
+  private val service = new DraftRegistrationService(frontendAppConfig, mockConnector, mockTrustStore)
 
   "Draft registration service" when {
 

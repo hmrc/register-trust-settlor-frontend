@@ -19,7 +19,8 @@ package forms.mappings
 import forms.Validation
 import models.UserAnswers
 import pages.living_settlor.business.SettlorBusinessUtrPage
-import pages.living_settlor.individual.SettlorIndividualNINOPage
+import pages.living_settlor.individual.{SettlorIndividualIDCardPage, SettlorIndividualNINOPage, SettlorIndividualPassportPage}
+import play.api.Logging
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}
 import sections.LivingSettlors
@@ -28,7 +29,7 @@ import uk.gov.hmrc.domain.Nino
 import java.time.LocalDate
 import scala.util.matching.Regex
 
-trait Constraints {
+trait Constraints extends Logging {
 
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint { input =>
@@ -172,6 +173,23 @@ trait Constraints {
       }
     }
 
+  protected def uniqueNino(
+    existingTrusteeNinos: collection.Seq[String],
+    existingBeneficiaryNinos: collection.Seq[String],
+    existingProtectorNinos: collection.Seq[String]
+  ): Constraint[String] =
+    Constraint { nino =>
+      if (existingTrusteeNinos.contains(nino)) {
+        Invalid("settlorIndividualNINO.error.uniqueTrustee")
+      } else if (existingBeneficiaryNinos.contains(nino)) {
+        Invalid("settlorIndividualNINO.error.uniqueBeneficiary")
+      } else if (existingProtectorNinos.contains(nino)) {
+        Invalid("settlorIndividualNINO.error.uniqueProtector")
+      } else {
+        Valid
+      }
+    }
+
   protected def isNinoDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
     Constraint { nino =>
       userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
@@ -181,6 +199,44 @@ trait Constraints {
           )
 
           if (uniqueNino) {
+            Valid
+          } else {
+            Invalid(errorKey)
+          }
+        case _                      =>
+          Valid
+      }
+    }
+
+  protected def isPassportNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint { passportNumber =>
+      userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
+        case JsSuccess(settlors, _) =>
+          val uniquePassportNumber = settlors.value.zipWithIndex.forall { settlor =>
+            !((settlor._1 \ SettlorIndividualPassportPage.key \ SettlorIndividualPassportPage.passportNumberKey).toOption
+              .fold(false)(_.as[String] == passportNumber) && settlor._2 != index)
+          }
+
+          if (uniquePassportNumber) {
+            Valid
+          } else {
+            Invalid(errorKey)
+          }
+        case _                      =>
+          Valid
+      }
+    }
+
+  protected def isIDNumberDuplicated(userAnswers: UserAnswers, index: Int, errorKey: String): Constraint[String] =
+    Constraint { idNumber =>
+      userAnswers.data.transform(LivingSettlors.path.json.pick[JsArray]) match {
+        case JsSuccess(settlors, _) =>
+          val uniqueIDNumber = settlors.value.zipWithIndex.forall { settlor =>
+            !((settlor._1 \ SettlorIndividualIDCardPage.key \ SettlorIndividualIDCardPage.idNumberKey).toOption
+              .fold(false)(_.as[String].equals(idNumber)) && settlor._2 != index)
+          }
+
+          if (uniqueIDNumber) {
             Valid
           } else {
             Invalid(errorKey)

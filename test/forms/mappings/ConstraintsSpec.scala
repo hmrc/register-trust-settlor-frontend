@@ -17,11 +17,13 @@
 package forms.mappings
 
 import generators.Generators
+import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
-import play.api.data.validation.{Invalid, Valid}
+import play.api.data.validation.{Invalid, Valid, ValidationError}
+import play.api.libs.json.{JsObject, Json}
 
 import java.time.LocalDate
 
@@ -177,6 +179,129 @@ class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
         val result = minDate(min, "error.past", "foo")(date)
         result mustEqual Invalid("error.past", "foo")
       }
+    }
+  }
+
+  "uniquePassportNumber" must {
+    "return valid when isPassportNumberDuplicated is true" in {
+      val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+      val result      = isPassportNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+      result mustEqual Valid
+    }
+
+    "return invalid when isPassportNumberDuplicated is false" in {
+      val json =
+        """{
+          |"settlors" : {
+          |  "living" : [
+          |   {
+          |   "individualOrBusiness":"individual",
+          |   "aliveAtRegistration":true,
+          |   "name":{
+          |      "firstName":"John",
+          |      "lastName":"Bonsony"
+          |   },
+          |   "dateOfBirthYesNo":false,
+          |   "countryOfNationalityYesNo":false,
+          |   "ninoYesNo":false,
+          |   "countryOfResidencyYesNo":false,
+          |   "addressYesNo":true,
+          |   "ukAddressYesNo":true,
+          |   "ukAddress":{
+          |      "line1":"Line 1",
+          |      "line2":"Line 2",
+          |      "line3":"Line 3",
+          |      "line4":"Line 4",
+          |      "postcode":"NE98 1EZ"
+          |   },
+          |   "passportYesNo":true,
+          |   "passport":{
+          |      "country":"JP",
+          |      "cardNumber":"502135326",
+          |      "expiryDate":"2029-02-12"
+          |   },
+          |   "mentalCapacityYesNo":"dontKnow",
+          |   "status":"completed"
+          |}
+          |                ]
+          |            }
+          |            }
+          |""".stripMargin
+
+      val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
+      val result      = isPassportNumberDuplicated(userAnswers, 1, "number.error.duplicate")("502135326")
+      result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
+    }
+  }
+
+  "uniqueIDNumber" must {
+    "return valid when isPassportNumberDuplicated is true" in {
+      val userAnswers = UserAnswers(draftId = "", internalAuthId = "")
+      val result      = isIDNumberDuplicated(userAnswers, 0, "number.error.duplicate")("502135326")
+      result mustEqual Valid
+    }
+
+    "return invalid when isIDNumberDuplicated is false" in {
+      val json        =
+        """
+          |{"settlors": {
+          |   "living" : [
+          |      {
+          |   "individualOrBusiness":"individual",
+          |   "aliveAtRegistration":true,
+          |   "name":{
+          |      "firstName":"John",
+          |      "lastName":"Bonsony"
+          |   },
+          |   "dateOfBirthYesNo":false,
+          |   "countryOfNationalityYesNo":false,
+          |   "ninoYesNo":false,
+          |   "countryOfResidencyYesNo":false,
+          |   "addressYesNo":true,
+          |   "ukAddressYesNo":true,
+          |   "ukAddress":{
+          |      "line1":"Line 1",
+          |      "line2":"Line 2",
+          |      "line3":"Line 3",
+          |      "line4":"Line 4",
+          |      "postcode":"NE98 1EZ"
+          |   },
+          |   "passportYesNo":false,
+          |   "mentalCapacityYesNo":"dontKnow",
+          |   "status":"completed",
+          |   "idCardYesNo":true,
+          |   "idCard":{
+          |      "country":"JP",
+          |      "cardNumber":"018765432",
+          |      "expiryDate":"2029-02-12"
+          |   }
+          |}
+          |                ]
+          |                }
+          |                }
+          |""".stripMargin
+      val userAnswers = UserAnswers(draftId = "", data = Json.parse(json).as[JsObject], internalAuthId = "")
+      val result      = isIDNumberDuplicated(userAnswers, 1, "number.error.duplicate")("018765432")
+      result mustEqual Invalid(List(ValidationError(List("number.error.duplicate"))))
+    }
+  }
+
+  "uniqueNinoTrustee" should {
+
+    val existingTrusteeNinos: Seq[String]     = Seq("AA123456C", "AR123456A", "AE123456C")
+    val existingBeneficiaryNinos: Seq[String] = Seq("AA123456C", "AR123456A", "AE123456C")
+    val existingProtectorNinos: Seq[String]   = Seq("AA123456C", "AR123456A", "AE123456C")
+
+    "return Valid if the NINO is unique" in {
+
+      val result = uniqueNino(existingTrusteeNinos, existingBeneficiaryNinos, existingProtectorNinos)("AC123456C")
+      result mustEqual Valid
+    }
+
+    "return Invalid if the NINO is already in the existingTrusteeNinos" in {
+
+      val result = uniqueNino(existingTrusteeNinos, existingBeneficiaryNinos, existingProtectorNinos)("AR123456A")
+      result mustEqual Invalid("settlorIndividualNINO.error.uniqueTrustee")
     }
   }
 }

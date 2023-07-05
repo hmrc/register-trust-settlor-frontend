@@ -33,9 +33,10 @@
 package forms
 
 import java.time.LocalDate
-
 import config.FrontendAppConfig
 import forms.mappings.Mappings
+import models.UserAnswers
+
 import javax.inject.Inject
 import models.pages.PassportOrIdCardDetails
 import play.api.data.Form
@@ -43,10 +44,10 @@ import play.api.data.Forms._
 
 class PassportOrIdCardFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings {
 
-  val maxLengthCountyField = 100
-  val maxLengthNumberField = 30
+  private val maxLengthCountyField = 100
+  private val maxLengthNumberField = 30
 
-  def apply(prefix: String): Form[PassportOrIdCardDetails] = Form(
+  def apply(prefix: String, userAnswers: UserAnswers, index: Int): Form[PassportOrIdCardDetails] = Form(
     mapping(
       "country"    -> text(s"$prefix.country.error.required")
         .verifying(
@@ -60,7 +61,9 @@ class PassportOrIdCardFormProvider @Inject() (appConfig: FrontendAppConfig) exte
           firstError(
             maxLength(maxLengthNumberField, s"$prefix.number.error.length"),
             regexp(Validation.passportOrIdCardNumberRegEx, s"$prefix.number.error.invalid"),
-            isNotEmpty("number", s"$prefix.number.error.required")
+            isNotEmpty("number", s"$prefix.number.error.required"),
+            isPassportNumberDuplicated(userAnswers, index, s"$prefix.number.error.duplicate"),
+            isIDNumberDuplicated(userAnswers, index, s"$prefix.number.error.duplicate")
           )
         ),
       "expiryDate" -> localDate(

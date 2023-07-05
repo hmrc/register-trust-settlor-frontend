@@ -34,11 +34,12 @@ import java.time.{LocalDate, ZoneOffset}
 
 class SettlorIndividualPassportControllerSpec extends SpecBase {
 
-  private val formProvider: PassportOrIdCardFormProvider = new PassportOrIdCardFormProvider(frontendAppConfig)
-  private val form: Form[PassportOrIdCardDetails]        = formProvider("settlorIndividualPassport")
-  private val index: Int                                 = 0
-  private val name: FullName                             = FullName("First", Some("Middle"), "Last")
-  private val validAnswer: LocalDate                     = LocalDate.now(ZoneOffset.UTC)
+  private val index: Int             = 0
+  private val name: FullName         = FullName("First", Some("Middle"), "Last")
+  private val validAnswer: LocalDate = LocalDate.now(ZoneOffset.UTC)
+
+  private val form: Form[PassportOrIdCardDetails] =
+    new PassportOrIdCardFormProvider(frontendAppConfig)("settlorIndividualPassport", emptyUserAnswers, index)
 
   private lazy val settlorIndividualPassportRoute: String =
     routes.SettlorIndividualPassportController.onPageLoad(index, fakeDraftId).url

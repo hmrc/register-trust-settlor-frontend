@@ -16,17 +16,20 @@
 
 package services
 
+import config.FrontendAppConfig
 import connectors.SubmissionDraftConnector
 import models.pages.KindOfTrust.Employees
 import models.{RolesInCompanies, TaskStatus, UserAnswers}
 import pages.trust_type.KindOfTrustPage
 import play.api.Logging
+import play.api.libs.json.JsArray
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
 class DraftRegistrationService @Inject() (
+  config: FrontendAppConfig,
   submissionDraftConnector: SubmissionDraftConnector,
   trustsStoreService: TrustsStoreService
 )(implicit ec: ExecutionContext)
@@ -63,4 +66,45 @@ class DraftRegistrationService @Inject() (
   def removeLivingSettlorsMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeLivingSettlorsMappedPiece(draftId)
 
+  def retrieveTrusteeNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+    submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyTrustees).map { response =>
+      response.data
+        .\("data")
+        .\("trustees")
+        .asOpt[JsArray]
+        .getOrElse(JsArray())
+        .value
+        .map(_.\("nino").asOpt[String])
+        .filter(_.isDefined)
+        .map(_.get)
+
+    }
+
+  def retrieveBeneficiaryNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+    submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyBeneficiaries).map { response =>
+      response.data
+        .\("data")
+        .\("beneficiaries")
+        .\("individualBeneficiaries")
+        .asOpt[JsArray]
+        .getOrElse(JsArray())
+        .value
+        .map(_.\("nationalInsuranceNumber").asOpt[String])
+        .filter(_.isDefined)
+        .map(_.get)
+    }
+
+  def retrieveProtectorNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+    submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyProtectors).map { response =>
+      response.data
+        .\("data")
+        .\("protectors")
+        .\("individualProtectors")
+        .asOpt[JsArray]
+        .getOrElse(JsArray())
+        .value
+        .map(_.\("nationalInsuranceNumber").asOpt[String])
+        .filter(_.isDefined)
+        .map(_.get)
+    }
 }

@@ -31,5 +31,5 @@ class CountryOptionsNonUK @Inject() (
   config: FrontendAppConfig
 ) extends CountryOptions(environment, config) {
   override def options()(implicit messages: Messages): Seq[InputOption] =
-    CountryOptions.getCountries(environment, getFileName).filterNot(x => x.value == GB)
+    CountryOptions.getCountries(environment, getFileName()).filterNot(x => x.value == GB)
 }
