@@ -14,7 +14,7 @@ lazy val root = (project in file("."))
     DefaultBuildSettings.defaultSettings(),
     inConfig(Test)(testSettings),
     majorVersion := 0,
-    scalaVersion := "2.13.10",
+    scalaVersion := "2.13.11",
     // To resolve a bug with version 2.x.x of the scoverage plugin - https://github.com/sbt/sbt/issues/6997
     libraryDependencySchemes += "org.scala-lang.modules" %% "scala-xml" % VersionScheme.Always,
     name := appName,

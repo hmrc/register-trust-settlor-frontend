@@ -138,7 +138,9 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
 
             contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.country.error.required"))
             contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.number.error.required"))
-            contentAsString(result) must include(messages("settlorIndividualIDCardPastTense.expiryDate.error.required.all"))
+            contentAsString(result) must include(
+              messages("settlorIndividualIDCardPastTense.expiryDate.error.required.all")
+            )
 
             application.stop()
           }
