@@ -23,7 +23,7 @@ object AppDependencies {
     "org.mockito"            %% "mockito-scala-scalatest"  % "1.17.22",
     "wolfendale"             %% "scalacheck-gen-regexp"    % "0.1.2",
     "org.scalacheck"         %% "scalacheck"               % "1.17.0",
-    "com.github.tomakehurst"  % "wiremock-standalone"      % "3.0.1",
+    "com.github.tomakehurst"  % "wiremock-standalone"      % "2.27.2",
     "com.vladsch.flexmark"    % "flexmark-all"             % "0.64.8",
     "uk.gov.hmrc"            %% "bootstrap-test-play-28"   % bootstrapVersion
   ).map(_ % Test)
