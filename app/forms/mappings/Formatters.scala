@@ -43,7 +43,7 @@ trait Formatters {
       data.get(key) match {
         case None | Some("") => Left(Seq(FormError(key, errorKey)))
         case Some(s)         =>
-          Right(s.trim)
+          Right(s.trim.replace("‘", "'").replace("’", "'"))
       }
 
     override def unbind(key: String, value: String): Map[String, String] =
