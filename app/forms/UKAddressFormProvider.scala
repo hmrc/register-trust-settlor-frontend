@@ -22,7 +22,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import models.pages.UKAddress
 import play.api.data.Forms._
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 
 class UKAddressFormProvider @Inject() extends Mappings {
 
@@ -48,8 +48,7 @@ class UKAddressFormProvider @Inject() extends Mappings {
           ),
       "line3"    ->
         optional(
-          Forms.text
-            .transform(trimWhitespace, identity[String])
+          text()
             .verifying(
               firstError(
                 maxLength(35, "ukAddress.error.line3.length"),
@@ -59,8 +58,7 @@ class UKAddressFormProvider @Inject() extends Mappings {
         ).transform(emptyToNone, identity[Option[String]]),
       "line4"    ->
         optional(
-          Forms.text
-            .transform(trimWhitespace, identity[String])
+          text()
             .verifying(
               firstError(
                 maxLength(35, "ukAddress.error.line4.length"),

@@ -22,7 +22,7 @@ import forms.mappings.Mappings
 import javax.inject.Inject
 import models.pages.InternationalAddress
 import play.api.data.Forms._
-import play.api.data.{Form, Forms}
+import play.api.data.Form
 
 class InternationalAddressFormProvider @Inject() extends Mappings {
 
@@ -48,8 +48,7 @@ class InternationalAddressFormProvider @Inject() extends Mappings {
           ),
       "line3"   ->
         optional(
-          Forms.text
-            .transform(trimWhitespace, identity[String])
+          text()
             .verifying(
               firstError(
                 maxLength(35, "internationalAddress.error.line3.length"),
