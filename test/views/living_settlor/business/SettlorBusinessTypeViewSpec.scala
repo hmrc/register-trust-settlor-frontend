@@ -31,7 +31,7 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
   val name  = "Business name"
   val form  = new SettlorBusinessTypeFormProvider()()
 
-  val view = viewFor[SettlorBusinessTypeView](Some(emptyUserAnswers))
+  val view: SettlorBusinessTypeView = viewFor[SettlorBusinessTypeView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
@@ -59,7 +59,7 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView(form))
 
         for (option <- KindOfBusiness.options)
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = false)
       }
     }
 
@@ -70,10 +70,10 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
 
           val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
 
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = true)
 
           for (unselectedOption <- KindOfBusiness.options.filterNot(o => o == option))
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
+            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, isChecked = false)
         }
       }
   }

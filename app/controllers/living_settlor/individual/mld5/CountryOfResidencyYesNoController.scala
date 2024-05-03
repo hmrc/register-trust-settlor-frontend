@@ -58,8 +58,11 @@ class CountryOfResidencyYesNoController @Inject() (
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] = action(index, draftId) { implicit request =>
     val messageKeyPrefix =
-      if (request.settlorAliveAtRegistration(index)) "settlorIndividualCountryOfResidencyYesNo"
-      else "settlorIndividualCountryOfResidencyYesNoPastTense"
+      if (request.settlorAliveAtRegistration(index)) {
+        "settlorIndividualCountryOfResidencyYesNo"
+      } else {
+        "settlorIndividualCountryOfResidencyYesNoPastTense"
+      }
 
     val preparedForm = request.userAnswers.get(CountryOfResidencyYesNoPage(index)) match {
       case None        => form(messageKeyPrefix)
@@ -71,8 +74,11 @@ class CountryOfResidencyYesNoController @Inject() (
 
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = action(index, draftId).async { implicit request =>
     val messageKeyPrefix =
-      if (request.settlorAliveAtRegistration(index)) "settlorIndividualCountryOfResidencyYesNo"
-      else "settlorIndividualCountryOfResidencyYesNoPastTense"
+      if (request.settlorAliveAtRegistration(index)) {
+        "settlorIndividualCountryOfResidencyYesNo"
+      } else {
+        "settlorIndividualCountryOfResidencyYesNoPastTense"
+      }
 
     form(messageKeyPrefix)
       .bindFromRequest()

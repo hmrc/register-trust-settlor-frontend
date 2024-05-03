@@ -56,8 +56,11 @@ class SettlorIndividualAddressYesNoController @Inject() (
     (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
       val name             = request.userAnswers.get(SettlorIndividualNamePage(index)).get
       val messageKeyPrefix =
-        if (request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo"
-        else "settlorIndividualAddressYesNoPastTense"
+        if (request.settlorAliveAtRegistration(index)) {
+          "settlorIndividualAddressYesNo"
+        } else {
+          "settlorIndividualAddressYesNoPastTense"
+        }
 
       val preparedForm = request.userAnswers.get(SettlorAddressYesNoPage(index)) match {
         case None        => form(messageKeyPrefix)
@@ -71,8 +74,11 @@ class SettlorIndividualAddressYesNoController @Inject() (
     (actions.authWithData(draftId) andThen requireName(index, draftId)).async { implicit request =>
       val name             = request.userAnswers.get(SettlorIndividualNamePage(index)).get
       val messageKeyPrefix =
-        if (request.settlorAliveAtRegistration(index)) "settlorIndividualAddressYesNo"
-        else "settlorIndividualAddressYesNoPastTense"
+        if (request.settlorAliveAtRegistration(index)) {
+          "settlorIndividualAddressYesNo"
+        } else {
+          "settlorIndividualAddressYesNoPastTense"
+        }
 
       form(messageKeyPrefix)
         .bindFromRequest()

@@ -18,7 +18,6 @@ package mapping
 
 import base.SpecBase
 import models.pages.DeedOfVariation._
-import models.pages.KindOfTrust._
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
 import models.{TrustDetailsType, UserAnswers}
 import pages.deceased_settlor.SettlorsNamePage
