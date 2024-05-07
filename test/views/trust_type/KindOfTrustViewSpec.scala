@@ -27,9 +27,9 @@ class KindOfTrustViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "kindOfTrust"
 
-  val form = new KindOfTrustFormProvider()()
+  val form: Form[KindOfTrust] = new KindOfTrustFormProvider()()
 
-  val view = viewFor[KindOfTrustView](Some(emptyUserAnswers))
+  val view: KindOfTrustView = viewFor[KindOfTrustView](Some(emptyUserAnswers))
 
   def applyView(form: Form[_]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId)(fakeRequest, messages)
@@ -53,7 +53,7 @@ class KindOfTrustViewSpec extends ViewBehaviours {
         val doc = asDocument(applyView(form))
 
         for (option <- KindOfTrust.options)
-          assertContainsRadioButton(doc, option.id, "value", option.value, false)
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = false)
       }
     }
 
@@ -64,10 +64,10 @@ class KindOfTrustViewSpec extends ViewBehaviours {
 
           val doc = asDocument(applyView(form.bind(Map("value" -> s"${option.value}"))))
 
-          assertContainsRadioButton(doc, option.id, "value", option.value, true)
+          assertContainsRadioButton(doc, option.id, "value", option.value, isChecked = true)
 
           for (unselectedOption <- KindOfTrust.options.filterNot(o => o == option))
-            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, false)
+            assertContainsRadioButton(doc, unselectedOption.id, "value", unselectedOption.value, isChecked = false)
         }
       }
   }

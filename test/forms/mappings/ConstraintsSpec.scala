@@ -21,13 +21,18 @@ import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
+import org.scalatestplus.scalacheck.{ScalaCheckDrivenPropertyChecks, ScalaCheckPropertyChecks}
 import play.api.data.validation.{Invalid, Valid, ValidationError}
 import play.api.libs.json.{JsObject, Json}
 
 import java.time.LocalDate
 
-class ConstraintsSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with Generators with Constraints {
+class ConstraintsSpec
+    extends AnyWordSpec
+    with Matchers
+    with ScalaCheckDrivenPropertyChecks
+    with Generators
+    with Constraints {
 
   "firstError" must {
 

@@ -19,7 +19,6 @@ package controllers
 import config.FrontendAppConfig
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import play.api.{Configuration, Environment}
-import uk.gov.hmrc.play.bootstrap.config.AuthRedirects
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -31,8 +30,7 @@ class SessionTimeoutController @Inject() (
   val config: Configuration,
   val env: Environment,
   mcc: MessagesControllerComponents
-) extends FrontendController(mcc)
-    with AuthRedirects {
+) extends FrontendController(mcc) {
 
   val keepAlive: Action[AnyContent] = Action.async { implicit request =>
     Future.successful(Ok.withSession(request.session))

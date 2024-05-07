@@ -19,10 +19,9 @@ package pages.living_settlor
 import models.UserAnswers
 import models.pages.IndividualOrBusiness
 import models.pages.IndividualOrBusiness.{Business, Individual}
-import pages.QuestionPage
-import pages.LivingSettlorStatus
+import pages.{LivingSettlorStatus, QuestionPage}
 import pages.living_settlor.business._
-import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAddressUKPage, SettlorAddressUKYesNoPage, SettlorAddressYesNoPage, SettlorAliveYesNoPage, SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualIDCardYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNINOYesNoPage, SettlorIndividualNamePage, SettlorIndividualPassportPage, SettlorIndividualPassportYesNoPage}
+import pages.living_settlor.individual._
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 
