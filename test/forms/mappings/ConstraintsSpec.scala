@@ -21,7 +21,7 @@ import models.UserAnswers
 import org.scalacheck.Gen
 import org.scalatest.matchers.must.Matchers
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatestplus.scalacheck.{ScalaCheckDrivenPropertyChecks, ScalaCheckPropertyChecks}
+import org.scalatestplus.scalacheck.ScalaCheckDrivenPropertyChecks
 import play.api.data.validation.{Invalid, Valid, ValidationError}
 import play.api.libs.json.{JsObject, Json}
 

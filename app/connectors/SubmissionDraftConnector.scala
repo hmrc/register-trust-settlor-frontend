@@ -20,15 +20,16 @@ import config.FrontendAppConfig
 import models.RolesInCompanies.RolesInCompaniesAnswered
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse, UpstreamErrorResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 
 import java.time.LocalDate
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class SubmissionDraftConnector @Inject() (http: HttpClient, config: FrontendAppConfig) {
+class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
@@ -36,17 +37,23 @@ class SubmissionDraftConnector @Inject() (http: HttpClient, config: FrontendAppC
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[HttpResponse] =
-    http.POST[JsValue, HttpResponse](s"$submissionsBaseUrl/$draftId/set/$section", Json.toJson(data))
+    http
+      .post(url"$submissionsBaseUrl/$draftId/set/$section")
+      .withBody(Json.toJson(data))
+      .execute[HttpResponse]
 
   def getDraftSection(draftId: String, section: String)(implicit
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[SubmissionDraftResponse] =
-    http.GET[SubmissionDraftResponse](s"$submissionsBaseUrl/$draftId/$section")
+    http
+      .get(url"$submissionsBaseUrl/$draftId/$section")
+      .execute[SubmissionDraftResponse]
 
   def getTrustSetupDate(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[LocalDate]] =
     http
-      .GET[HttpResponse](s"$submissionsBaseUrl/$draftId/when-trust-setup")
+      .get(url"$submissionsBaseUrl/$draftId/when-trust-setup")
+      .execute[HttpResponse]
       .map { response =>
         (response.json \ "startDate").asOpt[LocalDate]
       }
@@ -55,39 +62,51 @@ class SubmissionDraftConnector @Inject() (http: HttpClient, config: FrontendAppC
       }
 
   def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
-    http.GET[Boolean](s"$submissionsBaseUrl/$draftId/is-trust-taxable").recover { case _ =>
-      true
-    }
+    http
+      .get(url"$submissionsBaseUrl/$draftId/is-trust-taxable")
+      .execute[Boolean]
+      .recover { case _ =>
+        true
+      }
 
   def allIndividualBeneficiariesHaveRoleInCompany(
     draftId: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[RolesInCompaniesAnswered] =
-    http.GET[RolesInCompaniesAnswered](s"$submissionsBaseUrl/$draftId/beneficiaries")
+    http
+      .get(url"$submissionsBaseUrl/$draftId/beneficiaries")
+      .execute[RolesInCompaniesAnswered]
 
   def removeRoleInCompanyAnswers(
     draftId: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/set/beneficiaries/remove-role-in-company"
-    http.POSTEmpty[HttpResponse](url)
+    http
+      .post(url"$url")
+      .execute[HttpResponse]
   }
 
   def removeDeceasedSettlorMappedPiece(
     draftId: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/deceased-settlor"
-    http.POSTEmpty[HttpResponse](url)
+    http
+      .post(url"$url")
+      .execute[HttpResponse]
   }
 
   def removeLivingSettlorsMappedPiece(
     draftId: String
   )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/living-settlors"
-    http.POSTEmpty[HttpResponse](url)
+    http
+      .post(url"$url")
+      .execute[HttpResponse]
   }
 
   def getTrustUtr(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] =
     http
-      .GET[String](s"$submissionsBaseUrl/$draftId/trust-utr")
+      .get(url"$submissionsBaseUrl/$draftId/trust-utr")
+      .execute[String]
       .map(Some(_))
       .recover {
         case e: UpstreamErrorResponse if e.statusCode == NOT_FOUND => None

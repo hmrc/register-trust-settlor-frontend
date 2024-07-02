@@ -18,13 +18,15 @@ package connectors
 
 import config.FrontendAppConfig
 import models.TaskStatus.TaskStatus
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpResponse}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class TrustsStoreConnector @Inject() (http: HttpClient, config: FrontendAppConfig) {
+class TrustsStoreConnector @Inject() (http: HttpClientV2, config: FrontendAppConfig) {
 
   private val baseUrl: String = s"${config.trustsStoreUrl}/trusts-store"
 
@@ -33,7 +35,10 @@ class TrustsStoreConnector @Inject() (http: HttpClient, config: FrontendAppConfi
     ec: ExecutionContext
   ): Future[HttpResponse] = {
     val url: String = s"$baseUrl/register/tasks/update-settlors/$draftId"
-    http.POST[TaskStatus, HttpResponse](url, taskStatus)
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(taskStatus))
+      .execute[HttpResponse]
   }
 
   def updateBeneficiaryTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit
@@ -41,7 +46,10 @@ class TrustsStoreConnector @Inject() (http: HttpClient, config: FrontendAppConfi
     ec: ExecutionContext
   ): Future[HttpResponse] = {
     val url: String = s"$baseUrl/register/tasks/update-beneficiaries/$draftId"
-    http.POST[TaskStatus, HttpResponse](url, taskStatus)
+    http
+      .post(url"$url")
+      .withBody(Json.toJson(taskStatus))
+      .execute[HttpResponse]
   }
 
 }
