@@ -19,9 +19,7 @@ package connectors
 import config.FrontendAppConfig
 import models.TaskStatus.TaskStatus
 import play.api.libs.json.Json
-import play.api.libs.ws.DefaultBodyWritables
 import uk.gov.hmrc.http.HttpReads.Implicits._
-import uk.gov.hmrc.http.HttpReadsInstances.readFromJson
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps}
 

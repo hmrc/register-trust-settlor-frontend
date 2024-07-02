@@ -20,7 +20,7 @@ import config.FrontendAppConfig
 import models.RolesInCompanies.RolesInCompaniesAnswered
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.Json
 import uk.gov.hmrc.http.HttpReads.Implicits._
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}

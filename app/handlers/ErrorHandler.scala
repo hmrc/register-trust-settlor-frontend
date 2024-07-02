@@ -20,7 +20,6 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.RequestHeader
 import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.frontend.http.FrontendErrorHandler
-import uk.gov.hmrc.play.bootstrap.http.RequestHandler
 import views.html.{ErrorTemplate, PageNotFoundView}
 
 import javax.inject.{Inject, Singleton}
@@ -31,7 +30,7 @@ class ErrorHandler @Inject() (
   val messagesApi: MessagesApi,
   view: ErrorTemplate,
   notFoundView: PageNotFoundView
-)(implicit rh: RequestHandler, implicit val ec: ExecutionContext)
+)(implicit val ec: ExecutionContext)
     extends FrontendErrorHandler
     with I18nSupport {
 
