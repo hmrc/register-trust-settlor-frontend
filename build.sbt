@@ -2,8 +2,6 @@ import scoverage.ScoverageKeys
 
 resolvers += MavenRepository("HMRC-open-artefacts-maven2", "https://open.artefacts.tax.service.gov.uk/maven2")
 
-libraryDependencies += "uk.gov.hmrc" %% "http-verbs-test-play-30" % "15.0.0" % Test
-
 ThisBuild / scalaVersion := "2.13.14"
 ThisBuild / majorVersion := 0
 
