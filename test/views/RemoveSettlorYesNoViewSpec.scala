@@ -36,7 +36,7 @@ class RemoveSettlorYesNoViewSpec extends YesNoViewBehaviours {
 
     val view = viewFor[RemoveSettlorYesNoView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
       view.apply(
         form,
         index,

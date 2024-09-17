@@ -79,7 +79,7 @@ class SettlorDateOfDeathController @Inject() (
         form(maxDate, minDate)
           .bindFromRequest()
           .fold(
-            (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+            (formWithErrors: Form[LocalDate]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
             value =>
               request.userAnswers.set(SettlorDateOfDeathPage, value) match {
                 case Success(updatedAnswers) =>

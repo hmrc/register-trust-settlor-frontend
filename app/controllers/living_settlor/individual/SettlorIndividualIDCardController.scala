@@ -20,6 +20,7 @@ import config.annotations.IndividualSettlor
 import controllers.actions._
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.PassportOrIdCardFormProvider
+import models.pages.PassportOrIdCardDetails
 import models.requests.SettlorIndividualNameRequest
 import navigation.Navigator
 import pages.living_settlor.individual.{SettlorIndividualIDCardPage, SettlorIndividualNamePage}
@@ -79,7 +80,7 @@ class SettlorIndividualIDCardController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[PassportOrIdCardDetails]) =>
             Future.successful(
               BadRequest(
                 view(

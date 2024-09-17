@@ -37,7 +37,7 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     val view = viewFor[MentalCapacityYesNoView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[YesNoDontKnow]): HtmlFormat.Appendable =
       view.apply(form, index, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(

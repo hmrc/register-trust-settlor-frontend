@@ -35,7 +35,7 @@ class SettlorIndividualNINOYesNoViewSpec extends YesNoViewBehaviours {
 
     val view = viewFor[SettlorIndividualNINOYesNoView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)

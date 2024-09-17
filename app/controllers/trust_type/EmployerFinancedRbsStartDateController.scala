@@ -64,7 +64,7 @@ class EmployerFinancedRbsStartDateController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[LocalDate]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(EfrbsStartDatePage, value) match {
             case Success(updatedAnswers) =>

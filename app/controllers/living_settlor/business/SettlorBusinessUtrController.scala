@@ -69,7 +69,7 @@ class SettlorBusinessUtrController @Inject() (
       form(index)
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[String]) =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
           value =>
             request.userAnswers.set(SettlorBusinessUtrPage(index), value) match {

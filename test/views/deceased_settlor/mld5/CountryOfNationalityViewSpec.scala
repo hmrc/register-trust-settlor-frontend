@@ -39,7 +39,7 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
 
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[String]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, name.toString)

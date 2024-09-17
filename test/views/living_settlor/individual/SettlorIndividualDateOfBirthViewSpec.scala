@@ -37,10 +37,10 @@ class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalD
 
     val view = viewFor[SettlorIndividualDateOfBirthView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
-    val applyViewF = (form: Form[_]) => applyView(form)
+    val applyViewF = (form: Form[LocalDate]) => applyView(form)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

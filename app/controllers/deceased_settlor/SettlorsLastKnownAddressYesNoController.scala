@@ -71,7 +71,7 @@ class SettlorsLastKnownAddressYesNoController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
           value =>
             request.userAnswers.set(SettlorsLastKnownAddressYesNoPage, value) match {
               case Success(updatedAnswers) =>

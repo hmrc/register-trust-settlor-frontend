@@ -16,6 +16,7 @@
 
 @import controllers.trust_type.routes._
 @import views.html.components.{SubmitButton, ErrorSummary, InputDate}
+@import java.time.LocalDate
 
 @this(
     main_template: MainTemplate,
@@ -25,7 +26,7 @@
     input_date: InputDate
 )
 
-@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalDate], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("employerFinancedRbsStartDate.title")}",

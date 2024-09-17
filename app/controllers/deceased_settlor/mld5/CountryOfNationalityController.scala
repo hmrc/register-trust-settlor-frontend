@@ -69,7 +69,7 @@ class CountryOfNationalityController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[String]) =>
             Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, request.name))),
           value =>
             request.userAnswers.set(CountryOfNationalityPage, value) match {

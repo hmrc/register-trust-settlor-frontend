@@ -78,7 +78,7 @@ class SettlorIndividualAddressInternationalController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[InternationalAddress]) =>
             Future.successful(
               BadRequest(
                 view(

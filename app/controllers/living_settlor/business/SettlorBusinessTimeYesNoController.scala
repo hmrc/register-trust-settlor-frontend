@@ -67,7 +67,7 @@ class SettlorBusinessTimeYesNoController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[Boolean]) =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
           value =>
             request.userAnswers.set(SettlorBusinessTimeYesNoPage(index), value) match {

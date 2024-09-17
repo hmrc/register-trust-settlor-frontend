@@ -94,7 +94,7 @@ class CountryOfNationalityController @Inject() (
     form(messageKeyPrefix)
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) =>
+        (formWithErrors: Form[String]) =>
           Future.successful(
             BadRequest(
               view(

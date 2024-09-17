@@ -70,7 +70,7 @@ class SettlorBusinessTypeController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[KindOfBusiness]) =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
           value =>
             request.userAnswers.set(SettlorBusinessTypePage(index), value) match {

@@ -74,7 +74,7 @@ class SettlorsDateOfBirthController @Inject() (
       form(maxDate)
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+          (formWithErrors: Form[LocalDate]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
           value =>
             request.userAnswers.set(SettlorsDateOfBirthPage, value) match {
               case Success(updatedAnswers) =>

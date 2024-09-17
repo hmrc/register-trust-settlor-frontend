@@ -16,6 +16,7 @@
 
 @import controllers.living_settlor.individual.routes._
 @import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading}
+@import models.pages.FullName
 
 @this(
     main_template: MainTemplate,
@@ -26,7 +27,7 @@
     heading: Heading
 )
 
-@(form: Form[_], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[FullName], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: Request[_], messages: Messages)
 
 @settlorIndividualNamePrefix = @{
     if({{setUpBeforeSettlorDied}}){

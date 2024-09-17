@@ -97,7 +97,7 @@ class SettlorNationalInsuranceNumberController @Inject() (
         form
           .bindFromRequest()
           .fold(
-            (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+            (formWithErrors: Form[String]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
             value =>
               request.userAnswers.set(SettlorNationalInsuranceNumberPage, value) match {
                 case Success(updatedAnswers) =>

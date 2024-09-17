@@ -80,7 +80,7 @@ class CountryOfResidencyController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) =>
+        (formWithErrors: Form[String]) =>
           Future.successful(
             BadRequest(
               view(

@@ -73,7 +73,7 @@ class SettlorIndividualNINOController @Inject() (
       form(index)
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          (formWithErrors: Form[String]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
           value =>
             request.userAnswers.set(SettlorIndividualNINOPage(index), value) match {
               case Success(updatedAnswers) =>

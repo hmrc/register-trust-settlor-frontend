@@ -18,7 +18,7 @@ package views.deceased_settlor
 
 import controllers.deceased_settlor.routes
 import forms.InternationalAddressFormProvider
-import models.pages.FullName
+import models.pages.{FullName, InternationalAddress}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import utils.InputOption
@@ -40,7 +40,7 @@ class SettlorsInternationalAddressViewSpec extends InternationalAddressViewBehav
 
     val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[InternationalAddress]): HtmlFormat.Appendable =
       view.apply(form, countryOptions, fakeDraftId, name)(fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))

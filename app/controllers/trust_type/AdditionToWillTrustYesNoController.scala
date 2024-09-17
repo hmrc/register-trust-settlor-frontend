@@ -63,7 +63,7 @@ class AdditionToWillTrustYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value) match {
             case Success(updatedAnswers) =>

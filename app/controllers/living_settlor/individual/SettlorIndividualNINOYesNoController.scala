@@ -71,7 +71,7 @@ class SettlorIndividualNINOYesNoController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index, name))),
           value =>
             request.userAnswers.set(SettlorIndividualNINOYesNoPage(index), value) match {
               case Success(updatedAnswers) =>

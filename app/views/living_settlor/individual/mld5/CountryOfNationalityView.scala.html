@@ -27,7 +27,7 @@
     select: InputSelect
 )
 
-@(form: Form[_], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName,
+@(form: Form[String], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName,
 settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
 
 @settlorIndividualCountryOfNationalityPrefix = @{

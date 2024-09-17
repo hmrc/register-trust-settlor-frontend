@@ -64,7 +64,7 @@ class HowDeedOfVariationCreatedController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[DeedOfVariation]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(HowDeedOfVariationCreatedPage, value) match {
             case Success(updatedAnswers) =>

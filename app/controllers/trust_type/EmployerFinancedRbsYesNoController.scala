@@ -63,7 +63,7 @@ class EmployerFinancedRbsYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(EfrbsYesNoPage, value) match {
             case Success(updatedAnswers) =>

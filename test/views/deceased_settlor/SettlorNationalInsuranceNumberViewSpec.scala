@@ -42,7 +42,7 @@ class SettlorNationalInsuranceNumberViewSpec extends StringViewBehaviours {
 
     val view = viewFor[SettlorNationalInsuranceNumberView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[String]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)

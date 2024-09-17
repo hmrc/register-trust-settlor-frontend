@@ -32,7 +32,7 @@ class EmployerFinancedRbsYesNoViewSpec extends YesNoViewBehaviours {
 
     val view = viewFor[EmployerFinancedRbsYesNoView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
