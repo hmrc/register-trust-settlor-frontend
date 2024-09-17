@@ -6,20 +6,22 @@ This service is responsible for collecting details about the settlor of the trus
 ## Running the micro-service
 To run locally using the micro-service provided by the service manager:
 
-```
+```bash
 sm2 --start TRUSTS_ALL
 ```
 
 Or
 
-```
+```bash
 sm2 --start REGISTER_TRUST_ALL
 ```
 
 
 If you want to run your local copy, then stop the frontend ran by the service manager and run your local code by using the following (port number is 8843 but is defaulted to that in build.sbt):
 
-```sbt run```
+```bash
+sbt run
+```
 
 ## Testing the service
 
@@ -29,8 +31,21 @@ provide test coverage reports.
 Use the following commands to run the tests with coverage and generate a report.
 
 Run this script before raising a PR to ensure your code changes pass the Jenkins pipeline. This runs all the unit tests with scalastyle and checks for dependency updates:
-```
+```bash
 ./run_all_tests.sh
+```
+
+#### Running Accessibility Tests
+
+The [Accessibility Linter](https://github.com/hmrc/sbt-accessibility-linter) helps identify accessibility issues in this service's HTML markup.
+
+It is configured in 'automatic' mode.
+
+If a new view is added, it will need to be added to `FrontendAccessibilitySpec`
+
+To run the accessibility tests, run
+```bash
+sbt clean A11y/test
 ```
 
 
