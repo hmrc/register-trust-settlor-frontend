@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import forms.{AddASettlorFormProvider, DeedOfVariationFormProvider, InternationalAddressFormProvider, KindOfTrustFormProvider, PassportOrIdCardFormProvider, UKAddressFormProvider, YesNoDontKnowFormProvider}
+import forms._
 import forms.deceased_settlor.{SettlorDateOfDeathFormProvider, SettlorIndividualOrBusinessFormProvider, SettlorsNameFormProvider}
 import forms.living_settlor.SettlorBusinessTypeFormProvider
 import models.{UserAnswers, YesNoDontKnow}
