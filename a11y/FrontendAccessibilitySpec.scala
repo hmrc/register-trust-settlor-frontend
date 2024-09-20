@@ -18,7 +18,7 @@ import forms._
 import forms.deceased_settlor.{SettlorDateOfDeathFormProvider, SettlorIndividualOrBusinessFormProvider, SettlorsNameFormProvider}
 import forms.living_settlor.SettlorBusinessTypeFormProvider
 import models.{UserAnswers, YesNoDontKnow}
-import models.pages.{AddASettlor, DeedOfVariation, FullName, IndividualOrBusiness, InternationalAddress, KindOfBusiness, KindOfTrust, PassportOrIdCardDetails, UKAddress}
+import models.pages._
 import org.scalacheck.Arbitrary
 import play.api.data.Form
 import play.api.data.Forms.{boolean, text}
