@@ -16,6 +16,7 @@
 
 @import controllers.living_settlor.business.routes._
 @import utils.InputOption
+@import models.pages.{InternationalAddress => InternationalAddressModel}
 @import views.html.components.{SubmitButton, ErrorSummary, InternationalAddress}
 
 @this(
@@ -26,7 +27,7 @@
     internationalAddress: InternationalAddress
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[InternationalAddressModel], countryOptions:Seq[InputOption], index:Int, draftId: String, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusinessAddressInternational.title")}",

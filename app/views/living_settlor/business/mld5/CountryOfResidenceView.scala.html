@@ -26,7 +26,7 @@
     select: InputSelect
 )
 
-@(form: Form[_], countryOptions: Seq[InputOption], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[String], countryOptions: Seq[InputOption], draftId: String, index: Int, businessName: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusiness.5mld.countryOfResidence.title")}",

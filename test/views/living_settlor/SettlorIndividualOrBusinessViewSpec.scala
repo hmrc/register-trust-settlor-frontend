@@ -32,7 +32,7 @@ class SettlorIndividualOrBusinessViewSpec extends OptionsViewBehaviours {
 
   val view = viewFor[SettlorIndividualOrBusinessView](Some(emptyUserAnswers))
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[IndividualOrBusiness]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, index)(fakeRequest, messages)
 
   "SettlorIndividualOrBusinessView" must {

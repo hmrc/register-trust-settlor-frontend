@@ -43,11 +43,11 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
 
   val hint: String = messages("addASettlor.Lifetime")
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[AddASettlor]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, Nil, Nil, "Add a settlor", Some(hint), Nil)(fakeRequest, messages)
 
   def applyView(
-    form: Form[_],
+    form: Form[AddASettlor],
     inProgressAssets: Seq[AddRow],
     completeAssets: Seq[AddRow],
     count: Int
@@ -57,7 +57,7 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
   }
 
   def applyView(
-    form: Form[_],
+    form: Form[AddASettlor],
     completeAssets: Seq[AddRow],
     count: Int,
     maxedOut: List[String]

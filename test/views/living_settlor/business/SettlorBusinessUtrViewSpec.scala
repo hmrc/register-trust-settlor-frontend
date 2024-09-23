@@ -35,7 +35,7 @@ class SettlorBusinessUtrViewSpec extends StringViewBehaviours {
 
     val view = viewFor[SettlorBusinessUtrView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[String]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, index, settlorBusinessBusinessName)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, settlorBusinessBusinessName, "hint")

@@ -16,7 +16,7 @@
 
 @import controllers.living_settlor.individual.routes._
 @import utils.InputOption
-@import models.pages.FullName
+@import models.pages.{FullName, PassportOrIdCardDetails}
 @import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading, InputDate, InputSelect}
 
 @this(
@@ -30,7 +30,7 @@
     select: InputSelect
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[PassportOrIdCardDetails], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
 
 @settlorIndividualPassportPrefix = @{
     if(settlorAliveAtRegistration){

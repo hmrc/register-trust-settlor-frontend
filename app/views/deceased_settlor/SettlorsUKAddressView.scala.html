@@ -15,8 +15,9 @@
  *@
 
 @import controllers.deceased_settlor.routes._
-@import models.pages.FullName
+@import models.pages.{FullName, UKAddress => UkAddressModel}
 @import views.html.components.{SubmitButton, ErrorSummary, UkAddress}
+
 
 @this(
     main_template: MainTemplate,
@@ -26,7 +27,7 @@
     ukAddress: UkAddress
 )
 
-@(form: Form[_], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[UkAddressModel], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsUKAddress.title")}",

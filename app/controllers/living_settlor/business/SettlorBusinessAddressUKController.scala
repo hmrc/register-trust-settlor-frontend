@@ -68,7 +68,7 @@ class SettlorBusinessAddressUKController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[UKAddress]) =>
             Future.successful(BadRequest(view(formWithErrors, draftId, index, request.businessName))),
           value =>
             request.userAnswers.set(SettlorBusinessAddressUKPage(index), value) match {

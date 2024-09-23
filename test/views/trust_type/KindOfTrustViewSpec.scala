@@ -31,7 +31,7 @@ class KindOfTrustViewSpec extends ViewBehaviours {
 
   val view: KindOfTrustView = viewFor[KindOfTrustView](Some(emptyUserAnswers))
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[KindOfTrust]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId)(fakeRequest, messages)
 
   "KindOfTrustView" must {

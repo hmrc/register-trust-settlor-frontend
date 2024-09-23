@@ -107,7 +107,7 @@ class AddASettlorController @Inject() (
     yesNoForm
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText))),
+        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText))),
         value =>
           request.userAnswers.set(AddASettlorYesNoPage, value) match {
             case Success(updatedAnswers) =>
@@ -126,7 +126,7 @@ class AddASettlorController @Inject() (
     addAnotherForm
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => {
+        (formWithErrors: Form[AddASettlor]) => {
 
           val rows     = new AddASettlorViewHelper(request.userAnswers, draftId).rows
           val maxedOut = request.userAnswers.settlors.maxedOutOptions.map(_.messageKey)

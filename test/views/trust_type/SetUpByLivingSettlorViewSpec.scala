@@ -33,7 +33,7 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
     "for a taxable trust" must {
       val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
+      def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, isTaxable = true)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
@@ -48,7 +48,7 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
     "for a non taxable trust" must {
       val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
+      def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
         view.apply(form, fakeDraftId, isTaxable = false)(fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)

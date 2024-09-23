@@ -17,7 +17,7 @@
 package views.deceased_settlor
 
 import forms.UKAddressFormProvider
-import models.pages.FullName
+import models.pages.{FullName, UKAddress}
 import play.api.data.Form
 import play.twirl.api.HtmlFormat
 import views.behaviours.UkAddressViewBehaviours
@@ -35,7 +35,7 @@ class SettlorsUKAddressViewSpec extends UkAddressViewBehaviours {
 
     val view = viewFor[SettlorsUKAddressView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[UKAddress]): HtmlFormat.Appendable =
       view.apply(form, fakeDraftId, name)(fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)

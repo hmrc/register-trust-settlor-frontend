@@ -66,7 +66,7 @@ class SettlorIndividualNameController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[FullName]) =>
             Future
               .successful(BadRequest(view(formWithErrors, draftId, index, request.settlorAliveAtRegistration(index)))),
           value =>

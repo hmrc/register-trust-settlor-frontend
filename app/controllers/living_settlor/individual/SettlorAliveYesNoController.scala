@@ -64,7 +64,7 @@ class SettlorAliveYesNoController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
           value =>
             request.userAnswers.set(SettlorAliveYesNoPage(index), value) match {
               case Success(updatedAnswers) =>

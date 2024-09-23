@@ -64,7 +64,7 @@ class SettlorsNameController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[FullName]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(SettlorsNamePage, value) match {
             case Success(updatedAnswers) =>

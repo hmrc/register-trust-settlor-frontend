@@ -83,7 +83,7 @@ class SettlorIndividualAddressUKYesNoController @Inject() (
       form(messageKeyPrefx)
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[Boolean]) =>
             Future.successful(
               BadRequest(view(formWithErrors, draftId, index, name, request.settlorAliveAtRegistration(index)))
             ),

@@ -16,7 +16,7 @@
 
 @import controllers.living_settlor.individual.routes._
 @import utils.InputOption
-@import models.pages.FullName
+@import models.pages.{FullName, InternationalAddress => InternationalAddressModel}
 @import views.html.components.{SubmitButton, ErrorSummary, InternationalAddress}
 
 @this(
@@ -27,7 +27,7 @@
     internationalAddress: InternationalAddress
 )
 
-@(form: Form[_], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName,
+@(form: Form[InternationalAddressModel], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName,
 settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
 
 @settlorIndividualAddressInternationalPrefix = @{

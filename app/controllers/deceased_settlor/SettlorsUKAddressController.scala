@@ -72,7 +72,7 @@ class SettlorsUKAddressController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
+          (formWithErrors: Form[UKAddress]) => Future.successful(BadRequest(view(formWithErrors, draftId, name))),
           value =>
             request.userAnswers.set(SettlorsUKAddressPage, value) match {
               case Success(updatedAnswers) =>

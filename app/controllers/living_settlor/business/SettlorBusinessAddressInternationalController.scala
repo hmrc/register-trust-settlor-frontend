@@ -70,7 +70,7 @@ class SettlorBusinessAddressInternationalController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[InternationalAddress]) =>
             Future.successful(
               BadRequest(view(formWithErrors, countryOptions.options(), index, draftId, request.businessName))
             ),

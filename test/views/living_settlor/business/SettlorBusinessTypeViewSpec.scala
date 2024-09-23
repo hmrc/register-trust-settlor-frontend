@@ -33,7 +33,7 @@ class SettlorBusinessTypeViewSpec extends ViewBehaviours {
 
   val view: SettlorBusinessTypeView = viewFor[SettlorBusinessTypeView](Some(emptyUserAnswers))
 
-  def applyView(form: Form[_]): HtmlFormat.Appendable =
+  def applyView(form: Form[KindOfBusiness]): HtmlFormat.Appendable =
     view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
 
   "SettlorBusinessTypeView" must {

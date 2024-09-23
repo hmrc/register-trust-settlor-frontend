@@ -74,7 +74,7 @@ class KindOfTrustController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[KindOfTrust]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
         value =>
           request.userAnswers.set(KindOfTrustPage, value) match {
             case Success(updatedAnswers) =>

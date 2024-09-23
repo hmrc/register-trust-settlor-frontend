@@ -32,7 +32,7 @@ class SettlorBusinessNameViewSpec extends StringViewBehaviours {
 
     val view = viewFor[SettlorBusinessNameView](Some(emptyUserAnswers))
 
-    def applyView(form: Form[_]): HtmlFormat.Appendable =
+    def applyView(form: Form[String]): HtmlFormat.Appendable =
       view.apply(form, 0, fakeDraftId)(fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)

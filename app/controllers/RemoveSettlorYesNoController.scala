@@ -63,7 +63,7 @@ class RemoveSettlorYesNoController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[Boolean]) =>
             Future.successful(
               BadRequest(
                 view(

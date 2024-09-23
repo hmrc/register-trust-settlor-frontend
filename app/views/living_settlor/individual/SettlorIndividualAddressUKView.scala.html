@@ -15,7 +15,7 @@
  *@
 
 @import controllers.living_settlor.individual.routes._
-@import models.pages.FullName
+@import models.pages.{FullName, UKAddress => UkAddressModel}
 @import views.html.components.{SubmitButton, ErrorSummary, UkAddress}
 
 @this(
@@ -26,7 +26,7 @@
     ukAddress: UkAddress
 )
 
-@(form: Form[_], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[UkAddressModel], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
 
 @settlorIndividualAddressUKPrefix = @{
     if(settlorAliveAtRegistration){

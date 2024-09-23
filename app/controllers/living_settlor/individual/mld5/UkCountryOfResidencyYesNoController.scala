@@ -83,7 +83,7 @@ class UkCountryOfResidencyYesNoController @Inject() (
     form(messageKeyPrefix)
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[_]) =>
+        (formWithErrors: Form[Boolean]) =>
           Future.successful(
             BadRequest(view(formWithErrors, index, draftId, request.name, request.settlorAliveAtRegistration(index)))
           ),

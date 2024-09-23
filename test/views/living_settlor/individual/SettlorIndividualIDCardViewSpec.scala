@@ -43,10 +43,10 @@ class SettlorIndividualIDCardViewSpec extends QuestionViewBehaviours[PassportOrI
 
       val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
-      def applyView(form: Form[_]): HtmlFormat.Appendable =
+      def applyView(form: Form[PassportOrIdCardDetails]): HtmlFormat.Appendable =
         view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
 
-      val applyViewF = (form: Form[_]) => applyView(form)
+      val applyViewF = (form: Form[PassportOrIdCardDetails]) => applyView(form)
 
       behave like dynamicTitlePage(applyView(form), settlorIndividualIDCardMessage, name.toString)
 

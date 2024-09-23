@@ -27,7 +27,7 @@
     input_radio: InputRadio
 )
 
-@(form: Form[_], draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[DeedOfVariation], draftId: String)(implicit request: Request[_], messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("howDeedOfVariationCreated.title")}",

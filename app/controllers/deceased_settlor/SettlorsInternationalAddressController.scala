@@ -74,7 +74,7 @@ class SettlorsInternationalAddressController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[_]) =>
+          (formWithErrors: Form[InternationalAddress]) =>
             Future.successful(BadRequest(view(formWithErrors, countryOptions.options(), draftId, name))),
           value =>
             request.userAnswers.set(SettlorsInternationalAddressPage, value) match {
