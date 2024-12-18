@@ -27,7 +27,7 @@
     input_radio: InputRadio
 )
 
-@(form: Form[KindOfTrust], draftId: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[KindOfTrust], draftId: String)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("kindOfTrust.title")}",

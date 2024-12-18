@@ -27,7 +27,7 @@
     heading: Heading
 )
 
-@(form: Form[FullName], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[FullName], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @settlorIndividualNamePrefix = @{
     if({{setUpBeforeSettlorDied}}){

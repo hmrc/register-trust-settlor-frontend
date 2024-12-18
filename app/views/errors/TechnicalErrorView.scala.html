@@ -21,7 +21,7 @@
 govuk_wrapper: MainTemplate,
 )
 
-@()(implicit request: Request[_], messages: Messages)
+@()(implicit request: RequestHeader, messages: Messages)
 
 @govuk_wrapper(title = messages("serverError.title")) {
 

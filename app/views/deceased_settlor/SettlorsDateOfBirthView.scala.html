@@ -27,7 +27,7 @@
     input_date: InputDate
 )
 
-@(form: Form[LocalDate], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[LocalDate], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsDateOfBirth.title")}",

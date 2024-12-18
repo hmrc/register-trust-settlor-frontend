@@ -41,7 +41,7 @@
     heading: String,
     hint: Option[String],
     maxedOut: List[String]
-)(implicit request: Request[_], messages: Messages)
+)(implicit request: RequestHeader, messages: Messages)
 
 @settlorsMaxedOut = @{maxedOut.size == 2}
 

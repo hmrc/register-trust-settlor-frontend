@@ -30,7 +30,7 @@
     select: InputSelect
 )
 
-@(form: Form[PassportOrIdCardDetails], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+@(form: Form[PassportOrIdCardDetails], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @settlorIndividualPassportPrefix = @{
     if(settlorAliveAtRegistration){
