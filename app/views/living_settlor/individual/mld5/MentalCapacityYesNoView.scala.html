@@ -28,7 +28,7 @@
     headingI: Heading
 )
 
-@(form: Form[YesNoDontKnow], index: Int, draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[YesNoDontKnow], index: Int, draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
 
 @content = {
     <p>@messages("settlorIndividualMentalCapacityYesNo.p1")</p>

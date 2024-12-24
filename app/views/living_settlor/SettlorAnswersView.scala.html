@@ -28,7 +28,7 @@
     govukSummaryList: GovukSummaryList,
 )
 
-@(onSubmit: Call, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages)
+@(onSubmit: Call, answerSections: Seq[Section])(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${messages("settlorAnswers.title")}",

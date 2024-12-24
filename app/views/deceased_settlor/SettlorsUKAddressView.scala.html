@@ -27,7 +27,7 @@
     ukAddress: UkAddress
 )
 
-@(form: Form[UkAddressModel], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[UkAddressModel], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsUKAddress.title")}",

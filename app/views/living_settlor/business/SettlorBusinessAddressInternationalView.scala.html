@@ -27,7 +27,7 @@
     internationalAddress: InternationalAddress
 )
 
-@(form: Form[InternationalAddressModel], countryOptions:Seq[InputOption], index:Int, draftId: String, settlorBusinessName: String)(implicit request: Request[_], messages: Messages)
+@(form: Form[InternationalAddressModel], countryOptions:Seq[InputOption], index:Int, draftId: String, settlorBusinessName: String)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusinessAddressInternational.title")}",

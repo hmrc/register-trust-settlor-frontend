@@ -28,7 +28,7 @@
 )
 
 @(form: Form[InternationalAddressModel], countryOptions:Seq[InputOption], index:Int, draftId: String, name: FullName,
-settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @settlorIndividualAddressInternationalPrefix = @{
     if(settlorAliveAtRegistration){

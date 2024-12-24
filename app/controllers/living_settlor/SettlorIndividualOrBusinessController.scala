@@ -66,7 +66,8 @@ class SettlorIndividualOrBusinessController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[IndividualOrBusiness]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          (formWithErrors: Form[IndividualOrBusiness]) =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, index))),
           value =>
             request.userAnswers.set(SettlorIndividualOrBusinessPage(index), value) match {
               case Success(updatedAnswers) =>

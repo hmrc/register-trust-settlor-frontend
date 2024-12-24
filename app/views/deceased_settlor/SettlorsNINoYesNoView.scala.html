@@ -26,7 +26,7 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[Boolean], draftId: String, name: FullName)(implicit request: Request[_], messages: Messages)
+@(form: Form[Boolean], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsNationalInsuranceYesNo.title")}",

@@ -69,7 +69,8 @@ class CountryOfNationalityYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
+        (formWithErrors: Form[Boolean]) =>
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
         value =>
           request.userAnswers.set(CountryOfNationalityYesNoPage(index), value) match {
             case Success(updatedAnswers) =>

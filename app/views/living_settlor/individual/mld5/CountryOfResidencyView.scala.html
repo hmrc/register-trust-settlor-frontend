@@ -28,7 +28,7 @@
 )
 
 @(form: Form[String], index: Int, draftId: String, countryOptions: Seq[InputOption], name: FullName,
-settlorAliveAtRegistration: Boolean)(implicit request: Request[_], messages: Messages)
+settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
 
 @settlorIndividualCountryOfResidencyPrefix = @{
     if(settlorAliveAtRegistration){

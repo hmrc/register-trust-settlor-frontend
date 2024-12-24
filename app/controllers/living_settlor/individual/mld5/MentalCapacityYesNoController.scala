@@ -70,7 +70,8 @@ class MentalCapacityYesNoController @Inject() (
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[YesNoDontKnow]) => Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
+        (formWithErrors: Form[YesNoDontKnow]) =>
+          Future.successful(BadRequest(view(formWithErrors, index, draftId, request.name))),
         value =>
           request.userAnswers.set(MentalCapacityYesNoPage(index), value) match {
             case Success(updatedAnswers) =>
