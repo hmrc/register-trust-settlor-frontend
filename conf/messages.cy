@@ -1,4 +1,4 @@
-service.name = Cofrestru Ymddiriedolaeth a’i Chynnal
+service.name = Cofrestru ymddiriedolaeth
 
 5mld.countryOfNationality.checkYourAnswersLabel = Beth oedd gwlad cenedligrwydd {0}?
 5mld.countryOfNationality.error.invalidCharacters = Mae’n rhaid i wlad y cenedligrwydd gynnwys y llythrennau a i z yn unig
