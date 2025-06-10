@@ -107,7 +107,8 @@ class AddASettlorController @Inject() (
     yesNoForm
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText))),
+        (formWithErrors: Form[Boolean]) =>
+          Future.successful(BadRequest(yesNoView(formWithErrors, draftId, trustHintText))),
         value =>
           request.userAnswers.set(AddASettlorYesNoPage, value) match {
             case Success(updatedAnswers) =>
