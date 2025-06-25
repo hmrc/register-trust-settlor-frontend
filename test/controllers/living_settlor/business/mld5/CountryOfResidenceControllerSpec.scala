@@ -18,7 +18,7 @@ package controllers.living_settlor.business.mld5
 
 import base.SpecBase
 import forms.CountryFormProvider
-import org.mockito.MockitoSugar
+import org.scalatestplus.mockito.MockitoSugar
 import pages.living_settlor.business.SettlorBusinessNamePage
 import pages.living_settlor.business.mld5.CountryOfResidencePage
 import play.api.data.Form

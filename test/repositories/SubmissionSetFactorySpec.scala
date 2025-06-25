@@ -22,6 +22,7 @@ import models.RegistrationSubmission.{DataSet, MappedPiece}
 import models.pages.FullName
 import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import play.api.libs.json.Json
 import utils.print.PrintHelpers
 

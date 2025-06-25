@@ -26,6 +26,7 @@ import models.pages.KindOfBusiness.Investment
 import models.pages.Status.Completed
 import models.pages._
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{reset, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks

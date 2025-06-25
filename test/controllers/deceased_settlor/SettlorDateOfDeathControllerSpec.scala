@@ -21,7 +21,8 @@ import controllers.routes._
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
 import models.pages.FullName
 import org.mockito.ArgumentMatchers.any
-import org.mockito.MockitoSugar
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
