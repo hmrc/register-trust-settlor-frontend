@@ -24,6 +24,7 @@ import models.pages.Status.{Completed, InProgress}
 import models.{TaskStatus, UserAnswers}
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
 import pages.{DeceasedSettlorStatus, LivingSettlorStatus, deceased_settlor => deceasedPages}

@@ -21,6 +21,7 @@ import controllers.routes._
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
 import models.pages.FullName
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._

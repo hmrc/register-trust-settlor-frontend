@@ -21,6 +21,7 @@ import connectors.SubmissionDraftConnector
 import models.RolesInCompanies.{AllRolesAnswered, CouldNotDetermine, NoIndividualBeneficiaries, NotAllRolesAnswered}
 import models.pages.KindOfTrust
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.{never, reset, times, verify, when}
 import pages.trust_type.KindOfTrustPage
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -58,8 +59,8 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
           Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-          verify(mockConnector, never).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-          verify(mockTrustStore, never).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+          verify(mockConnector, never()).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
+          verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
 
           verify(mockConnector, times(1)).removeRoleInCompanyAnswers(any())(any(), any())
         }
@@ -85,8 +86,8 @@ class DraftRegistrationServiceSpec extends SpecBase {
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
             verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-            verify(mockTrustStore, never).updateBeneficiaryTaskStatus(any(), any())(any(), any())
-            verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+            verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
           }
         }
 
@@ -108,7 +109,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
             verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-            verify(mockTrustStore, never).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
             verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
           }
         }
@@ -132,7 +133,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
               Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
               verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-              verify(mockTrustStore, never).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+              verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
               verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
             }
           }

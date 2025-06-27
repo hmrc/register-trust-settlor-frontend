@@ -22,6 +22,7 @@ import models.TaskStatus.Completed
 import models.UserAnswers
 import models.pages.FullName
 import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
 import pages.deceased_settlor._
 import play.api.Application

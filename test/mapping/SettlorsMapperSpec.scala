@@ -20,6 +20,7 @@ import base.SpecBase
 import models.pages.FullName
 import models.{Settlor, SettlorCompany, Settlors, UserAnswers}
 import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
 
 class SettlorsMapperSpec extends SpecBase {
 
