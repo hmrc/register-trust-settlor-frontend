@@ -10,6 +10,7 @@ lazy val appName: String = "register-trust-settlor-frontend"
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .settings(CodeCoverageSettings())
   .settings(
     routesImport += "models._",
     TwirlKeys.templateImports ++= Seq(
@@ -22,10 +23,6 @@ lazy val microservice = Project(appName, file("."))
       "controllers.routes._"
     ),
     PlayKeys.playDefaultPort := 8843,
-    ScoverageKeys.coverageExcludedFiles := "<empty>;.*handlers.*;.*components.*;.*repositories.*;.*Routes.*;.*LanguageSwitchController",
-    ScoverageKeys.coverageMinimumStmtTotal := 85,
-    ScoverageKeys.coverageFailOnMinimum := true,
-    ScoverageKeys.coverageHighlighting := true,
     scalacOptions ++= Seq(
       "-feature",
       "-Wconf:src=routes/.*:s",
@@ -59,4 +56,3 @@ lazy val microservice = Project(appName, file("."))
   )
 
 addCommandAlias("scalafmtAll", "all scalafmtSbt scalafmt Test/scalafmt")
-addCommandAlias("scalastyleAll", "all scalastyle Test/scalastyle")
