@@ -1,13 +1,9 @@
-import scoverage.ScoverageKeys
-
 resolvers += MavenRepository("HMRC-open-artefacts-maven2", "https://open.artefacts.tax.service.gov.uk/maven2")
 
 ThisBuild / scalaVersion := "2.13.16"
 ThisBuild / majorVersion := 0
 
-lazy val appName: String = "register-trust-settlor-frontend"
-
-lazy val microservice = Project(appName, file("."))
+lazy val microservice = Project("register-trust-settlor-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
   .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(CodeCoverageSettings())
