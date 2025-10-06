@@ -35,19 +35,6 @@ Run this script before raising a PR to ensure your code changes pass the Jenkins
 ./run_all_tests.sh
 ```
 
-#### Running Accessibility Tests
-
-The [Accessibility Linter](https://github.com/hmrc/sbt-accessibility-linter) helps identify accessibility issues in this service's HTML markup.
-
-It is configured in 'automatic' mode.
-
-If a new view is added, it will need to be added to `FrontendAccessibilitySpec`
-
-To run the accessibility tests, run
-```bash
-sbt clean A11y/test
-```
-
 
 ## Making content changes
 
