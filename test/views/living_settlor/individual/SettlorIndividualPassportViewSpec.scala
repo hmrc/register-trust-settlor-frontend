@@ -71,4 +71,5 @@ class SettlorIndividualPassportViewSpec extends QuestionViewBehaviours[PassportO
       behave like pageWithASubmitButton(applyView(form))
     }
   }
+
 }

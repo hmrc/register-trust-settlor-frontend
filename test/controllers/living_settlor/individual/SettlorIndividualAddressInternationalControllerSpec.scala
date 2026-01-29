@@ -21,7 +21,9 @@ import controllers.routes._
 import forms.InternationalAddressFormProvider
 import models.UserAnswers
 import models.pages.{FullName, InternationalAddress}
-import pages.living_settlor.individual.{SettlorAddressInternationalPage, SettlorAliveYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{
+  SettlorAddressInternationalPage, SettlorAliveYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNamePage
+}
 import play.api.Application
 import play.api.data.Form
 import play.api.mvc.{Call, Result}
@@ -235,4 +237,5 @@ class SettlorIndividualAddressInternationalControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

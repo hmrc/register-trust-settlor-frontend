@@ -22,7 +22,9 @@ import models.UserAnswers
 import models.pages.KindOfTrust._
 import pages._
 import pages.living_settlor.business._
-import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.living_settlor.business.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 import pages.trust_type._
 import play.api.mvc.Call
 
@@ -113,4 +115,5 @@ class BusinessSettlorNavigator extends Navigator {
       case Some(_)         => businessRoutes.SettlorBusinessAnswerController.onPageLoad(index, draftId)
       case None            => controllers.routes.SessionExpiredController.onPageLoad
     }
+
 }

@@ -187,4 +187,5 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

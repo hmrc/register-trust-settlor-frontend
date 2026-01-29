@@ -51,9 +51,7 @@ class DeceasedSettlorAnswerController @Inject() (
   trustsStoreService: TrustsStoreService,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {
     implicit request =>
@@ -76,4 +74,5 @@ class DeceasedSettlorAnswerController @Inject() (
           Future.successful(InternalServerError(technicalErrorView()))
       }
     }
+
 }

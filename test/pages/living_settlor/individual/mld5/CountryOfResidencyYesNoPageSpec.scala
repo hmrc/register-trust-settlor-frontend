@@ -31,7 +31,7 @@ class CountryOfResidencyYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfResidencyYesNoPage(0))
 
     "implement cleanup logic" when {
-      "NO selected" in {
+      "NO selected" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(UkCountryOfResidencyYesNoPage(0), false)
@@ -47,11 +47,10 @@ class CountryOfResidencyYesNoPageSpec extends PageBehaviours {
           result.get(UkCountryOfResidencyYesNoPage(0)) mustNot be(defined)
           result.get(CountryOfResidencyPage(0)) mustNot be(defined)
         }
-      }
     }
 
     "not implement cleanup logic" when {
-      "previous selection YES selected" in {
+      "previous selection YES selected" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(UkCountryOfResidencyYesNoPage(0), false)
@@ -67,7 +66,7 @@ class CountryOfResidencyYesNoPageSpec extends PageBehaviours {
           result.get(UkCountryOfResidencyYesNoPage(0)) must be(defined)
           result.get(CountryOfResidencyPage(0))        must be(defined)
         }
-      }
     }
   }
+
 }

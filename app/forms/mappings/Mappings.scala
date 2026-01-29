@@ -70,4 +70,5 @@ trait Mappings extends Formatters with Constraints {
     requiredKey: String
   ): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey))
+
 }

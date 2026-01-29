@@ -142,4 +142,5 @@ class SetUpByLivingSettlorControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -24,10 +24,7 @@ import wolfendale.scalacheck.regexp.RegexpGen
 import java.time.LocalDate
 
 class PassportOrIdCardFormProviderSpec
-    extends StringFieldBehaviours
-    with PassportOrIDCardBehaviours
-    with DateBehaviours
-    with FakeTrustsApp {
+    extends StringFieldBehaviours with PassportOrIDCardBehaviours with DateBehaviours with FakeTrustsApp {
 
   val index  = 0
   val prefix = "passport"
@@ -139,4 +136,5 @@ class PassportOrIdCardFormProviderSpec
       FormError(key, s"$prefix.expiryDate.error.past", List("day", "month", "year"))
     )
   }
+
 }

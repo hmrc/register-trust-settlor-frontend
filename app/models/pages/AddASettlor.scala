@@ -39,6 +39,7 @@ object AddASettlor extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[AddASettlor] =
     Enumerable(values.map(v => v.toString -> v): _*)
+
 }
 
 object AddAnotherSettlor {

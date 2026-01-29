@@ -88,10 +88,11 @@ trait SelectCountryViewBehaviours extends QuestionViewBehaviours[String] {
             doc,
             "title",
             ViewUtils.breadcrumbTitle(s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}""")
+                s"$messageKeyPrefix.title"
+              )}""")
           )
         }
       }
     }
+
 }

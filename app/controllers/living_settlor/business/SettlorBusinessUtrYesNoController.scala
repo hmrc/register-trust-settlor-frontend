@@ -46,9 +46,7 @@ class SettlorBusinessUtrYesNoController @Inject() (
   view: SettlorBusinessUtrYesNoView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =
     (actions.authWithData(draftId) andThen requireName(index, draftId)) { implicit request =>
@@ -83,4 +81,5 @@ class SettlorBusinessUtrYesNoController @Inject() (
             }
         )
     }
+
 }

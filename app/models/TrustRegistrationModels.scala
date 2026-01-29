@@ -90,6 +90,7 @@ object TrustDetailsType {
       (__ \ Symbol("holdoverReliefYesNo")).readNullable[Boolean] and
       (__ \ Symbol("efrbsStartDate")).readNullable[LocalDate]
   )(TrustDetailsType.apply _)
+
 }
 
 case class PassportType(number: String, expirationDate: LocalDate, countryOfIssue: String)

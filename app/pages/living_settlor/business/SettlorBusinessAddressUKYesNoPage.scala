@@ -35,4 +35,5 @@ final case class SettlorBusinessAddressUKYesNoPage(index: Int) extends QuestionP
       case Some(false) => userAnswers.remove(SettlorBusinessAddressUKPage(index))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

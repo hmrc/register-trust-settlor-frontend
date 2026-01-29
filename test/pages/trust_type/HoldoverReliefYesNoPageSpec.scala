@@ -28,4 +28,5 @@ class HoldoverReliefYesNoPageSpec extends PageBehaviours {
 
     beRemovable[Boolean](HoldoverReliefYesNoPage)
   }
+
 }

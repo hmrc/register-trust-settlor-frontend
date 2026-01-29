@@ -148,4 +148,5 @@ class EmployerFinancedRbsYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

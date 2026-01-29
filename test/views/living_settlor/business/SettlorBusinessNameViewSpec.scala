@@ -47,4 +47,5 @@ class SettlorBusinessNameViewSpec extends StringViewBehaviours {
       controllers.living_settlor.business.routes.SettlorBusinessNameController.onSubmit(0, fakeDraftId).url
     )
   }
+
 }

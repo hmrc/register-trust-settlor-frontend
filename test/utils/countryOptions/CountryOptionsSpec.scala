@@ -81,4 +81,5 @@ class CountryOptionsSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

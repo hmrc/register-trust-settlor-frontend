@@ -37,4 +37,5 @@ case object CountryOfNationalityYesNoPage extends QuestionPage[Boolean] {
           .flatMap(_.remove(CountryOfNationalityPage))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

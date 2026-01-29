@@ -160,27 +160,24 @@ class TrustTypeNavigatorSpec extends SpecBase {
       }
 
       "EfrbsStartDatePage" must {
-        "redirect to Individual or Business" in {
+        "redirect to Individual or Business" in
           navigator
             .nextPage(EfrbsStartDatePage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-        }
       }
 
       "HowDeedOfVariationCreatedPage" must {
-        "redirect to Individual or Business" in {
+        "redirect to Individual or Business" in
           navigator
             .nextPage(HowDeedOfVariationCreatedPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-        }
       }
 
       "HoldoverReliefYesNoPage" must {
-        "redirect to Individual or Business" in {
+        "redirect to Individual or Business" in
           navigator
             .nextPage(HoldoverReliefYesNoPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.living_settlor.routes.SettlorIndividualOrBusinessController.onPageLoad(0, fakeDraftId))
-        }
       }
     }
 
@@ -214,4 +211,5 @@ class TrustTypeNavigatorSpec extends SpecBase {
       }
     }
   }
+
 }

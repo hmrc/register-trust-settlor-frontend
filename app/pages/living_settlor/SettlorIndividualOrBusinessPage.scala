@@ -67,4 +67,5 @@ final case class SettlorIndividualOrBusinessPage(index: Int) extends QuestionPag
       case _                =>
         super.cleanup(value, userAnswers)
     }
+
 }

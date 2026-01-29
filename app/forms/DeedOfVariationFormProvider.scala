@@ -27,4 +27,5 @@ class DeedOfVariationFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[DeedOfVariation]("howDeedOfVariationCreated.error.required")
     )
+
 }

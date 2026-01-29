@@ -50,9 +50,7 @@ class SettlorIndividualAnswerController @Inject() (
   livingSettlorPrintHelper: LivingSettlorPrintHelper,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)

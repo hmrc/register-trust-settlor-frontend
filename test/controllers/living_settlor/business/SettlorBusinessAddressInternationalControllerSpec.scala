@@ -208,4 +208,5 @@ class SettlorBusinessAddressInternationalControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

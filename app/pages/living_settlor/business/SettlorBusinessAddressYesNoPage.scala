@@ -38,4 +38,5 @@ final case class SettlorBusinessAddressYesNoPage(index: Int) extends QuestionPag
           .flatMap(_.remove(SettlorBusinessAddressUKPage(index)))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

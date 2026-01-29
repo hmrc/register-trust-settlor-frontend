@@ -39,6 +39,7 @@ final case class DeceasedSettlor(
     case (Some(_), _) => Some(Identification(nino, None))
     case _            => Some(Identification(None, buildAddress(address)))
   }
+
 }
 
 object DeceasedSettlor extends SettlorReads {

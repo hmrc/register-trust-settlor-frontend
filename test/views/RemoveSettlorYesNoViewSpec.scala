@@ -52,4 +52,5 @@ class RemoveSettlorYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

@@ -46,6 +46,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
   private lazy val settlorIndividualAnswerRoute: String =
     routes.SettlorIndividualAnswerController.onPageLoad(index, fakeDraftId).url
+
   private lazy val onSubmit: Call                       = routes.SettlorIndividualAnswerController.onSubmit(index, fakeDraftId)
 
   private val baseAnswers: UserAnswers = emptyUserAnswers
@@ -200,4 +201,5 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
     }
 
   }
+
 }

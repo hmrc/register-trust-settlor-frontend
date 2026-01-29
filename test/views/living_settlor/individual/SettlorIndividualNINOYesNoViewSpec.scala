@@ -46,4 +46,5 @@ class SettlorIndividualNINOYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

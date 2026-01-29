@@ -260,4 +260,5 @@ class AddASettlorViewHelperSpec extends SpecBase {
       }
     }
   }
+
 }

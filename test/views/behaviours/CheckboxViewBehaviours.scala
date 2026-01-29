@@ -67,8 +67,8 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
           val data: Map[String, String] =
             Map(s"$fieldKey[$i]" -> checkboxOption.value)
 
-          val doc                       = asDocument(createView(form.bind(data)))
-          val field                     = form(fieldKey)(s"[$i]")
+          val doc   = asDocument(createView(form.bind(data)))
+          val field = form(fieldKey)(s"[$i]")
 
           assert(doc.getElementById(field.id).hasAttr("checked"), s"${field.id} is not checked")
 
@@ -103,4 +103,5 @@ trait CheckboxViewBehaviours[A] extends ViewBehaviours {
         doc.getElementsByTag("fieldset").first.attr("aria-describedby") contains errorSpan.attr("id")
       }
     }
+
 }

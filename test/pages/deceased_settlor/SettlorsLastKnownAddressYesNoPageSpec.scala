@@ -32,7 +32,7 @@ class SettlorsLastKnownAddressYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](SettlorsLastKnownAddressYesNoPage)
   }
 
-  "remove WasSettlorsAddressUKYesNoPage, SettlorsAddressUK, SettlorsInternationalAddressPage when SettlorsLastKnownAddressYesNoPage is set to false" in {
+  "remove WasSettlorsAddressUKYesNoPage, SettlorsAddressUK, SettlorsInternationalAddressPage when SettlorsLastKnownAddressYesNoPage is set to false" in
     forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
       val answers: UserAnswers = initial
         .set(SettlorsUKAddressPage, UKAddress(str, str, Some(str), Some(str), str))
@@ -47,5 +47,5 @@ class SettlorsLastKnownAddressYesNoPageSpec extends PageBehaviours {
       result.get(SettlorsInternationalAddressPage) mustNot be(defined)
       result.get(WasSettlorsAddressUKYesNoPage) mustNot be(defined)
     }
-  }
+
 }

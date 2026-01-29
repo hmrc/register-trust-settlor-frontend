@@ -62,6 +62,7 @@ class SettlorNavigator @Inject() (config: FrontendAppConfig) extends Navigator {
         SettlorNavigator.addSettlorNowRoute(individualOrBusiness, answers, draftId, Some(index))
       case _                          => controllers.routes.SessionExpiredController.onPageLoad
     }
+
 }
 
 object SettlorNavigator {
@@ -121,4 +122,5 @@ object SettlorNavigator {
     }
     route(i, draftId)
   }
+
 }

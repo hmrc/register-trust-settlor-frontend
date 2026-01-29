@@ -28,8 +28,10 @@ class SettlorAliveYesNoControllerSpec extends SpecBase {
 
   private lazy val settlorAliveYesNoGetRoute  =
     controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onPageLoad(index, draftId).url
+
   private lazy val settlorAliveYesNoPostRoute =
     controllers.living_settlor.individual.routes.SettlorAliveYesNoController.onSubmit(index, draftId).url
+
   private val index                           = 0
   private val formProvider                    = new YesNoFormProvider()
   private val form                            = formProvider.withPrefix("settlorAliveYesNo")

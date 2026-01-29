@@ -57,4 +57,5 @@ class NinoFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, invalidFormatKey, Seq(fieldName))
     )
   }
+
 }

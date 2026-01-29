@@ -26,12 +26,14 @@ import scala.util.{Failure, Success, Try}
 
 trait ReadableUserAnswers {
   val data: JsObject
+
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     Reads.at(page.path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
       case JsError(_)          =>
         None
     }
+
 }
 
 case class ReadOnlyUserAnswers(data: JsObject) extends ReadableUserAnswers
@@ -116,6 +118,7 @@ final case class UserAnswers(
       living.collect { case x: SettlorBusinessViewModel => x }
     )
   }
+
 }
 
 object UserAnswers {
@@ -135,4 +138,5 @@ object UserAnswers {
       (__ \ "isTaxable").write[Boolean] and
       (__ \ "existingTrustUtr").writeNullable[String]
   )(unlift(UserAnswers.unapply))
+
 }

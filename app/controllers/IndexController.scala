@@ -40,8 +40,7 @@ class IndexController @Inject() (
   trustsStoreService: TrustsStoreService,
   submissionDraftConnector: SubmissionDraftConnector
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport {
+    extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
     def redirect(userAnswers: UserAnswers)(implicit request: IdentifierRequest[AnyContent]): Future[Result] =
@@ -70,4 +69,5 @@ class IndexController @Inject() (
       _           <- trustsStoreService.updateTaskStatus(draftId, InProgress)
     } yield result
   }
+
 }

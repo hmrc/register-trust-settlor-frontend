@@ -55,4 +55,5 @@ class SettlorsDateOfBirthFormProviderSpec extends DateBehaviours with FakeTrusts
     )
 
   }
+
 }

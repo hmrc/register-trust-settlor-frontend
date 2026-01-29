@@ -48,10 +48,7 @@ class KindOfTrustController @Inject() (
   requiredAnswer: RequiredAnswerActionProvider,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Enumerable.Implicits
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
@@ -87,4 +84,5 @@ class KindOfTrustController @Inject() (
           }
       )
   }
+
 }

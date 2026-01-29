@@ -110,4 +110,5 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
       }
     }
   }
+
 }

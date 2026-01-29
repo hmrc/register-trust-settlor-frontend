@@ -35,4 +35,5 @@ class SettlorDateOfDeathPageSpec extends PageBehaviours {
 
     beRemovable[LocalDate](SettlorDateOfDeathPage)
   }
+
 }

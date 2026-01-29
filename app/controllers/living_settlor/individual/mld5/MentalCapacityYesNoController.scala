@@ -48,9 +48,7 @@ class MentalCapacityYesNoController @Inject() (
   view: MentalCapacityYesNoView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[YesNoDontKnow] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
 
@@ -84,4 +82,5 @@ class MentalCapacityYesNoController @Inject() (
           }
       )
   }
+
 }

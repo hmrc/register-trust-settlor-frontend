@@ -49,9 +49,7 @@ class SettlorNationalInsuranceNumberController @Inject() (
   technicalErrorView: TechnicalErrorView,
   draftRegistrationService: DraftRegistrationService
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def getForm(draftId: String)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
     for {
@@ -70,6 +68,7 @@ class SettlorNationalInsuranceNumberController @Inject() (
     request: SettlorIndividualNameRequest[AnyContent]
   ): Future[collection.IndexedSeq[String]] =
     draftRegistrationService.retrieveBeneficiaryNinos(draftId)
+
   private def getProtectorNinos(draftId: String)(implicit
     request: SettlorIndividualNameRequest[AnyContent]
   ): Future[collection.IndexedSeq[String]] =
@@ -111,4 +110,5 @@ class SettlorNationalInsuranceNumberController @Inject() (
           )
       }
     }
+
 }

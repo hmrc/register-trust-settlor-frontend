@@ -25,6 +25,7 @@ package object models {
 
     def removeObject(path: JsPath): JsResult[JsObject] =
       jsObject.remove(path).flatMap(_.validate[JsObject])
+
   }
 
   implicit class RichJsValue(jsValue: JsValue) {
@@ -144,5 +145,7 @@ package object models {
                 }
             }
       }
+
   }
+
 }

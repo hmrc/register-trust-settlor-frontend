@@ -243,4 +243,5 @@ class RegistrationProgressSpec extends SpecBase {
       }
     }
   }
+
 }

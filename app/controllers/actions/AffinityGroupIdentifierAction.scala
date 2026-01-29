@@ -36,8 +36,7 @@ class AffinityGroupIdentifierAction[A] @Inject() (
   action: Action[A],
   trustsAuthFunctions: TrustsAuthorisedFunctions,
   config: FrontendAppConfig
-) extends Action[A]
-    with Logging {
+) extends Action[A] with Logging {
 
   private def authoriseAgent(request: Request[A], enrolments: Enrolments, internalId: String, action: Action[A]) = {
 
@@ -122,6 +121,6 @@ class AffinityGroupIdentifierAction[A] @Inject() (
   }
 
   override def parser: BodyParser[A]                       = action.parser
-  override implicit def executionContext: ExecutionContext = action.executionContext
+  implicit override def executionContext: ExecutionContext = action.executionContext
 
 }

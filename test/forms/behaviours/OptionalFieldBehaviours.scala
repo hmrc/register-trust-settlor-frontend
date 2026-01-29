@@ -26,12 +26,11 @@ trait OptionalFieldBehaviours extends FormSpec with ScalaCheckPropertyChecks wit
 
   def optionalField(form: Form[_], fieldName: String, validDataGenerator: Gen[String]): Unit = {
 
-    "bind valid data" in {
+    "bind valid data" in
       forAll(validDataGenerator) { dataItem =>
         val result = form.bind(Map(fieldName -> dataItem)).apply(fieldName)
         result.value.value mustBe dataItem
       }
-    }
 
     "bind when key is not present at all" in {
 
@@ -46,4 +45,5 @@ trait OptionalFieldBehaviours extends FormSpec with ScalaCheckPropertyChecks wit
     }
 
   }
+
 }

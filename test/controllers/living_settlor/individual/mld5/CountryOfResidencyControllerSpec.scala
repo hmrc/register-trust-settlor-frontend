@@ -197,4 +197,5 @@ class CountryOfResidencyControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

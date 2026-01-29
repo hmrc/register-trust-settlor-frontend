@@ -68,4 +68,5 @@ class SettlorInfoControllerSpec extends SpecBase {
       }
     }
   }
+
 }

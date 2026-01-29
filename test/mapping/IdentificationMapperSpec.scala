@@ -25,10 +25,13 @@ class IdentificationMapperSpec extends SpecBase {
 
   private val ukAddress: UKAddress               =
     UKAddress("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), "AB1 1AB")
+
   private val nonUkAddress: InternationalAddress =
     InternationalAddress("Line 1", "Line 2", Some("Line 3"), "FR")
+
   private val ukAddressType: AddressType         =
     AddressType("Line 1", "Line 2", Some("Line 3"), Some("Line 4"), Some("AB1 1AB"), "GB")
+
   private val nonUkAddressType: AddressType      =
     AddressType("Line 1", "Line 2", Some("Line 3"), None, None, "FR")
 
@@ -58,4 +61,5 @@ class IdentificationMapperSpec extends SpecBase {
       }
     }
   }
+
 }

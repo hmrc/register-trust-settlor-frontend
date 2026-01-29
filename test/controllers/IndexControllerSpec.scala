@@ -247,7 +247,7 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
           val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
           verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-          uaCaptor.getValue.isTaxable mustBe true
+          uaCaptor.getValue.isTaxable            mustBe true
           uaCaptor.getValue.existingTrustUtr.get mustBe utr
 
           application.stop()
@@ -279,10 +279,10 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-              uaCaptor.getValue.isTaxable mustBe true
+              uaCaptor.getValue.isTaxable            mustBe true
               uaCaptor.getValue.existingTrustUtr.get mustBe utr
-              uaCaptor.getValue.draftId mustBe fakeDraftId
-              uaCaptor.getValue.internalAuthId mustBe "id"
+              uaCaptor.getValue.draftId              mustBe fakeDraftId
+              uaCaptor.getValue.internalAuthId       mustBe "id"
 
               application.stop()
             }
@@ -310,10 +310,10 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
               val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
               verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
 
-              uaCaptor.getValue.isTaxable mustBe false
+              uaCaptor.getValue.isTaxable            mustBe false
               uaCaptor.getValue.existingTrustUtr.get mustBe utr
-              uaCaptor.getValue.draftId mustBe fakeDraftId
-              uaCaptor.getValue.internalAuthId mustBe "id"
+              uaCaptor.getValue.draftId              mustBe fakeDraftId
+              uaCaptor.getValue.internalAuthId       mustBe "id"
 
               application.stop()
             }
@@ -322,4 +322,5 @@ class IndexControllerSpec extends SpecBase with BeforeAndAfterEach {
       }
     }
   }
+
 }

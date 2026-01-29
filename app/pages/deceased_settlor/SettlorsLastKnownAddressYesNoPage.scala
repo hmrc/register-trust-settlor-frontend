@@ -38,4 +38,5 @@ case object SettlorsLastKnownAddressYesNoPage extends QuestionPage[Boolean] {
           .flatMap(_.remove(SettlorsInternationalAddressPage))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

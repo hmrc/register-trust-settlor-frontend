@@ -47,9 +47,7 @@ class SettlorIndividualNINOController @Inject() (
   view: SettlorIndividualNINOView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
     formProvider("settlorIndividualNINO", request.userAnswers, index)
@@ -86,4 +84,5 @@ class SettlorIndividualNINOController @Inject() (
             }
         )
     }
+
 }

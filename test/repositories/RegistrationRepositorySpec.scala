@@ -95,4 +95,5 @@ class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSuga
       }
     }
   }
+
 }

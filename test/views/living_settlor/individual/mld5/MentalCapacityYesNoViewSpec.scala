@@ -63,4 +63,5 @@ class MentalCapacityYesNoViewSpec extends QuestionViewBehaviours[YesNoDontKnow] 
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

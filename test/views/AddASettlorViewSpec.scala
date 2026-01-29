@@ -150,4 +150,5 @@ class AddASettlorViewSpec extends OptionsViewBehaviours with TabularDataViewBeha
     }
 
   }
+
 }

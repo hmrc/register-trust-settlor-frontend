@@ -44,10 +44,12 @@ class RequiredAnswerAction[T] @Inject() (required: RequiredAnswer[T])(implicit
       case Some(_) =>
         Future.successful(Right(request))
     }
+
 }
 
 class RequiredAnswerActionProvider @Inject() (implicit ec: ExecutionContext) {
 
   def apply[T](required: RequiredAnswer[T])(implicit reads: Reads[T]) =
     new RequiredAnswerAction(required)
+
 }

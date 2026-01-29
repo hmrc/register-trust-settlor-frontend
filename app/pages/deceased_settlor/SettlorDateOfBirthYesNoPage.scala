@@ -36,4 +36,5 @@ case object SettlorDateOfBirthYesNoPage extends QuestionPage[Boolean] {
       case _           =>
         super.cleanup(value, userAnswers)
     }
+
 }

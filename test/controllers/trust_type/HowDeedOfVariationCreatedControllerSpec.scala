@@ -157,4 +157,5 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

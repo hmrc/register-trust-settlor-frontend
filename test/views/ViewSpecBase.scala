@@ -47,13 +47,13 @@ trait ViewSpecBase extends SpecBase {
 
     if (elements.isEmpty) throw new IllegalArgumentException(s"CSS Selector $cssSelector wasn't rendered.")
 
-    //<p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
+    // <p> HTML elements are rendered out with a carriage return on some pages, so discount for comparison
     assert(elements.first().html().replace("\n", "") == expectedValue)
   }
 
   def assertPageTitleEqualsMessage(doc: Document, expectedMessageKey: String, args: Any*): Assertion = {
     val headers = doc.getElementsByTag("h1")
-    headers.size mustBe 1
+    headers.size                                 mustBe 1
     headers.first.text.replaceAll("\u00a0", " ") mustBe messages(expectedMessageKey, args: _*).replaceAll("&nbsp;", " ")
   }
 
@@ -65,7 +65,7 @@ trait ViewSpecBase extends SpecBase {
   ): Assertion = {
     val headers = doc.getElementsByTag("h1")
     headers.size mustBe 1
-    val actual  = headers.first.text.replaceAll("\u00a0", " ")
+    val actual = headers.first.text.replaceAll("\u00a0", " ")
 
     val expectedCaption = messages(expectedCaptionMessageKey, captionParam).replaceAll("&nbsp;", " ")
     val expectedHeading = messages(expectedMessageKey).replaceAll("&nbsp;", " ")
@@ -99,7 +99,7 @@ trait ViewSpecBase extends SpecBase {
   def assertContainsText(doc: Document, text: String): Assertion =
     assert(doc.toString.contains(text), "\n\ntext " + text + " was not rendered on the page.\n")
 
-  def assertContainsMessages(doc: Document, expectedMessageKeys: String*): Unit                              =
+  def assertContainsMessages(doc: Document, expectedMessageKeys: String*): Unit =
     for (key <- expectedMessageKeys) assertContainsText(doc, messages(key))
 
   def assertAttributeValueForElement(element: Element, attribute: String, attributeValue: String): Assertion =

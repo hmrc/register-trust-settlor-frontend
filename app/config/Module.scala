@@ -44,4 +44,5 @@ class Module extends AbstractModule {
       .asEagerSingleton()
     bind(classOf[Navigator]).annotatedWith(classOf[TrustType]).to(classOf[TrustTypeNavigator]).asEagerSingleton()
   }
+
 }

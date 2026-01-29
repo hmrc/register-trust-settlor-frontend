@@ -22,7 +22,9 @@ import controllers.living_settlor.business.routes
 import models.UserAnswers
 import models.pages.KindOfTrust.{Employees, Intervivos}
 import pages.living_settlor.business._
-import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.living_settlor.business.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 import pages.trust_type.KindOfTrustPage
 
 class BusinessSettlorNavigatorSpec extends SpecBase {
@@ -37,11 +39,10 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
       val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
 
       "SettlorBusinessNamePage" must {
-        "redirect to UTR yes/no" in {
+        "redirect to UTR yes/no" in
           navigator
             .nextPage(SettlorBusinessNamePage(index), fakeDraftId)(baseAnswers)
             .mustBe(routes.SettlorBusinessUtrYesNoController.onPageLoad(index, fakeDraftId))
-        }
       }
 
       "SettlorBusinessUtrYesNoPage" when {
@@ -472,27 +473,24 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
       }
 
       "SettlorBusinessTypePage" must {
-        "redirect to existed for 2 years yes/no" in {
+        "redirect to existed for 2 years yes/no" in
           navigator
             .nextPage(SettlorBusinessTypePage(index), fakeDraftId)(baseAnswers)
             .mustBe(routes.SettlorBusinessTimeYesNoController.onPageLoad(index, fakeDraftId))
-        }
       }
 
       "SettlorBusinessTimeYesNoPage" must {
-        "redirect to check answers" in {
+        "redirect to check answers" in
           navigator
             .nextPage(SettlorBusinessTimeYesNoPage(index), fakeDraftId)(baseAnswers)
             .mustBe(routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId))
-        }
       }
 
       "SettlorBusinessAnswerPage" must {
-        "redirect to add-to page" in {
+        "redirect to add-to page" in
           navigator
             .nextPage(SettlorBusinessAnswerPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.routes.AddASettlorController.onPageLoad(fakeDraftId))
-        }
       }
     }
 
@@ -505,11 +503,10 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
         .value // we want to ensure an Employees type of trust does not affect our non-taxable nav
 
       "SettlorBusinessNamePage" must {
-        "redirect to CountryOfResidenceYesNoPage" in {
+        "redirect to CountryOfResidenceYesNoPage" in
           navigator
             .nextPage(SettlorBusinessNamePage(index), fakeDraftId)(baseAnswers)
             .mustBe(mld5Routes.CountryOfResidenceYesNoController.onPageLoad(index, fakeDraftId))
-        }
       }
 
       "CountryOfResidenceYesNoPage" when {
@@ -584,12 +581,12 @@ class BusinessSettlorNavigatorSpec extends SpecBase {
       }
 
       "SettlorBusinessAnswerPage" must {
-        "redirect to add-to page" in {
+        "redirect to add-to page" in
           navigator
             .nextPage(SettlorBusinessAnswerPage, fakeDraftId)(baseAnswers)
             .mustBe(controllers.routes.AddASettlorController.onPageLoad(fakeDraftId))
-        }
       }
     }
   }
+
 }

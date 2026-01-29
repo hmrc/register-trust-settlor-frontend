@@ -26,8 +26,7 @@ import java.time.format.DateTimeFormatter
 trait DateBehaviours extends FieldBehaviours {
 
   def dateField(form: Form[_], key: String, validData: Gen[LocalDate]): Unit =
-    "bind valid data" in {
-
+    "bind valid data" in
       forAll(validData -> "valid date") { date =>
         val data = Map(
           s"$key.day"   -> date.getDayOfMonth.toString,
@@ -39,7 +38,6 @@ trait DateBehaviours extends FieldBehaviours {
 
         result.value.value mustEqual date
       }
-    }
 
   def dateFieldForPassportOrIdForm(
     form: Form[PassportOrIdCardDetails],
@@ -47,8 +45,7 @@ trait DateBehaviours extends FieldBehaviours {
     validData: Gen[LocalDate],
     requiredBindings: Map[String, String] = Map.empty
   ): Unit =
-    "bind valid data" in {
-
+    "bind valid data" in
       forAll(validData -> "valid date") { date =>
         val data = requiredBindings ++ Map(
           s"$key.day"   -> date.getDayOfMonth.toString,
@@ -60,7 +57,6 @@ trait DateBehaviours extends FieldBehaviours {
 
         result.value.value.expiryDate mustEqual date
       }
-    }
 
   def dateFieldWithMax(form: Form[_], key: String, max: LocalDate, formError: FormError): Unit =
     s"fail to bind a date greater than ${max.format(DateTimeFormatter.ISO_LOCAL_DATE)}" in {
@@ -105,4 +101,5 @@ trait DateBehaviours extends FieldBehaviours {
 
       result.errors must contain only FormError(key, requiredAllKey, List("day", "month", "year"))
     }
+
 }

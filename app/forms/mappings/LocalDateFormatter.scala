@@ -28,8 +28,7 @@ private[mappings] class LocalDateFormatter(
   allRequiredKey: String,
   twoRequiredKey: String,
   requiredKey: String
-) extends Formatter[LocalDate]
-    with Formatters {
+) extends Formatter[LocalDate] with Formatters {
 
   private val fieldKeys: List[String] = List("day", "month", "year")
 
@@ -88,4 +87,5 @@ private[mappings] class LocalDateFormatter(
       s"$key.month" -> value.getMonthValue.toString,
       s"$key.year"  -> value.getYear.toString
     )
+
 }

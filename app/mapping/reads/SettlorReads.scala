@@ -36,4 +36,5 @@ trait SettlorReads {
       .orElse {
         (__ \ Symbol("mentalCapacityYesNo")).readNullable[YesNoDontKnow]
       }
+
 }

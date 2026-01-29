@@ -39,4 +39,5 @@ object IndividualOrBusiness extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[IndividualOrBusiness] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
 }

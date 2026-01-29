@@ -120,4 +120,5 @@ class SettlorInfoViewSpec extends ViewBehaviours {
       behave like pageWithContinueButton(applyView, routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url)
     }
   }
+
 }

@@ -29,4 +29,5 @@ class SettlorIndividualIDCardPageSpec extends PageBehaviours {
 
     beRemovable[PassportOrIdCardDetails](SettlorIndividualIDCardPage(0))
   }
+
 }

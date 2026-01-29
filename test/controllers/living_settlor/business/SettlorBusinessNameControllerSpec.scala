@@ -160,4 +160,5 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

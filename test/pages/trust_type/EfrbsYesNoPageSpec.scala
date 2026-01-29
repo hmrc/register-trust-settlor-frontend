@@ -36,7 +36,7 @@ class EfrbsYesNoPageSpec extends PageBehaviours {
 
       val page = EfrbsYesNoPage
 
-      "set to false" in {
+      "set to false" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, true)
@@ -53,8 +53,8 @@ class EfrbsYesNoPageSpec extends PageBehaviours {
 
           result.get(EfrbsStartDatePage) must not be defined
         }
-      }
 
     }
   }
+
 }

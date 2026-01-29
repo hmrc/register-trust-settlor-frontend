@@ -188,4 +188,5 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -155,4 +155,5 @@ class AdditionToWillTrustYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -232,4 +232,5 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

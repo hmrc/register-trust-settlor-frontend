@@ -20,7 +20,9 @@ import base.SpecBase
 import controllers.routes._
 import forms.DateOfBirthFormProvider
 import models.pages.FullName
-import pages.living_settlor.individual.{SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{
+  SettlorIndividualDateOfBirthPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualNamePage
+}
 import play.api.data.Form
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -203,4 +205,5 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

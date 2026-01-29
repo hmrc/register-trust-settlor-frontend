@@ -47,4 +47,5 @@ class SettlorsNameViewSpec extends QuestionViewBehaviours[FullName] {
       Seq(("firstName", None), ("middleName", None), ("lastName", None))
     )
   }
+
 }

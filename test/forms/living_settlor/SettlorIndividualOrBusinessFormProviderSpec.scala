@@ -43,4 +43,5 @@ class SettlorIndividualOrBusinessFormProviderSpec extends OptionFieldBehaviours 
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

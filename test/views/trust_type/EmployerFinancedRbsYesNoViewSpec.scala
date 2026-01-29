@@ -43,4 +43,5 @@ class EmployerFinancedRbsYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

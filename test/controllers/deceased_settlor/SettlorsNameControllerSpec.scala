@@ -146,4 +146,5 @@ class SettlorsNameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

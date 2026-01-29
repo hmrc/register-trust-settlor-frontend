@@ -56,4 +56,5 @@ class DateOfBirthFormProviderSpec extends DateBehaviours with FakeTrustsApp {
     )
 
   }
+
 }

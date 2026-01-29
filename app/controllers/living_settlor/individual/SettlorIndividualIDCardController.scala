@@ -50,9 +50,7 @@ class SettlorIndividualIDCardController @Inject() (
   val countryOptions: CountryOptions,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def getForm(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
     formProvider("settlorIndividualIDCard", request.userAnswers, index)
@@ -105,4 +103,5 @@ class SettlorIndividualIDCardController @Inject() (
             }
         )
     }
+
 }

@@ -173,4 +173,5 @@ class SettlorsLastKnownAddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

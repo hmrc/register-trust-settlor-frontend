@@ -40,4 +40,5 @@ final case class SettlorBusinessUtrYesNoPage(index: Int) extends QuestionPage[Bo
       case Some(false) => userAnswers.remove(SettlorBusinessUtrPage(index))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

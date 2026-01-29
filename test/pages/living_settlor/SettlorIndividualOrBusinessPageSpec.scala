@@ -38,7 +38,7 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
     beRemovable[IndividualOrBusiness](SettlorIndividualOrBusinessPage(0))
   }
 
-  "remove business related data when changing to individual" in {
+  "remove business related data when changing to individual" in
     forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
       val answers: UserAnswers = initial
         .set(SetUpByLivingSettlorYesNoPage, false)
@@ -88,9 +88,8 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
       result.get(SettlorBusinessTimeYesNoPage(0)) mustNot be(defined)
       result.get(LivingSettlorStatus(0)) mustNot be(defined)
     }
-  }
 
-  "remove individual related data when changing to business" in {
+  "remove individual related data when changing to business" in
     forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
       val answers: UserAnswers = initial
         .set(SetUpByLivingSettlorYesNoPage, false)
@@ -134,6 +133,5 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
       result.get(SettlorIndividualIDCardPage(0)) mustNot be(defined)
       result.get(LivingSettlorStatus(0)) mustNot be(defined)
     }
-  }
 
 }

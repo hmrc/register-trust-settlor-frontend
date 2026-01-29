@@ -31,4 +31,5 @@ class SettlorsMapper @Inject() (
       case (individuals, businesses) =>
         Some(Settlors(individuals, businesses))
     }
+
 }

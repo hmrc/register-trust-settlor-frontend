@@ -52,4 +52,5 @@ class SettlorBusinessNameFormProviderSpec extends StringFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

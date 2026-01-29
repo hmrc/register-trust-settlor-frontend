@@ -41,4 +41,5 @@ case object SettlorsNationalInsuranceYesNoPage extends QuestionPage[Boolean] {
           .flatMap(_.remove(SettlorsInternationalAddressPage))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

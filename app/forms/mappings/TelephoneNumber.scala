@@ -48,10 +48,12 @@ object TelephoneNumber extends (String => TelephoneNumber) {
       def digit: Regex = "[0-9]".r
       digit.findAllIn(tel).length >= 6
     }
+
   }
 
   def isValid(tel: String): Boolean =
     tel != null &&
       tel.removeParentheses().matches(Validation.telephoneRegex) &&
       tel.removeParentheses().hasMinimumOfSixDigits
+
 }

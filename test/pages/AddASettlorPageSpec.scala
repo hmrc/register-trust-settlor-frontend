@@ -29,4 +29,5 @@ class AddASettlorPageSpec extends PageBehaviours {
 
     beRemovable[AddASettlor](AddASettlorPage)
   }
+
 }

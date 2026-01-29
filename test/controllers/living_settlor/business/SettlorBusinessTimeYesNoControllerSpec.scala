@@ -185,4 +185,5 @@ class SettlorBusinessTimeYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

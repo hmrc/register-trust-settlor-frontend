@@ -58,4 +58,5 @@ class IndividualOrBusinessSpec extends AnyWordSpec with Matchers with ScalaCheck
       }
     }
   }
+
 }

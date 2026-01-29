@@ -59,4 +59,5 @@ class SettlorIndividualNameViewSpec extends QuestionViewBehaviours[FullName] {
       behave like pageWithASubmitButton(applyView(form))
     }
   }
+
 }

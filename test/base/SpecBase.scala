@@ -84,4 +84,5 @@ trait SpecBase
         bind[DraftRegistrationService].toInstance(draftRegistrationService),
         bind[AffinityGroup].toInstance(Organisation)
       )
+
 }

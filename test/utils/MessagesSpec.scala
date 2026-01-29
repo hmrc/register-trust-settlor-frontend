@@ -31,7 +31,7 @@ class MessagesSpec extends SpecBase {
     )
     .build()
 
-  override implicit lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en"), Lang("cy")))
+  implicit override lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en"), Lang("cy")))
 
   val MatchSingleQuoteOnly: Regex   = """\w+'{1}\w+""".r
   val MatchBacktickQuoteOnly: Regex = """`+""".r
@@ -39,7 +39,7 @@ class MessagesSpec extends SpecBase {
   "Application" should {
     "have the correct message configs" in {
       messagesApi.messages.size mustBe 4
-      messagesApi.messages.keys must contain theSameElementsAs Vector("en", "cy", "default", "default.play")
+      messagesApi.messages.keys   must contain theSameElementsAs Vector("en", "cy", "default", "default.play")
     }
 
     "have messages for default and cy only" in {
@@ -51,17 +51,16 @@ class MessagesSpec extends SpecBase {
   }
 
   "All message files" should {
-    "have the same set of keys" in {
+    "have the same set of keys" in
       withClue(mismatchingKeys(defaultMessages.keySet, welshMessages.keySet)) {
         assert(welshMessages.keySet equals defaultMessages.keySet)
       }
-    }
     "not have the same messages" in {
-      val same = defaultMessages.keys.collect({
+      val same = defaultMessages.keys.collect {
         case messageKey
             if defaultMessages.get(messageKey) == welshMessages.get(messageKey) && !messageKey.contains(".url") =>
           (messageKey, defaultMessages.get(messageKey))
-      })
+      }
 
       // 94% of app needs to be translated into Welsh. 94% allows for:
       //   - Messages which just can't be different from English
@@ -147,7 +146,7 @@ class MessagesSpec extends SpecBase {
   private def assertCorrectUseOfQuotes(label: String, messages: Map[String, String]): Unit = messages.foreach {
     case (messageKey: String, messageValue: String) =>
       withClue(s"In $label, there is an unescaped or invalid quote:[$messageKey][$messageValue]") {
-        MatchSingleQuoteOnly.findFirstIn(messageValue).isDefined mustBe false
+        MatchSingleQuoteOnly.findFirstIn(messageValue).isDefined   mustBe false
         MatchBacktickQuoteOnly.findFirstIn(messageValue).isDefined mustBe false
       }
   }
@@ -174,4 +173,5 @@ class MessagesSpec extends SpecBase {
 
     test1 ++ test2
   }
+
 }

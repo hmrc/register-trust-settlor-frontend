@@ -28,4 +28,5 @@ class CountryOfResidencyPageSpec extends PageBehaviours {
 
     beRemovable[String](CountryOfResidencyPage(0))
   }
+
 }

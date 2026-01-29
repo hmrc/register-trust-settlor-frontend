@@ -45,4 +45,5 @@ class SettlorBusinessTimeYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

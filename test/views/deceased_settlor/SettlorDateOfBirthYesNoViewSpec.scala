@@ -44,4 +44,5 @@ class SettlorDateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name.toString))
   }
+
 }

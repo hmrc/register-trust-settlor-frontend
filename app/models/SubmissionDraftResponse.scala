@@ -59,6 +59,7 @@ object RegistrationSubmission {
   object DataSet {
     implicit lazy val format: OFormat[DataSet] = Json.format[DataSet]
   }
+
 }
 
 // Responses

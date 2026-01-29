@@ -31,4 +31,5 @@ class DeceasedSettlorAnswerViewSpec extends ViewBehaviours {
 
     behave like pageWithBackLink(applyView)
   }
+
 }

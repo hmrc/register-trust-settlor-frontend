@@ -504,4 +504,5 @@ class DeceasedSettlorPrintHelperSpec extends SpecBase {
       headingArgs = Seq(1)
     )
   }
+
 }

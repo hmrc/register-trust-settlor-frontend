@@ -42,4 +42,5 @@ class SettlorsBasedInTheUKFormProviderSpec extends BooleanFieldBehaviours {
       requiredError = FormError(fieldName, requiredKey)
     )
   }
+
 }

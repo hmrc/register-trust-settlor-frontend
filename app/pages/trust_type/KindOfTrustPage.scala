@@ -86,4 +86,5 @@ case object KindOfTrustPage extends QuestionPage[KindOfTrust] {
           .flatMap(_.remove(SettlorBusinessTimeYesNoPage(index)))
     }
   }
+
 }

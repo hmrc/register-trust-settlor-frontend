@@ -35,7 +35,7 @@ class SettlorBusinessUtrYesNoPageSpec extends PageBehaviours {
 
       val page = SettlorBusinessUtrYesNoPage(0)
 
-      "set to true" in {
+      "set to true" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, false)
@@ -58,9 +58,8 @@ class SettlorBusinessUtrYesNoPageSpec extends PageBehaviours {
           result.get(SettlorBusinessAddressUKPage(0))            must not be defined
           result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
         }
-      }
 
-      "set to false" in {
+      "set to false" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, true)
@@ -74,8 +73,8 @@ class SettlorBusinessUtrYesNoPageSpec extends PageBehaviours {
 
           result.get(SettlorBusinessUtrPage(0)) must not be defined
         }
-      }
 
     }
   }
+
 }

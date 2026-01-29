@@ -32,7 +32,7 @@ class RegistrationIdentifierActionSpec extends SpecBase {
   type RetrievalType = Option[String] ~ Option[AffinityGroup] ~ Enrolments
 
   val mockAuthConnector: AuthConnector = mock[AuthConnector]
-  lazy override val trustsAuth         = new TrustsAuthorisedFunctions(mockAuthConnector, frontendAppConfig)
+  override lazy val trustsAuth         = new TrustsAuthorisedFunctions(mockAuthConnector, frontendAppConfig)
 
   private def authRetrievals(affinityGroup: AffinityGroup, enrolment: Enrolments) =
     Future.successful(new ~(new ~(Some("id"), Some(affinityGroup)), enrolment))
@@ -85,4 +85,5 @@ class RegistrationIdentifierActionSpec extends SpecBase {
       }
     }
   }
+
 }

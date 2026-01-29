@@ -402,9 +402,10 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
     forAll(arbitrary[Int].suchThat(_ > 0)) { subsequentIndex =>
       val subsequentPrintSection =
         businessSettlorPrintHelper.printSection(userAnswers, businessName, fakeDraftId, subsequentIndex)
-      subsequentPrintSection.headingKey mustBe Some("answerPage.section.settlor.subheading")
+      subsequentPrintSection.headingKey  mustBe Some("answerPage.section.settlor.subheading")
       subsequentPrintSection.headingArgs mustBe Seq(subsequentIndex + 1)
-      subsequentPrintSection.sectionKey mustBe None
+      subsequentPrintSection.sectionKey  mustBe None
     }
   }
+
 }

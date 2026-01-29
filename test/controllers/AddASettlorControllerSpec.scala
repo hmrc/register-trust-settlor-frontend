@@ -50,10 +50,7 @@ import views.html.{AddASettlorView, AddASettlorYesNoView}
 import scala.concurrent.Future
 
 class AddASettlorControllerSpec
-    extends SpecBase
-    with BeforeAndAfterEach
-    with ScalaCheckPropertyChecks
-    with ModelGenerators {
+    extends SpecBase with BeforeAndAfterEach with ScalaCheckPropertyChecks with ModelGenerators {
 
   lazy val getRoute: String            = routes.AddASettlorController.onPageLoad(fakeDraftId).url
   lazy val submitAnotherRoute: String  = routes.AddASettlorController.submitAnother(fakeDraftId).url
@@ -620,8 +617,7 @@ class AddASettlorControllerSpec
             application.stop()
           }
 
-          "registration progress is not completed" in {
-
+          "registration progress is not completed" in
             forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
               beforeEach()
 
@@ -648,7 +644,6 @@ class AddASettlorControllerSpec
 
               application.stop()
             }
-          }
         }
       }
 
@@ -714,8 +709,7 @@ class AddASettlorControllerSpec
           application.stop()
         }
 
-        "registration progress is not completed" in {
-
+        "registration progress is not completed" in
           forAll(arbitrary[Option[Status]].suchThat(!_.contains(Completed))) { regProgressStatus =>
             beforeEach()
 
@@ -743,9 +737,9 @@ class AddASettlorControllerSpec
 
             application.stop()
           }
-        }
       }
     }
 
   }
+
 }

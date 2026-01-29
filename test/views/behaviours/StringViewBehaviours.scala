@@ -86,9 +86,9 @@ trait StringViewBehaviours extends QuestionViewBehaviours[String] {
             doc,
             "title",
             ViewUtils.breadcrumbTitle(s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title",
-              messageKeyParam.getOrElse("")
-            )}""")
+                s"$messageKeyPrefix.title",
+                messageKeyParam.getOrElse("")
+              )}""")
           )
         }
       }

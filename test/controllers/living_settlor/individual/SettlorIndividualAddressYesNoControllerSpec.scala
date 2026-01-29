@@ -203,4 +203,5 @@ class SettlorIndividualAddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

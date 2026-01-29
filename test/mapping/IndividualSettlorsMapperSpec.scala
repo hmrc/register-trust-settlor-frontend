@@ -547,4 +547,5 @@ class IndividualSettlorsMapperSpec extends SpecBase {
       }
     }
   }
+
 }

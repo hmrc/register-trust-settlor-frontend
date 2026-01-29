@@ -175,4 +175,5 @@ class CountryOfResidenceControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

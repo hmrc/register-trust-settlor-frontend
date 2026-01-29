@@ -88,4 +88,5 @@ trait ModelGenerators {
     Arbitrary {
       Gen.oneOf(YesNoDontKnow.values)
     }
+
 }

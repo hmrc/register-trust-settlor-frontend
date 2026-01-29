@@ -31,7 +31,7 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfResidenceInTheUkYesNoPage)
   }
 
-  "Yes selected - set CountryOfResidencePage to 'GB' " in {
+  "Yes selected - set CountryOfResidencePage to 'GB' " in
     forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial
         .set(CountryOfResidenceYesNoPage, true)
@@ -45,9 +45,8 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 
       result.get(CountryOfResidencePage).get mustBe "GB"
     }
-  }
 
-  "No selected" in {
+  "No selected" in
     forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial
         .set(CountryOfResidenceYesNoPage, true)
@@ -61,5 +60,5 @@ class CountryOfResidenceInTheUkYesNoPageSpec extends PageBehaviours {
 
       result.get(CountryOfResidencePage).get mustBe "ES"
     }
-  }
+
 }

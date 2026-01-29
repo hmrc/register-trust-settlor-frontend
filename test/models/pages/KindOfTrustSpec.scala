@@ -55,4 +55,5 @@ class KindOfTrustSpec extends AnyWordSpec with Matchers with ScalaCheckPropertyC
       }
     }
   }
+
 }
