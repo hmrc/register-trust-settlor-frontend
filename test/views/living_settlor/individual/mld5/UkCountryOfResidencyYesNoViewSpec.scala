@@ -25,13 +25,13 @@ import views.html.living_settlor.individual.mld5.UkCountryOfResidencyYesNoView
 
 class UkCountryOfResidencyYesNoViewSpec extends YesNoViewBehaviours {
 
-  override val form: Form[Boolean]                  = new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfResidencyYesNo")
+  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfResidencyYesNo")
 
   private val formContentInPastTense: Form[Boolean] =
     new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfResidencyYesNoPastTense")
 
-  private val index: Int                            = 0
-  private val name: FullName                        = FullName("First", None, "Last")
+  private val index: Int     = 0
+  private val name: FullName = FullName("First", None, "Last")
 
   Seq(
     ("settlorIndividualUkCountryOfResidencyYesNo", true, form),
