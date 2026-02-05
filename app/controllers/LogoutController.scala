@@ -36,8 +36,7 @@ class LogoutController @Inject() (
   identify: RegistrationIdentifierAction,
   auditConnector: AuditConnector
 )(implicit val ec: ExecutionContext)
-    extends FrontendBaseController
-    with Logging {
+    extends FrontendBaseController with Logging {
 
   def logout: Action[AnyContent] = identify { request =>
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
@@ -63,4 +62,5 @@ class LogoutController @Inject() (
     Redirect(appConfig.logoutUrl).withSession(session = ("feedbackId", Session.id(hc)))
 
   }
+
 }

@@ -26,4 +26,5 @@ class SettlorsBasedInTheUKFormProvider @Inject() extends Mappings {
     Form(
       "value" -> boolean("settlorsBasedInTheUK.error.required")
     )
+
 }

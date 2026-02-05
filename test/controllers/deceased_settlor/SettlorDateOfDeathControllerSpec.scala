@@ -299,4 +299,5 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       application.stop()
     }
   }
+
 }

@@ -35,6 +35,7 @@ final case class BusinessSettlor(
     case (None, None) => None
     case _            => Some(IdentificationOrgType(utr, buildAddress(address)))
   }
+
 }
 
 object BusinessSettlor extends SettlorReads {

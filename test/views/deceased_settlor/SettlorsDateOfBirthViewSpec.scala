@@ -50,4 +50,5 @@ class SettlorsDateOfBirthViewSpec extends QuestionViewBehaviours[LocalDate] {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

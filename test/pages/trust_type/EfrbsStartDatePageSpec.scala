@@ -35,4 +35,5 @@ class EfrbsStartDatePageSpec extends PageBehaviours {
 
     beRemovable[LocalDate](EfrbsStartDatePage)
   }
+
 }

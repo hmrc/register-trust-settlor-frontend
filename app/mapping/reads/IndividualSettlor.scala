@@ -43,6 +43,7 @@ final case class IndividualSettlor(
     case (None, None, None) => None
     case _                  => Some(IdentificationType(nino, buildPassport(passportOrId), buildAddress(address)))
   }
+
 }
 
 object IndividualSettlor extends SettlorReads {

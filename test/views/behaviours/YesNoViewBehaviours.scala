@@ -37,7 +37,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
           val doc     = asDocument(createView(form))
           val legends = doc.getElementsByTag("legend")
-          legends.size mustBe 1
+          legends.size     mustBe 1
           legends.first.text must include(messages(s"$messageKeyPrefix.heading", args: _*))
 
           hintTextPrefix.map { pref =>
@@ -88,7 +88,7 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
 
           val doc       = asDocument(createView(form.withError(error)))
           val errorSpan = doc.getElementsByClass("govuk-error-message").first
-          errorSpan.text mustBe (s"""${messages(errorPrefix)} ${messages(errorMessage)}""")
+          errorSpan.text mustBe s"""${messages(errorPrefix)} ${messages(errorMessage)}"""
         }
 
         "show an error prefix in the browser title" in {
@@ -120,4 +120,5 @@ trait YesNoViewBehaviours extends QuestionViewBehaviours[Boolean] {
       assertNotRenderedById(doc, "error-summary_header")
     }
   }
+
 }

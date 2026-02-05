@@ -154,4 +154,5 @@ class IndividualSettlorNavigator extends Navigator {
     } else {
       SettlorIndividualAnswerController.onPageLoad(index, draftId)
     }
+
 }

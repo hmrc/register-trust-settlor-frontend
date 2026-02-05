@@ -188,4 +188,5 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

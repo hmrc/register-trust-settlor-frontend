@@ -25,11 +25,7 @@ import play.api.data.{Form, FormError}
 import java.time.LocalDate
 
 trait PassportOrIDCardBehaviours
-    extends FormSpec
-    with ScalaCheckPropertyChecks
-    with Generators
-    with FieldBehaviours
-    with OptionalFieldBehaviours {
+    extends FormSpec with ScalaCheckPropertyChecks with Generators with FieldBehaviours with OptionalFieldBehaviours {
 
   def passportOrIDCardDateField(form: Form[PassportOrIdCardDetails], key: String): Unit =
     "bind a valid date" in {

@@ -44,4 +44,5 @@ class SettlorBusinessAddressUKYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

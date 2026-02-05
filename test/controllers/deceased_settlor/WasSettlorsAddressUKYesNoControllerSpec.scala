@@ -173,4 +173,5 @@ class WasSettlorsAddressUKYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

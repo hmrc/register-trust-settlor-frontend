@@ -36,7 +36,7 @@ object RolesInCompanies extends Logging {
   final case object CouldNotDetermine extends RolesInCompaniesAnswered
 
   implicit lazy val httpReads: HttpReads[RolesInCompaniesAnswered] =
-    (_: String, _: String, response: HttpResponse) => {
+    (_: String, _: String, response: HttpResponse) =>
       response.status match {
         case Status.OK =>
           if (response.json.\\("individualBeneficiaries").nonEmpty) {
@@ -54,6 +54,5 @@ object RolesInCompanies extends Logging {
         case _         =>
           CouldNotDetermine
       }
-    }
 
 }

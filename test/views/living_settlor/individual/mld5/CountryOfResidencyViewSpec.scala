@@ -25,9 +25,10 @@ import views.html.living_settlor.individual.mld5.CountryOfResidencyView
 
 class CountryOfResidencyViewSpec extends SelectCountryViewBehaviours {
 
-  override val form: Form[String]                  = new CountryFormProvider().withPrefix("settlorIndividualCountryOfResidency")
-  private val index: Int                           = 0
-  private val name: FullName                       = FullName("First", None, "Last")
+  override val form: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfResidency")
+  private val index: Int          = 0
+  private val name: FullName      = FullName("First", None, "Last")
+
   private val formContentInPastTense: Form[String] =
     new CountryFormProvider().withPrefix("settlorIndividualCountryOfResidencyPastTense")
 
@@ -51,4 +52,5 @@ class CountryOfResidencyViewSpec extends SelectCountryViewBehaviours {
       behave like pageWithASubmitButton(applyView(formToUse))
     }
   }
+
 }

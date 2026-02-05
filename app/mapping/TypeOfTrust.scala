@@ -50,7 +50,7 @@ object TypeOfTrust extends Enumerable.Implicits {
   implicit val enumerable: Enumerable[TypeOfTrust] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 
-  val uaReads: Reads[TypeOfTrust]                  = (
+  val uaReads: Reads[TypeOfTrust] = (
     (__ \ Symbol("living")).readWithDefault[List[mapping.reads.Settlor]](Nil) and
       (__ \ Symbol("deceased")).readNullable[DeceasedSettlor]
   ).tupled

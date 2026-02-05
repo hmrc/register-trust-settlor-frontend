@@ -71,4 +71,5 @@ class KindOfTrustViewSpec extends ViewBehaviours {
         }
       }
   }
+
 }

@@ -112,7 +112,7 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
         val result: SubmissionDraftResponse =
           Await.result(connector.getDraftSection(testDraftId, testSection), Duration.Inf)
         result.createdAt mustBe LocalDateTime.of(2012, 2, 3, 9, 30)
-        result.data mustBe draftData
+        result.data      mustBe draftData
       }
     }
 
@@ -447,4 +447,5 @@ class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionVal
       }
     }
   }
+
 }

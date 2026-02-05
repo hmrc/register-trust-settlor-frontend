@@ -36,4 +36,5 @@ class IndividualSettlorsMapper extends Mapping[Settlor, IndividualSettlor] {
         case (_, _)            => None
       }
     )
+
 }

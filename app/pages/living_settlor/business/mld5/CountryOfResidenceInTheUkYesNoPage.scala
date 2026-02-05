@@ -35,4 +35,5 @@ final case class CountryOfResidenceInTheUkYesNoPage(index: Int) extends Question
       case Some(true) => userAnswers.set(CountryOfResidencePage(index), GB)
       case _          => super.cleanup(value, userAnswers)
     }
+
 }

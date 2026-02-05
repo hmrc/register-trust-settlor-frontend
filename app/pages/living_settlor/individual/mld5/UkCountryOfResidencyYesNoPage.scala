@@ -41,4 +41,5 @@ case class UkCountryOfResidencyYesNoPage(index: Int) extends QuestionPage[Boolea
         super.cleanup(value, userAnswers)
     }
   }
+
 }

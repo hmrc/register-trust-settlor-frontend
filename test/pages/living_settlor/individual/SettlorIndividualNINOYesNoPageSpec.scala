@@ -37,7 +37,7 @@ class SettlorIndividualNINOYesNoPageSpec extends PageBehaviours {
 
       val page = SettlorIndividualNINOYesNoPage(0)
 
-      "set to true" in {
+      "set to true" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, false)
@@ -79,9 +79,8 @@ class SettlorIndividualNINOYesNoPageSpec extends PageBehaviours {
           result.get(SettlorIndividualIDCardYesNoPage(0))   must not be defined
           result.get(SettlorIndividualIDCardPage(0))        must not be defined
         }
-      }
 
-      "set to false" in {
+      "set to false" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, true)
@@ -95,7 +94,7 @@ class SettlorIndividualNINOYesNoPageSpec extends PageBehaviours {
 
           result.get(SettlorIndividualNINOPage(0)) must not be defined
         }
-      }
     }
   }
+
 }

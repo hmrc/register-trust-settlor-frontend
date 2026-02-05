@@ -44,4 +44,5 @@ class CountryOfNationalityInTheUkYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like yesNoPage(form, applyView, messageKeyPrefix, None, Seq(name.toString))
   }
+
 }

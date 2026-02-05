@@ -38,4 +38,5 @@ case class CountryOfResidencyYesNoPage(index: Int) extends QuestionPage[Boolean]
       case _           =>
         super.cleanup(value, userAnswers)
     }
+
 }

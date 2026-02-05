@@ -47,4 +47,5 @@ class YesNoDontKnowFormProviderSpec extends OptionFieldBehaviours {
     )
 
   }
+
 }

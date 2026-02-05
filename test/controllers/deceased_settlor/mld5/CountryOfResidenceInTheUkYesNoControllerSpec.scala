@@ -175,4 +175,5 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

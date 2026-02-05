@@ -35,4 +35,5 @@ case object EfrbsYesNoPage extends QuestionPage[Boolean] {
         userAnswers.remove(EfrbsStartDatePage)
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

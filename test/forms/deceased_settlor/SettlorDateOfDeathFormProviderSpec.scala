@@ -55,4 +55,5 @@ class SettlorDateOfDeathFormProviderSpec extends DateBehaviours with FakeTrustsA
     )
 
   }
+
 }

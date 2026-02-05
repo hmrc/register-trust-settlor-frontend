@@ -35,7 +35,7 @@ class SettlorBusinessAddressYesNoPageSpec extends PageBehaviours {
 
       val page = SettlorBusinessAddressYesNoPage(0)
 
-      "set to false" in {
+      "set to false" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, true)
@@ -57,8 +57,8 @@ class SettlorBusinessAddressYesNoPageSpec extends PageBehaviours {
           result.get(SettlorBusinessAddressInternationalPage(0)) must not be defined
           result.get(SettlorBusinessAddressUKPage(0))            must not be defined
         }
-      }
 
     }
   }
+
 }

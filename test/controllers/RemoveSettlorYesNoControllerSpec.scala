@@ -317,4 +317,5 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

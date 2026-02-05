@@ -107,4 +107,5 @@ class DraftRegistrationService @Inject() (
         .filter(_.isDefined)
         .map(_.get)
     }
+
 }

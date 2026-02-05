@@ -46,9 +46,7 @@ class SettlorsLastKnownAddressYesNoController @Inject() (
   view: SettlorsLastKnownAddressYesNoView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorsLastKnownAddressYesNo")
 
@@ -84,4 +82,5 @@ class SettlorsLastKnownAddressYesNoController @Inject() (
             }
         )
     }
+
 }

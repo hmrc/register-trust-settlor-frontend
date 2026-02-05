@@ -57,4 +57,5 @@ class SettlorBusinessAddressInternationalViewSpec extends InternationalAddressVi
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

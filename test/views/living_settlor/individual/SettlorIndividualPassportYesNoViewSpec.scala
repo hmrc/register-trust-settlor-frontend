@@ -46,4 +46,5 @@ class SettlorIndividualPassportYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithASubmitButton(applyView(form))
   }
+
 }

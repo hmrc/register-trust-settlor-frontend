@@ -38,4 +38,5 @@ final case class SettlorAliveYesNoPage(index: Int) extends QuestionPage[Boolean]
       case _           =>
         super.cleanup(value, userAnswers)
     }
+
 }

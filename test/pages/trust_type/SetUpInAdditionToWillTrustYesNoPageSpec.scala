@@ -40,7 +40,7 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
 
       val page = SetUpInAdditionToWillTrustYesNoPage
 
-      "set to false" in {
+      "set to false" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, true)
@@ -57,9 +57,8 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
 
           result.get(DeceasedSettlor) must not be defined
         }
-      }
 
-      "set to true" in {
+      "set to true" in
         forAll(arbitrary[UserAnswers]) { initial =>
           val answers: UserAnswers = initial
             .set(page, false)
@@ -86,8 +85,8 @@ class SetUpInAdditionToWillTrustYesNoPageSpec extends PageBehaviours {
           result.get(HowDeedOfVariationCreatedPage) must not be defined
           result.get(LivingSettlors)                must not be defined
         }
-      }
 
     }
   }
+
 }

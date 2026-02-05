@@ -37,4 +37,5 @@ case object WasSettlorsAddressUKYesNoPage extends QuestionPage[Boolean] {
         userAnswers.remove(SettlorsInternationalAddressPage)
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

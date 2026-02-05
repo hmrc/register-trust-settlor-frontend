@@ -21,7 +21,9 @@ import models.pages.KindOfBusiness._
 import models.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType, SettlorCompany, UserAnswers}
 import pages.living_settlor.business._
-import pages.living_settlor.business.mld5.{CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage}
+import pages.living_settlor.business.mld5.{
+  CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
+}
 
 class BusinessSettlorsMapperSpec extends SpecBase {
 
@@ -390,4 +392,5 @@ class BusinessSettlorsMapperSpec extends SpecBase {
       }
     }
   }
+
 }

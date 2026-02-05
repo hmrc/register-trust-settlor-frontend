@@ -30,8 +30,7 @@ class SettlorInfoController @Inject() (
   actions: Actions,
   val controllerComponents: MessagesControllerComponents,
   view: SettlorInfoView
-) extends FrontendBaseController
-    with I18nSupport {
+) extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
     val userAnswers: UserAnswers = request.userAnswers

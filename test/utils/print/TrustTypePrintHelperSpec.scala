@@ -218,4 +218,5 @@ class TrustTypePrintHelperSpec extends SpecBase {
     val answerRows = trustTypePrintHelper.answerRows(userAnswers, fakeDraftId)
     answerRows mustEqual expectedAnswerRows
   }
+
 }

@@ -28,4 +28,5 @@ class BusinessSettlorsMapper extends Mapping[SettlorCompany, BusinessSettlor] {
     identification = settlor.identification,
     countryOfResidence = settlor.countryOfResidence
   )
+
 }

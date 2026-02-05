@@ -58,6 +58,7 @@ class DefaultRegistrationsRepository @Inject() (
 
   def getTrustSetupDate(draftId: String)(implicit hc: HeaderCarrier): Future[Option[LocalDate]] =
     submissionDraftConnector.getTrustSetupDate(draftId)
+
 }
 
 trait RegistrationsRepository {

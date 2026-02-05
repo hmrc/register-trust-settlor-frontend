@@ -51,9 +51,7 @@ class SettlorBusinessAnswerController @Inject() (
   businessSettlorPrintHelper: BusinessSettlorPrintHelper,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorBusinessNameRequest, AnyContent] =
     actions.authWithData(draftId) andThen requireName(index, draftId)

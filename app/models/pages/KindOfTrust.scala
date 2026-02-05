@@ -46,7 +46,7 @@ object KindOfTrust extends Enumerable.Implicits {
   implicit val enumerable: Enumerable[KindOfTrust] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
-  val typeofTrustReads: Reads[TypeOfTrust]         = __.read[KindOfTrust].flatMap[TypeOfTrust] {
+  val typeofTrustReads: Reads[TypeOfTrust] = __.read[KindOfTrust].flatMap[TypeOfTrust] {
     case Intervivos              => Reads(_ => JsSuccess(TypeOfTrust.IntervivosSettlementTrust))
     case Deed                    => Reads(_ => JsSuccess(TypeOfTrust.DeedOfVariation))
     case Employees               => Reads(_ => JsSuccess(TypeOfTrust.EmployeeRelated))

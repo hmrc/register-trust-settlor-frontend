@@ -28,7 +28,8 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
   private val index: Int     = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[String]          = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationality")
+  override val form: Form[String] = new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationality")
+
   val formContentInPastTense: Form[String] =
     new CountryFormProvider().withPrefix("settlorIndividualCountryOfNationalityPastTense")
 
@@ -52,4 +53,5 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
       behave like pageWithASubmitButton(applyView(formToUse))
     }
   }
+
 }

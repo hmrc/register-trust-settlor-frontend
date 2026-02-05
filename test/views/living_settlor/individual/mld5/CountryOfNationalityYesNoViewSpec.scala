@@ -48,4 +48,5 @@ class CountryOfNationalityYesNoViewSpec extends YesNoViewBehaviours {
 
     behave like pageWithHint(applyView(form), s"$messageKeyPrefix.hint")
   }
+
 }

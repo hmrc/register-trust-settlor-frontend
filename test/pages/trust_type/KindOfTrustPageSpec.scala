@@ -77,15 +77,14 @@ class KindOfTrustPageSpec extends PageBehaviours {
           .success
           .value
 
-      "Deed selected" in {
-
+      "Deed selected" in
         forAll(arbitrary[UserAnswers], arbitrary[LocalDate]) { (initial, date) =>
           val answers: UserAnswers = userAnswers(initial, date)
 
           val result = answers.set(KindOfTrustPage, KindOfTrust.Deed).success.value
 
           result.get(SetUpInAdditionToWillTrustYesNoPage) mustBe defined
-          result.get(HowDeedOfVariationCreatedPage) mustBe defined
+          result.get(HowDeedOfVariationCreatedPage)       mustBe defined
           result.get(HoldoverReliefYesNoPage) mustNot be(defined)
           result.get(EfrbsYesNoPage) mustNot be(defined)
           result.get(EfrbsStartDatePage) mustNot be(defined)
@@ -93,12 +92,10 @@ class KindOfTrustPageSpec extends PageBehaviours {
           result.get(SettlorBusinessTimeYesNoPage(0)) mustNot be(defined)
           result.get(SettlorBusinessTypePage(1)) mustNot be(defined)
           result.get(SettlorBusinessTimeYesNoPage(1)) mustNot be(defined)
-          result.get(DeceasedSettlor) mustBe defined
+          result.get(DeceasedSettlor)                     mustBe defined
         }
-      }
 
-      "Intervivos selected" in {
-
+      "Intervivos selected" in
         forAll(arbitrary[UserAnswers], arbitrary[LocalDate]) { (initial, date) =>
           val answers: UserAnswers = userAnswers(initial, date)
 
@@ -115,10 +112,8 @@ class KindOfTrustPageSpec extends PageBehaviours {
           result.get(SettlorBusinessTimeYesNoPage(1)) mustNot be(defined)
           result.get(DeceasedSettlor) mustNot be(defined)
         }
-      }
 
-      "FlatManagement selected" in {
-
+      "FlatManagement selected" in
         forAll(arbitrary[UserAnswers], arbitrary[LocalDate]) { (initial, date) =>
           val answers: UserAnswers = userAnswers(initial, date)
 
@@ -135,10 +130,8 @@ class KindOfTrustPageSpec extends PageBehaviours {
           result.get(SettlorBusinessTimeYesNoPage(1)) mustNot be(defined)
           result.get(DeceasedSettlor) mustNot be(defined)
         }
-      }
 
-      "HeritageMaintenanceFund selected" in {
-
+      "HeritageMaintenanceFund selected" in
         forAll(arbitrary[UserAnswers], arbitrary[LocalDate]) { (initial, date) =>
           val answers: UserAnswers = userAnswers(initial, date)
 
@@ -155,10 +148,8 @@ class KindOfTrustPageSpec extends PageBehaviours {
           result.get(SettlorBusinessTimeYesNoPage(1)) mustNot be(defined)
           result.get(DeceasedSettlor) mustNot be(defined)
         }
-      }
 
-      "Employees selected" in {
-
+      "Employees selected" in
         forAll(arbitrary[UserAnswers], arbitrary[LocalDate]) { (initial, date) =>
           val answers: UserAnswers = userAnswers(initial, date)
 
@@ -167,15 +158,15 @@ class KindOfTrustPageSpec extends PageBehaviours {
           result.get(SetUpInAdditionToWillTrustYesNoPage) mustNot be(defined)
           result.get(HowDeedOfVariationCreatedPage) mustNot be(defined)
           result.get(HoldoverReliefYesNoPage) mustNot be(defined)
-          result.get(EfrbsYesNoPage) mustBe defined
-          result.get(EfrbsStartDatePage) mustBe defined
-          result.get(SettlorBusinessTypePage(0)) mustBe defined
+          result.get(EfrbsYesNoPage)                  mustBe defined
+          result.get(EfrbsStartDatePage)              mustBe defined
+          result.get(SettlorBusinessTypePage(0))      mustBe defined
           result.get(SettlorBusinessTimeYesNoPage(0)) mustBe defined
-          result.get(SettlorBusinessTypePage(1)) mustBe defined
+          result.get(SettlorBusinessTypePage(1))      mustBe defined
           result.get(SettlorBusinessTimeYesNoPage(1)) mustBe defined
           result.get(DeceasedSettlor) mustNot be(defined)
         }
-      }
     }
   }
+
 }

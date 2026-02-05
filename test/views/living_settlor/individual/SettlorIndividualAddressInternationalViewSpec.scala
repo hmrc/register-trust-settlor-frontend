@@ -60,4 +60,5 @@ class SettlorIndividualAddressInternationalViewSpec extends InternationalAddress
       behave like pageWithASubmitButton(applyView(form))
     }
   }
+
 }

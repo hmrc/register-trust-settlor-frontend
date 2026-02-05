@@ -19,7 +19,9 @@ package forms.mappings
 import forms.Validation
 import models.UserAnswers
 import pages.living_settlor.business.SettlorBusinessUtrPage
-import pages.living_settlor.individual.{SettlorIndividualIDCardPage, SettlorIndividualNINOPage, SettlorIndividualPassportPage}
+import pages.living_settlor.individual.{
+  SettlorIndividualIDCardPage, SettlorIndividualNINOPage, SettlorIndividualPassportPage
+}
 import play.api.Logging
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.libs.json.{JsArray, JsString, JsSuccess}

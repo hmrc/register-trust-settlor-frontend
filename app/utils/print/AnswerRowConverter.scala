@@ -113,5 +113,7 @@ class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatte
           labelArg = labelArg
         )
       }
+
   }
+
 }

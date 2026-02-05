@@ -28,14 +28,10 @@ import pages.QuestionPage
 import play.api.libs.json._
 
 trait PageBehaviours
-    extends AnyWordSpec
-    with Matchers
-    with ScalaCheckPropertyChecks
-    with Generators
-    with OptionValues
-    with TryValues {
+    extends AnyWordSpec with Matchers with ScalaCheckPropertyChecks with Generators with OptionValues with TryValues {
 
   class BeRetrievable[A] {
+
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit = {
 
       "return None" when {
@@ -75,9 +71,11 @@ trait PageBehaviours
         }
       }
     }
+
   }
 
   class BeSettable[A] {
+
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
       "be able to be set on UserAnswers" in {
 
@@ -92,9 +90,11 @@ trait PageBehaviours
           updatedAnswers.get(page).value mustEqual newValue
         }
       }
+
   }
 
   class BeRemovable[A] {
+
     def apply[P <: QuestionPage[A]](genP: Gen[P])(implicit ev1: Arbitrary[A], ev2: Format[A]): Unit =
       "be able to be removed from UserAnswers" in {
 
@@ -109,6 +109,7 @@ trait PageBehaviours
           updatedAnswers.get(page) must be(empty)
         }
       }
+
   }
 
   def beRetrievable[A]: BeRetrievable[A] = new BeRetrievable[A]

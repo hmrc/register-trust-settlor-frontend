@@ -38,7 +38,7 @@ object DeedOfVariation {
     RadioOption("howDeedOfVariationCreated", value.toString)
   }
 
-  implicit val enumerable: Enumerable[DeedOfVariation]        =
+  implicit val enumerable: Enumerable[DeedOfVariation] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
   implicit def reads[A](implicit ev: Enumerable[A]): Reads[A] =
@@ -71,12 +71,11 @@ object DeedOfVariation {
     case ReplaceAbsolute => JsString("Previously there was only an absolute interest under the will")
   }
 
-  val uaReads: Reads[Option[DeedOfVariation]] = {
+  val uaReads: Reads[Option[DeedOfVariation]] =
     (__ \ Symbol("howDeedOfVariationCreated")).read[DeedOfVariation].map(Some(_)) or
       (__ \ Symbol("setUpInAdditionToWillTrustYesNo")).readNullable[Boolean].flatMap {
         case Some(true) => Reads(_ => JsSuccess(Some(AdditionToWill)))
         case _          => Reads(_ => JsSuccess(None))
       }
-  }
 
 }

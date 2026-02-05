@@ -31,8 +31,7 @@ class ErrorHandler @Inject() (
   view: ErrorTemplate,
   notFoundView: PageNotFoundView
 )(implicit val ec: ExecutionContext)
-    extends FrontendErrorHandler
-    with I18nSupport {
+    extends FrontendErrorHandler with I18nSupport {
 
   override def standardErrorTemplate(pageTitle: String, heading: String, message: String)(implicit
     request: RequestHeader
@@ -41,4 +40,5 @@ class ErrorHandler @Inject() (
 
   override def notFoundTemplate(implicit request: RequestHeader): Future[Html] =
     Future.successful(notFoundView())
+
 }

@@ -157,4 +157,5 @@ class KindOfTrustControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

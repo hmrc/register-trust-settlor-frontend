@@ -30,4 +30,5 @@ case class SettlorIndividualNameRequest[T](request: RegistrationDataRequest[T], 
       case Some(value) => value
       case None        => false
     }
+
 }

@@ -210,4 +210,5 @@ class DraftRegistrationServiceSpec extends SpecBase {
       }
     }
   }
+
 }

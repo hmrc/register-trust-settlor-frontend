@@ -33,7 +33,9 @@ object EnumerableSpec {
 
     implicit val fooEnumerable: Enumerable[Foo] =
       Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
   }
+
 }
 
 class EnumerableSpec extends AnyWordSpec with Matchers with EitherValues with OptionValues with Enumerable.Implicits {
@@ -78,4 +80,5 @@ class EnumerableSpec extends AnyWordSpec with Matchers with EitherValues with Op
       implicitly[Format[Foo]]
     }
   }
+
 }

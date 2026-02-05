@@ -35,4 +35,5 @@ case object SettlorDateOfDeathYesNoPage extends QuestionPage[Boolean] {
         userAnswers.remove(SettlorDateOfDeathPage)
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

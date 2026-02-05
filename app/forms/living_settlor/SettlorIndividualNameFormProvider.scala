@@ -57,4 +57,5 @@ class SettlorIndividualNameFormProvider @Inject() extends Mappings {
         )
     )(FullName.apply)(FullName.unapply)
   )
+
 }

@@ -78,4 +78,5 @@ class TrustTypeNavigator extends Navigator {
 
   private def redirectToLivingSettlorQuestions(draftId: String): Call =
     SettlorIndividualOrBusinessController.onPageLoad(0, draftId)
+
 }

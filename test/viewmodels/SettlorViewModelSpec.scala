@@ -141,4 +141,5 @@ class SettlorViewModelSpec extends SpecBase {
       }
     }
   }
+
 }

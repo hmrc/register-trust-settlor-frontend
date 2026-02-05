@@ -179,4 +179,5 @@ class SettlorIndividualDateOfBirthYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -32,16 +32,15 @@ class SettlorsNINoYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](SettlorsNationalInsuranceYesNoPage)
   }
 
-  "remove SettlorNinoPage when settlorsNationalInsuranceYesNoPage is set to false" in {
+  "remove SettlorNinoPage when settlorsNationalInsuranceYesNoPage is set to false" in
     forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
       val answers: UserAnswers = initial.set(SettlorNationalInsuranceNumberPage, str).success.value
       val result               = answers.set(SettlorsNationalInsuranceYesNoPage, false).success.value
 
       result.get(SettlorNationalInsuranceNumberPage) mustNot be(defined)
     }
-  }
 
-  "remove relevant Data when SettlorsNationalInsurancePage is set to true" in {
+  "remove relevant Data when SettlorsNationalInsurancePage is set to true" in
     forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
       val answers: UserAnswers = initial
         .set(SettlorsLastKnownAddressYesNoPage, true)
@@ -60,5 +59,5 @@ class SettlorsNINoYesNoPageSpec extends PageBehaviours {
       result.get(WasSettlorsAddressUKYesNoPage) mustNot be(defined)
       result.get(SettlorsUKAddressPage) mustNot be(defined)
     }
-  }
+
 }

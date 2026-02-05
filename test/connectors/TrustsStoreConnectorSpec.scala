@@ -101,4 +101,5 @@ class TrustsStoreConnectorSpec extends SpecBase with Matchers with OptionValues 
       }
     }
   }
+
 }

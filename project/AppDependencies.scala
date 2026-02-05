@@ -17,5 +17,5 @@ object AppDependencies {
     "io.github.wolfendale" %% "scalacheck-gen-regexp"  % "1.1.0"
   ).map(_ % Test)
 
-  def apply(): Seq[ModuleID]      = compile ++ test
+  def apply(): Seq[ModuleID] = compile ++ test
 }

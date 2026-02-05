@@ -47,9 +47,7 @@ class SettlorBusinessUtrController @Inject() (
   view: SettlorBusinessUtrView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(index: Int)(implicit request: SettlorBusinessNameRequest[AnyContent]): Form[String] =
     formProvider("settlorBusinessUtr", request.userAnswers, index)
@@ -83,4 +81,5 @@ class SettlorBusinessUtrController @Inject() (
             }
         )
     }
+
 }

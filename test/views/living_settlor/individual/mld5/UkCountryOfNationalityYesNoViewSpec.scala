@@ -28,7 +28,8 @@ class UkCountryOfNationalityYesNoViewSpec extends YesNoViewBehaviours {
   private val index: Int     = 0
   private val name: FullName = FullName("First", None, "Last")
 
-  override val form: Form[Boolean]                  = new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfNationalityYesNo")
+  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfNationalityYesNo")
+
   private val formContentInPastTense: Form[Boolean] =
     new YesNoFormProvider().withPrefix("settlorIndividualUkCountryOfNationalityYesNoPastTense")
 
@@ -52,4 +53,5 @@ class UkCountryOfNationalityYesNoViewSpec extends YesNoViewBehaviours {
       behave like pageWithASubmitButton(applyView(formToUse))
     }
   }
+
 }

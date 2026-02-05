@@ -45,9 +45,7 @@ class HowDeedOfVariationCreatedController @Inject() (
   view: HowDeedOfVariationCreatedView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
 
@@ -77,4 +75,5 @@ class HowDeedOfVariationCreatedController @Inject() (
           }
       )
   }
+
 }

@@ -31,11 +31,10 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
   "DeceasedSettlor Navigator" when {
 
     "SettlorsNamePage" must {
-      "redirect to date of death yes/no" in {
+      "redirect to date of death yes/no" in
         navigator
           .nextPage(SettlorsNamePage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.SettlorDateOfDeathYesNoController.onPageLoad(fakeDraftId))
-      }
     }
 
     "SettlorDateOfDeathYesNoPage" when {
@@ -62,19 +61,17 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
     }
 
     "SettlorDateOfDeathPage" must {
-      "redirect to date of birth yes/no" in {
+      "redirect to date of birth yes/no" in
         navigator
           .nextPage(SettlorDateOfDeathPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.SettlorDateOfBirthYesNoController.onPageLoad(fakeDraftId))
-      }
     }
 
     "SettlorsDateOfBirthPage" must {
-      "redirect to Country of nationality yes/no" in {
+      "redirect to Country of nationality yes/no" in
         navigator
           .nextPage(SettlorsDateOfBirthPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId))
-      }
     }
 
     "SettlorsNationalInsuranceYesNoPage" when {
@@ -101,11 +98,10 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
     }
 
     "SettlorNationalInsuranceNumberPage" must {
-      "redirect to country of residence yes/no" in {
+      "redirect to country of residence yes/no" in
         navigator
           .nextPage(SettlorNationalInsuranceNumberPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId))
-      }
     }
 
     "SettlorsLastKnownAddressYesNoPage" when {
@@ -155,27 +151,24 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
     }
 
     "SettlorsUKAddressPage" must {
-      "redirect to check answers" in {
+      "redirect to check answers" in
         navigator
           .nextPage(SettlorsUKAddressPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId))
-      }
     }
 
     "SettlorsInternationalAddressPage" must {
-      "redirect to check answers" in {
+      "redirect to check answers" in
         navigator
           .nextPage(SettlorsInternationalAddressPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(routes.DeceasedSettlorAnswerController.onPageLoad(fakeDraftId))
-      }
     }
 
     "DeceasedSettlorAnswerPage" must {
-      "redirect to task list" in {
+      "redirect to task list" in
         navigator
           .nextPage(DeceasedSettlorAnswerPage, fakeDraftId)(emptyUserAnswers)
           .mustBe(Call("GET", frontendAppConfig.registrationProgressUrl(fakeDraftId)))
-      }
     }
 
     "taxable" must {
@@ -553,4 +546,5 @@ class DeceasedSettlorNavigatorSpec extends SpecBase {
       }
     }
   }
+
 }

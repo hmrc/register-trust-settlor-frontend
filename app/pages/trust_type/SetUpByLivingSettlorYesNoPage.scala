@@ -49,4 +49,5 @@ case object SetUpByLivingSettlorYesNoPage extends QuestionPage[Boolean] {
           .flatMap(_.remove(LivingSettlors))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

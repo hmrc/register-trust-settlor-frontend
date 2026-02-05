@@ -53,4 +53,5 @@ class SettlorIndividualAddressUKViewSpec extends UkAddressViewBehaviours {
       behave like pageWithASubmitButton(applyView(form))
     }
   }
+
 }

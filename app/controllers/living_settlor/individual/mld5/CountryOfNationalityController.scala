@@ -49,9 +49,7 @@ class CountryOfNationalityController @Inject() (
   countryOptions: CountryOptionsNonUK,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(messageKey: String): Form[String] = countryFormProvider.withPrefix(messageKey)
 
@@ -119,4 +117,5 @@ class CountryOfNationalityController @Inject() (
           }
       )
   }
+
 }

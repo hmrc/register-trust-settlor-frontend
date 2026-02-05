@@ -50,4 +50,5 @@ class SettlorBusinessUtrViewSpec extends StringViewBehaviours {
 
     behave like pageWithBackLink(applyView(form))
   }
+
 }

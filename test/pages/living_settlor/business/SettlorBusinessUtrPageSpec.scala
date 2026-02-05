@@ -28,4 +28,5 @@ class SettlorBusinessUtrPageSpec extends PageBehaviours {
 
     beRemovable[String](SettlorBusinessUtrPage(0))
   }
+
 }

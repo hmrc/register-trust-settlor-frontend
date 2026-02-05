@@ -33,4 +33,5 @@ object Status extends Enumerable.Implicits {
 
   implicit val enumerable: Enumerable[Status] =
     Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+
 }

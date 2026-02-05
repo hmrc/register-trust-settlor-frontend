@@ -72,4 +72,5 @@ class SettlorIndividualIDCardViewSpec extends QuestionViewBehaviours[PassportOrI
 
     }
   }
+
 }

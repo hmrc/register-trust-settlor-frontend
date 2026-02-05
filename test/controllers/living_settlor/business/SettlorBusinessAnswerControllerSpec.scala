@@ -44,7 +44,8 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
   private lazy val settlorBusinessAnswerRoute: String =
     routes.SettlorBusinessAnswerController.onPageLoad(index, fakeDraftId).url
-  private lazy val onSubmit: Call                     = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
+
+  private lazy val onSubmit: Call = routes.SettlorBusinessAnswerController.onSubmit(index, fakeDraftId)
 
   val baseAnswers: UserAnswers = emptyUserAnswers
     .set(SettlorBusinessNamePage(index), settlorName)
@@ -160,4 +161,5 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -27,4 +27,5 @@ class AddASettlorFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[AddASettlor]("addASettlor.error.required")
     )
+
 }

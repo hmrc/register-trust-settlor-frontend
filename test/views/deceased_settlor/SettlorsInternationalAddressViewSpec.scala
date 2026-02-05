@@ -52,4 +52,5 @@ class SettlorsInternationalAddressViewSpec extends InternationalAddressViewBehav
       routes.SettlorsInternationalAddressController.onSubmit(fakeDraftId).url
     )
   }
+
 }

@@ -167,4 +167,5 @@ class SettlorDateOfDeathYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

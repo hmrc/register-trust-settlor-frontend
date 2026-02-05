@@ -28,4 +28,5 @@ class SettlorIndividualNINOPageSpec extends PageBehaviours {
 
     beRemovable[String](SettlorIndividualNINOPage(0))
   }
+
 }

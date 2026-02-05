@@ -40,8 +40,7 @@ class RemoveSettlorYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: RemoveSettlorYesNoView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport {
+    extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlors.removeYesNo")
 

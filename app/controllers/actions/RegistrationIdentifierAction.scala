@@ -31,9 +31,8 @@ class RegistrationIdentifierAction @Inject() (
   val parser: BodyParsers.Default,
   trustsAuth: TrustsAuthorisedFunctions,
   config: FrontendAppConfig
-)(override implicit val executionContext: ExecutionContext)
-    extends ActionBuilder[IdentifierRequest, AnyContent]
-    with Logging {
+)(implicit override val executionContext: ExecutionContext)
+    extends ActionBuilder[IdentifierRequest, AnyContent] with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
@@ -51,4 +50,5 @@ class RegistrationIdentifierAction @Inject() (
 
   override def composeAction[A](action: Action[A]): Action[A] =
     new AffinityGroupIdentifierAction(action, trustsAuth, config)
+
 }

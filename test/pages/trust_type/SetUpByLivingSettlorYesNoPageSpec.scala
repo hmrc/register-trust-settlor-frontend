@@ -44,8 +44,7 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
     "no selected" when {
 
       "SetUpInAdditionToWillTrustYesNoPage is Some(true)" must {
-        "not implement cleanup" in {
-
+        "not implement cleanup" in
           forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
             val answers: UserAnswers = initial
               .set(SetUpByLivingSettlorYesNoPage, false)
@@ -68,12 +67,10 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
 
             result.get(DeceasedSettlor) mustBe defined
           }
-        }
       }
 
       "SetUpInAdditionToWillTrustYesNoPage is not Some(true)" must {
-        "implement cleanup" in {
-
+        "implement cleanup" in
           forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
             val answers: UserAnswers = initial
               .set(SetUpByLivingSettlorYesNoPage, false)
@@ -90,12 +87,10 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
 
             result.get(DeceasedSettlor) mustNot be(defined)
           }
-        }
       }
     }
 
-    "yes selected" in {
-
+    "yes selected" in
       forAll(arbitrary[UserAnswers], arbitrary[String], arbitrary[LocalDate]) { (initial, str, date) =>
         val answers: UserAnswers = initial
           .set(SetUpByLivingSettlorYesNoPage, true)
@@ -142,7 +137,6 @@ class SetUpByLivingSettlorYesNoPageSpec extends PageBehaviours {
         result.get(EfrbsStartDatePage) mustNot be(defined)
         result.get(LivingSettlors) mustNot be(defined)
       }
-    }
   }
 
 }

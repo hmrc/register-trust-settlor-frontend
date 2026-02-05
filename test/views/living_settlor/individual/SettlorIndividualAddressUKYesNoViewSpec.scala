@@ -25,11 +25,13 @@ import views.html.living_settlor.individual.SettlorIndividualAddressUKYesNoView
 
 class SettlorIndividualAddressUKYesNoViewSpec extends YesNoViewBehaviours {
 
-  override val form: Form[Boolean]                  = new YesNoFormProvider().withPrefix("settlorIndividualAddressUKYesNo")
+  override val form: Form[Boolean] = new YesNoFormProvider().withPrefix("settlorIndividualAddressUKYesNo")
+
   private val formContentInPastTense: Form[Boolean] =
     new YesNoFormProvider().withPrefix("settlorIndividualAddressUKYesNoPastTense")
-  private val index                                 = 0
-  private val name                                  = FullName("First", Some("Middle"), "Last")
+
+  private val index = 0
+  private val name  = FullName("First", Some("Middle"), "Last")
 
   Seq(
     ("settlorIndividualAddressUKYesNo", true, form),
@@ -51,4 +53,5 @@ class SettlorIndividualAddressUKYesNoViewSpec extends YesNoViewBehaviours {
       behave like pageWithASubmitButton(applyView(formToUse))
     }
   }
+
 }

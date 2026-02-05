@@ -28,7 +28,7 @@ class FakeIdentifyForRegistration @Inject() (affinityGroup: AffinityGroup, confi
   override val parser: BodyParsers.Default,
   trustsAuth: TrustsAuthorisedFunctions,
   enrolments: Enrolments = Enrolments(Set.empty[Enrolment])
-)(override implicit val executionContext: ExecutionContext)
+)(implicit override val executionContext: ExecutionContext)
     extends RegistrationIdentifierAction(parser, trustsAuth, config) {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
@@ -44,6 +44,8 @@ class FakeAffinityGroupIdentifierAction[A](
   trustsAuth: TrustsAuthorisedFunctions,
   config: FrontendAppConfig
 ) extends AffinityGroupIdentifierAction(action, trustsAuth, config) {
+
   override def apply(request: Request[A]): Future[Result] =
     action(request)
+
 }

@@ -20,7 +20,9 @@ import base.SpecBase
 import controllers.routes._
 import forms.PassportOrIdCardFormProvider
 import models.pages.{FullName, PassportOrIdCardDetails}
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{
+  SettlorAliveYesNoPage, SettlorIndividualDateOfBirthYesNoPage, SettlorIndividualIDCardPage, SettlorIndividualNamePage
+}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
@@ -226,4 +228,5 @@ class SettlorIndividualIDCardControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -34,7 +34,7 @@ class UkCountryOfResidencyYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](UkCountryOfResidencyYesNoPage(0))
 
     "implement cleanup logic" when {
-      "NO selected and previous selection was YES" in {
+      "NO selected and previous selection was YES" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(CountryOfResidencyPage(0), gbCountry)
@@ -46,12 +46,11 @@ class UkCountryOfResidencyYesNoPageSpec extends PageBehaviours {
 
           result.get(CountryOfResidencyPage(0)) mustNot be(defined)
         }
-      }
     }
 
     "not implement cleanup logic" when {
 
-      "NO selected and previous selection was NO" in {
+      "NO selected and previous selection was NO" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(UkCountryOfResidencyYesNoPage(0), false)
@@ -64,12 +63,11 @@ class UkCountryOfResidencyYesNoPageSpec extends PageBehaviours {
             .success
             .value
 
-          result.get(CountryOfResidencyPage(0)) must be(defined)
+          result.get(CountryOfResidencyPage(0))       must be(defined)
           result.get(CountryOfResidencyPage(0)).get mustBe nonGbCountry
         }
-      }
 
-      "NO selected and no previous selection" in {
+      "NO selected and no previous selection" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(UkCountryOfResidencyYesNoPage(0), false)
@@ -78,21 +76,20 @@ class UkCountryOfResidencyYesNoPageSpec extends PageBehaviours {
 
           result.get(CountryOfResidencyPage(0)) mustNot be(defined)
         }
-      }
     }
 
     "set CountryOfNationalityPage to GB" when {
-      "YES selected" in {
+      "YES selected" in
         forAll(arbitrary[UserAnswers]) { userAnswers =>
           val result: UserAnswers = userAnswers
             .set(UkCountryOfResidencyYesNoPage(0), true)
             .success
             .value
 
-          result.get(CountryOfResidencyPage(0)) must be(defined)
+          result.get(CountryOfResidencyPage(0))       must be(defined)
           result.get(CountryOfResidencyPage(0)).get mustBe gbCountry
         }
-      }
     }
   }
+
 }

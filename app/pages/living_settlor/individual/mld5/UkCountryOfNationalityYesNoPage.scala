@@ -41,4 +41,5 @@ case class UkCountryOfNationalityYesNoPage(index: Int) extends QuestionPage[Bool
         super.cleanup(value, userAnswers)
     }
   }
+
 }

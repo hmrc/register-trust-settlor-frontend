@@ -180,4 +180,5 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

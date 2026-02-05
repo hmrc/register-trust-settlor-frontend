@@ -29,4 +29,5 @@ class SettlorAddressInternationalPageSpec extends PageBehaviours {
 
     beRemovable[InternationalAddress](SettlorAddressInternationalPage(0))
   }
+
 }

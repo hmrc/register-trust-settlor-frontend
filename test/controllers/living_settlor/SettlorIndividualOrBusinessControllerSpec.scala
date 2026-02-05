@@ -162,4 +162,5 @@ class SettlorIndividualOrBusinessControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

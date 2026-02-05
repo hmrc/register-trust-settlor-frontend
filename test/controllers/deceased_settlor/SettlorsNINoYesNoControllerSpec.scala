@@ -172,4 +172,5 @@ class SettlorsNINoYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

@@ -48,10 +48,7 @@ class SettlorBusinessTypeController @Inject() (
   view: SettlorBusinessTypeView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Enumerable.Implicits
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val form: Form[KindOfBusiness] = formProvider()
 
@@ -84,4 +81,5 @@ class SettlorBusinessTypeController @Inject() (
             }
         )
     }
+
 }

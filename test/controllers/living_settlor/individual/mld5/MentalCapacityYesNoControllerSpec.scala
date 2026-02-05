@@ -174,4 +174,5 @@ class MentalCapacityYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

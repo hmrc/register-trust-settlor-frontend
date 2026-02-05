@@ -27,4 +27,5 @@ class KindOfTrustFormProvider @Inject() extends Mappings {
     Form(
       "value" -> enumerable[KindOfTrust]("kindOfTrust.error.required")
     )
+
 }

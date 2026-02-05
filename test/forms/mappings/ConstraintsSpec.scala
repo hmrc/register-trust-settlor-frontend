@@ -28,11 +28,7 @@ import play.api.libs.json.{JsObject, Json}
 import java.time.LocalDate
 
 class ConstraintsSpec
-    extends AnyWordSpec
-    with Matchers
-    with ScalaCheckDrivenPropertyChecks
-    with Generators
-    with Constraints {
+    extends AnyWordSpec with Matchers with ScalaCheckDrivenPropertyChecks with Generators with Constraints {
 
   "firstError" must {
 
@@ -309,4 +305,5 @@ class ConstraintsSpec
       result mustEqual Invalid("settlorIndividualNINO.error.uniqueTrustee")
     }
   }
+
 }

@@ -48,9 +48,7 @@ class SettlorsDateOfBirthController @Inject() (
   view: SettlorsDateOfBirthView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(maxDate: (LocalDate, String)): Form[LocalDate] =
     formProvider.withConfig(maxDate)
@@ -95,4 +93,5 @@ class SettlorsDateOfBirthController @Inject() (
       case None              =>
         (LocalDate.now, "future")
     }
+
 }

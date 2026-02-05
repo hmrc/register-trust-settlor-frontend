@@ -64,4 +64,5 @@ class SettlorNationalInsuranceNumberFormProviderSpec extends StringFieldBehaviou
     )
 
   }
+
 }

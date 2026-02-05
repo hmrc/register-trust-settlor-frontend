@@ -59,10 +59,7 @@ class AddASettlorController @Inject() (
   registrationProgress: RegistrationProgress,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext, config: FrontendAppConfig)
-    extends FrontendBaseController
-    with I18nSupport
-    with Enumerable.Implicits
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
   private val yesNoForm: Form[Boolean]          = yesNoFormProvider.withPrefix("addASettlorYesNo")
@@ -191,4 +188,5 @@ class AddASettlorController @Inject() (
 
   private def setTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit hc: HeaderCarrier): Future[HttpResponse] =
     trustsStoreService.updateTaskStatus(draftId, taskStatus)
+
 }

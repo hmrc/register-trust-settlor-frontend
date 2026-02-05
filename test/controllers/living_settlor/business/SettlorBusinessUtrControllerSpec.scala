@@ -183,4 +183,5 @@ class SettlorBusinessUtrControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

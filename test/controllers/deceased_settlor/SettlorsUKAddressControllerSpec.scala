@@ -174,4 +174,5 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

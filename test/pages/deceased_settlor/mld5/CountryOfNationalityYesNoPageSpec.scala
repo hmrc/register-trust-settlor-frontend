@@ -31,7 +31,7 @@ class CountryOfNationalityYesNoPageSpec extends PageBehaviours {
     beRemovable[Boolean](CountryOfNationalityYesNoPage)
   }
 
-  "remove pages when CountryOfNationalityYesNoPage is set to false" in {
+  "remove pages when CountryOfNationalityYesNoPage is set to false" in
     forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial
         .set(CountryOfNationalityInTheUkYesNoPage, false)
@@ -46,5 +46,5 @@ class CountryOfNationalityYesNoPageSpec extends PageBehaviours {
       result.get(CountryOfNationalityInTheUkYesNoPage) mustNot be(defined)
       result.get(CountryOfNationalityPage) mustNot be(defined)
     }
-  }
+
 }

@@ -190,4 +190,5 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

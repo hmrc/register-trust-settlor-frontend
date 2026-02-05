@@ -42,6 +42,7 @@ class NameRequiredAction(index: Int, draftId: String)(implicit val executionCont
           Right(SettlorIndividualNameRequest(request, name))
       }
     )
+
 }
 
 class NameRequiredActionProvider @Inject() (implicit val executionContext: ExecutionContext) {

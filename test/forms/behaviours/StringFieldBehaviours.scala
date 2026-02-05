@@ -39,13 +39,11 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
     }
 
   def fieldWithMaxLength(form: Form[_], fieldName: String, maxLength: Int, lengthError: FormError): Unit =
-    s"not bind strings longer than $maxLength characters" in {
-
+    s"not bind strings longer than $maxLength characters" in
       forAll(stringsLongerThan(maxLength) -> "longString") { string =>
         val result = form.bind(Map(fieldName -> string)).apply(fieldName)
         result.errors mustEqual Seq(lengthError)
       }
-    }
 
   def fieldWithRegexpWithGenerator(
     form: Form[_],
@@ -54,14 +52,13 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
     generator: Gen[String],
     error: FormError
   ): Unit =
-    s"not bind strings which do not match $regexp" in {
+    s"not bind strings which do not match $regexp" in
       forAll(generator) { string =>
         whenever(!string.matches(regexp) && string.nonEmpty) {
           val result = form.bind(Map(fieldName -> string)).apply(fieldName)
           result.errors mustEqual Seq(error)
         }
       }
-    }
 
   def nonEmptyField(form: Form[_], fieldName: String, requiredError: FormError): Unit =
     "not bind spaces" in {
@@ -114,7 +111,7 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
       }
     }
 
-    "not bind valid UTR if it is the same as the trust UTR" in {
+    "not bind valid UTR if it is the same as the trust UTR" in
       forAll(utrGenerator) { utr =>
         val result = form
           .apply(prefix, emptyUserAnswers.copy(existingTrustUtr = Some(utr)), 0)
@@ -122,15 +119,13 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
           .apply(fieldName)
         result.errors mustEqual Seq(sameAsTrustUtrError)
       }
-    }
 
-    "bind valid UTRs when no businesses" in {
+    "bind valid UTRs when no businesses" in
       forAll(utrGenerator) { utr =>
         val result = form.apply(prefix, emptyUserAnswers, 0).bind(Map(fieldName -> utr)).apply(fieldName)
         result.errors mustEqual Nil
         result.value.value mustBe utr
       }
-    }
 
     "bind valid UTRs when no other businesses have that UTR" in {
       val value: String      = "1234567890"
@@ -142,14 +137,13 @@ trait StringFieldBehaviours extends FieldBehaviours with OptionalFieldBehaviours
       }
     }
 
-    "bind valid UTR when business at current index has that UTR" in {
+    "bind valid UTR when business at current index has that UTR" in
       forAll(utrGenerator) { utr =>
         val updatedUserAnswers = emptyUserAnswers.set(SettlorBusinessUtrPage(0), utr).success.value
         val result             = form.apply(prefix, updatedUserAnswers, 0).bind(Map(fieldName -> utr)).apply(fieldName)
         result.errors mustEqual Nil
         result.value.value mustBe utr
       }
-    }
   }
 
 }

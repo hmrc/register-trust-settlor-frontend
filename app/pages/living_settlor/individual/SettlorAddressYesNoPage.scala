@@ -42,4 +42,5 @@ final case class SettlorAddressYesNoPage(index: Int) extends QuestionPage[Boolea
           .flatMap(_.remove(SettlorIndividualIDCardPage(index)))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

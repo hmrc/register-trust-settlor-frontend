@@ -78,10 +78,11 @@ trait IntViewBehaviours extends QuestionViewBehaviours[Int] {
             doc,
             "title",
             ViewUtils.breadcrumbTitle(s"""${messages("error.browser.title.prefix")} ${messages(
-              s"$messageKeyPrefix.title"
-            )}""")
+                s"$messageKeyPrefix.title"
+              )}""")
           )
         }
       }
     }
+
 }

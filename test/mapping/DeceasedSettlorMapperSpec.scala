@@ -187,4 +187,5 @@ class DeceasedSettlorMapperSpec extends SpecBase {
     }
 
   }
+
 }

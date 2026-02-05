@@ -35,4 +35,5 @@ case object CountryOfNationalityInTheUkYesNoPage extends QuestionPage[Boolean] {
       case Some(true) => userAnswers.set(CountryOfNationalityPage, GB)
       case _          => super.cleanup(value, userAnswers)
     }
+
 }

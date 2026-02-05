@@ -37,4 +37,5 @@ final case class CountryOfResidenceYesNoPage(index: Int) extends QuestionPage[Bo
           .flatMap(_.remove(CountryOfResidencePage(index)))
       case _           => super.cleanup(value, userAnswers)
     }
+
 }

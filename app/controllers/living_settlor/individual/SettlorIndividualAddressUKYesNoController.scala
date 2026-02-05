@@ -46,9 +46,7 @@ class SettlorIndividualAddressUKYesNoController @Inject() (
   view: SettlorIndividualAddressUKYesNoView,
   technicalErrorView: TechnicalErrorView
 )(implicit ec: ExecutionContext)
-    extends FrontendBaseController
-    with I18nSupport
-    with Logging {
+    extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(messageKey: String): Form[Boolean] = yesNoFormProvider.withPrefix(messageKey)
 
@@ -99,4 +97,5 @@ class SettlorIndividualAddressUKYesNoController @Inject() (
             }
         )
     }
+
 }

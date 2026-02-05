@@ -29,4 +29,5 @@ class SettlorAddressUKPageSpec extends PageBehaviours {
 
     beRemovable[UKAddress](SettlorAddressUKPage(0))
   }
+
 }

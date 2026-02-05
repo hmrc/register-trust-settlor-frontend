@@ -159,4 +159,5 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
       application.stop()
     }
   }
+
 }

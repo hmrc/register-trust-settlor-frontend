@@ -31,4 +31,5 @@ class Actions @Inject() (
 
   def authWithData(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     authWithSession(draftId) andThen requireData
+
 }

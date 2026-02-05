@@ -37,4 +37,5 @@ class SettlorNationalInsuranceNumberFormProvider @Inject() extends Mappings {
           )
         )
     )
+
 }

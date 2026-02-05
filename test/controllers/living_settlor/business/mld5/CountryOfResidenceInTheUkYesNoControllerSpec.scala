@@ -168,4 +168,5 @@ class CountryOfResidenceInTheUkYesNoControllerSpec extends SpecBase with Mockito
       application.stop()
     }
   }
+
 }

@@ -30,8 +30,7 @@ class FakeDraftIdRetrievalActionProvider(
   status: Status = Status.InProgress,
   dataToReturn: Option[UserAnswers],
   registrationsRepository: RegistrationsRepository
-) extends DraftIdRetrievalActionProvider
-    with MockitoSugar {
+) extends DraftIdRetrievalActionProvider with MockitoSugar {
 
   implicit val executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global

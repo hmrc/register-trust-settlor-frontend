@@ -5,7 +5,7 @@ ThisBuild / majorVersion := 0
 
 lazy val microservice = Project("register-trust-settlor-frontend", file("."))
   .enablePlugins(PlayScala, SbtDistributablesPlugin)
-  .disablePlugins(JUnitXmlReportPlugin) //Required to prevent https://github.com/scalatest/scalatest/issues/1427
+  .disablePlugins(JUnitXmlReportPlugin) // Required to prevent https://github.com/scalatest/scalatest/issues/1427
   .settings(CodeCoverageSettings())
   .settings(
     routesImport += "models._",

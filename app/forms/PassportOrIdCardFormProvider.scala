@@ -75,4 +75,5 @@ class PassportOrIdCardFormProvider @Inject() (appConfig: FrontendAppConfig) exte
       )
     )(PassportOrIdCardDetails.apply)(PassportOrIdCardDetails.unapply)
   )
+
 }

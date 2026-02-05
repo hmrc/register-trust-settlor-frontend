@@ -35,4 +35,5 @@ class UtrFormProvider @Inject() extends Mappings {
         uniqueUtr(userAnswers, index, s"$messagePrefix.error.notUnique", s"$messagePrefix.error.sameAsTrustUtr")
       )
     )
+
 }

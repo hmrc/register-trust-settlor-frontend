@@ -186,4 +186,5 @@ class SettlorBusinessAddressYesNoControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

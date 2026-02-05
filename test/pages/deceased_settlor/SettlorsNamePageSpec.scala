@@ -29,4 +29,5 @@ class SettlorsNamePageSpec extends PageBehaviours {
 
     beRemovable[FullName](SettlorsNamePage)
   }
+
 }

@@ -20,7 +20,9 @@ import base.SpecBase
 import controllers.routes._
 import forms.UKAddressFormProvider
 import models.pages.{FullName, UKAddress}
-import pages.living_settlor.individual.{SettlorAddressUKPage, SettlorAliveYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNamePage}
+import pages.living_settlor.individual.{
+  SettlorAddressUKPage, SettlorAliveYesNoPage, SettlorIndividualNINOPage, SettlorIndividualNamePage
+}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
@@ -214,4 +216,5 @@ class SettlorIndividualAddressUKControllerSpec extends SpecBase {
       application.stop()
     }
   }
+
 }

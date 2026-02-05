@@ -24,7 +24,7 @@ import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
 
 class LanguageSwitchController @Inject() (
   appConfig: FrontendAppConfig,
-  override implicit val messagesApi: MessagesApi,
+  implicit override val messagesApi: MessagesApi,
   languageUtils: LanguageUtils,
   cc: MessagesControllerComponents
 ) extends LanguageController(languageUtils, cc) {
