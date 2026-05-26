@@ -71,11 +71,11 @@ class SettlorIndividualAnswerController @Inject() (
   def onSubmit(index: Int, draftId: String): Action[AnyContent] = actions(index, draftId).async { implicit request =>
     request.userAnswers.set(LivingSettlorStatus(index), Completed) match {
       case Success(updatedAnswers) =>
-        registrationsRepository.set(updatedAnswers).map { _ =>
-          draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
-          draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
-          Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
-        }
+        for {
+          _ <- registrationsRepository.set(updatedAnswers)
+          _ <- draftRegistrationService.amendBeneficiariesState(draftId, updatedAnswers)
+          _ <- draftRegistrationService.removeDeceasedSettlorMappedPiece(draftId)
+        } yield Redirect(navigator.nextPage(SettlorIndividualAnswerPage, draftId)(updatedAnswers))
       case Failure(_)              =>
         logger.error("[SettlorIndividualAnswerController][onSubmit] Error while storing user answers")
         Future.successful(InternalServerError(technicalErrorView()))

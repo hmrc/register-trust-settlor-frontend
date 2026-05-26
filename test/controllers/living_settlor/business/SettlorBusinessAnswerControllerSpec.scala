@@ -160,6 +160,32 @@ class SettlorBusinessAnswerControllerSpec extends SpecBase {
 
       application.stop()
     }
+
+    "return InternalServerError if removeDeceasedSettlorMappedPiece fails" in {
+
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+        .thenReturn(Future.failed(new RuntimeException("fail")))
+
+      val userAnswers = baseAnswers
+        .set(SettlorIndividualOrBusinessPage(index), IndividualOrBusiness.Business)
+        .success
+        .value
+        .set(KindOfTrustPage, KindOfTrust.Deed)
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
+
+      val request = FakeRequest(POST, settlorBusinessAnswerRoute)
+
+      val result = route(application, request).value
+
+      intercept[RuntimeException] {
+        await(result)
+      }
+
+      application.stop()
+    }
   }
 
 }

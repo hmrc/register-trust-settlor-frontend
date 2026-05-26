@@ -64,11 +64,11 @@ class DeceasedSettlorAnswerController @Inject() (
     (actions.authWithData(draftId) andThen requireName(draftId)).async { implicit request =>
       request.userAnswers.set(DeceasedSettlorStatus, Completed) match {
         case Success(updatedAnswers) =>
-          registrationsRepository.set(updatedAnswers).map { _ =>
-            draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
-            trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
-            Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
-          }
+          for {
+            _ <- registrationsRepository.set(updatedAnswers)
+            _ <- draftRegistrationService.removeLivingSettlorsMappedPiece(draftId)
+            _ <- trustsStoreService.updateTaskStatus(draftId, TaskStatus.Completed)
+          } yield Redirect(navigator.nextPage(DeceasedSettlorAnswerPage, draftId)(request.userAnswers))
         case Failure(_)              =>
           logger.error("[DeceasedSettlorAnswerController][onSubmit] Error while storing user answers")
           Future.successful(InternalServerError(technicalErrorView()))

@@ -158,6 +158,31 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
       application.stop()
     }
+
+    "return InternalServerError if removeLivingSettlorsMappedPiece fails" in {
+
+      when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
+        .thenReturn(Future.failed(new RuntimeException("fail")))
+
+      val userAnswers: UserAnswers = emptyUserAnswers
+        .set(SettlorsNamePage, FullName("First", None, "Last"))
+        .success
+        .value
+
+      val application = applicationBuilder(userAnswers = Some(userAnswers))
+        .overrides(bind[TrustsStoreService].toInstance(trustsStoreService))
+        .build()
+
+      val request = FakeRequest(POST, deceasedSettlorsAnswerRoute)
+
+      val result = route(application, request).value
+
+      intercept[RuntimeException] {
+        await(result)
+      }
+
+      application.stop()
+    }
   }
 
 }
