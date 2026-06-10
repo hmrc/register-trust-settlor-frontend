@@ -35,9 +35,7 @@ lazy val microservice = Project("register-trust-settlor-frontend", file("."))
           Seq(
             "javascripts/iebacklink.js",
             "javascripts/registertrustsettlorfrontend.js",
-            "javascripts/autocomplete.js",
-            "javascripts/print.js",
-            "javascripts/libraries/location-autocomplete.min.js"
+            "javascripts/print.js"
           )
         )
     ),
