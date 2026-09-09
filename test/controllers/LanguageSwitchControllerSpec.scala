@@ -17,15 +17,10 @@
 package controllers
 
 import base.SpecBase
-import config.FrontendAppConfig
-import play.api.Configuration
-import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 class LanguageSwitchControllerSpec extends SpecBase {
 
@@ -35,15 +30,6 @@ class LanguageSwitchControllerSpec extends SpecBase {
   private val welsh           = "cymraeg"
   private val fakeUrl: String = "fakeUrl"
 
-  private lazy val config: Configuration = injector.instanceOf[Configuration]
-  private lazy val contactConfig         = injector.instanceOf[ContactFrontendConfig]
-  private lazy val servicesConfig        = injector.instanceOf[ServicesConfig]
-
-  def frontendAppConfig(languageToggleEnabled: Boolean = true): FrontendAppConfig =
-    new FrontendAppConfig(config, contactConfig, servicesConfig) {
-      override lazy val languageTranslationEnabled: Boolean = languageToggleEnabled
-    }
-
   "LanguageSwitch Controller" when {
 
     "language toggle enabled" when {
@@ -51,9 +37,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       "English selected" must {
         "switch to English" in {
 
-          val application = new GuiceApplicationBuilder()
-            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
-            .build()
+          val application = new GuiceApplicationBuilder().build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
 
@@ -74,9 +58,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
       "Welsh selected" must {
         "switch to Welsh" in {
 
-          val application = new GuiceApplicationBuilder()
-            .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
-            .build()
+          val application = new GuiceApplicationBuilder().build()
 
           val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
 
@@ -99,9 +81,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
       "default to English" in {
 
-        val application = new GuiceApplicationBuilder()
-          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig(false)))
-          .build()
+        val application = new GuiceApplicationBuilder().build()
 
         val requestHeaders: Headers = new Headers(Seq(("Referer", fakeUrl)))
 
@@ -123,9 +103,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
       "redirect to login continue url" in {
 
-        val application = new GuiceApplicationBuilder()
-          .overrides(bind[FrontendAppConfig].toInstance(frontendAppConfig()))
-          .build()
+        val application = new GuiceApplicationBuilder().build()
 
         val request = FakeRequest(GET, switchLanguageRoute(welsh))
 
@@ -133,7 +111,7 @@ class LanguageSwitchControllerSpec extends SpecBase {
 
         status(result) mustEqual SEE_OTHER
 
-        redirectLocation(result).value mustEqual frontendAppConfig().loginContinueUrl
+        redirectLocation(result).value mustEqual frontendAppConfig.loginContinueUrl
 
         application.stop()
       }

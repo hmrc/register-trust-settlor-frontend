@@ -20,13 +20,6 @@ import java.time.LocalDateTime
 
 import play.api.libs.json.{JsValue, Json, OFormat}
 
-// Primary front end draft data (e.g, trusts-frontend), including reference and in-progress.
-case class SubmissionDraftData(data: JsValue, reference: Option[String], inProgress: Option[Boolean])
-
-object SubmissionDraftData {
-  implicit lazy val format: OFormat[SubmissionDraftData] = Json.format[SubmissionDraftData]
-}
-
 object RegistrationSubmission {
   // Piece to be inserted into final registration data. data == JsNull means remove value.
   case class MappedPiece(elementPath: String, data: JsValue)
@@ -67,10 +60,4 @@ case class SubmissionDraftResponse(createdAt: LocalDateTime, data: JsValue, refe
 
 object SubmissionDraftResponse {
   implicit lazy val format: OFormat[SubmissionDraftResponse] = Json.format[SubmissionDraftResponse]
-}
-
-case class SubmissionDraftId(draftId: String, createdAt: LocalDateTime, reference: Option[String])
-
-object SubmissionDraftId {
-  implicit lazy val format: OFormat[SubmissionDraftId] = Json.format[SubmissionDraftId]
 }

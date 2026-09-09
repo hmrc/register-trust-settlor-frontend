@@ -31,9 +31,8 @@ class MainTemplateSpec extends ViewSpecBase {
 
   "MainTemplate" must {
 
-    "render the service navigation component" in {
+    "render the service navigation component" in
       assertRenderedByCssSelector(asDocument(render()), ".govuk-service-navigation")
-    }
 
     "request the service navigation component on every generated link to a shared PlatUI page" in {
       val doc = asDocument(render())
@@ -56,9 +55,8 @@ class MainTemplateSpec extends ViewSpecBase {
       }
     }
 
-    "render the report technical issue link" in {
+    "render the report technical issue link" in
       assertRenderedByCssSelector(asDocument(render()), "a.hmrc-report-technical-issue")
-    }
   }
 
 }

@@ -16,9 +16,7 @@
 
 package controllers
 
-import config.FrontendAppConfig
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.api.{Configuration, Environment}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -26,9 +24,6 @@ import scala.concurrent.Future
 
 @Singleton
 class SessionTimeoutController @Inject() (
-  val appConfig: FrontendAppConfig,
-  val config: Configuration,
-  val env: Environment,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) {
 
