@@ -24,24 +24,6 @@ import viewmodels.{SettlorBusinessViewModel, SettlorIndividualViewModel}
 
 import scala.util.{Failure, Success, Try}
 
-trait ReadableUserAnswers {
-  val data: JsObject
-
-  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
-    Reads.at(page.path).reads(data) match {
-      case JsSuccess(value, _) => Some(value)
-      case JsError(_)          =>
-        None
-    }
-
-}
-
-case class ReadOnlyUserAnswers(data: JsObject) extends ReadableUserAnswers
-
-object ReadOnlyUserAnswers {
-  implicit lazy val formats: OFormat[ReadOnlyUserAnswers] = Json.format[ReadOnlyUserAnswers]
-}
-
 final case class UserAnswers(
   draftId: String,
   data: JsObject = Json.obj(),
@@ -49,16 +31,6 @@ final case class UserAnswers(
   isTaxable: Boolean = true,
   existingTrustUtr: Option[String] = None
 ) extends Logging {
-
-  def checkDeceasedSettlorNino(
-    deceasedSettlorNino: String,
-    existingTrusteeNino: Option[String] = None,
-    existingBeneficiaryNino: Option[String] = None,
-    existingProtectorNino: Option[String] = None
-  ): Boolean =
-    existingTrusteeNino.contains(deceasedSettlorNino) || existingBeneficiaryNino.contains(
-      deceasedSettlorNino
-    ) || existingProtectorNino.contains(deceasedSettlorNino)
 
   def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
     getAtPath(page.path)

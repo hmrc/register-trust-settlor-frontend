@@ -41,39 +41,6 @@ trait Constraints extends Logging {
         .getOrElse(Valid)
     }
 
-  protected def minimumValue[A](minimum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input =>
-      import ev._
-
-      if (input >= minimum) {
-        Valid
-      } else {
-        Invalid(errorKey, minimum)
-      }
-    }
-
-  protected def maximumValue[A](maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input =>
-      import ev._
-
-      if (input <= maximum) {
-        Valid
-      } else {
-        Invalid(errorKey, maximum)
-      }
-    }
-
-  protected def inRange[A](minimum: A, maximum: A, errorKey: String)(implicit ev: Ordering[A]): Constraint[A] =
-    Constraint { input =>
-      import ev._
-
-      if (input >= minimum && input <= maximum) {
-        Valid
-      } else {
-        Invalid(errorKey, minimum, maximum)
-      }
-    }
-
   protected def regexp(regex: String, errorKey: String): Constraint[String] =
     Constraint {
       case str if str.matches(regex) =>
@@ -88,14 +55,6 @@ trait Constraints extends Logging {
         Valid
       case _                            =>
         Invalid(errorKey, maximum)
-    }
-
-  protected def minLength(minimum: Int, errorKey: String): Constraint[String] =
-    Constraint {
-      case str if str.length >= minimum =>
-        Valid
-      case _                            =>
-        Invalid(errorKey, minimum)
     }
 
   protected def isNotEmpty(value: String, errorKey: String): Constraint[String] =
@@ -139,14 +98,6 @@ trait Constraints extends Logging {
       case _         => Invalid(errorKey)
     }
   }
-
-  protected def isTelephoneNumberValid(value: String, errorKey: String): Constraint[String] =
-    Constraint {
-      case str if TelephoneNumber.isValid(str) =>
-        Valid
-      case _                                   =>
-        Invalid(errorKey, value)
-    }
 
   protected def uniqueUtr(
     userAnswers: UserAnswers,

@@ -17,11 +17,8 @@
 package config
 
 import com.google.inject.{Inject, Singleton}
-import controllers.routes
 import play.api.Configuration
 import play.api.i18n.{Lang, Messages}
-import play.api.mvc.Call
-import uk.gov.hmrc.hmrcfrontend.config.ContactFrontendConfig
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 import java.time.LocalDate
@@ -29,7 +26,6 @@ import java.time.LocalDate
 @Singleton
 class FrontendAppConfig @Inject() (
   configuration: Configuration,
-  contactFrontendConfig: ContactFrontendConfig,
   servicesConfig: ServicesConfig
 ) {
 
@@ -41,17 +37,12 @@ class FrontendAppConfig @Inject() (
   val repositoryKeyBeneficiaries: String = "beneficiaries"
   val repositoryKeyProtectors: String    = "protectors"
 
-  val appName: String       = configuration.get[String]("appName")
-  val analyticsHost: String = configuration.get[String](s"google-analytics.host")
-
-  val betaFeedbackUrl =
-    s"${contactFrontendConfig.baseUrl.get}/contact/beta-feedback?service=${contactFrontendConfig.serviceId.get}"
+  val appName: String = configuration.get[String]("appName")
 
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
-  lazy val authUrl: String              = servicesConfig.baseUrl("auth")
   lazy val loginUrl: String             = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String     = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String            = configuration.get[String]("urls.logout")
+  lazy val logoutUrl: String            = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
@@ -77,16 +68,10 @@ class FrontendAppConfig @Inject() (
   private val year: Int       = configuration.get[Int]("minimumDate.year")
   lazy val minDate: LocalDate = LocalDate.of(year, month, day)
 
-  lazy val languageTranslationEnabled: Boolean =
-    configuration.get[Boolean]("microservice.services.features.welsh-translation")
-
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang(ENGLISH),
     "cymraeg" -> Lang(WELSH)
   )
-
-  def routeToSwitchLanguage: String => Call =
-    (lang: String) => routes.LanguageSwitchController.switchToLanguage(lang)
 
   def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
 

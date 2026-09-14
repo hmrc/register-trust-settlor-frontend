@@ -50,4 +50,23 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
   }
 
+  "logout should redirect to a feedback url that requests the service navigation component" in {
+
+    val mockAuditConnector = mock[AuditConnector]
+
+    val application = applicationBuilder(userAnswers = Some(emptyUserAnswers))
+      .overrides(bind[AuditConnector].toInstance(mockAuditConnector))
+      .build()
+
+    val request = FakeRequest(GET, routes.LogoutController.logout().url)
+
+    val result = route(application, request).value
+
+    status(result) mustEqual SEE_OTHER
+
+    redirectLocation(result).value must include("useServiceNavigation")
+
+    application.stop()
+  }
+
 }
