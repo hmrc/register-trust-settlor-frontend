@@ -56,7 +56,7 @@ class HowDeedOfVariationCreatedController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId))
+      Ok(view(preparedForm, draftId, index))
   }
 
   def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
