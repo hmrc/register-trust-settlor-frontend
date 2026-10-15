@@ -26,6 +26,8 @@ trait Navigator {
 
   def nextPage(page: Page, draftId: String): UserAnswers => Call
 
+  def nextPage(page: Page, draftId: String, index: Int): UserAnswers => Call = nextPage(page, draftId)
+
   def yesNoNav(fromPage: QuestionPage[Boolean], yesCall: => Call, noCall: => Call)(answers: UserAnswers): Call =
     answers
       .get(fromPage)

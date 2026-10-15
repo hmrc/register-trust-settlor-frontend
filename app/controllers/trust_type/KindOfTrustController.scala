@@ -58,25 +58,25 @@ class KindOfTrustController @Inject() (
 
   private val form: Form[KindOfTrust] = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId) { implicit request =>
     val preparedForm = request.userAnswers.get(KindOfTrustPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[KindOfTrust]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[KindOfTrust]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
         value =>
           request.userAnswers.set(KindOfTrustPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(KindOfTrustPage, draftId)(updatedAnswers))
+                Redirect(navigator.nextPage(KindOfTrustPage, draftId, index)(updatedAnswers))
               }
             case Failure(_)              =>
               logger.error("[KindOfTrustController][onSubmit] Error while storing user answers")

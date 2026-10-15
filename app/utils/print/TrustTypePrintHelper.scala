@@ -25,7 +25,9 @@ import viewmodels.AnswerRow
 
 class TrustTypePrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def answerRows(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages): Seq[AnswerRow] = {
+  def answerRows(userAnswers: UserAnswers, draftId: String, index: Int = 0)(implicit
+    messages: Messages
+  ): Seq[AnswerRow] = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers)
 
@@ -33,34 +35,39 @@ class TrustTypePrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
       bound.yesNoQuestion(
         SetUpByLivingSettlorYesNoPage,
         "setUpByLivingSettlorYesNo",
-        SetUpByLivingSettlorController.onPageLoad(draftId).url
+        SetUpByLivingSettlorController.onPageLoad(draftId, index).url
       ),
-      bound.enumQuestion(KindOfTrustPage, "kindOfTrust", KindOfTrustController.onPageLoad(draftId).url, "kindOfTrust"),
+      bound.enumQuestion(
+        KindOfTrustPage,
+        "kindOfTrust",
+        KindOfTrustController.onPageLoad(draftId, index).url,
+        "kindOfTrust"
+      ),
       bound.yesNoQuestion(
         SetUpInAdditionToWillTrustYesNoPage,
         "setUpInAdditionToWillTrustYesNo",
-        AdditionToWillTrustYesNoController.onPageLoad(draftId).url
+        AdditionToWillTrustYesNoController.onPageLoad(draftId, index).url
       ),
       bound.enumQuestion(
         HowDeedOfVariationCreatedPage,
         "howDeedOfVariationCreated",
-        HowDeedOfVariationCreatedController.onPageLoad(draftId).url,
+        HowDeedOfVariationCreatedController.onPageLoad(draftId, index).url,
         "howDeedOfVariationCreated"
       ),
       bound.yesNoQuestion(
         HoldoverReliefYesNoPage,
         "holdoverReliefYesNo",
-        HoldoverReliefYesNoController.onPageLoad(draftId).url
+        HoldoverReliefYesNoController.onPageLoad(draftId, index).url
       ),
       bound.yesNoQuestion(
         EfrbsYesNoPage,
         "employerFinancedRbsYesNo",
-        EmployerFinancedRbsYesNoController.onPageLoad(draftId).url
+        EmployerFinancedRbsYesNoController.onPageLoad(draftId, index).url
       ),
       bound.dateQuestion(
         EfrbsStartDatePage,
         "employerFinancedRbsStartDate",
-        EmployerFinancedRbsStartDateController.onPageLoad(draftId).url
+        EmployerFinancedRbsStartDateController.onPageLoad(draftId, index).url
       )
     ).flatten
 

@@ -55,7 +55,7 @@ class HoldoverReliefYesNoController @Inject() (
         RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
       )
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId) { implicit request =>
     val preparedForm = request.userAnswers.get(HoldoverReliefYesNoPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -64,16 +64,16 @@ class HoldoverReliefYesNoController @Inject() (
     Ok(view(preparedForm, draftId))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
         value =>
           request.userAnswers.set(HoldoverReliefYesNoPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId)(updatedAnswers))
+                Redirect(navigator.nextPage(HoldoverReliefYesNoPage, draftId, index)(updatedAnswers))
               }
             case Failure(_)              =>
               logger.error("[HoldoverReliefYesNoController][onSubmit] Error while storing user answers")

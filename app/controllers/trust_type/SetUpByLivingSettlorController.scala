@@ -48,32 +48,34 @@ class SetUpByLivingSettlorController @Inject() (
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpByLivingSettlorYesNo")
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
-    val preparedForm: Form[Boolean] = request.userAnswers.get(SetUpByLivingSettlorYesNoPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions.authWithData(draftId) {
+    implicit request =>
+      val preparedForm: Form[Boolean] = request.userAnswers.get(SetUpByLivingSettlorYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, draftId, request.userAnswers.isTaxable, index))
+  }
+
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[Boolean]) =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, request.userAnswers.isTaxable, index))),
+          value =>
+            request.userAnswers.set(SetUpByLivingSettlorYesNoPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SetUpByLivingSettlorYesNoPage, draftId, index)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[SetUpByLivingSettlorController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
     }
-
-    Ok(view(preparedForm, draftId, request.userAnswers.isTaxable))
-  }
-
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        (formWithErrors: Form[Boolean]) =>
-          Future.successful(BadRequest(view(formWithErrors, draftId, request.userAnswers.isTaxable))),
-        value =>
-          request.userAnswers.set(SetUpByLivingSettlorYesNoPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SetUpByLivingSettlorYesNoPage, draftId)(updatedAnswers))
-              }
-            case Failure(_)              =>
-              logger.error("[SetUpByLivingSettlorController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-      )
-  }
 
 }
