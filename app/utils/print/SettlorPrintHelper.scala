@@ -60,7 +60,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
 
     val bound = answerRowConverter.bind(userAnswers, name)
 
-    trustTypePrintHelper.answerRows(userAnswers, draftId) ++
+    trustTypePrintHelper.answerRows(userAnswers, draftId, index) ++
       answerRows(index, draftId, prefix)(bound).flatten
   }
 

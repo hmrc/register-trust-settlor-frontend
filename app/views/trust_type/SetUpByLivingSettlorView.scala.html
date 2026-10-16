@@ -25,14 +25,14 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[Boolean], draftId: String, isTaxable: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[Boolean], draftId: String, isTaxable: Boolean, index: Int = 0)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("setUpByLivingSettlorYesNo.title")}",
     showBackLink = true
 ) {
 
-    @formHelper(action = SetUpByLivingSettlorController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
+    @formHelper(action = SetUpByLivingSettlorController.onSubmit(draftId, index), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 

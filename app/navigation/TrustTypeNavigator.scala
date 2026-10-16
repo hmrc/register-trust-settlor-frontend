@@ -31,52 +31,56 @@ import javax.inject.Singleton
 @Singleton
 class TrustTypeNavigator extends Navigator {
 
-  override def nextPage(page: Page, draftId: String): UserAnswers => Call = route(draftId)(page)
+  override def nextPage(page: Page, draftId: String): UserAnswers => Call = nextPage(page, draftId, 0)
 
-  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
+  override def nextPage(page: Page, draftId: String, index: Int): UserAnswers => Call = route(draftId, index)(page)
+
+  override protected def route(draftId: String): PartialFunction[Page, UserAnswers => Call] = route(draftId, 0)
+
+  private def route(draftId: String, index: Int): PartialFunction[Page, UserAnswers => Call] = {
     case SetUpByLivingSettlorYesNoPage                                                =>
       ua =>
         yesNoNav(
           fromPage = SetUpByLivingSettlorYesNoPage,
           yesCall = if (ua.isTaxable) {
-            KindOfTrustController.onPageLoad(draftId)
+            KindOfTrustController.onPageLoad(draftId, index)
           } else {
-            redirectToLivingSettlorQuestions(draftId)
+            redirectToLivingSettlorQuestions(draftId, index)
           },
           noCall = SettlorsNameController.onPageLoad(draftId)
         )(ua)
-    case KindOfTrustPage                                                              => kindOfTrustPage(draftId)
+    case KindOfTrustPage                                                              => kindOfTrustPage(draftId, index)
     case EfrbsYesNoPage                                                               =>
       yesNoNav(
         fromPage = EfrbsYesNoPage,
-        yesCall = EmployerFinancedRbsStartDateController.onPageLoad(draftId),
-        noCall = redirectToLivingSettlorQuestions(draftId)
+        yesCall = EmployerFinancedRbsStartDateController.onPageLoad(draftId, index),
+        noCall = redirectToLivingSettlorQuestions(draftId, index)
       )
     case SetUpInAdditionToWillTrustYesNoPage                                          =>
       yesNoNav(
         fromPage = SetUpInAdditionToWillTrustYesNoPage,
         yesCall = SettlorsNameController.onPageLoad(draftId),
-        noCall = HowDeedOfVariationCreatedController.onPageLoad(draftId)
+        noCall = HowDeedOfVariationCreatedController.onPageLoad(draftId, index)
       )
     case EfrbsStartDatePage | HowDeedOfVariationCreatedPage | HoldoverReliefYesNoPage =>
-      _ => redirectToLivingSettlorQuestions(draftId)
+      _ => redirectToLivingSettlorQuestions(draftId, index)
   }
 
-  private def kindOfTrustPage(draftId: String)(answers: UserAnswers): Call =
+  private def kindOfTrustPage(draftId: String, index: Int)(answers: UserAnswers): Call =
     answers.get(KindOfTrustPage) match {
       case Some(Deed)                                           =>
-        AdditionToWillTrustYesNoController.onPageLoad(draftId)
+        AdditionToWillTrustYesNoController.onPageLoad(draftId, index)
       case Some(Intervivos)                                     =>
-        HoldoverReliefYesNoController.onPageLoad(draftId)
+        HoldoverReliefYesNoController.onPageLoad(draftId, index)
       case Some(FlatManagement) | Some(HeritageMaintenanceFund) =>
-        redirectToLivingSettlorQuestions(draftId)
+        redirectToLivingSettlorQuestions(draftId, index)
       case Some(Employees)                                      =>
-        EmployerFinancedRbsYesNoController.onPageLoad(draftId)
+        EmployerFinancedRbsYesNoController.onPageLoad(draftId, index)
       case _                                                    =>
         SessionExpiredController.onPageLoad
     }
 
-  private def redirectToLivingSettlorQuestions(draftId: String): Call =
-    SettlorIndividualOrBusinessController.onPageLoad(0, draftId)
+  private def redirectToLivingSettlorQuestions(draftId: String, index: Int): Call =
+    SettlorIndividualOrBusinessController.onPageLoad(index, draftId)
 
 }

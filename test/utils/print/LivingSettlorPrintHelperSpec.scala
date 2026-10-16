@@ -54,7 +54,7 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
 
   override def beforeEach(): Unit = {
     reset(mockTrustTypePrintHelper)
-    when(mockTrustTypePrintHelper.answerRows(any(), any())(any())).thenReturn(Nil)
+    when(mockTrustTypePrintHelper.answerRows(any(), any(), any())(any())).thenReturn(Nil)
   }
 
   "LivingSettlorPrintHelper" must {

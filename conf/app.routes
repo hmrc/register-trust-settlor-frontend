@@ -33,26 +33,26 @@ POST       /:draftId/:index/remove-yes-no                                       
 
 # Trust type
 
-GET        /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onPageLoad(draftId: String)
-POST       /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onSubmit(draftId: String)
+GET        /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/setup-after-settlor-died                                               controllers.trust_type.SetUpByLivingSettlorController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onPageLoad(draftId: String)
-POST       /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onSubmit(draftId: String)
+GET        /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/in-addition-to-will-trust                                              controllers.trust_type.AdditionToWillTrustYesNoController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/how-was-deed-of-variation-created                                      controllers.trust_type.HowDeedOfVariationCreatedController.onPageLoad(draftId: String)
-POST       /:draftId/how-was-deed-of-variation-created                                      controllers.trust_type.HowDeedOfVariationCreatedController.onSubmit(draftId: String)
+GET        /:draftId/how-was-deed-of-variation-created                                      controllers.trust_type.HowDeedOfVariationCreatedController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/how-was-deed-of-variation-created                                      controllers.trust_type.HowDeedOfVariationCreatedController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/type                                                                   controllers.trust_type.KindOfTrustController.onPageLoad(draftId: String)
-POST       /:draftId/type                                                                   controllers.trust_type.KindOfTrustController.onSubmit(draftId: String)
+GET        /:draftId/type                                                                   controllers.trust_type.KindOfTrustController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/type                                                                   controllers.trust_type.KindOfTrustController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/holdover-relief                                                        controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(draftId: String)
-POST       /:draftId/holdover-relief                                                        controllers.trust_type.HoldoverReliefYesNoController.onSubmit(draftId: String)
+GET        /:draftId/holdover-relief                                                        controllers.trust_type.HoldoverReliefYesNoController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/holdover-relief                                                        controllers.trust_type.HoldoverReliefYesNoController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/employer-financed-rbs                                                  controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(draftId: String)
-POST       /:draftId/employer-financed-rbs                                                  controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(draftId: String)
+GET        /:draftId/employer-financed-rbs                                                  controllers.trust_type.EmployerFinancedRbsYesNoController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/employer-financed-rbs                                                  controllers.trust_type.EmployerFinancedRbsYesNoController.onSubmit(draftId: String, index: Int ?= 0)
 
-GET        /:draftId/employer-financed-rbs-start                                            controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(draftId: String)
-POST       /:draftId/employer-financed-rbs-start                                            controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(draftId: String)
+GET        /:draftId/employer-financed-rbs-start                                            controllers.trust_type.EmployerFinancedRbsStartDateController.onPageLoad(draftId: String, index: Int ?= 0)
+POST       /:draftId/employer-financed-rbs-start                                            controllers.trust_type.EmployerFinancedRbsStartDateController.onSubmit(draftId: String, index: Int ?= 0)
 
 # Deceased Settlor
 

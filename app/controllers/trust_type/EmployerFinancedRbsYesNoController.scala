@@ -48,31 +48,33 @@ class EmployerFinancedRbsYesNoController @Inject() (
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("employerFinancedRbsYesNo")
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
-    val preparedForm = request.userAnswers.get(EfrbsYesNoPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions.authWithData(draftId) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(EfrbsYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, draftId, index))
+  }
+
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value =>
+            request.userAnswers.set(EfrbsYesNoPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(EfrbsYesNoPage, draftId, index)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[EmployerFinancedRbsYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
     }
-
-    Ok(view(preparedForm, draftId))
-  }
-
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value =>
-          request.userAnswers.set(EfrbsYesNoPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(EfrbsYesNoPage, draftId)(updatedAnswers))
-              }
-            case Failure(_)              =>
-              logger.error("[EmployerFinancedRbsYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-      )
-  }
 
 }

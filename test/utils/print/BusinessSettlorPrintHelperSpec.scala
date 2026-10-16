@@ -52,7 +52,7 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
 
   override def beforeEach(): Unit = {
     reset(mockTrustTypePrintHelper)
-    when(mockTrustTypePrintHelper.answerRows(any(), any())(any())).thenReturn(Nil)
+    when(mockTrustTypePrintHelper.answerRows(any(), any(), any())(any())).thenReturn(Nil)
   }
 
   "BusinessSettlorPrintHelper" must {
