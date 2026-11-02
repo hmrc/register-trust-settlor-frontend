@@ -25,7 +25,13 @@ import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 
+import java.net.URLEncoder
+
 class LogoutControllerSpec extends SpecBase with MockitoSugar {
+
+  val continueUrl = URLEncoder.encode(s"${frontendAppConfig.feedbackFrontendUrl}", "UTF-8")
+
+  val expectedUrl = s"${frontendAppConfig.logoutWithBasGatewayUrl}?continue=$continueUrl"
 
   "logout should redirect to feedback and audit" in {
 
@@ -41,7 +47,11 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
     status(result) mustEqual SEE_OTHER
 
-    redirectLocation(result).value mustBe frontendAppConfig.logoutUrl
+    val value = redirectLocation(result).value
+
+    value mustBe expectedUrl
+
+    value must include("useServiceNavigation")
 
     verify(mockAuditConnector, never())
       .sendExplicitAudit(eqTo("trusts"), any[Map[String, String]])(any(), any())
@@ -64,7 +74,11 @@ class LogoutControllerSpec extends SpecBase with MockitoSugar {
 
     status(result) mustEqual SEE_OTHER
 
-    redirectLocation(result).value must include("useServiceNavigation")
+    val value = redirectLocation(result).value
+
+    value mustBe expectedUrl
+
+    value must include("useServiceNavigation")
 
     application.stop()
   }

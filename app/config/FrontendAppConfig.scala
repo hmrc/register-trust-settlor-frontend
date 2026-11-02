@@ -42,7 +42,7 @@ class FrontendAppConfig @Inject() (
   lazy val registrationStartUrl: String = configuration.get[String]("urls.registrationStart")
   lazy val loginUrl: String             = configuration.get[String]("urls.login")
   lazy val loginContinueUrl: String     = configuration.get[String]("urls.loginContinue")
-  lazy val logoutUrl: String            = s"${configuration.get[String]("urls.logout")}?useServiceNavigation"
+  lazy val logoutUrl: String            = configuration.get[String]("urls.logout")
 
   lazy val logoutAudit: Boolean =
     configuration.get[Boolean]("microservice.services.features.auditing.logout")
@@ -62,6 +62,11 @@ class FrontendAppConfig @Inject() (
 
   lazy val countdownLength: Int = configuration.get[Int]("timeout.countdown")
   lazy val timeoutLength: Int   = configuration.get[Int]("timeout.length")
+
+  lazy val basGatewayBaseUrl: String       = configuration.get[String]("bas-gateway.host")
+  lazy val feedbackFrontendUrl: String     = s"${configuration.get[String]("feedback-frontend.url")}?useServiceNavigation"
+  lazy val timeOutUrl: String              = configuration.get[String]("urls.timeOut")
+  lazy val logoutWithBasGatewayUrl: String = s"$basGatewayBaseUrl$logoutUrl"
 
   private val day: Int        = configuration.get[Int]("minimumDate.day")
   private val month: Int      = configuration.get[Int]("minimumDate.month")
