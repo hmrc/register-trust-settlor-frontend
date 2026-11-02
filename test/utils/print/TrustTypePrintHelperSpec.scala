@@ -215,7 +215,7 @@ class TrustTypePrintHelperSpec extends SpecBase {
     expectedAnswerRows: Seq[AnswerRow]
   ): Assertion = {
 
-    val answerRows = trustTypePrintHelper.answerRows(userAnswers, fakeDraftId)
+    val answerRows = trustTypePrintHelper.answerRows(userAnswers, fakeDraftId, 0)
     answerRows mustEqual expectedAnswerRows
   }
 

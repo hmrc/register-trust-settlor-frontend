@@ -24,8 +24,8 @@ import models.pages.IndividualOrBusiness._
 import models.pages.Status.Completed
 import models.pages._
 import models.{UserAnswers, YesNoDontKnow}
-import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{reset, when}
+import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.Mockito.{atLeastOnce, reset, times, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
@@ -1138,9 +1138,16 @@ class LivingSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyCheck
       headingArgs = Seq(index + 1)
     )
 
+    verify(mockTrustTypePrintHelper, times(2))
+      .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(index))(any())
+
     forAll(arbitrary[Int].suchThat(_ > 0)) { subsequentIndex =>
       val subsequentPrintSection =
         livingSettlorPrintHelper.printSection(userAnswers, name.toString, fakeDraftId, subsequentIndex)
+
+      verify(mockTrustTypePrintHelper, atLeastOnce())
+        .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(subsequentIndex))(any())
+
       subsequentPrintSection.headingKey  mustBe Some("answerPage.section.settlor.subheading")
       subsequentPrintSection.headingArgs mustBe Seq(subsequentIndex + 1)
       subsequentPrintSection.sectionKey  mustBe None

@@ -50,7 +50,7 @@ class KindOfTrustController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
-  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
+  private def actions(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
       requiredAnswer(
         RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
@@ -58,7 +58,7 @@ class KindOfTrustController @Inject() (
 
   private val form: Form[KindOfTrust] = formProvider()
 
-  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId) { implicit request =>
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId, index) { implicit request =>
     val preparedForm = request.userAnswers.get(KindOfTrustPage) match {
       case None        => form
       case Some(value) => form.fill(value)
@@ -67,7 +67,7 @@ class KindOfTrustController @Inject() (
     Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId).async { implicit request =>
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId, index).async { implicit request =>
     form
       .bindFromRequest()
       .fold(

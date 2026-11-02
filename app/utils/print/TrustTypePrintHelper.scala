@@ -25,7 +25,7 @@ import viewmodels.AnswerRow
 
 class TrustTypePrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def answerRows(userAnswers: UserAnswers, draftId: String, index: Int = 0)(implicit
+  def answerRows(userAnswers: UserAnswers, draftId: String, index: Int)(implicit
     messages: Messages
   ): Seq[AnswerRow] = {
 
