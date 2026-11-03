@@ -52,7 +52,7 @@ class HoldoverReliefYesNoController @Inject() (
   private def actions(draftId: String, index: Int) =
     standardActions.authWithData(draftId) andThen
       requiredAnswer(
-        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId, index))
       )
 
   def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId, index) { implicit request =>

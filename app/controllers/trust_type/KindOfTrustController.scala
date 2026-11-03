@@ -53,7 +53,7 @@ class KindOfTrustController @Inject() (
   private def actions(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
       requiredAnswer(
-        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId, index))
       )
 
   private val form: Form[KindOfTrust] = formProvider()
