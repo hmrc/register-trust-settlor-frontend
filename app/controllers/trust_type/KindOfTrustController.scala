@@ -50,33 +50,33 @@ class KindOfTrustController @Inject() (
 )(implicit ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
-  private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
+  private def actions(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId) andThen
       requiredAnswer(
-        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId))
+        RequiredAnswer(SetUpByLivingSettlorYesNoPage, routes.SetUpByLivingSettlorController.onPageLoad(draftId, index))
       )
 
   private val form: Form[KindOfTrust] = formProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions(draftId) { implicit request =>
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId, index) { implicit request =>
     val preparedForm = request.userAnswers.get(KindOfTrustPage) match {
       case None        => form
       case Some(value) => form.fill(value)
     }
 
-    Ok(view(preparedForm, draftId))
+    Ok(view(preparedForm, draftId, index))
   }
 
-  def onSubmit(draftId: String): Action[AnyContent] = actions(draftId).async { implicit request =>
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] = actions(draftId, index).async { implicit request =>
     form
       .bindFromRequest()
       .fold(
-        (formWithErrors: Form[KindOfTrust]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
+        (formWithErrors: Form[KindOfTrust]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
         value =>
           request.userAnswers.set(KindOfTrustPage, value) match {
             case Success(updatedAnswers) =>
               registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(KindOfTrustPage, draftId)(updatedAnswers))
+                Redirect(navigator.nextPage(KindOfTrustPage, draftId, index)(updatedAnswers))
               }
             case Failure(_)              =>
               logger.error("[KindOfTrustController][onSubmit] Error while storing user answers")

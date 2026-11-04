@@ -210,6 +210,52 @@ class TrustTypeNavigatorSpec extends SpecBase {
         }
       }
     }
+
+    "changing a trust type answer from a later settlor's check answers page" must {
+
+      val settlorIndex             = 1
+      val baseAnswers: UserAnswers = emptyUserAnswers.copy(isTaxable = true)
+
+      "keep the settlor index through the EFRBS questions" in {
+        val ua = baseAnswers
+          .set(KindOfTrustPage, Employees)
+          .success
+          .value
+          .set(EfrbsYesNoPage, true)
+          .success
+          .value
+
+        navigator
+          .nextPage(KindOfTrustPage, fakeDraftId, settlorIndex)(ua)
+          .mustBe(
+            controllers.trust_type.routes.EmployerFinancedRbsYesNoController.onPageLoad(fakeDraftId, settlorIndex)
+          )
+
+        navigator
+          .nextPage(EfrbsYesNoPage, fakeDraftId, settlorIndex)(ua)
+          .mustBe(
+            controllers.trust_type.routes.EmployerFinancedRbsStartDateController.onPageLoad(fakeDraftId, settlorIndex)
+          )
+
+        navigator
+          .nextPage(EfrbsStartDatePage, fakeDraftId, settlorIndex)(ua)
+          .mustBe(
+            controllers.living_settlor.routes.SettlorIndividualOrBusinessController
+              .onPageLoad(settlorIndex, fakeDraftId)
+          )
+      }
+
+      "return to the same settlor for heritage maintenance fund, not settlor 0" in {
+        val ua = baseAnswers.set(KindOfTrustPage, HeritageMaintenanceFund).success.value
+
+        navigator
+          .nextPage(KindOfTrustPage, fakeDraftId, settlorIndex)(ua)
+          .mustBe(
+            controllers.living_settlor.routes.SettlorIndividualOrBusinessController
+              .onPageLoad(settlorIndex, fakeDraftId)
+          )
+      }
+    }
   }
 
 }

@@ -49,31 +49,34 @@ class HowDeedOfVariationCreatedController @Inject() (
 
   private val form: Form[DeedOfVariation] = deedOfVariationFormProvider()
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
-    val preparedForm = request.userAnswers.get(HowDeedOfVariationCreatedPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions.authWithData(draftId) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(HowDeedOfVariationCreatedPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, draftId, index))
+  }
+
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[DeedOfVariation]) =>
+            Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value =>
+            request.userAnswers.set(HowDeedOfVariationCreatedPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, draftId, index)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[HowDeedOfVariationCreatedController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
     }
-
-    Ok(view(preparedForm, draftId))
-  }
-
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        (formWithErrors: Form[DeedOfVariation]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value =>
-          request.userAnswers.set(HowDeedOfVariationCreatedPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(HowDeedOfVariationCreatedPage, draftId)(updatedAnswers))
-              }
-            case Failure(_)              =>
-              logger.error("[HowDeedOfVariationCreatedController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-      )
-  }
 
 }

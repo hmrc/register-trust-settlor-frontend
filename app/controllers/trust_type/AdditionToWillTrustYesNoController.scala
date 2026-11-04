@@ -48,31 +48,33 @@ class AdditionToWillTrustYesNoController @Inject() (
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpInAdditionToWillTrustYesNo")
 
-  def onPageLoad(draftId: String): Action[AnyContent] = actions.authWithData(draftId) { implicit request =>
-    val preparedForm = request.userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
-      case None        => form
-      case Some(value) => form.fill(value)
+  def onPageLoad(draftId: String, index: Int = 0): Action[AnyContent] = actions.authWithData(draftId) {
+    implicit request =>
+      val preparedForm = request.userAnswers.get(SetUpInAdditionToWillTrustYesNoPage) match {
+        case None        => form
+        case Some(value) => form.fill(value)
+      }
+
+      Ok(view(preparedForm, draftId, index))
+  }
+
+  def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
+    actions.authWithData(draftId).async { implicit request =>
+      form
+        .bindFromRequest()
+        .fold(
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
+          value =>
+            request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value) match {
+              case Success(updatedAnswers) =>
+                registrationsRepository.set(updatedAnswers).map { _ =>
+                  Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, draftId, index)(updatedAnswers))
+                }
+              case Failure(_)              =>
+                logger.error("[AdditionToWillTrustYesNoController][onSubmit] Error while storing user answers")
+                Future.successful(InternalServerError(technicalErrorView()))
+            }
+        )
     }
-
-    Ok(view(preparedForm, draftId))
-  }
-
-  def onSubmit(draftId: String): Action[AnyContent] = actions.authWithData(draftId).async { implicit request =>
-    form
-      .bindFromRequest()
-      .fold(
-        (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId))),
-        value =>
-          request.userAnswers.set(SetUpInAdditionToWillTrustYesNoPage, value) match {
-            case Success(updatedAnswers) =>
-              registrationsRepository.set(updatedAnswers).map { _ =>
-                Redirect(navigator.nextPage(SetUpInAdditionToWillTrustYesNoPage, draftId)(updatedAnswers))
-              }
-            case Failure(_)              =>
-              logger.error("[AdditionToWillTrustYesNoController][onSubmit] Error while storing user answers")
-              Future.successful(InternalServerError(technicalErrorView()))
-          }
-      )
-  }
 
 }

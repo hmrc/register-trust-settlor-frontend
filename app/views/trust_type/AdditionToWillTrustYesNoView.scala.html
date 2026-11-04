@@ -25,14 +25,14 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[Boolean], draftId: String)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[Boolean], draftId: String, index: Int = 0)(implicit request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("setUpInAdditionToWillTrustYesNo.title")}",
     showBackLink = true
 ) {
 
-    @formHelper(action = AdditionToWillTrustYesNoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
+    @formHelper(action = AdditionToWillTrustYesNoController.onSubmit(draftId, index), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors)
 
