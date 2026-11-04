@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.FrontendAppConfig
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
@@ -24,6 +25,7 @@ import scala.concurrent.Future
 
 @Singleton
 class SessionTimeoutController @Inject() (
+  val appConfig: FrontendAppConfig,
   mcc: MessagesControllerComponents
 ) extends FrontendController(mcc) {
 
@@ -32,7 +34,12 @@ class SessionTimeoutController @Inject() (
   }
 
   val timeout: Action[AnyContent] = Action.async {
-    Future.successful(Redirect(controllers.routes.SessionExpiredController.onPageLoad.url).withNewSession)
+    Future.successful(
+      Redirect(
+        appConfig.logoutWithBasGatewayUrl,
+        Map("continue" -> Seq(appConfig.timeOutUrl))
+      )
+    )
   }
 
 }
