@@ -18,13 +18,13 @@ package pages
 
 import base.SpecBase
 import models.pages.AddASettlor.NoComplete
-import models.pages.IndividualOrBusiness._
-import models.pages.Status._
+import models.pages.IndividualOrBusiness.*
+import models.pages.Status.*
 import models.pages.{FullName, KindOfTrust}
+import pages.deceased_settlor as deceasedPages
 import pages.living_settlor.individual.SettlorAliveYesNoPage
-import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => businessPages, individual => individualPages}
-import pages.trust_type._
-import pages.{deceased_settlor => deceasedPages}
+import pages.living_settlor.{SettlorIndividualOrBusinessPage, business as businessPages, individual as individualPages}
+import pages.trust_type.*
 
 class RegistrationProgressSpec extends SpecBase {
 

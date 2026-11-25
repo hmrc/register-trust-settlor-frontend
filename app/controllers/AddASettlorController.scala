@@ -17,7 +17,7 @@
 package controllers
 
 import config.FrontendAppConfig
-import controllers.actions._
+import controllers.actions.*
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import models.TaskStatus.TaskStatus
 import models.pages.AddASettlor
@@ -31,7 +31,7 @@ import pages.{AddASettlorPage, AddASettlorYesNoPage, RegistrationProgress}
 import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages, MessagesApi, MessagesProvider}
-import play.api.mvc._
+import play.api.mvc.*
 import repositories.RegistrationsRepository
 import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpVerbs.GET
@@ -58,7 +58,7 @@ class AddASettlorController @Inject() (
   trustsStoreService: TrustsStoreService,
   registrationProgress: RegistrationProgress,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext, config: FrontendAppConfig)
+)(using ec: ExecutionContext, config: FrontendAppConfig)
     extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private val addAnotherForm: Form[AddASettlor] = addAnotherFormProvider()
@@ -67,13 +67,13 @@ class AddASettlorController @Inject() (
   private def actions(draftId: String): ActionBuilder[RegistrationDataRequest, AnyContent] =
     standardActions.authWithData(draftId)
 
-  private def heading(count: Int)(implicit mp: MessagesProvider): String =
+  private def heading(count: Int)(using mp: MessagesProvider): String =
     count match {
       case x if x <= 1 => Messages("addASettlor.heading")
       case _           => Messages("addASettlor.count.heading", count)
     }
 
-  private def trustHintText(implicit request: RegistrationDataRequest[AnyContent]): Option[String] =
+  private def trustHintText(using request: RegistrationDataRequest[AnyContent]): Option[String] =
     request.userAnswers.get(KindOfTrustPage) map { trust =>
       s"addASettlor.$trust"
     }
@@ -172,7 +172,7 @@ class AddASettlorController @Inject() (
     }
   }
 
-  private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)(implicit
+  private def setTaskStatus(userAnswers: UserAnswers, draftId: String, selection: AddASettlor)(using
     hc: HeaderCarrier
   ): Future[HttpResponse] = {
 
@@ -186,7 +186,7 @@ class AddASettlorController @Inject() (
     setTaskStatus(draftId, status)
   }
 
-  private def setTaskStatus(draftId: String, taskStatus: TaskStatus)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  private def setTaskStatus(draftId: String, taskStatus: TaskStatus)(using hc: HeaderCarrier): Future[HttpResponse] =
     trustsStoreService.updateTaskStatus(draftId, taskStatus)
 
 }

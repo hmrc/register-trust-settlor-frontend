@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
 import models.pages.FullName
 import org.mockito.ArgumentMatchers.any
@@ -25,7 +25,7 @@ import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.deceased_settlor.SettlorDateOfDeathView
 
 import java.time.{LocalDate, ZoneOffset}
@@ -58,7 +58,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, fullName)(request, messages).toString
+        view(form, fakeDraftId, fullName)(using request, messages).toString
 
       application.stop()
     }
@@ -84,7 +84,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, fullName)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, fullName)(using request, messages).toString
 
       application.stop()
     }
@@ -99,7 +99,8 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
         .success
         .value
 
-      when(registrationsRepository.getTrustSetupDate(any())(any())).thenReturn(Future.successful(Some(validAnswer)))
+      when(registrationsRepository.getTrustSetupDate(any())(using any()))
+        .thenReturn(Future.successful(Some(validAnswer)))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -161,7 +162,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, fullName)(request, messages).toString
+        view(boundForm, fakeDraftId, fullName)(using request, messages).toString
 
       application.stop()
     }
@@ -172,7 +173,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
 
         val submittedDate = LocalDate.parse("2020-02-03")
 
-        when(registrationsRepository.getTrustSetupDate(any())(any()))
+        when(registrationsRepository.getTrustSetupDate(any())(using any()))
           .thenReturn(Future.successful(Some(mockedTrustStartDate)))
 
         val form = formProvider.withConfig((mockedTrustStartDate, "afterTrustStartDate"))
@@ -210,7 +211,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, fullName)(request, messages).toString
+          view(boundForm, fakeDraftId, fullName)(using request, messages).toString
 
         application.stop()
       }
@@ -258,7 +259,7 @@ class SettlorDateOfDeathControllerSpec extends SpecBase with MockitoSugar {
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, fullName)(request, messages).toString
+          view(boundForm, fakeDraftId, fullName)(using request, messages).toString
 
         application.stop()
       }

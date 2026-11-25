@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
 import models.UserAnswers
 import models.pages.FullName
@@ -25,7 +25,7 @@ import org.scalatestplus.mockito.MockitoSugar
 import pages.deceased_settlor.{SettlorDateOfDeathPage, SettlorsDateOfBirthPage, SettlorsNamePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.deceased_settlor.SettlorsDateOfBirthView
 
 import java.time.LocalDate
@@ -66,7 +66,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -89,7 +89,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, name)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -133,7 +133,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -167,7 +167,7 @@ class SettlorsDateOfBirthControllerSpec extends SpecBase with MockitoSugar {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

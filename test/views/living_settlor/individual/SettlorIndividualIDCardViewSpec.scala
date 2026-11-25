@@ -44,7 +44,10 @@ class SettlorIndividualIDCardViewSpec extends QuestionViewBehaviours[PassportOrI
       val countryOptions: Seq[InputOption] = app.injector.instanceOf[CountryOptionsNonUK].options()
 
       def applyView(form: Form[PassportOrIdCardDetails]): HtmlFormat.Appendable =
-        view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(fakeRequest, messages)
+        view.apply(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDiedBool)(using
+          fakeRequest,
+          messages
+        )
 
       val applyViewF = (form: Form[PassportOrIdCardDetails]) => applyView(form)
 

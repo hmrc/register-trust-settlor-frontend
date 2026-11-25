@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.DateOfBirthFormProvider
 import models.pages.FullName
 import pages.living_settlor.individual.{
@@ -25,7 +25,7 @@ import pages.living_settlor.individual.{
 }
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.SettlorIndividualDateOfBirthView
 
 import java.time.{LocalDate, ZoneOffset}
@@ -60,7 +60,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -89,7 +89,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -165,7 +165,7 @@ class SettlorIndividualDateOfBirthControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }

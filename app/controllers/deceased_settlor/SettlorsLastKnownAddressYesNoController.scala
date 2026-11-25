@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import navigation.Navigator
@@ -45,7 +45,7 @@ class SettlorsLastKnownAddressYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorsLastKnownAddressYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorsLastKnownAddressYesNo")

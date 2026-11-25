@@ -17,17 +17,15 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.trust_type.routes._
+import controllers.trust_type.routes.*
 import models.UserAnswers
-import pages.trust_type._
+import pages.trust_type.*
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
 class TrustTypePrintHelper @Inject() (answerRowConverter: AnswerRowConverter) {
 
-  def answerRows(userAnswers: UserAnswers, draftId: String, index: Int)(implicit
-    messages: Messages
-  ): Seq[AnswerRow] = {
+  def answerRows(userAnswers: UserAnswers, draftId: String, index: Int)(using messages: Messages): Seq[AnswerRow] = {
 
     val bound: answerRowConverter.Bound = answerRowConverter.bind(userAnswers)
 

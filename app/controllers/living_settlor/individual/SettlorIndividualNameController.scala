@@ -23,6 +23,7 @@ import models.pages.FullName
 import models.requests.RegistrationDataRequest
 import navigation.Navigator
 import pages.living_settlor.individual.SettlorIndividualNamePage
+import play.api.Logging
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -31,8 +32,6 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.living_settlor.individual.SettlorIndividualNameView
 
 import javax.inject.Inject
-import play.api.Logging
-
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
@@ -44,7 +43,7 @@ class SettlorIndividualNameController @Inject() (
   formProvider: SettlorIndividualNameFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: SettlorIndividualNameView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[FullName] = formProvider()

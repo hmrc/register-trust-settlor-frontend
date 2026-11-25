@@ -17,7 +17,7 @@
 package repositories
 
 import base.SpecBase
-import mapping._
+import mapping.*
 import models.RegistrationSubmission.{DataSet, MappedPiece}
 import models.pages.FullName
 import models.{Settlor, SettlorCompany, Settlors, TrustDetailsType, UserAnswers, WillType}

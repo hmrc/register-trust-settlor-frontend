@@ -17,12 +17,12 @@
 package controllers.living_settlor.business
 
 import base.SpecBase
-import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.routes._
+import controllers.living_settlor.business.routes as businessRoutes
+import controllers.routes.*
 import forms.living_settlor.SettlorBusinessNameFormProvider
 import pages.living_settlor.business.SettlorBusinessNamePage
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, _}
+import play.api.test.Helpers.{route, *}
 import views.html.living_settlor.business.SettlorBusinessNameView
 
 class SettlorBusinessNameControllerSpec extends SpecBase {
@@ -48,7 +48,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, fakeDraftId)(request, messages).toString
+        view(form, index, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -68,7 +68,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), index, fakeDraftId)(request, messages).toString
+        view(form.fill("answer"), index, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class SettlorBusinessNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId)(request, messages).toString
+        view(boundForm, index, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }

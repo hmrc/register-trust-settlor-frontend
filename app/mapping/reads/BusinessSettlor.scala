@@ -19,7 +19,7 @@ package mapping.reads
 import mapping.IdentificationMapper.buildAddress
 import models.IdentificationOrgType
 import models.pages.Address
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Reads, __}
 
 final case class BusinessSettlor(
@@ -40,13 +40,13 @@ final case class BusinessSettlor(
 
 object BusinessSettlor extends SettlorReads {
 
-  implicit lazy val reads: Reads[BusinessSettlor] = (
+  given reads: Reads[BusinessSettlor] = (
     (__ \ "businessName").read[String] and
       (__ \ "utr").readNullable[String] and
       (__ \ "countryOfResidence").readNullable[String] and
       readAddress() and
       (__ \ "companyType").readNullable[String] and
       (__ \ "companyTime").readNullable[Boolean]
-  )(BusinessSettlor.apply _)
+  )(BusinessSettlor.apply)
 
 }

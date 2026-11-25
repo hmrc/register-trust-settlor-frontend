@@ -18,7 +18,7 @@ package controllers.actions
 
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.auth.core.{AffinityGroup, Enrolment, Enrolments}
 
 import javax.inject.Inject
@@ -28,7 +28,7 @@ class FakeIdentifyForRegistration @Inject() (affinityGroup: AffinityGroup, confi
   override val parser: BodyParsers.Default,
   trustsAuth: TrustsAuthorisedFunctions,
   enrolments: Enrolments = Enrolments(Set.empty[Enrolment])
-)(implicit override val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends RegistrationIdentifierAction(parser, trustsAuth, config) {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =

@@ -17,16 +17,16 @@
 package controllers.living_settlor.individual.mld5
 
 import base.SpecBase
-import controllers.living_settlor.individual.routes._
-import controllers.routes._
+import controllers.living_settlor.individual.routes.*
+import controllers.routes.*
 import forms.YesNoFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.living_settlor.individual.mld5.UkCountryOfNationalityYesNoPage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.mld5.UkCountryOfNationalityYesNoView
 
 class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
@@ -68,7 +68,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(formContentInPastTense, index, fakeDraftId, name, settlorAliveAtRegistration = false)(
+        view(formContentInPastTense, index, fakeDraftId, name, settlorAliveAtRegistration = false)(using
           request,
           messages
         ).toString
@@ -94,7 +94,10 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), index, fakeDraftId, name, settlorAliveAtRegistration = true)(request, messages).toString
+        view(form.fill(true), index, fakeDraftId, name, settlorAliveAtRegistration = true)(using
+          request,
+          messages
+        ).toString
 
       application.stop()
     }
@@ -135,7 +138,7 @@ class UkCountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, name, settlorAliveAtRegistration = true)(request, messages).toString
+        view(boundForm, index, fakeDraftId, name, settlorAliveAtRegistration = true)(using request, messages).toString
 
       application.stop()
     }

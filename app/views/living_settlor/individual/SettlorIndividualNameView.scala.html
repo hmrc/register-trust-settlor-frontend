@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.routes._
+@import controllers.living_settlor.individual.routes.*
 @import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading}
 @import models.pages.FullName
 
@@ -27,7 +27,7 @@
     heading: Heading
 )
 
-@(form: Form[FullName], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[FullName], draftId: String, index: Int, setUpBeforeSettlorDied: Boolean)(using request: RequestHeader, messages: Messages)
 
 @settlorIndividualNamePrefix = @{
     if({{setUpBeforeSettlorDied}}){

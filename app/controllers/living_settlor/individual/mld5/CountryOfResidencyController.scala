@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual.mld5
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.CountryFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -48,7 +48,7 @@ class CountryOfResidencyController @Inject() (
   view: CountryOfResidencyView,
   countryOptions: CountryOptionsNonUK,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = countryFormProvider.withPrefix("settlorIndividualCountryOfResidency")

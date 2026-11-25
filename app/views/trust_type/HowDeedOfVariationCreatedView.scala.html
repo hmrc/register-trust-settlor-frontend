@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.trust_type.routes._
+@import controllers.trust_type.routes.*
 @import models.pages.DeedOfVariation
 @import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
 @import views.ViewUtils.mapRadioOptionsToRadioItems
@@ -27,7 +27,7 @@
     input_radio: InputRadio
 )
 
-@(form: Form[DeedOfVariation], draftId: String, index: Int = 0)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[DeedOfVariation], draftId: String, index: Int = 0)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("howDeedOfVariationCreated.title")}",

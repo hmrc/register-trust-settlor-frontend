@@ -34,7 +34,7 @@ class SettlorsNameViewSpec extends QuestionViewBehaviours[FullName] {
     val view = viewFor[SettlorsNameView](Some(emptyUserAnswers))
 
     def applyView(form: Form[FullName]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(using fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

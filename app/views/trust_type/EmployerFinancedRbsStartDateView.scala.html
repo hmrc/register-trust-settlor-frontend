@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.trust_type.routes._
+@import controllers.trust_type.routes.*
 @import views.html.components.{SubmitButton, ErrorSummary, InputDate}
 @import java.time.LocalDate
 
@@ -26,7 +26,7 @@
     input_date: InputDate
 )
 
-@(form: Form[LocalDate], draftId: String, index: Int = 0)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[LocalDate], draftId: String, index: Int = 0)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("employerFinancedRbsStartDate.title")}",

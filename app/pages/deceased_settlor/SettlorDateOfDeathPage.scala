@@ -16,11 +16,11 @@
 
 package pages.deceased_settlor
 
-import java.time.LocalDate
-
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.DeceasedSettlor
+
+import java.time.LocalDate
 
 case object SettlorDateOfDeathPage extends QuestionPage[LocalDate] {
 

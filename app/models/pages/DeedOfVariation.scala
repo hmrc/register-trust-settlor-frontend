@@ -17,8 +17,8 @@
 package models.pages
 
 import models.{Enumerable, WithName}
-import play.api.libs.functional.syntax._
-import play.api.libs.json.{JsError, JsString, JsSuccess, Reads, Writes, __}
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import viewmodels.RadioOption
 
 sealed trait DeedOfVariation
@@ -38,10 +38,10 @@ object DeedOfVariation {
     RadioOption("howDeedOfVariationCreated", value.toString)
   }
 
-  implicit val enumerable: Enumerable[DeedOfVariation] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[DeedOfVariation] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
-  implicit def reads[A](implicit ev: Enumerable[A]): Reads[A] =
+  given reads[A](using ev: Enumerable[A]): Reads[A] =
     Reads {
       case JsString("Addition to the will trust")                                    =>
         ev.withName("AdditionToWillTrust")
@@ -65,7 +65,7 @@ object DeedOfVariation {
         JsError("error.invalid")
     }
 
-  implicit def writes: Writes[DeedOfVariation] = Writes {
+  given writes: Writes[DeedOfVariation] = Writes {
     case AdditionToWill  => JsString("Addition to the will trust")
     case ReplacedWill    => JsString("Replaced the will trust")
     case ReplaceAbsolute => JsString("Previously there was only an absolute interest under the will")

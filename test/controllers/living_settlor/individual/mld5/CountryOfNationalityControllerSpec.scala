@@ -17,16 +17,16 @@
 package controllers.living_settlor.individual.mld5
 
 import base.SpecBase
-import controllers.living_settlor.individual.routes._
-import controllers.routes._
+import controllers.living_settlor.individual.routes.*
+import controllers.routes.*
 import forms.CountryFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import pages.living_settlor.individual.mld5.CountryOfNationalityPage
+import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.living_settlor.individual.mld5.CountryOfNationalityView
@@ -73,7 +73,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(formContentInPastTense, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = false)(
+        view(formContentInPastTense, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = false)(using
           request,
           messages
         ).toString
@@ -99,7 +99,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(
+        view(form.fill(validAnswer), index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(using
           request,
           messages
         ).toString
@@ -143,7 +143,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(
+        view(boundForm, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration = true)(using
           request,
           messages
         ).toString

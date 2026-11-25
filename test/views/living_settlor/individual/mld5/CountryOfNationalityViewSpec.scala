@@ -42,7 +42,10 @@ class CountryOfNationalityViewSpec extends SelectCountryViewBehaviours {
       val view = viewFor[CountryOfNationalityView](Some(emptyUserAnswers))
 
       def applyView(form: Form[String]): HtmlFormat.Appendable =
-        view.apply(form, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration)(fakeRequest, messages)
+        view.apply(form, index, fakeDraftId, countryOptions, name, settlorAliveAtRegistration)(using
+          fakeRequest,
+          messages
+        )
 
       behave like dynamicTitlePage(applyView(formToUse), messageKey, name.toString)
 

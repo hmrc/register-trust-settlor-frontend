@@ -34,7 +34,7 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
       val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
       def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, isTaxable = true)(fakeRequest, messages)
+        view.apply(form, fakeDraftId)(using fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 
@@ -49,7 +49,7 @@ class SetUpByLivingSettlorViewSpec extends YesNoViewBehaviours {
       val view = viewFor[SetUpByLivingSettlorView](Some(emptyUserAnswers))
 
       def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, isTaxable = false)(fakeRequest, messages)
+        view.apply(form, fakeDraftId)(using fakeRequest, messages)
 
       behave like normalPage(applyView(form), messageKeyPrefix)
 

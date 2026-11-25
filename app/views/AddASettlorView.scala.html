@@ -15,9 +15,8 @@
  *@
 
 @import config.FrontendAppConfig
-@import controllers.routes._
 @import models.pages.AddASettlor
-@import utils.Constants._
+@import utils.Constants.*
 @import viewmodels.AddRow
 @import views.html.components.{SubmitButton, ErrorSummary, Heading, AddToList, InputRadio}
 @import views.ViewUtils.mapRadioOptionsToRadioItems
@@ -41,7 +40,7 @@
     heading: String,
     hint: Option[String],
     maxedOut: List[String]
-)(implicit request: RequestHeader, messages: Messages)
+)(using request: RequestHeader, messages: Messages)
 
 @settlorsMaxedOut = @{maxedOut.size == 2}
 
@@ -50,7 +49,7 @@
     showBackLink = true
 ) {
 
-    @formHelper(action = if (settlorsMaxedOut) AddASettlorController.submitComplete(draftId) else AddASettlorController.submitAnother(draftId), Symbol("autoComplete") -> "off") {
+    @formHelper(action = if (settlorsMaxedOut) controllers.routes.AddASettlorController.submitComplete(draftId) else controllers.routes.AddASettlorController.submitAnother(draftId), Symbol("autoComplete") -> "off") {
 
         @error_summary(form.errors, AddASettlor.options)
 
@@ -60,9 +59,9 @@
             <p>@messages(text)</p>
         }
 
-        @addToList(inProgress, "inprogress", "settlor")
+        @addToList(inProgress, "inprogress")
 
-        @addToList(complete, "complete", "settlor")
+        @addToList(complete, "complete")
 
         @if(settlorsMaxedOut) {
             <div class="govuk-inset-text">

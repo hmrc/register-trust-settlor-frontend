@@ -17,11 +17,11 @@
 package navigation
 
 import base.SpecBase
-import controllers.deceased_settlor.mld5.{routes => mld5Rts}
+import controllers.deceased_settlor.mld5.routes as mld5Rts
 import controllers.deceased_settlor.routes
 import models.UserAnswers
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5._
+import pages.deceased_settlor.*
+import pages.deceased_settlor.mld5.*
 import play.api.mvc.Call
 
 class DeceasedSettlorNavigatorSpec extends SpecBase {

@@ -18,19 +18,19 @@ package controllers.living_settlor.individual
 
 import base.SpecBase
 import controllers.living_settlor.individual.routes.SettlorIndividualNameController
-import controllers.routes._
+import controllers.routes.*
 import models.UserAnswers
-import models.pages._
+import models.pages.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, times, verify, when}
-import pages.living_settlor._
-import pages.living_settlor.individual._
-import pages.trust_type._
+import pages.living_settlor.*
+import pages.living_settlor.individual.*
+import pages.trust_type.*
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.{Call, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import play.twirl.api.Html
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.LivingSettlorPrintHelper
@@ -69,7 +69,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
 
       val fakeAnswerSection = AnswerSection(rows = Seq(answerRow))
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(using any()))
         .thenReturn(fakeAnswerSection)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -85,7 +85,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(onSubmit, Seq(fakeAnswerSection))(request, messages).toString
+        view(onSubmit, Seq(fakeAnswerSection))(using request, messages).toString
 
       application.stop()
     }
@@ -99,7 +99,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       val fakeAnswerSection =
         AnswerSection(rows = Seq(answerRow.copy(label = s"settlorIndividualName$prefix.checkYourAnswersLabel")))
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(using any()))
         .thenReturn(fakeAnswerSection)
 
       val application: Application = applicationBuilder(userAnswers = Some(userAnswers))
@@ -115,7 +115,7 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(onSubmit, Seq(fakeAnswerSection))(request, messages).toString
+        view(onSubmit, Seq(fakeAnswerSection))(using request, messages).toString
 
       application.stop()
     }
@@ -146,10 +146,10 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .success
         .value
 
-      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(using any()))
         .thenReturn(Future.successful(()))
 
-      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(using any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -161,8 +161,8 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(any())
-      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(using any())
+      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(using any())
 
       application.stop()
     }
@@ -179,10 +179,10 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
         .success
         .value
 
-      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(any()))
+      when(mockCreateDraftRegistrationService.amendBeneficiariesState(any(), any())(using any()))
         .thenReturn(Future.successful(()))
 
-      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(using any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val application = applicationBuilder(userAnswers = Some(userAnswers)).build()
@@ -194,15 +194,15 @@ class SettlorIndividualAnswerControllerSpec extends SpecBase {
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(any())
-      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(any())
+      verify(mockCreateDraftRegistrationService, times(1)).amendBeneficiariesState(any(), any())(using any())
+      verify(mockCreateDraftRegistrationService, times(1)).removeDeceasedSettlorMappedPiece(any())(using any())
 
       application.stop()
     }
 
     "return InternalServerError if removeDeceasedSettlorMappedPiece fails" in {
 
-      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(any()))
+      when(mockCreateDraftRegistrationService.removeDeceasedSettlorMappedPiece(any())(using any()))
         .thenReturn(Future.failed(new RuntimeException("fail")))
 
       val userAnswers = baseAnswers

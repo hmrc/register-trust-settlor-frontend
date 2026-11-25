@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -48,10 +48,10 @@ class SettlorNationalInsuranceNumberController @Inject() (
   view: SettlorNationalInsuranceNumberView,
   technicalErrorView: TechnicalErrorView,
   draftRegistrationService: DraftRegistrationService
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
-  private def getForm(draftId: String)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
+  private def getForm(draftId: String)(using request: SettlorIndividualNameRequest[AnyContent]) =
     for {
       existingTrusteeNinos     <- getTrusteeNinos(draftId)
       existingBeneficiaryNinos <- getBeneficiaryNinos(draftId)
@@ -59,17 +59,17 @@ class SettlorNationalInsuranceNumberController @Inject() (
 
     } yield formProvider(existingTrusteeNinos, existingBeneficiaryNinos, existingProtectorNinos)
 
-  private def getTrusteeNinos(draftId: String)(implicit
+  private def getTrusteeNinos(draftId: String)(using
     request: SettlorIndividualNameRequest[AnyContent]
   ): Future[collection.IndexedSeq[String]] =
     draftRegistrationService.retrieveTrusteeNinos(draftId)
 
-  private def getBeneficiaryNinos(draftId: String)(implicit
+  private def getBeneficiaryNinos(draftId: String)(using
     request: SettlorIndividualNameRequest[AnyContent]
   ): Future[collection.IndexedSeq[String]] =
     draftRegistrationService.retrieveBeneficiaryNinos(draftId)
 
-  private def getProtectorNinos(draftId: String)(implicit
+  private def getProtectorNinos(draftId: String)(using
     request: SettlorIndividualNameRequest[AnyContent]
   ): Future[collection.IndexedSeq[String]] =
     draftRegistrationService.retrieveProtectorNinos(draftId)

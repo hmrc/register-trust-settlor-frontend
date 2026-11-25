@@ -21,8 +21,8 @@ import models.requests.IdentifierRequest
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import play.api.mvc.{Action, AnyContent, Results}
-import play.api.test.Helpers._
-import uk.gov.hmrc.auth.core._
+import play.api.test.Helpers.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.retrieve.{Retrieval, ~}
 
 import scala.concurrent.Future
@@ -51,7 +51,7 @@ class RegistrationIdentifierActionSpec extends SpecBase {
 
         def fakeAction: Action[AnyContent] = identify(_ => Results.Ok)
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
+        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(using any(), any()))
           .thenReturn(Future failed BearerTokenExpired())
 
         val result = fakeAction.apply(fakeRequest)
@@ -74,7 +74,7 @@ class RegistrationIdentifierActionSpec extends SpecBase {
 
         val idRequest = IdentifierRequest(fakeRequest, "id", AffinityGroup.Agent, Enrolments(Set.empty[Enrolment]))
 
-        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(any(), any()))
+        when(mockAuthConnector.authorise(any(), any[Retrieval[RetrievalType]]())(using any(), any()))
           .thenReturn(authRetrievals(AffinityGroup.Agent, agentEnrolment))
 
         val result = fakeAction.apply(idRequest)

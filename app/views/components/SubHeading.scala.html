@@ -16,7 +16,7 @@
 
 @this()
 
-@(key: String, param: String, hiddenText: Boolean = true)(implicit messages: Messages)
+@(key: String, param: String, hiddenText: Boolean = true)(using messages: Messages)
 
 <span class="govuk-caption-l">
  @if(hiddenText){

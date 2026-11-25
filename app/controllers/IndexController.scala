@@ -39,11 +39,11 @@ class IndexController @Inject() (
   identify: RegistrationIdentifierAction,
   trustsStoreService: TrustsStoreService,
   submissionDraftConnector: SubmissionDraftConnector
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
   def onPageLoad(draftId: String): Action[AnyContent] = identify.async { implicit request =>
-    def redirect(userAnswers: UserAnswers)(implicit request: IdentifierRequest[AnyContent]): Future[Result] =
+    def redirect(userAnswers: UserAnswers)(using request: IdentifierRequest[AnyContent]): Future[Result] =
       repository.set(userAnswers) map { _ =>
         val livingSettlors  = userAnswers.get(LivingSettlors).getOrElse(List.empty)
         val deceasedSettlor = userAnswers.get(DeceasedSettlor)

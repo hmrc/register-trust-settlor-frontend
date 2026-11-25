@@ -17,9 +17,9 @@
 package navigation
 
 import base.SpecBase
-import models.pages.AddASettlor._
+import models.pages.AddASettlor.*
 import models.pages.FullName
-import models.pages.IndividualOrBusiness._
+import models.pages.IndividualOrBusiness.*
 import models.pages.Status.Completed
 import pages.living_settlor.SettlorIndividualOrBusinessPage
 import pages.living_settlor.business.SettlorBusinessNamePage

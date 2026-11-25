@@ -45,7 +45,7 @@ class SettlorBusinessUtrYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorBusinessUtrYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =

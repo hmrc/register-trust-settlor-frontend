@@ -18,7 +18,7 @@ package controllers
 
 import base.SpecBase
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.SettlorInfoView
 
 class SettlorInfoControllerSpec extends SpecBase {
@@ -42,7 +42,7 @@ class SettlorInfoControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fakeDraftId, isTaxable = true)(request, messages).toString
+          view(fakeDraftId, isTaxable = true)(using request, messages).toString
 
         application.stop()
       }
@@ -62,7 +62,7 @@ class SettlorInfoControllerSpec extends SpecBase {
         status(result) mustEqual OK
 
         contentAsString(result) mustEqual
-          view(fakeDraftId, isTaxable = false)(request, messages).toString
+          view(fakeDraftId, isTaxable = false)(using request, messages).toString
 
         application.stop()
       }

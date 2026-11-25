@@ -17,8 +17,8 @@
 package models
 
 import play.api.Logging
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 import queries.{Gettable, Settable}
 import viewmodels.{SettlorBusinessViewModel, SettlorIndividualViewModel}
 
@@ -32,10 +32,10 @@ final case class UserAnswers(
   existingTrustUtr: Option[String] = None
 ) extends Logging {
 
-  def get[A](page: Gettable[A])(implicit rds: Reads[A]): Option[A] =
+  def get[A](page: Gettable[A])(using rds: Reads[A]): Option[A] =
     getAtPath(page.path)
 
-  def getAtPath[A](path: JsPath)(implicit rds: Reads[A]): Option[A] =
+  def getAtPath[A](path: JsPath)(using rds: Reads[A]): Option[A] =
     Reads.at(path).reads(data) match {
       case JsSuccess(value, _) => Some(value)
       case JsError(errors)     =>
@@ -43,7 +43,7 @@ final case class UserAnswers(
         None
     }
 
-  def set[A](page: Settable[A], value: A)(implicit writes: Writes[A]): Try[UserAnswers] = {
+  def set[A](page: Settable[A], value: A)(using writes: Writes[A]): Try[UserAnswers] = {
 
     val updatedData: Try[JsObject] = data.setObject(page.path, Json.toJson(value)) match {
       case JsSuccess(jsValue, _) =>
@@ -95,20 +95,28 @@ final case class UserAnswers(
 
 object UserAnswers {
 
-  implicit lazy val reads: Reads[UserAnswers] = (
+  given reads: Reads[UserAnswers] = (
     (__ \ "_id").read[String] and
       (__ \ "data").read[JsObject] and
       (__ \ "internalId").read[String] and
       (__ \ "isTaxable").readWithDefault[Boolean](true) and
       (__ \ "existingTrustUtr").readNullable[String]
-  )(UserAnswers.apply _)
+  )(UserAnswers.apply)
 
-  implicit lazy val writes: OWrites[UserAnswers] = (
+  given writes: OWrites[UserAnswers] = (
     (__ \ "_id").write[String] and
       (__ \ "data").write[JsObject] and
       (__ \ "internalId").write[String] and
       (__ \ "isTaxable").write[Boolean] and
       (__ \ "existingTrustUtr").writeNullable[String]
-  )(unlift(UserAnswers.unapply))
+  ) { userAnswer =>
+    (
+      userAnswer.draftId,
+      userAnswer.data,
+      userAnswer.internalAuthId,
+      userAnswer.isTaxable,
+      userAnswer.existingTrustUtr
+    )
+  }
 
 }

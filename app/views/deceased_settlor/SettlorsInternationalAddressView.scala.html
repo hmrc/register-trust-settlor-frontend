@@ -14,9 +14,9 @@
  * limitations under the License.
  *@
 
-@import controllers.deceased_settlor.routes._
+@import controllers.deceased_settlor.routes.*
 @import models.pages.FullName
-@import models.pages.{InternationalAddress => InternationalAddressModel}
+@import models.pages.{InternationalAddress as InternationalAddressModel}
 @import utils.InputOption
 @import views.html.components.{SubmitButton, ErrorSummary, InternationalAddress}
 
@@ -28,7 +28,7 @@
     internationalAddress: InternationalAddress
 )
 
-@(form: Form[InternationalAddressModel], countryOptions: Seq[InputOption], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[InternationalAddressModel], countryOptions: Seq[InputOption], draftId: String, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsInternationalAddress.title")}",

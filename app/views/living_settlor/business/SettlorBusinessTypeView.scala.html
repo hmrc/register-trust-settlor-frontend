@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.business.routes._
+@import controllers.living_settlor.business.routes.*
 @import models.pages.KindOfBusiness
 @import views.html.components.{Heading, BulletList, SubmitButton, ErrorSummary, InputRadio}
 @import views.ViewUtils.mapRadioOptionsToRadioItems
@@ -29,7 +29,7 @@
     input_radio: InputRadio
 )
 
-@(form: Form[KindOfBusiness], draftId: String, index: Int, settlorBusinessName: String)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[KindOfBusiness], draftId: String, index: Int, settlorBusinessName: String)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorBusinessType.title")}",

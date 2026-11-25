@@ -20,16 +20,16 @@ import base.SpecBase
 import forms.YesNoFormProvider
 import models.UserAnswers
 import models.pages.FullName
-import models.pages.IndividualOrBusiness._
+import models.pages.IndividualOrBusiness.*
 import org.mockito.ArgumentCaptor
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, verify, when}
-import pages.living_settlor._
-import pages.living_settlor.business._
-import pages.living_settlor.individual._
+import pages.living_settlor.*
+import pages.living_settlor.business.*
+import pages.living_settlor.individual.*
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.RemoveSettlorYesNoView
 
 import scala.concurrent.Future
@@ -107,7 +107,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
               index,
               fakeDraftId,
               name.toString
-            )(request, messages).toString
+            )(using request, messages).toString
 
           application.stop()
         }
@@ -130,7 +130,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
               index,
               fakeDraftId,
               defaultName
-            )(request, messages).toString
+            )(using request, messages).toString
 
           application.stop()
         }
@@ -156,7 +156,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
               index,
               fakeDraftId,
               businessName
-            )(request, messages).toString
+            )(using request, messages).toString
 
           application.stop()
         }
@@ -179,7 +179,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
               index,
               fakeDraftId,
               defaultName
-            )(request, messages).toString
+            )(using request, messages).toString
 
           application.stop()
         }
@@ -208,7 +208,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         reset(registrationsRepository)
 
-        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+        when(registrationsRepository.set(any())(using any(), any())).thenReturn(Future.successful(true))
 
         val application = applicationBuilder(userAnswers = Some(individualUserAnswers)).build()
 
@@ -222,7 +222,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        verify(registrationsRepository).set(uaCaptor.capture)(using any(), any())
         uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorIndividualNamePage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorIndividualDateOfBirthYesNoPage(index)) mustNot be(defined)
@@ -236,7 +236,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
 
         reset(registrationsRepository)
 
-        when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+        when(registrationsRepository.set(any())(using any(), any())).thenReturn(Future.successful(true))
 
         val application = applicationBuilder(userAnswers = Some(businessUserAnswers)).build()
 
@@ -250,7 +250,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
         redirectLocation(result).value mustEqual routes.AddASettlorController.onPageLoad(fakeDraftId).url
 
         val uaCaptor: ArgumentCaptor[UserAnswers] = ArgumentCaptor.forClass(classOf[UserAnswers])
-        verify(registrationsRepository).set(uaCaptor.capture)(any(), any())
+        verify(registrationsRepository).set(uaCaptor.capture)(using any(), any())
         uaCaptor.getValue.get(SettlorIndividualOrBusinessPage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorBusinessNamePage(index)) mustNot be(defined)
         uaCaptor.getValue.get(SettlorBusinessUtrYesNoPage(index)) mustNot be(defined)
@@ -281,7 +281,7 @@ class RemoveSettlorYesNoControllerSpec extends SpecBase {
           index,
           fakeDraftId,
           "the settlor"
-        )(request, messages).toString
+        )(using request, messages).toString
 
       application.stop()
     }

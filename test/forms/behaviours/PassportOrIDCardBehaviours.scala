@@ -45,7 +45,7 @@ trait PassportOrIDCardBehaviours
       }
     }
 
-  def passportNumberField(form: Form[_], fieldName: String, invalidError: FormError): Unit =
+  def passportNumberField(form: Form[?], fieldName: String, invalidError: FormError): Unit =
     s"not bind strings which do not match valid passport number format " in {
       val generator = stringsWithMaxLength(30)
       forAll(generator) { string =>
@@ -56,7 +56,7 @@ trait PassportOrIDCardBehaviours
       }
     }
 
-  def cardNumberField(form: Form[_], fieldName: String, invalidError: FormError): Unit =
+  def cardNumberField(form: Form[?], fieldName: String, invalidError: FormError): Unit =
     s"not bind strings which do not match valid ID card number format " in {
       val generator = stringsWithMaxLength(30)
       forAll(generator) { string =>

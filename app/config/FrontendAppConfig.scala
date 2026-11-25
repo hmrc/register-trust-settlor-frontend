@@ -80,7 +80,7 @@ class FrontendAppConfig @Inject() (
 
   def registerTrustAsTrusteeUrl: String = configuration.get[String]("urls.registerTrustAsTrustee")
 
-  def helplineUrl(implicit messages: Messages): String = {
+  def helplineUrl(using messages: Messages): String = {
     val path = messages.lang.code match {
       case WELSH => "urls.welshHelpline"
       case _     => "urls.trustsHelpline"

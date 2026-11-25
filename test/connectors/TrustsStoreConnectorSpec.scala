@@ -17,7 +17,7 @@
 package connectors
 
 import base.SpecBase
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.TaskStatus.Completed
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
@@ -28,14 +28,14 @@ import utils.WireMockHelper
 
 class TrustsStoreConnectorSpec extends SpecBase with Matchers with OptionValues with WireMockHelper {
 
-  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   override lazy val app: Application = new GuiceApplicationBuilder()
     .configure(
       Seq(
         "microservice.services.trusts-store.port" -> server.port(),
         "auditing.enabled"                        -> false
-      ): _*
+      )*
     )
     .build()
 

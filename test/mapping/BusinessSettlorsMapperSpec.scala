@@ -17,10 +17,10 @@
 package mapping
 
 import base.SpecBase
-import models.pages.KindOfBusiness._
+import models.pages.KindOfBusiness.*
 import models.pages.{InternationalAddress, UKAddress}
 import models.{AddressType, IdentificationOrgType, SettlorCompany, UserAnswers}
-import pages.living_settlor.business._
+import pages.living_settlor.business.*
 import pages.living_settlor.business.mld5.{
   CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
 }

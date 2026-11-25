@@ -28,13 +28,13 @@ final case class SettlorIndividualViewModel(
 
 object SettlorIndividualViewModel {
 
-  import play.api.libs.functional.syntax._
-  import play.api.libs.json._
+  import play.api.libs.functional.syntax.*
+  import play.api.libs.json.*
 
-  implicit lazy val reads: Reads[SettlorIndividualViewModel] = (
+  given reads: Reads[SettlorIndividualViewModel] = (
     (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Individual) and
       (__ \ "name").readNullable[FullName].map(_.map(_.toString)) and
       (__ \ "status").readWithDefault[Status](InProgress)
-  )(SettlorIndividualViewModel.apply _)
+  )(SettlorIndividualViewModel.apply)
 
 }

@@ -17,14 +17,14 @@
 package controllers.living_settlor.business
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.living_settlor.SettlorBusinessTypeFormProvider
 import models.pages.KindOfBusiness
 import models.pages.KindOfTrust.Employees
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessTypePage}
 import pages.trust_type.KindOfTrustPage
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.business.SettlorBusinessTypeView
 
 class SettlorBusinessTypeControllerSpec extends SpecBase {
@@ -55,7 +55,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -81,7 +81,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(KindOfBusiness.values.head), fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(KindOfBusiness.values.head), fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -131,7 +131,7 @@ class SettlorBusinessTypeControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }

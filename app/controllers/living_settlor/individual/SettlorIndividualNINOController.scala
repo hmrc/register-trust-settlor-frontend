@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.NinoFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -46,10 +46,10 @@ class SettlorIndividualNINOController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorIndividualNINOView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
-  private def form(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
+  private def form(index: Int)(using request: SettlorIndividualNameRequest[AnyContent]): Form[String] =
     formProvider("settlorIndividualNINO", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =

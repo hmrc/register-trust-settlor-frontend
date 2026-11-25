@@ -17,14 +17,14 @@
 package utils
 
 import base.SpecBase
-import controllers.living_settlor.business.{routes => busRoutes}
-import controllers.living_settlor.individual.{routes => indRoutes}
+import controllers.living_settlor.business.routes as busRoutes
+import controllers.living_settlor.individual.routes as indRoutes
 import controllers.routes.RemoveSettlorYesNoController
 import models.pages.FullName
-import models.pages.IndividualOrBusiness._
+import models.pages.IndividualOrBusiness.*
 import models.pages.Status.Completed
 import pages.LivingSettlorStatus
-import pages.living_settlor.{SettlorIndividualOrBusinessPage, business => bus, individual => ind}
+import pages.living_settlor.{SettlorIndividualOrBusinessPage, business as bus, individual as ind}
 import viewmodels.{AddRow, AddToRows}
 
 class AddASettlorViewHelperSpec extends SpecBase {

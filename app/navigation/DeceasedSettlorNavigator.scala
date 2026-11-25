@@ -17,12 +17,12 @@
 package navigation
 
 import config.FrontendAppConfig
-import controllers.deceased_settlor.mld5.{routes => mld5Rts}
-import controllers.deceased_settlor.{routes => rts}
+import controllers.deceased_settlor.mld5.routes as mld5Rts
+import controllers.deceased_settlor.routes as rts
 import models.UserAnswers
 import pages.Page
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5._
+import pages.deceased_settlor.*
+import pages.deceased_settlor.mld5.*
 import play.api.mvc.Call
 import uk.gov.hmrc.http.HttpVerbs.GET
 
@@ -99,7 +99,7 @@ class DeceasedSettlorNavigator @Inject() (config: FrontendAppConfig) extends Nav
   }
 
   private def mldDependentSimpleNavigation(draftId: String): PartialFunction[Page, UserAnswers => Call] = {
-    case SettlorsDateOfBirthPage            => ua => mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
+    case SettlorsDateOfBirthPage            => _ => mld5Rts.CountryOfNationalityYesNoController.onPageLoad(draftId)
     case SettlorNationalInsuranceNumberPage => _ => mld5Rts.CountryOfResidenceYesNoController.onPageLoad(draftId)
   }
 

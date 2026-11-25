@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.UKAddressFormProvider
 import models.pages.{FullName, UKAddress}
 import pages.living_settlor.individual.{
@@ -25,7 +25,7 @@ import pages.living_settlor.individual.{
 }
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.SettlorIndividualAddressUKView
 
 class SettlorIndividualAddressUKControllerSpec extends SpecBase {
@@ -57,7 +57,7 @@ class SettlorIndividualAddressUKControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name, settlorAliveAtRegistration = false)(request, messages).toString
+        view(form, fakeDraftId, index, name, settlorAliveAtRegistration = false)(using request, messages).toString
 
       application.stop()
     }
@@ -92,7 +92,7 @@ class SettlorIndividualAddressUKControllerSpec extends SpecBase {
           index,
           name,
           settlorAliveAtRegistration = true
-        )(request, messages).toString
+        )(using request, messages).toString
 
       application.stop()
     }
@@ -180,7 +180,7 @@ class SettlorIndividualAddressUKControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name, settlorAliveAtRegistration = true)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name, settlorAliveAtRegistration = true)(using request, messages).toString
 
       application.stop()
     }

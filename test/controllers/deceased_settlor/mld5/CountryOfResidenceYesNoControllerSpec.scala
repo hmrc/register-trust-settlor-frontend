@@ -25,7 +25,7 @@ import models.pages.FullName
 import pages.deceased_settlor.SettlorsNamePage
 import pages.deceased_settlor.mld5.CountryOfResidenceYesNoPage
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.deceased_settlor.mld5.CountryOfResidenceYesNoView
 
 class CountryOfResidenceYesNoControllerSpec extends SpecBase {
@@ -53,7 +53,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -74,7 +74,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -118,7 +118,7 @@ class CountryOfResidenceYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

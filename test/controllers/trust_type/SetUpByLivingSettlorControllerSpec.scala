@@ -17,11 +17,11 @@
 package controllers.trust_type
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.YesNoFormProvider
 import pages.trust_type.SetUpByLivingSettlorYesNoPage
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.trust_type.SetUpByLivingSettlorView
 
 class SetUpByLivingSettlorControllerSpec extends SpecBase {
@@ -45,7 +45,7 @@ class SetUpByLivingSettlorControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, isTaxable = true)(request, messages).toString
+        view(form, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -65,7 +65,7 @@ class SetUpByLivingSettlorControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, isTaxable = true)(request, messages).toString
+        view(form.fill(true), fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -105,7 +105,7 @@ class SetUpByLivingSettlorControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, isTaxable = true)(request, messages).toString
+        view(boundForm, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }

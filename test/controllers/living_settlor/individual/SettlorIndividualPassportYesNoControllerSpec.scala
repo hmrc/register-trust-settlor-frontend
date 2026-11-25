@@ -17,13 +17,13 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.YesNoFormProvider
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorIndividualNamePage, SettlorIndividualPassportYesNoPage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.SettlorIndividualPassportYesNoView
 
 class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
@@ -55,7 +55,7 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, name)(request, messages).toString
+        view(form, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -81,7 +81,7 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, name)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }
@@ -130,7 +130,7 @@ class SettlorIndividualPassportYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, name)(request, messages).toString
+        view(boundForm, fakeDraftId, index, name)(using request, messages).toString
 
       application.stop()
     }

@@ -14,7 +14,6 @@
  * limitations under the License.
  *@
 
-@import controllers.routes._
 @import views.html.components.{BulletList, HeadingWithCaption, SubmitButton}
 
 @this(
@@ -25,7 +24,7 @@
     submit_button: SubmitButton
 )
 
-@(draftId: String, isTaxable: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(draftId: String, isTaxable: Boolean)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${messages("5mld.settlorInfo.title")}",
@@ -117,7 +116,7 @@
         )
     )
 
-    @formHelper(action = SettlorInfoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
+    @formHelper(action = controllers.routes.SettlorInfoController.onSubmit(draftId), Symbol("autoComplete") -> "off") {
         @submit_button(Some(messages("site.onlyContinue")))
     }
 }

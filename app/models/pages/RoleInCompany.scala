@@ -37,7 +37,7 @@ object RoleInCompany extends Enumerable.Implicits {
     RadioOption("roleInCompany", value.toString)
   }
 
-  implicit val enumerable: Enumerable[RoleInCompany] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[RoleInCompany] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

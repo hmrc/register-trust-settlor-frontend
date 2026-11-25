@@ -17,7 +17,7 @@
 package controllers.trust_type
 
 import config.annotations.TrustType
-import controllers.actions._
+import controllers.actions.*
 import forms.KindOfTrustFormProvider
 import models.Enumerable
 import models.pages.KindOfTrust
@@ -47,7 +47,7 @@ class KindOfTrustController @Inject() (
   view: KindOfTrustView,
   requiredAnswer: RequiredAnswerActionProvider,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Enumerable.Implicits with Logging {
 
   private def actions(draftId: String, index: Int): ActionBuilder[RegistrationDataRequest, AnyContent] =

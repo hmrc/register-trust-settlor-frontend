@@ -36,7 +36,7 @@ class SubmissionSetFactory @Inject() (
   private def mappedPiece(path: String, json: JsValue) =
     List(RegistrationSubmission.MappedPiece(path, json))
 
-  def createFrom(userAnswers: UserAnswers)(implicit messages: Messages): RegistrationSubmission.DataSet =
+  def createFrom(userAnswers: UserAnswers)(using messages: Messages): RegistrationSubmission.DataSet =
     RegistrationSubmission.DataSet(
       data = Json.toJson(userAnswers),
       registrationPieces = mappedDataIfCompleted(userAnswers),
@@ -67,7 +67,7 @@ class SubmissionSetFactory @Inject() (
 
   def answerSectionsIfCompleted(
     userAnswers: UserAnswers
-  )(implicit messages: Messages): Seq[RegistrationSubmission.AnswerSection] = {
+  )(using messages: Messages): Seq[RegistrationSubmission.AnswerSection] = {
     val cyaHelper = new CheckYourAnswersHelper(printHelpers)(userAnswers, userAnswers.draftId)
 
     val settlorRows = settlorsMapper

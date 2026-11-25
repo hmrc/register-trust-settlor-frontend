@@ -16,7 +16,7 @@
 
 package models.pages
 
-import play.api.libs.json._
+import play.api.libs.json.*
 
 case class FullName(firstName: String, middleName: Option[String], lastName: String) {
 
@@ -31,6 +31,6 @@ case class FullName(firstName: String, middleName: Option[String], lastName: Str
 
 object FullName {
 
-  implicit lazy val formats: OFormat[FullName] = Json.format[FullName]
+  given formats: OFormat[FullName] = Json.format[FullName]
 
 }

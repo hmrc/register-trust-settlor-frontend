@@ -34,7 +34,7 @@ class SettlorDateOfBirthYesNoPageSpec extends PageBehaviours {
   }
 
   "remove SettlorDateOfBirth when SettlorDateOfBirthYesNoPage is set to false" in
-    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+    forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial.set(SettlorsDateOfBirthPage, LocalDate.now()).success.value
       val result: UserAnswers  = answers.set(SettlorDateOfBirthYesNoPage, false).success.value
 

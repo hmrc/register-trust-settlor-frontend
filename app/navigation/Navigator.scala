@@ -16,8 +16,8 @@
 
 package navigation
 
-import pages._
-import models._
+import pages.*
+import models.*
 import play.api.mvc.Call
 
 trait Navigator {

@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import navigation.Navigator
@@ -45,7 +45,7 @@ class SettlorIndividualDateOfBirthYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorIndividualDateOfBirthYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorIndividualDateOfBirthYesNo")

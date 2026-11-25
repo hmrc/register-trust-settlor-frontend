@@ -17,8 +17,8 @@
 package controllers.living_settlor.individual.mld5
 
 import base.SpecBase
-import controllers.living_settlor.individual.routes._
-import controllers.routes._
+import controllers.living_settlor.individual.routes.*
+import controllers.routes.*
 import forms.YesNoFormProvider
 import models.UserAnswers
 import models.pages.FullName
@@ -26,7 +26,7 @@ import pages.living_settlor.individual.SettlorIndividualNamePage
 import pages.living_settlor.individual.mld5.CountryOfNationalityYesNoPage
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.mld5.CountryOfNationalityYesNoView
 
 class CountryOfNationalityYesNoControllerSpec extends SpecBase {
@@ -60,7 +60,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, index, fakeDraftId, name)(request, messages).toString
+        view(form, index, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -83,7 +83,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), index, fakeDraftId, name)(request, messages).toString
+        view(form.fill(validAnswer), index, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -124,7 +124,7 @@ class CountryOfNationalityYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, index, fakeDraftId, name)(request, messages).toString
+        view(boundForm, index, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

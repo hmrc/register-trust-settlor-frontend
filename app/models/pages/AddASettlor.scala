@@ -37,7 +37,7 @@ object AddASettlor extends Enumerable.Implicits {
     RadioOption("addASettlor", value.toString)
   }
 
-  implicit val enumerable: Enumerable[AddASettlor] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[AddASettlor] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

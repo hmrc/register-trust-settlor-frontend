@@ -17,9 +17,9 @@
 package config
 
 import com.google.inject.AbstractModule
-import config.annotations._
-import controllers.actions._
-import navigation._
+import config.annotations.*
+import controllers.actions.*
+import navigation.*
 import repositories.{DefaultRegistrationsRepository, RegistrationsRepository}
 
 class Module extends AbstractModule {

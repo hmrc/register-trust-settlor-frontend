@@ -38,7 +38,7 @@ class SettlorIndividualDateOfBirthViewSpec extends QuestionViewBehaviours[LocalD
     val view = viewFor[SettlorIndividualDateOfBirthView](Some(emptyUserAnswers))
 
     def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(using fakeRequest, messages)
 
     val applyViewF = (form: Form[LocalDate]) => applyView(form)
 

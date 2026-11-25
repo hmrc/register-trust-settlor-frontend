@@ -20,7 +20,7 @@ import base.SpecBase
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.mvc.Headers
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 
 class LanguageSwitchControllerSpec extends SpecBase {
 

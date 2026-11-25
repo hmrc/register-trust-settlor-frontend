@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.PassportOrIdCardFormProvider
 import models.pages.{FullName, PassportOrIdCardDetails}
 import pages.living_settlor.individual.{
@@ -26,9 +26,9 @@ import pages.living_settlor.individual.{
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.TrustsStoreService
-import utils._
+import utils.*
 import utils.countryOptions.CountryOptions
 import views.html.living_settlor.individual.SettlorIndividualPassportView
 
@@ -74,7 +74,10 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(request, messages).toString
+              view(form, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(using
+                request,
+                messages
+              ).toString
 
             application.stop()
           }
@@ -106,7 +109,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
             status(result) mustEqual BAD_REQUEST
 
             contentAsString(result) mustEqual
-              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(
+              view(boundForm, countryOptions, fakeDraftId, index, name, setUpBeforeSettlorDied)(using
                 request,
                 messages
               ).toString
@@ -147,7 +150,7 @@ class SettlorIndividualPassportControllerSpec extends SpecBase {
                 index,
                 name,
                 setUpBeforeSettlorDied
-              )(request, messages).toString
+              )(using request, messages).toString
 
             application.stop()
           }

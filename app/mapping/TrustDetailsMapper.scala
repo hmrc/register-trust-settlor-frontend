@@ -17,13 +17,13 @@
 package mapping
 
 import models.{TrustDetailsType, UserAnswers}
-import sections.{Settlors => section}
+import sections.Settlors as section
 
 class TrustDetailsMapper {
 
   def build(userAnswers: UserAnswers): Option[TrustDetailsType] =
     if (userAnswers.isTaxable) {
-      userAnswers.getAtPath(section.path)(TrustDetailsType.uaReads)
+      userAnswers.getAtPath(section.path)(using TrustDetailsType.uaReads)
     } else {
       None
     }

@@ -37,7 +37,7 @@ class SettlorBusinessUtrYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[SettlorBusinessUtrYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, settlorBusinessName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, settlorBusinessName)(using fakeRequest, messages)
 
     behave like pageWithBackLink(applyView(form))
 

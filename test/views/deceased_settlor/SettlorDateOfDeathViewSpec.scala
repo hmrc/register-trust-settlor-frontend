@@ -38,7 +38,7 @@ class SettlorDateOfDeathViewSpec extends QuestionViewBehaviours[LocalDate] {
     val view = viewFor[SettlorDateOfDeathView](Some(emptyUserAnswers))
 
     def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(using fakeRequest, messages)
 
     val applyViewF = (form: Form[LocalDate]) => applyView(form)
 

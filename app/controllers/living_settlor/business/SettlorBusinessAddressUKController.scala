@@ -46,7 +46,7 @@ class SettlorBusinessAddressUKController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorBusinessAddressUKView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[UKAddress] = formProvider()

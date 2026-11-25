@@ -24,8 +24,10 @@ import play.api.mvc.{ActionRefiner, Result}
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class NameRequiredAction(index: Int, draftId: String)(implicit val executionContext: ExecutionContext)
+class NameRequiredAction(index: Int, draftId: String)(using ec: ExecutionContext)
     extends ActionRefiner[RegistrationDataRequest, SettlorIndividualNameRequest] {
+
+  override protected def executionContext: ExecutionContext = ec
 
   override protected def refine[A](
     request: RegistrationDataRequest[A]
@@ -45,6 +47,6 @@ class NameRequiredAction(index: Int, draftId: String)(implicit val executionCont
 
 }
 
-class NameRequiredActionProvider @Inject() (implicit val executionContext: ExecutionContext) {
+class NameRequiredActionProvider @Inject() ()(using executionContext: ExecutionContext) {
   def apply(index: Int, draftId: String) = new NameRequiredAction(index, draftId)
 }

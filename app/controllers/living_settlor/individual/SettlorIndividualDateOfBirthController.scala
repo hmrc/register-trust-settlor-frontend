@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.DateOfBirthFormProvider
 import navigation.Navigator
@@ -46,7 +46,7 @@ class SettlorIndividualDateOfBirthController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorIndividualDateOfBirthView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def form: Form[LocalDate] = formProvider()

@@ -16,7 +16,7 @@
 
 package models.pages
 
-import models.pages.DeedOfVariation._
+import models.pages.DeedOfVariation.*
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
@@ -46,11 +46,13 @@ class DeedOfVariationSpec extends AnyWordSpec with Matchers with ScalaCheckPrope
     }
 
     "serialise" in {
-      Json.toJson(ReplacedWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString("Replaced the will trust")
-      Json.toJson(AdditionToWill: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString(
+      Json.toJson(ReplacedWill: DeedOfVariation)(using DeedOfVariation.writes) mustEqual JsString(
+        "Replaced the will trust"
+      )
+      Json.toJson(AdditionToWill: DeedOfVariation)(using DeedOfVariation.writes) mustEqual JsString(
         "Addition to the will trust"
       )
-      Json.toJson(ReplaceAbsolute: DeedOfVariation)(DeedOfVariation.writes) mustEqual JsString(
+      Json.toJson(ReplaceAbsolute: DeedOfVariation)(using DeedOfVariation.writes) mustEqual JsString(
         "Previously there was only an absolute interest under the will"
       )
     }

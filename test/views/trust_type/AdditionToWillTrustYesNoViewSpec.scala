@@ -33,7 +33,7 @@ class AdditionToWillTrustYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[AdditionToWillTrustYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(using fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

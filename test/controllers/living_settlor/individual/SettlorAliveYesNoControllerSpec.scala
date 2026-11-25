@@ -21,7 +21,7 @@ import controllers.routes.SessionExpiredController
 import forms.YesNoFormProvider
 import pages.living_settlor.individual.SettlorAliveYesNoPage
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.SettlorAliveYesNoView
 
 class SettlorAliveYesNoControllerSpec extends SpecBase {
@@ -51,7 +51,7 @@ class SettlorAliveYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, draftId, index)(request, messages).toString()
+        view(form, draftId, index)(using request, messages).toString()
 
       application.stop()
     }
@@ -71,7 +71,7 @@ class SettlorAliveYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(false), draftId, index)(request, messages).toString()
+        view(form.fill(false), draftId, index)(using request, messages).toString()
 
       application.stop()
     }
@@ -113,7 +113,7 @@ class SettlorAliveYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, draftId, index)(request, messages).toString
+        view(boundForm, draftId, index)(using request, messages).toString
 
       application.stop()
     }

@@ -31,9 +31,7 @@ trait InternationalAddressViewBehaviours extends ViewBehaviours {
 
   def internationalAddress(
     createView: Form[InternationalAddress] => HtmlFormat.Appendable,
-    sectionKey: Option[String],
     titleMessagePrefix: Option[String],
-    expectedFormAction: String,
     args: String*
   ) = {
 
@@ -67,7 +65,7 @@ trait InternationalAddressViewBehaviours extends ViewBehaviours {
             doc,
             "title",
             ViewUtils.breadcrumbTitle(
-              s"""${messages("error.browser.title.prefix")} ${messages(s"$titlePrefix.title", args: _*)}"""
+              s"""${messages("error.browser.title.prefix")} ${messages(s"$titlePrefix.title", args*)}"""
             )
           )
         }

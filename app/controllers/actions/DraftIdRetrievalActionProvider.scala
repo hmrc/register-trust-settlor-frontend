@@ -44,11 +44,13 @@ trait DraftIdRetrievalActionProvider {
 class DraftIdDataRetrievalAction(
   draftId: String,
   repository: RegistrationsRepository,
-  implicit protected val executionContext: ExecutionContext
+  ec: ExecutionContext
 ) extends ActionTransformer[IdentifierRequest, OptionalRegistrationDataRequest] {
 
+  override protected given executionContext: ExecutionContext = ec
+
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalRegistrationDataRequest[A]] = {
-    implicit implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     repository.get(draftId).map { userAnswers =>
       OptionalRegistrationDataRequest(

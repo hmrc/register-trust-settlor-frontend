@@ -17,8 +17,8 @@
 package viewmodels
 
 import base.SpecBase
-import models.pages.IndividualOrBusiness._
-import models.pages.Status._
+import models.pages.IndividualOrBusiness.*
+import models.pages.Status.*
 import play.api.libs.json.{JsSuccess, Json}
 
 class SettlorViewModelSpec extends SpecBase {

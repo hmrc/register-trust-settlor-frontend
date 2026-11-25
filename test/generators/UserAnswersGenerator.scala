@@ -19,20 +19,20 @@ package generators
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 import org.scalatest.TryValues
-import pages._
-import pages.deceased_settlor._
-import pages.living_settlor._
+import pages.*
+import pages.deceased_settlor.*
+import pages.living_settlor.*
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.individual._
-import pages.trust_type._
+import pages.living_settlor.individual.*
+import pages.trust_type.*
 import play.api.libs.json.{JsValue, Json}
 
 trait UserAnswersGenerator extends TryValues {
   self: Generators =>
 
-  import models._
+  import models.*
 
-  val generators: Seq[Gen[(QuestionPage[_], JsValue)]] =
+  val generators: Seq[Gen[(QuestionPage[?], JsValue)]] =
     arbitrary[(KindOfTrustPage.type, JsValue)] ::
       arbitrary[(HoldoverReliefYesNoPage.type, JsValue)] ::
       arbitrary[(SettlorBusinessNamePage, JsValue)] ::
@@ -65,12 +65,12 @@ trait UserAnswersGenerator extends TryValues {
       arbitrary[(AddASettlorPage.type, JsValue)] ::
       Nil
 
-  implicit lazy val arbitraryUserData: Arbitrary[UserAnswers] =
+  given arbitraryUserData: Arbitrary[UserAnswers] =
     Arbitrary {
       for {
         id         <- nonEmptyString
         data       <- generators match {
-                        case Nil => Gen.const(Map[QuestionPage[_], JsValue]())
+                        case Nil => Gen.const(Map[QuestionPage[?], JsValue]())
                         case _   => Gen.mapOf(oneOf(generators))
                       }
         internalId <- nonEmptyString

@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import models.pages.Status.Completed
 import models.requests.SettlorIndividualNameRequest
@@ -49,7 +49,7 @@ class SettlorIndividualAnswerController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   livingSettlorPrintHelper: LivingSettlorPrintHelper,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorIndividualNameRequest, AnyContent] =

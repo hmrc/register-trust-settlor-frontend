@@ -14,8 +14,8 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.routes._
-@import models.pages.{FullName, UKAddress => UkAddressModel}
+@import controllers.living_settlor.individual.routes.*
+@import models.pages.{FullName, UKAddress as UkAddressModel}
 @import views.html.components.{SubmitButton, ErrorSummary, UkAddress}
 
 @this(
@@ -26,7 +26,7 @@
     ukAddress: UkAddress
 )
 
-@(form: Form[UkAddressModel], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[UkAddressModel], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(using request: RequestHeader, messages: Messages)
 
 @settlorIndividualAddressUKPrefix = @{
     if(settlorAliveAtRegistration){

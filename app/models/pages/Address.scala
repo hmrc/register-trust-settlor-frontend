@@ -30,7 +30,7 @@ final case class UKAddress(
 
 object UKAddress {
 
-  implicit lazy val formats: OFormat[UKAddress] = Json.format[UKAddress]
+  given formats: OFormat[UKAddress] = Json.format[UKAddress]
 }
 
 final case class InternationalAddress(
@@ -42,31 +42,24 @@ final case class InternationalAddress(
 
 object InternationalAddress {
 
-  implicit lazy val formats: OFormat[InternationalAddress] = Json.format[InternationalAddress]
+  given formats: OFormat[InternationalAddress] = Json.format[InternationalAddress]
 }
 
 sealed trait Address
 
 object Address {
 
-  implicit lazy val reads: Reads[Address] = {
+  given reads: Reads[Address] =
 
-    implicit class ReadsWithContravariantOr[A](a: Reads[A]) {
+    UKAddress.formats
+      .map[Address](identity)
+      .orElse(
+        InternationalAddress.formats.map[Address](identity)
+      )
 
-      def or[B >: A](b: Reads[B]): Reads[B] =
-        a.map[B](identity).orElse(b)
-    }
-
-    implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
-      a.map(identity)
-
-    UKAddress.formats or
-      InternationalAddress.formats
-  }
-
-  implicit lazy val writes: Writes[Address] = Writes {
-    case address: UKAddress            => Json.toJson(address)(UKAddress.formats)
-    case address: InternationalAddress => Json.toJson(address)(InternationalAddress.formats)
+  given writes: Writes[Address] = Writes {
+    case address: UKAddress            => Json.toJson(address)(using UKAddress.formats)
+    case address: InternationalAddress => Json.toJson(address)(using InternationalAddress.formats)
   }
 
 }

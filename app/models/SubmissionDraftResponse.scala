@@ -16,23 +16,23 @@
 
 package models
 
-import java.time.LocalDateTime
-
 import play.api.libs.json.{JsValue, Json, OFormat}
+
+import java.time.LocalDateTime
 
 object RegistrationSubmission {
   // Piece to be inserted into final registration data. data == JsNull means remove value.
   case class MappedPiece(elementPath: String, data: JsValue)
 
   object MappedPiece {
-    implicit lazy val format: OFormat[MappedPiece] = Json.format[MappedPiece]
+    given format: OFormat[MappedPiece] = Json.format[MappedPiece]
   }
 
   // Answer row and section, for display in print summary.
   case class AnswerRow(label: String, answer: String, labelArg: String)
 
   object AnswerRow {
-    implicit lazy val format: OFormat[AnswerRow] = Json.format[AnswerRow]
+    given format: OFormat[AnswerRow] = Json.format[AnswerRow]
   }
 
   case class AnswerSection(
@@ -43,14 +43,14 @@ object RegistrationSubmission {
   )
 
   object AnswerSection {
-    implicit lazy val format: OFormat[AnswerSection] = Json.format[AnswerSection]
+    given format: OFormat[AnswerSection] = Json.format[AnswerSection]
   }
 
   // Set of data sent by sub-frontend, with user answers, status, any mapped pieces and answer sections.
   case class DataSet(data: JsValue, registrationPieces: Seq[MappedPiece], answerSections: Seq[AnswerSection])
 
   object DataSet {
-    implicit lazy val format: OFormat[DataSet] = Json.format[DataSet]
+    given format: OFormat[DataSet] = Json.format[DataSet]
   }
 
 }
@@ -59,5 +59,5 @@ object RegistrationSubmission {
 case class SubmissionDraftResponse(createdAt: LocalDateTime, data: JsValue, reference: Option[String])
 
 object SubmissionDraftResponse {
-  implicit lazy val format: OFormat[SubmissionDraftResponse] = Json.format[SubmissionDraftResponse]
+  given format: OFormat[SubmissionDraftResponse] = Json.format[SubmissionDraftResponse]
 }

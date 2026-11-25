@@ -43,7 +43,10 @@ class SettlorIndividualNameViewSpec extends QuestionViewBehaviours[FullName] {
       val view = viewFor[SettlorIndividualNameView](Some(userAnswers))
 
       def applyView(form: Form[FullName]): HtmlFormat.Appendable =
-        view.apply(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDiedBool)(fakeRequest, messages)
+        view.apply(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDiedBool)(using
+          fakeRequest,
+          messages
+        )
 
       behave like normalPage(applyView(form), setUpBeforeSettlorMessage)
 

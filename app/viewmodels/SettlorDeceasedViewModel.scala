@@ -17,22 +17,21 @@
 package viewmodels
 
 import models.pages.IndividualOrBusiness.Individual
-import models.pages.{FullName, IndividualOrBusiness}
-import models.pages.Status
 import models.pages.Status.InProgress
+import models.pages.{FullName, IndividualOrBusiness, Status}
 
 final case class SettlorDeceasedViewModel(`type`: IndividualOrBusiness, name: String, override val status: Status)
     extends SettlorViewModel
 
 object SettlorDeceasedViewModel {
 
-  import play.api.libs.functional.syntax._
-  import play.api.libs.json._
+  import play.api.libs.functional.syntax.*
+  import play.api.libs.json.*
 
-  implicit lazy val reads: Reads[SettlorDeceasedViewModel] = (
+  given reads: Reads[SettlorDeceasedViewModel] = (
     Reads(_ => JsSuccess(Individual)) and
       (__ \ "name").read[FullName].map(_.toString) and
       (__ \ "status").readWithDefault[Status](InProgress)
-  )(SettlorDeceasedViewModel.apply _)
+  )(SettlorDeceasedViewModel.apply)
 
 }

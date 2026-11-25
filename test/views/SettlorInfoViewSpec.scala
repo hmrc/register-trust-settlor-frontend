@@ -16,7 +16,6 @@
 
 package views
 
-import controllers.trust_type.routes
 import views.behaviours.ViewBehaviours
 import views.html.SettlorInfoView
 
@@ -28,12 +27,11 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       val view = viewFor[SettlorInfoView](Some(emptyUserAnswers))
 
-      val applyView = view.apply(fakeDraftId, isTaxable = true)(fakeRequest, messages)
+      val applyView = view.apply(fakeDraftId, isTaxable = true)(using fakeRequest, messages)
 
       behave like normalPageTitleWithSectionSubheading(
         applyView,
         "5mld.settlorInfo",
-        "caption",
         "subheading1",
         "paragraph1",
         "bulletpoint1",
@@ -72,19 +70,18 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url)
+      behave like pageWithContinueButton(applyView)
     }
 
     "non-taxable" must {
 
       val view = viewFor[SettlorInfoView](Some(emptyUserAnswers))
 
-      val applyView = view.apply(fakeDraftId, isTaxable = false)(fakeRequest, messages)
+      val applyView = view.apply(fakeDraftId, isTaxable = false)(using fakeRequest, messages)
 
       behave like normalPageTitleWithSectionSubheading(
         applyView,
         "5mld.settlorInfo",
-        "caption",
         "subheading1",
         "paragraph1",
         "bulletpoint1",
@@ -117,7 +114,7 @@ class SettlorInfoViewSpec extends ViewBehaviours {
 
       behave like pageWithBackLink(applyView)
 
-      behave like pageWithContinueButton(applyView, routes.SetUpByLivingSettlorController.onPageLoad(fakeDraftId).url)
+      behave like pageWithContinueButton(applyView)
     }
   }
 

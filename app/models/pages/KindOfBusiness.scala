@@ -35,7 +35,7 @@ object KindOfBusiness extends Enumerable.Implicits {
     RadioOption("kindOfBusiness", value.toString)
   }
 
-  implicit val enumerable: Enumerable[KindOfBusiness] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[KindOfBusiness] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
 }

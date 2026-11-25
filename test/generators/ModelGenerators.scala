@@ -17,7 +17,7 @@
 package generators
 
 import models.YesNoDontKnow
-import models.pages._
+import models.pages.*
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalacheck.{Arbitrary, Gen}
 
@@ -25,12 +25,12 @@ import java.time.LocalDate
 
 trait ModelGenerators {
 
-  implicit lazy val arbitraryKindOfTrust: Arbitrary[KindOfTrust] =
+  given arbitraryKindOfTrust: Arbitrary[KindOfTrust] =
     Arbitrary {
       Gen.oneOf(KindOfTrust.values)
     }
 
-  implicit lazy val arbitrarySettlorIndividualPassport: Arbitrary[PassportOrIdCardDetails] =
+  given arbitrarySettlorIndividualPassport: Arbitrary[PassportOrIdCardDetails] =
     Arbitrary {
       for {
         field1 <- arbitrary[String]
@@ -39,26 +39,26 @@ trait ModelGenerators {
       } yield PassportOrIdCardDetails(field1, field2, field3)
     }
 
-  implicit lazy val arbitraryFullName: Arbitrary[FullName] =
+  given arbitraryFullName: Arbitrary[FullName] =
     Arbitrary {
       for {
         str <- arbitrary[String]
       } yield FullName(str, Some(str), str)
     }
 
-  implicit lazy val arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
+  given arbitraryInternationalAddress: Arbitrary[InternationalAddress] =
     Arbitrary {
       for {
         str <- arbitrary[String]
       } yield InternationalAddress(str, str, Some(str), str)
     }
 
-  implicit lazy val arbitraryAddASettlor: Arbitrary[AddASettlor] =
+  given arbitraryAddASettlor: Arbitrary[AddASettlor] =
     Arbitrary {
       Gen.oneOf(AddASettlor.values)
     }
 
-  implicit lazy val arbitraryUkAddress: Arbitrary[UKAddress] =
+  given arbitraryUkAddress: Arbitrary[UKAddress] =
     Arbitrary {
       for {
         line1    <- arbitrary[String]
@@ -69,22 +69,22 @@ trait ModelGenerators {
       } yield UKAddress(line1, line2, Some(line3), Some(line4), postcode)
     }
 
-  implicit lazy val arbitraryTrusteeOrIndividual: Arbitrary[IndividualOrBusiness] =
+  given arbitraryTrusteeOrIndividual: Arbitrary[IndividualOrBusiness] =
     Arbitrary {
       Gen.oneOf(IndividualOrBusiness.values.toSeq)
     }
 
-  implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] =
+  given arbitraryLocalDate: Arbitrary[LocalDate] =
     Arbitrary {
       Gen.const(LocalDate.of(2010, 10, 10))
     }
 
-  implicit lazy val arbitraryStatus: Arbitrary[Status] =
+  given arbitraryStatus: Arbitrary[Status] =
     Arbitrary {
       Gen.oneOf(Status.values.toList)
     }
 
-  implicit lazy val arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] =
+  given arbitraryYesNoDontKnow: Arbitrary[YesNoDontKnow] =
     Arbitrary {
       Gen.oneOf(YesNoDontKnow.values)
     }

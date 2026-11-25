@@ -18,24 +18,15 @@ package mapping.reads
 
 import play.api.libs.json.Reads
 
-import scala.language.implicitConversions
-
 trait Settlor
 
 object Settlor {
 
-  implicit class ReadsWithContravariantOr[A](a: Reads[A]) {
-
-    def or[B >: A](b: Reads[B]): Reads[B] =
-      a.map[B](identity).orElse(b)
-
-  }
-
-  implicit def convertToSupertype[A, B >: A](a: Reads[A]): Reads[B] =
-    a.map(identity)
-
-  implicit lazy val reads: Reads[Settlor] =
-    IndividualSettlor.reads or
-      BusinessSettlor.reads
+  given reads: Reads[Settlor] =
+    IndividualSettlor.reads
+      .map[Settlor](identity)
+      .orElse(
+        BusinessSettlor.reads.map[Settlor](identity)
+      )
 
 }

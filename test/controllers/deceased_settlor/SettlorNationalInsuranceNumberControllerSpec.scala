@@ -17,14 +17,14 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.deceased_settlor.SettlorNationalInsuranceNumberFormProvider
 import models.pages.FullName
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import pages.deceased_settlor.{SettlorNationalInsuranceNumberPage, SettlorsNamePage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.DraftRegistrationService
 import views.html.deceased_settlor.SettlorNationalInsuranceNumberView
 
@@ -57,11 +57,14 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val sequence: IndexedSeq[String] = IndexedSeq("")
 
-      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
@@ -76,7 +79,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -95,11 +98,14 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val sequence: IndexedSeq[String] = IndexedSeq("")
 
-      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
@@ -114,7 +120,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("answer"), fakeDraftId, name)(request, messages).toString
+        view(form.fill("answer"), fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -127,11 +133,14 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val sequence: IndexedSeq[String] = IndexedSeq("")
 
-      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
@@ -157,11 +166,14 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
 
       val sequence: IndexedSeq[String] = IndexedSeq("")
 
-      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveTrusteeNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveBeneficiaryNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
-      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(any())).thenReturn(Future.successful(sequence))
+      when(mockDraftRegistrationService.retrieveProtectorNinos(any())(using any()))
+        .thenReturn(Future.successful(sequence))
 
       val application =
         applicationBuilder(userAnswers = Some(userAnswers), draftRegistrationService = mockDraftRegistrationService)
@@ -180,7 +192,7 @@ class SettlorNationalInsuranceNumberControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

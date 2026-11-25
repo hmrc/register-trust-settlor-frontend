@@ -16,7 +16,7 @@
 
 package connectors
 
-import com.github.tomakehurst.wiremock.client.WireMock._
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import models.{RegistrationSubmission, RolesInCompanies, SubmissionDraftResponse}
 import org.scalatest.OptionValues
 import org.scalatest.matchers.must.Matchers
@@ -36,10 +36,10 @@ import scala.concurrent.duration.Duration
 
 class SubmissionDraftConnectorSpec extends PlaySpec with Matchers with OptionValues with WireMockHelper {
 
-  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   lazy val app: Application = new GuiceApplicationBuilder()
-    .configure(Seq("microservice.services.trusts.port" -> server.port(), "auditing.enabled" -> false): _*)
+    .configure(Seq("microservice.services.trusts.port" -> server.port(), "auditing.enabled" -> false)*)
     .build()
 
   private lazy val connector = app.injector.instanceOf[SubmissionDraftConnector]

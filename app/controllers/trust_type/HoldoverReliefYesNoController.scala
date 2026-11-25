@@ -17,7 +17,7 @@
 package controllers.trust_type
 
 import config.annotations.TrustType
-import controllers.actions._
+import controllers.actions.*
 import forms.YesNoFormProvider
 import navigation.Navigator
 import pages.trust_type.{HoldoverReliefYesNoPage, SetUpByLivingSettlorYesNoPage}
@@ -44,7 +44,7 @@ class HoldoverReliefYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: HoldoverReliefYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("holdoverReliefYesNo")

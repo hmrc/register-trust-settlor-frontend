@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.deceased_settlor.routes._
+@import controllers.deceased_settlor.routes.*
 @import viewmodels.{AnswerSection, RepeaterAnswerSection, Section}
 @import views.html.components.{SubmitButton, ErrorSummary, Heading}
 @import utils.SectionFormatter.formatSections
@@ -24,12 +24,11 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary,
     heading: Heading,
     govukSummaryList: GovukSummaryList,
 )
 
-@(draftId: String, answerSections: Seq[Section])(implicit request: RequestHeader, messages: Messages)
+@(draftId: String, answerSections: Seq[Section])(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${messages("deceasedSettlorAnswer.title")}",

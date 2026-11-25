@@ -17,12 +17,12 @@
 package navigation
 
 import base.SpecBase
-import controllers.living_settlor.individual.mld5.routes._
-import controllers.living_settlor.individual.routes._
-import controllers.routes._
+import controllers.living_settlor.individual.mld5.routes.*
+import controllers.living_settlor.individual.routes.*
+import controllers.routes.*
 import models.UserAnswers
-import pages.living_settlor.individual._
-import pages.living_settlor.individual.mld5._
+import pages.living_settlor.individual.*
+import pages.living_settlor.individual.mld5.*
 
 class IndividualSettlorNavigatorSpec extends SpecBase {
 

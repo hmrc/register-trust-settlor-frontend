@@ -25,7 +25,7 @@ class EfrbsStartDatePageSpec extends PageBehaviours {
 
   "EfrbsStartDatePage" must {
 
-    implicit lazy val arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
+    given arbitraryLocalDate: Arbitrary[LocalDate] = Arbitrary {
       datesBetween(LocalDate.of(1900, 1, 1), LocalDate.of(2100, 1, 1))
     }
 

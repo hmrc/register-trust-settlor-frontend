@@ -35,6 +35,6 @@ object YesNoDontKnow extends Enumerable.Implicits {
     case None        => Some(DontKnow)
   }
 
-  implicit val enumerable: Enumerable[YesNoDontKnow] = Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[YesNoDontKnow] = Enumerable(values.map(v => v.toString -> v)*)
 
 }

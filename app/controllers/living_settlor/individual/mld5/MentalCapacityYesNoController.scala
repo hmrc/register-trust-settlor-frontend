@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual.mld5
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoDontKnowFormProvider
 import models.YesNoDontKnow
@@ -47,7 +47,7 @@ class MentalCapacityYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: MentalCapacityYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[YesNoDontKnow] = yesNoFormProvider.withPrefix("settlorIndividualMentalCapacityYesNo")
