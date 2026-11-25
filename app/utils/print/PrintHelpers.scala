@@ -28,17 +28,17 @@ class PrintHelpers @Inject() (
   businessSettlorPrintHelper: BusinessSettlorPrintHelper
 ) {
 
-  def deceasedSettlorSection(userAnswers: UserAnswers, name: String, draftId: String)(implicit
+  def deceasedSettlorSection(userAnswers: UserAnswers, name: String, draftId: String)(using
     messages: Messages
   ): AnswerSection =
     deceasedSettlorPrintHelper.printSection(userAnswers, name, draftId)
 
-  def livingSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+  def livingSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(using
     messages: Messages
   ): AnswerSection =
     livingSettlorPrintHelper.printSection(userAnswers, name, draftId, index)
 
-  def businessSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(implicit
+  def businessSettlorSection(userAnswers: UserAnswers, name: String, index: Int, draftId: String)(using
     messages: Messages
   ): AnswerSection =
     businessSettlorPrintHelper.printSection(userAnswers, name, draftId, index)

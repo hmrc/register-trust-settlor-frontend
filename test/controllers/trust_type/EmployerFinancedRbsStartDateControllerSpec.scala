@@ -17,13 +17,13 @@
 package controllers.trust_type
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.EfrbsStartDateFormProvider
 import models.pages.FullName
 import pages.trust_type.EfrbsStartDatePage
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.trust_type.EmployerFinancedRbsStartDateView
 
 import java.time.{LocalDate, ZoneOffset}
@@ -56,7 +56,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -76,7 +76,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(validAnswer), fakeDraftId)(request, messages).toString
+        view(form.fill(validAnswer), fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -123,7 +123,7 @@ class EmployerFinancedRbsStartDateControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }

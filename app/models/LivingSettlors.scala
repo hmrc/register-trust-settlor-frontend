@@ -34,7 +34,7 @@ case class LivingSettlors(
     (businesses.size, IndividualOrBusiness.Business)
   )
 
-  def maxedOutOptions(implicit config: FrontendAppConfig): List[RadioOption] = {
+  def maxedOutOptions(using config: FrontendAppConfig): List[RadioOption] = {
     val filteredOptions = if (config.countMaxAsCombined) {
       if (individuals.size + businesses.size >= MAX) options else Nil
     } else {

@@ -63,7 +63,6 @@ trait ViewBehaviours extends ViewSpecBase {
   def normalPageTitleWithSectionSubheading(
     view: HtmlFormat.Appendable,
     messageKeyPrefix: String,
-    captionParam: String,
     expectedGuidanceKeys: String*
   ): Unit =
     "behave like a normal page" when {
@@ -207,7 +206,7 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
 
-  def pageWithContinueButton(view: HtmlFormat.Appendable, url: String): Unit =
+  def pageWithContinueButton(view: HtmlFormat.Appendable): Unit =
     "behave like a page with a Continue button" must {
       "have a continue button" in {
         val doc = asDocument(view)

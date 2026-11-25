@@ -20,10 +20,10 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import play.api.Logging
-import play.api.mvc.Results._
-import play.api.mvc.{Request, Result, _}
+import play.api.mvc.*
+import play.api.mvc.Results.*
+import uk.gov.hmrc.auth.core.*
 import uk.gov.hmrc.auth.core.AffinityGroup.{Agent, Organisation}
-import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals
 import uk.gov.hmrc.auth.core.retrieve.~
 import uk.gov.hmrc.http.{HeaderCarrier, UnauthorizedException}
@@ -40,7 +40,7 @@ class AffinityGroupIdentifierAction[A] @Inject() (
 
   private def authoriseAgent(request: Request[A], enrolments: Enrolments, internalId: String, action: Action[A]) = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     def redirectToCreateAgentServicesAccount(reason: String): Future[Result] = {
       logger.info(s"[authoriseAgent][Session ID: ${Session.id(hc)}]: Agent services account required - $reason")
@@ -72,7 +72,7 @@ class AffinityGroupIdentifierAction[A] @Inject() (
     action: Action[A]
   ): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     val continueWithoutEnrolment =
       action(IdentifierRequest(request, internalId, AffinityGroup.Organisation, enrolments))
@@ -100,7 +100,7 @@ class AffinityGroupIdentifierAction[A] @Inject() (
 
   def apply(request: Request[A]): Future[Result] = {
 
-    implicit implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     val retrievals = Retrievals.internalId and
       Retrievals.affinityGroup and
@@ -120,7 +120,10 @@ class AffinityGroupIdentifierAction[A] @Inject() (
     } recover trustsAuthFunctions.recoverFromAuthorisation
   }
 
-  override def parser: BodyParser[A]                       = action.parser
-  implicit override def executionContext: ExecutionContext = action.executionContext
+  override def parser: BodyParser[A] = action.parser
+
+  override def executionContext: ExecutionContext = action.executionContext
+
+  private given ec: ExecutionContext = executionContext
 
 }

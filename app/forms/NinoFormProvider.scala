@@ -18,9 +18,9 @@ package forms
 
 import forms.mappings.Mappings
 import models.UserAnswers
+import play.api.data.Form
 
 import javax.inject.Inject
-import play.api.data.Form
 
 class NinoFormProvider @Inject() extends Mappings {
 

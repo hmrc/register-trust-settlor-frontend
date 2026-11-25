@@ -17,12 +17,12 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.living_settlor.business.mld5.routes._
-import controllers.living_settlor.business.routes._
-import controllers.living_settlor.routes._
+import controllers.living_settlor.business.mld5.routes.*
+import controllers.living_settlor.business.routes.*
+import controllers.living_settlor.routes.*
 import pages.living_settlor.SettlorIndividualOrBusinessPage
-import pages.living_settlor.business._
-import pages.living_settlor.business.mld5._
+import pages.living_settlor.business.*
+import pages.living_settlor.business.mld5.*
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
@@ -32,7 +32,7 @@ class BusinessSettlorPrintHelper @Inject() (
 ) extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
 
   override def answerRows(index: Int, draftId: String, prefix: Option[String] = None)(bound: AnswerRowConverter#Bound)(
-    implicit messages: Messages
+    using messages: Messages
   ): Seq[Option[AnswerRow]] = Seq(
     bound.enumQuestion(
       SettlorIndividualOrBusinessPage(index),

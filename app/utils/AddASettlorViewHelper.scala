@@ -16,16 +16,16 @@
 
 package utils
 
-import controllers.living_settlor.business.{routes => businessRoutes}
-import controllers.living_settlor.individual.{routes => individualRoutes}
+import controllers.living_settlor.business.routes as businessRoutes
+import controllers.living_settlor.individual.routes as individualRoutes
 import controllers.routes
 import models.UserAnswers
-import models.pages.Status._
+import models.pages.Status.*
 import play.api.i18n.Messages
 import sections.LivingSettlors
-import viewmodels.{AddRow, AddToRows, SettlorViewModel, _}
+import viewmodels.*
 
-class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(implicit messages: Messages) {
+class AddASettlorViewHelper(userAnswers: UserAnswers, draftId: String)(using messages: Messages) {
 
   def rows: AddToRows = AddToRows(
     inProgress = livingSettlors._2.flatMap(parseSettlor),

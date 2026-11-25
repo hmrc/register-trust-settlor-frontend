@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.InternationalAddressFormProvider
 import models.UserAnswers
 import models.pages.{FullName, InternationalAddress}
@@ -26,7 +26,7 @@ import play.api.Application
 import play.api.data.Form
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.deceased_settlor.SettlorsInternationalAddressView
@@ -62,7 +62,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, name)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -91,6 +91,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(form.fill(InternationalAddress("line 1", "line 2", None, "country")), countryOptions, fakeDraftId, name)(
+          using
           request,
           messages
         ).toString
@@ -139,7 +140,7 @@ class SettlorsInternationalAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, name)(request, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

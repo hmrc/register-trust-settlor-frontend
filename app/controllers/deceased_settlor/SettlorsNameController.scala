@@ -44,7 +44,7 @@ class SettlorsNameController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorsNameView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[FullName] = formProvider()

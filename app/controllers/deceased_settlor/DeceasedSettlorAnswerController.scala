@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import models.TaskStatus
 import models.pages.Status.Completed
@@ -50,7 +50,7 @@ class DeceasedSettlorAnswerController @Inject() (
   deceasedSettlorPrintHelper: DeceasedSettlorPrintHelper,
   trustsStoreService: TrustsStoreService,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   def onPageLoad(draftId: String): Action[AnyContent] = (actions.authWithData(draftId) andThen requireName(draftId)) {

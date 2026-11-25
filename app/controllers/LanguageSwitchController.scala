@@ -19,12 +19,12 @@ package controllers
 import com.google.inject.Inject
 import config.FrontendAppConfig
 import play.api.i18n.{Lang, MessagesApi}
-import play.api.mvc._
+import play.api.mvc.*
 import uk.gov.hmrc.play.language.{LanguageController, LanguageUtils}
 
 class LanguageSwitchController @Inject() (
   appConfig: FrontendAppConfig,
-  implicit override val messagesApi: MessagesApi,
+  override val messagesApi: MessagesApi,
   languageUtils: LanguageUtils,
   cc: MessagesControllerComponents
 ) extends LanguageController(languageUtils, cc) {

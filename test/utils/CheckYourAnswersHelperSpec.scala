@@ -17,14 +17,14 @@
 package utils
 
 import base.SpecBase
-import models.pages.IndividualOrBusiness._
-import models.pages._
+import models.pages.*
+import models.pages.IndividualOrBusiness.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{reset, when}
 import org.scalatest.BeforeAndAfterEach
+import pages.deceased_settlor as deceasedPages
 import pages.living_settlor.business.SettlorBusinessNamePage
-import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual => individualPages}
-import pages.{deceased_settlor => deceasedPages}
+import pages.living_settlor.{SettlorIndividualOrBusinessPage, individual as individualPages}
 import utils.print.PrintHelpers
 import viewmodels.AnswerSection
 
@@ -46,7 +46,7 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
       "there is a deceased settlor" must {
         "return deceased settlor section" in {
 
-          when(mockPrintHelpers.deceasedSettlorSection(any(), any(), any())(any()))
+          when(mockPrintHelpers.deceasedSettlorSection(any(), any(), any())(using any()))
             .thenReturn(fakeAnswerSection)
 
           val userAnswers = emptyUserAnswers
@@ -74,10 +74,10 @@ class CheckYourAnswersHelperSpec extends SpecBase with BeforeAndAfterEach {
       "there are living settlors" must {
         "return living settlor sections" in {
 
-          when(mockPrintHelpers.livingSettlorSection(any(), any(), any(), any())(any()))
+          when(mockPrintHelpers.livingSettlorSection(any(), any(), any(), any())(using any()))
             .thenReturn(fakeAnswerSection)
 
-          when(mockPrintHelpers.businessSettlorSection(any(), any(), any(), any())(any()))
+          when(mockPrintHelpers.businessSettlorSection(any(), any(), any(), any())(using any()))
             .thenReturn(fakeAnswerSection)
 
           val userAnswers = emptyUserAnswers

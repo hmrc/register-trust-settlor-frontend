@@ -17,7 +17,7 @@
 package navigation
 
 import models.UserAnswers
-import pages._
+import pages.*
 import play.api.mvc.Call
 import uk.gov.hmrc.http.HttpVerbs.GET
 

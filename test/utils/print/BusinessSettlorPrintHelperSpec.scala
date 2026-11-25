@@ -17,23 +17,23 @@
 package utils.print
 
 import base.SpecBase
-import controllers.living_settlor.business.mld5.routes._
-import controllers.living_settlor.business.routes._
-import controllers.living_settlor.routes._
+import controllers.living_settlor.business.mld5.routes.*
+import controllers.living_settlor.business.routes.*
+import controllers.living_settlor.routes.*
 import models.UserAnswers
-import models.pages.IndividualOrBusiness._
+import models.pages.*
+import models.pages.IndividualOrBusiness.*
 import models.pages.KindOfBusiness.Investment
 import models.pages.Status.Completed
-import models.pages._
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
-import org.mockito.Mockito.{atLeastOnce, reset, times, verify, when}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
+import org.mockito.Mockito.*
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.{Assertion, BeforeAndAfterEach}
 import org.scalatestplus.scalacheck.ScalaCheckPropertyChecks
 import pages.LivingSettlorStatus
 import pages.living_settlor.SettlorIndividualOrBusinessPage
-import pages.living_settlor.business._
-import pages.living_settlor.business.mld5._
+import pages.living_settlor.business.*
+import pages.living_settlor.business.mld5.*
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 
@@ -52,7 +52,7 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
 
   override def beforeEach(): Unit = {
     reset(mockTrustTypePrintHelper)
-    when(mockTrustTypePrintHelper.answerRows(any(), any(), any())(any())).thenReturn(Nil)
+    when(mockTrustTypePrintHelper.answerRows(any(), any(), any())(using any())).thenReturn(Nil)
   }
 
   "BusinessSettlorPrintHelper" must {
@@ -400,14 +400,14 @@ class BusinessSettlorPrintHelperSpec extends SpecBase with ScalaCheckPropertyChe
     )
 
     verify(mockTrustTypePrintHelper, times(2))
-      .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(index))(any())
+      .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(index))(using any())
 
     forAll(arbitrary[Int].suchThat(_ > 0)) { subsequentIndex =>
       val subsequentPrintSection =
         businessSettlorPrintHelper.printSection(userAnswers, businessName, fakeDraftId, subsequentIndex)
 
       verify(mockTrustTypePrintHelper, atLeastOnce())
-        .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(subsequentIndex))(any())
+        .answerRows(eqTo(userAnswers), eqTo(fakeDraftId), eqTo(subsequentIndex))(using any())
 
       subsequentPrintSection.headingKey  mustBe Some("answerPage.section.settlor.subheading")
       subsequentPrintSection.headingArgs mustBe Seq(subsequentIndex + 1)

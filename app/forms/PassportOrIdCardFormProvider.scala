@@ -16,15 +16,15 @@
 
 package forms
 
-import java.time.LocalDate
 import config.FrontendAppConfig
 import forms.mappings.Mappings
 import models.UserAnswers
-
-import javax.inject.Inject
 import models.pages.PassportOrIdCardDetails
 import play.api.data.Form
-import play.api.data.Forms._
+import play.api.data.Forms.*
+
+import java.time.LocalDate
+import javax.inject.Inject
 
 class PassportOrIdCardFormProvider @Inject() (appConfig: FrontendAppConfig) extends Mappings {
 
@@ -73,7 +73,15 @@ class PassportOrIdCardFormProvider @Inject() (appConfig: FrontendAppConfig) exte
           )
         )
       )
-    )(PassportOrIdCardDetails.apply)(PassportOrIdCardDetails.unapply)
+    )(PassportOrIdCardDetails.apply) { passportOrIdCardDetails =>
+      Some(
+        (
+          passportOrIdCardDetails.country,
+          passportOrIdCardDetails.cardNumber,
+          passportOrIdCardDetails.expiryDate
+        )
+      )
+    }
   )
 
 }

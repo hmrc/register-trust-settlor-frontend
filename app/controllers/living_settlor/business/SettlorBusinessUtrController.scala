@@ -46,10 +46,10 @@ class SettlorBusinessUtrController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorBusinessUtrView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
-  private def form(index: Int)(implicit request: SettlorBusinessNameRequest[AnyContent]): Form[String] =
+  private def form(index: Int)(using request: SettlorBusinessNameRequest[AnyContent]): Form[String] =
     formProvider("settlorBusinessUtr", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =

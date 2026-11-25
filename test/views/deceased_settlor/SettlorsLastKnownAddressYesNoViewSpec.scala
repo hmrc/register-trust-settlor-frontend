@@ -36,7 +36,7 @@ class SettlorsLastKnownAddressYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[SettlorsLastKnownAddressYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(using fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

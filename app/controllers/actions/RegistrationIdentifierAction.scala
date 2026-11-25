@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import models.requests.IdentifierRequest
 import play.api.Logging
-import play.api.mvc.{Request, Result, _}
+import play.api.mvc.*
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.http.HeaderCarrierConverter
 import utils.Session
@@ -31,12 +31,12 @@ class RegistrationIdentifierAction @Inject() (
   val parser: BodyParsers.Default,
   trustsAuth: TrustsAuthorisedFunctions,
   config: FrontendAppConfig
-)(implicit override val executionContext: ExecutionContext)
+)(using override val executionContext: ExecutionContext)
     extends ActionBuilder[IdentifierRequest, AnyContent] with Logging {
 
   override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] = {
 
-    implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
+    given hc: HeaderCarrier = HeaderCarrierConverter.fromRequestAndSession(request, request.session)
 
     request match {
       case req: IdentifierRequest[A] =>

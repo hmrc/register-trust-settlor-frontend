@@ -16,11 +16,11 @@
 
 package pages.trust_type
 
-import java.time.LocalDate
-
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.Settlors
+
+import java.time.LocalDate
 
 case object EfrbsStartDatePage extends QuestionPage[LocalDate] {
 

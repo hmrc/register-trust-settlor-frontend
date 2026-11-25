@@ -17,12 +17,12 @@
 package pages.trust_type
 
 import models.UserAnswers
-import models.pages.Status._
+import models.pages.Status.*
 import models.pages.{DeedOfVariation, FullName, KindOfBusiness, KindOfTrust}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.behaviours.PageBehaviours
 import pages.living_settlor.business.{SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage}
-import pages.{DeceasedSettlorStatus, deceased_settlor => deceasedPages}
+import pages.{DeceasedSettlorStatus, deceased_settlor as deceasedPages}
 import sections.DeceasedSettlor
 
 import java.time.LocalDate

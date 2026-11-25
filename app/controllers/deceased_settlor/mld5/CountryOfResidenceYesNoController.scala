@@ -17,7 +17,7 @@
 package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import navigation.Navigator
@@ -45,7 +45,7 @@ class CountryOfResidenceYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CountryOfResidenceYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("5mld.countryOfResidenceYesNo")

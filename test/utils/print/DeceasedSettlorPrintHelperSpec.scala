@@ -17,13 +17,13 @@
 package utils.print
 
 import base.SpecBase
-import controllers.deceased_settlor.mld5.routes._
-import controllers.deceased_settlor.routes._
+import controllers.deceased_settlor.mld5.routes.*
+import controllers.deceased_settlor.routes.*
 import models.UserAnswers
-import models.pages._
+import models.pages.*
 import org.scalatest.Assertion
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5._
+import pages.deceased_settlor.*
+import pages.deceased_settlor.mld5.*
 import play.twirl.api.Html
 import viewmodels.{AnswerRow, AnswerSection}
 

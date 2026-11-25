@@ -29,14 +29,14 @@ trait Mocked extends MockitoSugar {
 
   val registrationsRepository: RegistrationsRepository = mock[RegistrationsRepository]
 
-  when(registrationsRepository.get(any())(any())).thenReturn(Future.successful(None))
-  when(registrationsRepository.set(any())(any(), any())).thenReturn(Future.successful(true))
+  when(registrationsRepository.get(any())(using any())).thenReturn(Future.successful(None))
+  when(registrationsRepository.set(any())(using any(), any())).thenReturn(Future.successful(true))
 
   val mockCreateDraftRegistrationService: DraftRegistrationService = mock[DraftRegistrationService]
 
   val mockedTrustStartDate: LocalDate = LocalDate.parse("2019-02-03")
 
-  when(registrationsRepository.getTrustSetupDate(any())(any()))
+  when(registrationsRepository.getTrustSetupDate(any())(using any()))
     .thenReturn(Future.successful(Some(mockedTrustStartDate)))
 
 }

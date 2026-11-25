@@ -18,8 +18,9 @@ package forms.living_settlor
 
 import forms.Validation
 import forms.mappings.Mappings
-import javax.inject.Inject
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class SettlorBusinessNameFormProvider @Inject() extends Mappings {
 

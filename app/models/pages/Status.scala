@@ -31,7 +31,7 @@ object Status extends Enumerable.Implicits {
     InProgress
   )
 
-  implicit val enumerable: Enumerable[Status] =
-    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[Status] =
+    Enumerable(values.toSeq.map(v => v.toString -> v)*)
 
 }

@@ -17,7 +17,7 @@
 package controllers.living_settlor.business
 
 import config.annotations.BusinessSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.business.NameRequiredActionProvider
 import controllers.living_settlor.business.routes.SettlorBusinessAnswerController
 import models.pages.Status.Completed
@@ -50,7 +50,7 @@ class SettlorBusinessAnswerController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   businessSettlorPrintHelper: BusinessSettlorPrintHelper,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def actions(index: Int, draftId: String): ActionBuilder[SettlorBusinessNameRequest, AnyContent] =

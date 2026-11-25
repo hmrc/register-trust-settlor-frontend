@@ -36,18 +36,18 @@ class ErrorHandlerSpec extends SpecBase {
   "ErrorHandler" when {
     ".notFoundTemplate"      should {
       "Return a not found template" in {
-        implicit val request: RequestHeader = FakeRequest()
-        val resultFuture: Future[Html]      = errorHandler.notFoundTemplate(request)
-        val result                          = Await.result(resultFuture, 5.seconds)
-        result.body must include(messageApi("pageNotFound.p1")(Lang("en")))
+        given request: RequestHeader   = FakeRequest()
+        val resultFuture: Future[Html] = errorHandler.notFoundTemplate(using request)
+        val result                     = Await.result(resultFuture, 5.seconds)
+        result.body must include(messageApi("pageNotFound.p1")(using Lang("en")))
       }
     }
     ".standardErrorTemplate" should {
       "Return an Error page" in {
-        implicit val request: RequestHeader = FakeRequest()
-        val resultFuture: Future[Html]      =
+        given request: RequestHeader   = FakeRequest()
+        val resultFuture: Future[Html] =
           errorHandler.standardErrorTemplate(pageTitle = "pageTitle", heading = "heading", message = "message")
-        val result                          = Await.result(resultFuture, 5.seconds)
+        val result                     = Await.result(resultFuture, 5.seconds)
         result.body must include("pageTitle")
         result.body must include("message")
       }

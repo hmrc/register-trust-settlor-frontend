@@ -17,9 +17,9 @@
 package mapping.reads
 
 import mapping.IdentificationMapper.{buildAddress, buildPassport}
-import models.{IdentificationType, YesNoDontKnow}
 import models.pages.{Address, FullName, PassportOrIdCardDetails}
-import play.api.libs.functional.syntax._
+import models.{IdentificationType, YesNoDontKnow}
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
@@ -48,7 +48,7 @@ final case class IndividualSettlor(
 
 object IndividualSettlor extends SettlorReads {
 
-  implicit lazy val reads: Reads[IndividualSettlor] = (
+  given reads: Reads[IndividualSettlor] = (
     (__ \ "aliveAtRegistration").read[Boolean] and
       (__ \ "name").read[FullName] and
       (__ \ "dateOfBirth").readNullable[LocalDate] and
@@ -59,6 +59,6 @@ object IndividualSettlor extends SettlorReads {
       (__ \ "countryOfResidency").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String] and
       readMentalCapacity
-  )(IndividualSettlor.apply _)
+  )(IndividualSettlor.apply)
 
 }

@@ -30,10 +30,10 @@ import java.time.LocalDate
 
 class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatters) {
 
-  def bind(userAnswers: UserAnswers, name: String = "")(implicit messages: Messages): Bound =
+  def bind(userAnswers: UserAnswers, name: String = "")(using messages: Messages): Bound =
     new Bound(userAnswers, name)
 
-  class Bound(userAnswers: UserAnswers, name: String)(implicit messages: Messages) {
+  class Bound(userAnswers: UserAnswers, name: String)(using messages: Messages) {
 
     def nameQuestion(query: Gettable[FullName], labelKey: String, changeUrl: String): Option[AnswerRow] = {
       val format = (x: FullName) => HtmlFormat.escape(x.displayFullName)
@@ -74,7 +74,7 @@ class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatte
       question(query, labelKey, format, changeUrl, name)
     }
 
-    def addressQuestion[T <: Address](query: Gettable[T], labelKey: String, changeUrl: String)(implicit
+    def addressQuestion[T <: Address](query: Gettable[T], labelKey: String, changeUrl: String)(using
       reads: Reads[T]
     ): Option[AnswerRow] = {
       val format = (x: T) => checkAnswersFormatters.addressFormatter(x)
@@ -90,7 +90,7 @@ class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatte
       question(query, labelKey, format, changeUrl, name)
     }
 
-    def enumQuestion[T](query: Gettable[T], labelKey: String, changeUrl: String, enumPrefix: String)(implicit
+    def enumQuestion[T](query: Gettable[T], labelKey: String, changeUrl: String, enumPrefix: String)(using
       messages: Messages,
       rds: Reads[T]
     ): Option[AnswerRow] = {
@@ -104,7 +104,7 @@ class AnswerRowConverter @Inject() (checkAnswersFormatters: CheckAnswersFormatte
       format: T => Html,
       changeUrl: String,
       labelArg: String = ""
-    )(implicit rds: Reads[T]): Option[AnswerRow] =
+    )(using rds: Reads[T]): Option[AnswerRow] =
       userAnswers.get(query) map { x =>
         AnswerRow(
           label = s"$labelKey.checkYourAnswersLabel",

@@ -18,8 +18,8 @@ package navigation
 
 import base.SpecBase
 import models.UserAnswers
-import models.pages.KindOfTrust._
-import pages.trust_type._
+import models.pages.KindOfTrust.*
+import pages.trust_type.*
 
 class TrustTypeNavigatorSpec extends SpecBase {
 

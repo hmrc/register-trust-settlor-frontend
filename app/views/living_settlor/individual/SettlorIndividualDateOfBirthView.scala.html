@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.routes._
+@import controllers.living_settlor.individual.routes.*
 @import models.pages.FullName
 @import views.html.components.{SubmitButton, ErrorSummary, InputDate}
 @import java.time.LocalDate
@@ -27,7 +27,7 @@
     input_date: InputDate
 )
 
-@(form: Form[LocalDate], draftId: String, index: Int, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[LocalDate], draftId: String, index: Int, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorIndividualDateOfBirth.title")}",

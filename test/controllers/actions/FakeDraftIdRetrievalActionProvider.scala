@@ -17,7 +17,6 @@
 package controllers.actions
 
 import models.UserAnswers
-import models.pages.Status
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.when
 import org.scalatestplus.mockito.MockitoSugar
@@ -26,18 +25,15 @@ import repositories.RegistrationsRepository
 import scala.concurrent.{ExecutionContext, Future}
 
 class FakeDraftIdRetrievalActionProvider(
-  draftId: String,
-  status: Status = Status.InProgress,
-  dataToReturn: Option[UserAnswers],
-  registrationsRepository: RegistrationsRepository
+  dataToReturn: Option[UserAnswers]
 ) extends DraftIdRetrievalActionProvider with MockitoSugar {
 
-  implicit val executionContext: ExecutionContext =
+  given executionContext: ExecutionContext =
     scala.concurrent.ExecutionContext.Implicits.global
 
   val mockedRepository: RegistrationsRepository = mock[RegistrationsRepository]
 
-  when(mockedRepository.get(any())(any())).thenReturn(Future.successful(dataToReturn))
+  when(mockedRepository.get(any())(using any())).thenReturn(Future.successful(dataToReturn))
 
   override def apply(draftId: String) = new DraftIdDataRetrievalAction(draftId, mockedRepository, executionContext)
 

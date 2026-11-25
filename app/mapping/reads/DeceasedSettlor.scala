@@ -19,7 +19,7 @@ package mapping.reads
 import mapping.IdentificationMapper.buildAddress
 import models.Identification
 import models.pages.{Address, FullName}
-import play.api.libs.functional.syntax._
+import play.api.libs.functional.syntax.*
 import play.api.libs.json.{Reads, __}
 
 import java.time.LocalDate
@@ -44,7 +44,7 @@ final case class DeceasedSettlor(
 
 object DeceasedSettlor extends SettlorReads {
 
-  implicit lazy val reads: Reads[DeceasedSettlor] = (
+  given reads: Reads[DeceasedSettlor] = (
     (__ \ "name").read[FullName] and
       (__ \ "dateOfDeath").readNullable[LocalDate] and
       (__ \ "settlorsDateOfBirth").readNullable[LocalDate] and
@@ -52,6 +52,6 @@ object DeceasedSettlor extends SettlorReads {
       readAddress() and
       (__ \ "countryOfResidence").readNullable[String] and
       (__ \ "countryOfNationality").readNullable[String]
-  )(DeceasedSettlor.apply _)
+  )(DeceasedSettlor.apply)
 
 }

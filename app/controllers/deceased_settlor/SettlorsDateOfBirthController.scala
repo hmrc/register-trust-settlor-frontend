@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorsDateOfBirthFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -47,7 +47,7 @@ class SettlorsDateOfBirthController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorsDateOfBirthView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(maxDate: (LocalDate, String)): Form[LocalDate] =
@@ -86,7 +86,7 @@ class SettlorsDateOfBirthController @Inject() (
         )
     }
 
-  private def maxDate(implicit request: SettlorIndividualNameRequest[AnyContent]): (LocalDate, String) =
+  private def maxDate(using request: SettlorIndividualNameRequest[AnyContent]): (LocalDate, String) =
     request.userAnswers.get(SettlorDateOfDeathPage) match {
       case Some(dateOfDeath) =>
         (dateOfDeath, "afterDateOfDeath")

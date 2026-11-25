@@ -17,19 +17,19 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import models.TaskStatus.Completed
 import models.UserAnswers
 import models.pages.FullName
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalatest.BeforeAndAfterEach
-import pages.deceased_settlor._
+import pages.deceased_settlor.*
 import play.api.Application
 import play.api.inject.bind
 import play.api.mvc.Result
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpResponse
 import utils.print.DeceasedSettlorPrintHelper
@@ -47,10 +47,10 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
   override def beforeEach(): Unit = {
     reset(mockCreateDraftRegistrationService, trustsStoreService)
 
-    when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
+    when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(using any()))
       .thenReturn(Future.successful(HttpResponse(OK, "")))
 
-    when(trustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+    when(trustsStoreService.updateTaskStatus(any(), any())(using any(), any()))
       .thenReturn(Future.successful(HttpResponse(OK, "")))
   }
 
@@ -64,7 +64,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
 
       val fakeAnswerSection = AnswerSection()
 
-      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(any()))
+      when(mockPrintHelper.checkDetailsSection(any(), any(), any(), any(), any())(using any()))
         .thenReturn(fakeAnswerSection)
 
       val answers: UserAnswers = emptyUserAnswers
@@ -85,7 +85,7 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(fakeDraftId, Seq(fakeAnswerSection))(request, messages).toString
+        view(fakeDraftId, Seq(fakeAnswerSection))(using request, messages).toString
 
       application.stop()
     }
@@ -153,15 +153,15 @@ class DeceasedSettlorAnswerControllerSpec extends SpecBase with BeforeAndAfterEa
       status(result) mustEqual SEE_OTHER
       redirectLocation(result).value mustBe fakeNavigator.desiredRoute.url
 
-      verify(mockCreateDraftRegistrationService).removeLivingSettlorsMappedPiece(any())(any())
-      verify(trustsStoreService).updateTaskStatus(any(), eqTo(Completed))(any(), any())
+      verify(mockCreateDraftRegistrationService).removeLivingSettlorsMappedPiece(any())(using any())
+      verify(trustsStoreService).updateTaskStatus(any(), eqTo(Completed))(using any(), any())
 
       application.stop()
     }
 
     "return InternalServerError if removeLivingSettlorsMappedPiece fails" in {
 
-      when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(any()))
+      when(mockCreateDraftRegistrationService.removeLivingSettlorsMappedPiece(any())(using any()))
         .thenReturn(Future.failed(new RuntimeException("fail")))
 
       val userAnswers: UserAnswers = emptyUserAnswers

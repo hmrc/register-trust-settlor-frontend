@@ -17,8 +17,8 @@
 package viewmodels
 
 import models.pages.IndividualOrBusiness.Business
-import models.pages.{IndividualOrBusiness, Status}
 import models.pages.Status.InProgress
+import models.pages.{IndividualOrBusiness, Status}
 
 final case class SettlorBusinessViewModel(
   `type`: IndividualOrBusiness,
@@ -28,13 +28,13 @@ final case class SettlorBusinessViewModel(
 
 object SettlorBusinessViewModel {
 
-  import play.api.libs.functional.syntax._
-  import play.api.libs.json._
+  import play.api.libs.functional.syntax.*
+  import play.api.libs.json.*
 
-  implicit lazy val reads: Reads[SettlorBusinessViewModel] = (
+  given reads: Reads[SettlorBusinessViewModel] = (
     (__ \ "individualOrBusiness").read[IndividualOrBusiness].filter(_ == Business) and
       (__ \ "businessName").readNullable[String] and
       (__ \ "status").readWithDefault[Status](InProgress)
-  )(SettlorBusinessViewModel.apply _)
+  )(SettlorBusinessViewModel.apply)
 
 }

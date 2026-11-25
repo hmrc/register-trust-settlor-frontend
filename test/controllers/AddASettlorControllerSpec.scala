@@ -17,17 +17,17 @@
 package controllers
 
 import base.SpecBase
-import controllers.living_settlor.business.routes._
-import controllers.living_settlor.individual.routes._
-import controllers.routes._
+import controllers.living_settlor.business.routes.*
+import controllers.living_settlor.individual.routes.*
+import controllers.routes.*
 import forms.{AddASettlorFormProvider, YesNoFormProvider}
 import generators.ModelGenerators
 import models.pages.IndividualOrBusiness.{Business, Individual}
 import models.pages.KindOfTrust.Intervivos
-import models.pages.Status._
+import models.pages.Status.*
 import models.pages.{AddASettlor, FullName, Status}
 import models.{TaskStatus, UserAnswers}
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{reset, verify, when}
 import org.scalacheck.Arbitrary.arbitrary
 import org.scalatest.BeforeAndAfterEach
@@ -40,7 +40,7 @@ import pages.{AddASettlorPage, RegistrationProgress}
 import play.api.data.Form
 import play.api.inject.bind
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import services.TrustsStoreService
 import uk.gov.hmrc.http.HttpResponse
 import utils.Constants.MAX
@@ -73,7 +73,7 @@ class AddASettlorControllerSpec
   override def beforeEach(): Unit = {
     reset(mockTrustsStoreService, mockRegistrationProgress)
 
-    when(mockTrustsStoreService.updateTaskStatus(any(), any())(any(), any()))
+    when(mockTrustsStoreService.updateTaskStatus(any(), any())(using any(), any()))
       .thenReturn(Future.successful(HttpResponse(OK, "")))
   }
 
@@ -129,7 +129,7 @@ class AddASettlorControllerSpec
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(yesNoForm, fakeDraftId, Some(hint))(request, messages).toString
+            view(yesNoForm, fakeDraftId, Some(hint))(using request, messages).toString
 
           application.stop()
         }
@@ -147,7 +147,7 @@ class AddASettlorControllerSpec
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(yesNoForm, fakeDraftId, None)(request, messages).toString
+            view(yesNoForm, fakeDraftId, None)(using request, messages).toString
 
           application.stop()
         }
@@ -168,7 +168,7 @@ class AddASettlorControllerSpec
 
         redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-        verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+        verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(using any(), any())
 
         application.stop()
       }
@@ -189,7 +189,7 @@ class AddASettlorControllerSpec
         status(result) mustEqual BAD_REQUEST
 
         contentAsString(result) mustEqual
-          view(boundForm, fakeDraftId, Some(hint))(request, messages).toString
+          view(boundForm, fakeDraftId, Some(hint))(using request, messages).toString
 
         application.stop()
       }
@@ -242,7 +242,7 @@ class AddASettlorControllerSpec
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", Some(hint), Nil)(
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", Some(hint), Nil)(using
                 request,
                 messages
               ).toString
@@ -271,7 +271,10 @@ class AddASettlorControllerSpec
             status(result) mustEqual OK
 
             contentAsString(result) mustEqual
-              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", None, Nil)(request, messages).toString
+              view(addSettlorForm, fakeDraftId, settlors, Nil, "Add a settlor", None, Nil)(using
+                request,
+                messages
+              ).toString
 
             application.stop()
           }
@@ -318,7 +321,7 @@ class AddASettlorControllerSpec
                 "You have added 25 settlors",
                 None,
                 List("Individual", "Business")
-              )(request, messages).toString
+              )(using request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -364,7 +367,7 @@ class AddASettlorControllerSpec
                 "You have added 25 settlors",
                 None,
                 List("Individual", "Business")
-              )(request, messages).toString
+              )(using request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -374,11 +377,11 @@ class AddASettlorControllerSpec
           "25 combined" in {
 
             lazy val settlors = (0 until MAX).foldLeft[List[AddRow]](Nil) { (acc, i) =>
-              acc :+ (if (i < (MAX / 2).floor) indRow(i) else busRow(i))
+              acc :+ (if (i < MAX / 2) indRow(i) else busRow(i))
             }
 
             val answers = (0 until MAX).foldLeft(emptyUserAnswers) { (acc, i) =>
-              if (i < (MAX / 2).floor) {
+              if (i < MAX / 2) {
                 acc
                   .set(SettlorIndividualOrBusinessPage(i), Individual)
                   .success
@@ -420,7 +423,7 @@ class AddASettlorControllerSpec
                 "You have added 25 settlors",
                 None,
                 List("Individual", "Business")
-              )(request, messages).toString
+              )(using request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 25.")
 
@@ -462,6 +465,7 @@ class AddASettlorControllerSpec
 
             content mustEqual
               view(addSettlorForm, fakeDraftId, settlors, Nil, "You have added 25 settlors", None, List("Individual"))(
+                using
                 request,
                 messages
               ).toString
@@ -520,7 +524,7 @@ class AddASettlorControllerSpec
                 "You have added 50 settlors",
                 None,
                 List("Individual", "Business")
-              )(request, messages).toString
+              )(using request, messages).toString
 
             content must include("You cannot enter another settlor as you have entered a maximum of 50.")
 
@@ -551,7 +555,10 @@ class AddASettlorControllerSpec
 
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(using
+            any(),
+            any()
+          )
           verify(mockRegistrationProgress).settlorsStatus(
             eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
           )
@@ -579,7 +586,10 @@ class AddASettlorControllerSpec
 
           redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(using
+            any(),
+            any()
+          )
           verify(mockRegistrationProgress).settlorsStatus(
             eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
           )
@@ -609,7 +619,10 @@ class AddASettlorControllerSpec
 
             redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(using
+              any(),
+              any()
+            )
             verify(mockRegistrationProgress).settlorsStatus(
               eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
             )
@@ -637,7 +650,10 @@ class AddASettlorControllerSpec
 
               redirectLocation(result).value mustEqual fakeNavigator.desiredRoute.url
 
-              verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+              verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(using
+                any(),
+                any()
+              )
               verify(mockRegistrationProgress).settlorsStatus(
                 eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, selection).success.value)
               )
@@ -671,7 +687,7 @@ class AddASettlorControllerSpec
             "Add a settlor",
             Some(hint),
             Nil
-          )(request, messages).toString
+          )(using request, messages).toString
 
         application.stop()
       }
@@ -701,7 +717,7 @@ class AddASettlorControllerSpec
             result
           ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
-          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(any(), any())
+          verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.Completed))(using any(), any())
           verify(mockRegistrationProgress).settlorsStatus(
             eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value)
           )
@@ -730,7 +746,10 @@ class AddASettlorControllerSpec
               result
             ).value mustEqual "http://localhost:9781/trusts-registration/draftId/registration-progress"
 
-            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(any(), any())
+            verify(mockTrustsStoreService).updateTaskStatus(eqTo(draftId), eqTo(TaskStatus.InProgress))(using
+              any(),
+              any()
+            )
             verify(mockRegistrationProgress).settlorsStatus(
               eqTo(userAnswersWithSettlorsComplete.set(AddASettlorPage, AddASettlor.NoComplete).success.value)
             )

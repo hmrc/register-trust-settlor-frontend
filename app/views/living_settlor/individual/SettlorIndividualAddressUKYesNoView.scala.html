@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.routes._
+@import controllers.living_settlor.individual.routes.*
 @import models.pages.FullName
 @import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
@@ -26,7 +26,7 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[Boolean], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[Boolean], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(using request: RequestHeader, messages: Messages)
 
 @settlorIndividualAddressUKYesNoPrefix = @{
     if(settlorAliveAtRegistration){

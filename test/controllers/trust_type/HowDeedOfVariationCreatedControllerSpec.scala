@@ -17,12 +17,12 @@
 package controllers.trust_type
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.DeedOfVariationFormProvider
 import models.pages.{DeedOfVariation, KindOfTrust}
 import pages.trust_type.{HowDeedOfVariationCreatedPage, SetUpByLivingSettlorYesNoPage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.trust_type.HowDeedOfVariationCreatedView
 
 class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
@@ -51,7 +51,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -77,7 +77,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(DeedOfVariation.values.head), fakeDraftId)(request, messages).toString
+        view(form.fill(DeedOfVariation.values.head), fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -121,7 +121,7 @@ class HowDeedOfVariationCreatedControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }

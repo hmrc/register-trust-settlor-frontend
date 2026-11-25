@@ -19,8 +19,8 @@ package mapping
 import base.SpecBase
 import models.pages.FullName
 import models.{Identification, UserAnswers, WillType}
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5._
+import pages.deceased_settlor.*
+import pages.deceased_settlor.mld5.*
 
 class DeceasedSettlorMapperSpec extends SpecBase {
 

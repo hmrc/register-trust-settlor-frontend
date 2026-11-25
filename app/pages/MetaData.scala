@@ -22,5 +22,5 @@ case class MetaData(lineNo: String, bpMatchStatus: Option[String], entityStart: 
 
 object MetaData {
 
-  implicit val format: Format[MetaData] = Json.format[MetaData]
+  given format: Format[MetaData] = Json.format[MetaData]
 }

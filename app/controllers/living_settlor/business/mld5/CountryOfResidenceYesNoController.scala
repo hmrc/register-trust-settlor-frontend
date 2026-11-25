@@ -24,8 +24,8 @@ import navigation.Navigator
 import pages.living_settlor.business.mld5.CountryOfResidenceYesNoPage
 import play.api.Logging
 import play.api.data.Form
-import play.api.i18n._
-import play.api.mvc._
+import play.api.i18n.*
+import play.api.mvc.*
 import repositories.RegistrationsRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
 import views.html.errors.TechnicalErrorView
@@ -44,7 +44,7 @@ class CountryOfResidenceYesNoController @Inject() (
   formProvider: YesNoFormProvider,
   view: CountryOfResidenceYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidenceYesNo")

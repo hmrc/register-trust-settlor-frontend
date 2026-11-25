@@ -21,7 +21,8 @@ import models.RolesInCompanies.RolesInCompaniesAnswered
 import models.{RegistrationSubmission, SubmissionDraftResponse}
 import play.api.http.Status.NOT_FOUND
 import play.api.libs.json.Json
-import uk.gov.hmrc.http.HttpReads.Implicits._
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
+import uk.gov.hmrc.http.HttpReads.Implicits.*
 import uk.gov.hmrc.http.client.HttpClientV2
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse, StringContextOps, UpstreamErrorResponse}
 
@@ -33,7 +34,7 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
 
   private val submissionsBaseUrl = s"${config.trustsUrl}/trusts/register/submission-drafts"
 
-  def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)(implicit
+  def setDraftSection(draftId: String, section: String, data: RegistrationSubmission.DataSet)(using
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[HttpResponse] =
@@ -42,7 +43,7 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
       .withBody(Json.toJson(data))
       .execute[HttpResponse]
 
-  def getDraftSection(draftId: String, section: String)(implicit
+  def getDraftSection(draftId: String, section: String)(using
     hc: HeaderCarrier,
     ec: ExecutionContext
   ): Future[SubmissionDraftResponse] =
@@ -50,7 +51,7 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
       .get(url"$submissionsBaseUrl/$draftId/$section")
       .execute[SubmissionDraftResponse]
 
-  def getTrustSetupDate(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[LocalDate]] =
+  def getTrustSetupDate(draftId: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[Option[LocalDate]] =
     http
       .get(url"$submissionsBaseUrl/$draftId/when-trust-setup")
       .execute[HttpResponse]
@@ -61,7 +62,7 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
         None
       }
 
-  def getIsTrustTaxable(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
+  def getIsTrustTaxable(draftId: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[Boolean] =
     http
       .get(url"$submissionsBaseUrl/$draftId/is-trust-taxable")
       .execute[Boolean]
@@ -71,14 +72,14 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
 
   def allIndividualBeneficiariesHaveRoleInCompany(
     draftId: String
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[RolesInCompaniesAnswered] =
+  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[RolesInCompaniesAnswered] =
     http
       .get(url"$submissionsBaseUrl/$draftId/beneficiaries")
       .execute[RolesInCompaniesAnswered]
 
   def removeRoleInCompanyAnswers(
     draftId: String
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/set/beneficiaries/remove-role-in-company"
     http
       .post(url"$url")
@@ -87,7 +88,7 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
 
   def removeDeceasedSettlorMappedPiece(
     draftId: String
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/deceased-settlor"
     http
       .post(url"$url")
@@ -96,14 +97,14 @@ class SubmissionDraftConnector @Inject() (http: HttpClientV2, config: FrontendAp
 
   def removeLivingSettlorsMappedPiece(
     draftId: String
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
+  )(using hc: HeaderCarrier, ec: ExecutionContext): Future[HttpResponse] = {
     val url: String = s"$submissionsBaseUrl/$draftId/remove-mapped-piece/living-settlors"
     http
       .post(url"$url")
       .execute[HttpResponse]
   }
 
-  def getTrustUtr(draftId: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] =
+  def getTrustUtr(draftId: String)(using hc: HeaderCarrier, ec: ExecutionContext): Future[Option[String]] =
     http
       .get(url"$submissionsBaseUrl/$draftId/trust-utr")
       .execute[String]

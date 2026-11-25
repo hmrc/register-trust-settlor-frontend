@@ -17,12 +17,12 @@
 package controllers.living_settlor.business
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.YesNoFormProvider
 import pages.living_settlor.business.{SettlorBusinessNamePage, SettlorBusinessUtrYesNoPage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{route, _}
+import play.api.test.Helpers.{route, *}
 import views.html.living_settlor.business.SettlorBusinessUtrYesNoView
 
 class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
@@ -58,7 +58,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(form, fakeDraftId, index, settlorBusinessName)(using request, messages).toString
 
       application.stop()
     }
@@ -84,7 +84,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(true), fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(form.fill(true), fakeDraftId, index, settlorBusinessName)(using request, messages).toString
 
       application.stop()
     }
@@ -153,7 +153,7 @@ class SettlorBusinessUtrYesNoControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, settlorBusinessName)(request, messages).toString
+        view(boundForm, fakeDraftId, index, settlorBusinessName)(using request, messages).toString
 
       application.stop()
     }

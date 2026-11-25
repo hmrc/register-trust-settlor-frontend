@@ -22,7 +22,7 @@ import models.requests.RegistrationDataRequest
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.libs.json.{JsPath, JsValue}
-import play.api.mvc._
+import play.api.mvc.*
 import repositories.RegistrationsRepository
 import sections.LivingSettlors
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendBaseController
@@ -39,7 +39,7 @@ class RemoveSettlorYesNoController @Inject() (
   yesNoFormProvider: YesNoFormProvider,
   val controllerComponents: MessagesControllerComponents,
   view: RemoveSettlorYesNoView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlors.removeYesNo")
@@ -87,9 +87,9 @@ class RemoveSettlorYesNoController @Inject() (
         )
     }
 
-  private def label(json: JsValue, path: JsPath)(implicit request: RegistrationDataRequest[AnyContent]): String = {
+  private def label(json: JsValue, path: JsPath)(using request: RegistrationDataRequest[AnyContent]): String = {
 
-    val default: String = request.messages(messagesApi)("settlors.defaultText")
+    val default: String = request.messages(using messagesApi)("settlors.defaultText")
 
     (for {
       pick    <- json.transform(path.json.pick)

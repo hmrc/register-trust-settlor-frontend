@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.deceased_settlor.routes._
+@import controllers.deceased_settlor.routes.*
 @import models.pages.FullName
 @import views.html.components.{SubmitButton, ErrorSummary, InputText}
 
@@ -26,7 +26,7 @@
     inputText: InputText
 )
 
-@(form: Form[String], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[String], draftId: String, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorNationalInsuranceNumber.title")}",

@@ -17,12 +17,11 @@
 package utils.print
 
 import base.SpecBase
-import controllers.trust_type.routes._
+import controllers.trust_type.routes.*
 import models.UserAnswers
-import models.pages.IndividualOrBusiness._
-import models.pages._
+import models.pages.*
 import org.scalatest.Assertion
-import pages.trust_type._
+import pages.trust_type.*
 import play.twirl.api.Html
 import viewmodels.AnswerRow
 
@@ -50,7 +49,7 @@ class TrustTypePrintHelperSpec extends SpecBase {
           .set(SetUpInAdditionToWillTrustYesNoPage, false)
           .success
           .value
-          .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill)(DeedOfVariation.writes)
+          .set(HowDeedOfVariationCreatedPage, DeedOfVariation.ReplacedWill)(using DeedOfVariation.writes)
           .success
           .value
 

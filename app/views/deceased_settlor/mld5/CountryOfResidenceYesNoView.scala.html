@@ -16,7 +16,7 @@
 
 @import models.pages.FullName
 
-@import controllers.deceased_settlor.mld5.routes._
+@import controllers.deceased_settlor.mld5.routes.*
 @import views.html.components.{SubmitButton, ErrorSummary, InputYesNo}
 
 @this(
@@ -27,7 +27,7 @@
     inputYesNo: InputYesNo
 )
 
-@(form: Form[Boolean], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[Boolean], draftId: String, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("5mld.countryOfResidenceYesNo.title")}",

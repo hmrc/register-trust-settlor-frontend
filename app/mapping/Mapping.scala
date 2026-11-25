@@ -20,7 +20,7 @@ import mapping.reads.Settlor
 import models.UserAnswers
 import pages.QuestionPage
 import play.api.libs.json.JsPath
-import sections.{LivingSettlors => livingSettlors}
+import sections.LivingSettlors as livingSettlors
 
 import scala.reflect.ClassTag
 

@@ -26,7 +26,7 @@ import pages.deceased_settlor.SettlorsNamePage
 import pages.deceased_settlor.mld5.CountryOfNationalityPage
 import play.api.data.Form
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import utils.InputOption
 import utils.countryOptions.CountryOptionsNonUK
 import views.html.deceased_settlor.mld5.CountryOfNationalityView
@@ -59,7 +59,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, countryOptions, fakeDraftId, name)(request, messages).toString
+        view(form, countryOptions, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -82,7 +82,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill("Spain"), countryOptions, fakeDraftId, name)(request, messages).toString
+        view(form.fill("Spain"), countryOptions, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -128,7 +128,7 @@ class CountryOfNationalityControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, countryOptions, fakeDraftId, name)(request, messages).toString
+        view(boundForm, countryOptions, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

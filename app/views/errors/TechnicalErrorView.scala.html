@@ -14,14 +14,14 @@
  * limitations under the License.
  *@
 
-@import views.ViewUtils._
+@import views.ViewUtils.*
 @import config.FrontendAppConfig
 
 @this(
 govuk_wrapper: MainTemplate,
 )
 
-@()(implicit request: RequestHeader, messages: Messages)
+@()(using request: RequestHeader, messages: Messages)
 
 @govuk_wrapper(title = messages("serverError.title")) {
 

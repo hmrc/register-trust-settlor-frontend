@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.PassportOrIdCardFormProvider
 import models.pages.PassportOrIdCardDetails
@@ -49,10 +49,10 @@ class SettlorIndividualPassportController @Inject() (
   view: SettlorIndividualPassportView,
   val countryOptions: CountryOptions,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
-  private def getForm(index: Int)(implicit request: SettlorIndividualNameRequest[AnyContent]) =
+  private def getForm(index: Int)(using request: SettlorIndividualNameRequest[AnyContent]) =
     formProvider("settlorIndividualPassport", request.userAnswers, index)
 
   def onPageLoad(index: Int, draftId: String): Action[AnyContent] =

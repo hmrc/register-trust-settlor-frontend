@@ -21,7 +21,7 @@ import connectors.SubmissionDraftConnector
 import models.RolesInCompanies.{AllRolesAnswered, CouldNotDetermine, NoIndividualBeneficiaries, NotAllRolesAnswered}
 import models.pages.KindOfTrust
 import org.mockito.ArgumentMatchers.any
-import org.mockito.Mockito.{never, reset, times, verify, when}
+import org.mockito.Mockito.*
 import pages.trust_type.KindOfTrustPage
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -31,7 +31,7 @@ import scala.concurrent.{Await, Future}
 
 class DraftRegistrationServiceSpec extends SpecBase {
 
-  implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   private val mockConnector: SubmissionDraftConnector = mock[SubmissionDraftConnector]
   private val mockTrustStore: TrustsStoreService      = mock[TrustsStoreService]
@@ -54,15 +54,15 @@ class DraftRegistrationServiceSpec extends SpecBase {
             .success
             .value
 
-          when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
+          when(mockConnector.removeRoleInCompanyAnswers(any())(using any(), any()))
             .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
           Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-          verify(mockConnector, never()).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-          verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
+          verify(mockConnector, never()).allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any())
+          verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(using any(), any())
 
-          verify(mockConnector, times(1)).removeRoleInCompanyAnswers(any())(any(), any())
+          verify(mockConnector, times(1)).removeRoleInCompanyAnswers(any())(using any(), any())
         }
       }
 
@@ -80,14 +80,14 @@ class DraftRegistrationServiceSpec extends SpecBase {
               .success
               .value
 
-            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any()))
               .thenReturn(Future.successful(NoIndividualBeneficiaries))
 
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
-            verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(any(), any())
+            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(using any(), any())
+            verify(mockConnector, never()).removeRoleInCompanyAnswers(any())(using any(), any())
           }
         }
 
@@ -103,14 +103,14 @@ class DraftRegistrationServiceSpec extends SpecBase {
               .success
               .value
 
-            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
+            when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any()))
               .thenReturn(Future.successful(CouldNotDetermine))
 
             Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
-            verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
+            verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any())
+            verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(using any(), any())
+            verify(mockConnector, never).removeRoleInCompanyAnswers(any())(using any(), any())
           }
         }
 
@@ -127,14 +127,14 @@ class DraftRegistrationServiceSpec extends SpecBase {
                 .success
                 .value
 
-              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any()))
                 .thenReturn(Future.successful(AllRolesAnswered))
 
               Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-              verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(any(), any())
-              verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
+              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any())
+              verify(mockTrustStore, never()).updateBeneficiaryTaskStatus(any(), any())(using any(), any())
+              verify(mockConnector, never).removeRoleInCompanyAnswers(any())(using any(), any())
             }
           }
 
@@ -150,17 +150,17 @@ class DraftRegistrationServiceSpec extends SpecBase {
                 .success
                 .value
 
-              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any()))
+              when(mockConnector.allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any()))
                 .thenReturn(Future.successful(NotAllRolesAnswered))
 
-              when(mockTrustStore.updateBeneficiaryTaskStatus(any(), any())(any(), any()))
+              when(mockTrustStore.updateBeneficiaryTaskStatus(any(), any())(using any(), any()))
                 .thenReturn(Future.successful(HttpResponse.apply(OK, "")))
 
               Await.result(service.amendBeneficiariesState(fakeDraftId, userAnswers), Duration.Inf)
 
-              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(any(), any())
-              verify(mockTrustStore, times(1)).updateBeneficiaryTaskStatus(any(), any())(any(), any())
-              verify(mockConnector, never).removeRoleInCompanyAnswers(any())(any(), any())
+              verify(mockConnector, times(1)).allIndividualBeneficiariesHaveRoleInCompany(any())(using any(), any())
+              verify(mockTrustStore, times(1)).updateBeneficiaryTaskStatus(any(), any())(using any(), any())
+              verify(mockConnector, never).removeRoleInCompanyAnswers(any())(using any(), any())
             }
           }
         }
@@ -172,7 +172,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
         val status: Int = 200
 
-        when(mockConnector.removeRoleInCompanyAnswers(any())(any(), any()))
+        when(mockConnector.removeRoleInCompanyAnswers(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeBeneficiaryRoleInCompanyAnswers(fakeDraftId), Duration.Inf)
@@ -187,7 +187,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
         val status: Int = 200
 
-        when(mockConnector.removeDeceasedSettlorMappedPiece(any())(any(), any()))
+        when(mockConnector.removeDeceasedSettlorMappedPiece(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeDeceasedSettlorMappedPiece(fakeDraftId), Duration.Inf)
@@ -201,7 +201,7 @@ class DraftRegistrationServiceSpec extends SpecBase {
 
         val status: Int = 200
 
-        when(mockConnector.removeLivingSettlorsMappedPiece(any())(any(), any()))
+        when(mockConnector.removeLivingSettlorsMappedPiece(any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(status, "")))
 
         val result = Await.result(service.removeLivingSettlorsMappedPiece(fakeDraftId), Duration.Inf)

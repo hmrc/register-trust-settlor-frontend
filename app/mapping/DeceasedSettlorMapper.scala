@@ -18,12 +18,12 @@ package mapping
 
 import mapping.reads.DeceasedSettlor
 import models.{UserAnswers, WillType}
-import sections.{DeceasedSettlor => entity}
+import sections.DeceasedSettlor as entity
 
-class DeceasedSettlorMapper extends {
+class DeceasedSettlorMapper {
 
   def build(userAnswers: UserAnswers): Option[WillType] =
-    userAnswers.getAtPath(entity.path)(DeceasedSettlor.reads) map { settlor =>
+    userAnswers.getAtPath(entity.path)(using DeceasedSettlor.reads) map { settlor =>
       WillType(
         name = settlor.name,
         dateOfBirth = settlor.dateOfBirth,

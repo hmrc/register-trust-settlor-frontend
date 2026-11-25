@@ -17,12 +17,12 @@
 package controllers.trust_type
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.KindOfTrustFormProvider
 import models.pages.KindOfTrust
 import pages.trust_type.{KindOfTrustPage, SetUpByLivingSettlorYesNoPage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.trust_type.KindOfTrustView
 
 class KindOfTrustControllerSpec extends SpecBase {
@@ -51,7 +51,7 @@ class KindOfTrustControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId)(request, messages).toString
+        view(form, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -77,7 +77,7 @@ class KindOfTrustControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form.fill(KindOfTrust.values.head), fakeDraftId)(request, messages).toString
+        view(form.fill(KindOfTrust.values.head), fakeDraftId)(using request, messages).toString
 
       application.stop()
     }
@@ -121,7 +121,7 @@ class KindOfTrustControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId)(request, messages).toString
+        view(boundForm, fakeDraftId)(using request, messages).toString
 
       application.stop()
     }

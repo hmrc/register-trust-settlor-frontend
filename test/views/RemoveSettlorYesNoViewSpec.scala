@@ -42,7 +42,7 @@ class RemoveSettlorYesNoViewSpec extends YesNoViewBehaviours {
         index,
         fakeDraftId,
         settlorLabel
-      )(fakeRequest, messages)
+      )(using fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, settlorLabel)
 

@@ -17,7 +17,7 @@
 package controllers.deceased_settlor
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.UKAddressFormProvider
 import models.pages.UKAddress
@@ -46,7 +46,7 @@ class SettlorsUKAddressController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorsUKAddressView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[UKAddress] = formProvider()

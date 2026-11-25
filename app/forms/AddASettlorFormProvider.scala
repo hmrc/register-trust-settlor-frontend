@@ -17,9 +17,10 @@
 package forms
 
 import forms.mappings.Mappings
-import javax.inject.Inject
 import models.pages.AddASettlor
 import play.api.data.Form
+
+import javax.inject.Inject
 
 class AddASettlorFormProvider @Inject() extends Mappings {
 

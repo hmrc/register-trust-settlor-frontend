@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.deceased_settlor.mld5.routes._
+@import controllers.deceased_settlor.mld5.routes.*
 @import utils.InputOption
 @import models.pages.FullName
 @import views.html.components.{SubmitButton, ErrorSummary, InputSelect}
@@ -27,7 +27,7 @@
     select: InputSelect
 )
 
-@(form: Form[String], countryOptions: Seq[InputOption], draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[String], countryOptions: Seq[InputOption], draftId: String, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("5mld.countryOfResidence.title")}",

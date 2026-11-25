@@ -16,11 +16,11 @@
 
 package pages.living_settlor.individual
 
-import java.time.LocalDate
-
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
+
+import java.time.LocalDate
 
 final case class SettlorIndividualDateOfBirthPage(index: Int) extends QuestionPage[LocalDate] {
 

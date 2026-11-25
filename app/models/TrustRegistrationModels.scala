@@ -18,15 +18,15 @@ package models
 
 import mapping.TypeOfTrust
 import models.pages.{DeedOfVariation, FullName}
-import play.api.libs.functional.syntax._
-import play.api.libs.json._
+import play.api.libs.functional.syntax.*
+import play.api.libs.json.*
 
 import java.time.LocalDate
 
 case class Settlors(settlor: Option[List[Settlor]], settlorCompany: Option[List[SettlorCompany]])
 
 object Settlors {
-  implicit val settlorsFormat: Format[Settlors] = Json.format[Settlors]
+  given settlorsFormat: Format[Settlors] = Json.format[Settlors]
 }
 
 case class Settlor(
@@ -40,7 +40,7 @@ case class Settlor(
 )
 
 object Settlor {
-  implicit val settlorFormat: Format[Settlor] = Json.format[Settlor]
+  given settlorFormat: Format[Settlor] = Json.format[Settlor]
 }
 
 case class SettlorCompany(
@@ -52,25 +52,25 @@ case class SettlorCompany(
 )
 
 object SettlorCompany {
-  implicit val settlorCompanyFormat: Format[SettlorCompany] = Json.format[SettlorCompany]
+  given settlorCompanyFormat: Format[SettlorCompany] = Json.format[SettlorCompany]
 }
 
 case class IdentificationOrgType(utr: Option[String], address: Option[AddressType])
 
 object IdentificationOrgType {
-  implicit val trustBeneficiaryIdentificationFormat: Format[IdentificationOrgType] = Json.format[IdentificationOrgType]
+  given trustBeneficiaryIdentificationFormat: Format[IdentificationOrgType] = Json.format[IdentificationOrgType]
 }
 
 case class Identification(nino: Option[String], address: Option[AddressType])
 
 object Identification {
-  implicit val identificationFormat: Format[Identification] = Json.format[Identification]
+  given identificationFormat: Format[Identification] = Json.format[Identification]
 }
 
 case class IdentificationType(nino: Option[String], passport: Option[PassportType], address: Option[AddressType])
 
 object IdentificationType {
-  implicit val identificationTypeFormat: Format[IdentificationType] = Json.format[IdentificationType]
+  given identificationTypeFormat: Format[IdentificationType] = Json.format[IdentificationType]
 }
 
 case class TrustDetailsType(
@@ -82,21 +82,21 @@ case class TrustDetailsType(
 
 object TrustDetailsType {
 
-  implicit val trustDetailsTypeFormat: Format[TrustDetailsType] = Json.format[TrustDetailsType]
+  given trustDetailsTypeFormat: Format[TrustDetailsType] = Json.format[TrustDetailsType]
 
   val uaReads: Reads[TrustDetailsType] = (
     TypeOfTrust.uaReads and
       DeedOfVariation.uaReads and
       (__ \ Symbol("holdoverReliefYesNo")).readNullable[Boolean] and
       (__ \ Symbol("efrbsStartDate")).readNullable[LocalDate]
-  )(TrustDetailsType.apply _)
+  )(TrustDetailsType.apply)
 
 }
 
 case class PassportType(number: String, expirationDate: LocalDate, countryOfIssue: String)
 
 object PassportType {
-  implicit val passportTypeFormat: Format[PassportType] = Json.format[PassportType]
+  given passportTypeFormat: Format[PassportType] = Json.format[PassportType]
 }
 
 case class AddressType(
@@ -109,7 +109,7 @@ case class AddressType(
 )
 
 object AddressType {
-  implicit val addressTypeFormat: Format[AddressType] = Json.format[AddressType]
+  given addressTypeFormat: Format[AddressType] = Json.format[AddressType]
 }
 
 case class WillType(
@@ -122,5 +122,5 @@ case class WillType(
 )
 
 object WillType {
-  implicit val willTypeFormat: Format[WillType] = Json.format[WillType]
+  given willTypeFormat: Format[WillType] = Json.format[WillType]
 }

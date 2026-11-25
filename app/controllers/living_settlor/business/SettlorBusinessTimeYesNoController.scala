@@ -45,7 +45,7 @@ class SettlorBusinessTimeYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SettlorBusinessTimeYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("settlorBusinessTimeYesNo")

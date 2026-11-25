@@ -23,12 +23,11 @@
     main_template: MainTemplate,
     formHelper: FormWithCSRF,
     submitButton: SubmitButton,
-    error_summary: ErrorSummary,
     heading: Heading,
     govukSummaryList: GovukSummaryList,
 )
 
-@(onSubmit: Call, answerSections: Seq[Section])(implicit request: RequestHeader, messages: Messages)
+@(onSubmit: Call, answerSections: Seq[Section])(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${messages("settlorAnswers.title")}",

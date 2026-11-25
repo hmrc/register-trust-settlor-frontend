@@ -17,7 +17,7 @@
 package utils.print
 
 import base.SpecBase
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{verify, when}
 import org.scalatestplus.mockito.MockitoSugar
 import viewmodels.AnswerSection
@@ -34,27 +34,27 @@ class PrintHelpersSpec extends SpecBase with MockitoSugar {
   "PrintHelpers" must {
 
     "delegate the deceased settlor section" in {
-      when(deceased.printSection(any(), any(), any(), any())(any())).thenReturn(section)
+      when(deceased.printSection(any(), any(), any(), any())(using any())).thenReturn(section)
 
       helpers.deceasedSettlorSection(emptyUserAnswers, "Name", fakeDraftId) mustBe section
 
-      verify(deceased).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(any())
+      verify(deceased).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(using any())
     }
 
     "delegate the living settlor section" in {
-      when(living.printSection(any(), any(), any(), any())(any())).thenReturn(section)
+      when(living.printSection(any(), any(), any(), any())(using any())).thenReturn(section)
 
       helpers.livingSettlorSection(emptyUserAnswers, "Name", 0, fakeDraftId) mustBe section
 
-      verify(living).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(any())
+      verify(living).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(using any())
     }
 
     "delegate the business settlor section" in {
-      when(business.printSection(any(), any(), any(), any())(any())).thenReturn(section)
+      when(business.printSection(any(), any(), any(), any())(using any())).thenReturn(section)
 
       helpers.businessSettlorSection(emptyUserAnswers, "Name", 0, fakeDraftId) mustBe section
 
-      verify(business).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(any())
+      verify(business).printSection(eqTo(emptyUserAnswers), eqTo("Name"), eqTo(fakeDraftId), eqTo(0))(using any())
     }
   }
 

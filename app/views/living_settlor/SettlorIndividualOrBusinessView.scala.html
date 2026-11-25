@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.routes._
+@import controllers.living_settlor.routes.*
 @import models.pages.IndividualOrBusiness
 @import views.html.components.{SubmitButton, ErrorSummary, InputRadio}
 @import views.ViewUtils.mapRadioOptionsToRadioItems
@@ -27,7 +27,7 @@
     input_radio: InputRadio
 )
 
-@(form: Form[IndividualOrBusiness], draftId: String, index: Int)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[IndividualOrBusiness], draftId: String, index: Int)(using request: RequestHeader, messages: Messages)
 
 
 @main_template(

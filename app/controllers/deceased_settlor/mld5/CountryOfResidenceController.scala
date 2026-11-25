@@ -17,7 +17,7 @@
 package controllers.deceased_settlor.mld5
 
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.CountryFormProvider
 import navigation.Navigator
@@ -47,7 +47,7 @@ class CountryOfResidenceController @Inject() (
   view: CountryOfResidenceView,
   val countryOptions: CountryOptionsNonUK,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider.withPrefix("5mld.countryOfResidence")

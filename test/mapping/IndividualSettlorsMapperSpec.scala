@@ -19,8 +19,8 @@ package mapping
 import base.SpecBase
 import models.pages.{FullName, InternationalAddress, PassportOrIdCardDetails, UKAddress}
 import models.{AddressType, IdentificationType, PassportType, Settlor, UserAnswers, YesNoDontKnow}
-import pages.living_settlor.individual._
-import pages.living_settlor.individual.mld5._
+import pages.living_settlor.individual.*
+import pages.living_settlor.individual.mld5.*
 
 import java.time.LocalDate
 

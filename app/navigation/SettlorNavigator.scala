@@ -18,11 +18,11 @@ package navigation
 
 import config.FrontendAppConfig
 import models.UserAnswers
-import models.pages.AddASettlor._
+import models.pages.AddASettlor.*
 import models.pages.IndividualOrBusiness
 import models.pages.IndividualOrBusiness.{Business, Individual}
-import pages.living_settlor._
-import pages.{AddASettlorPage, AddASettlorYesNoPage, _}
+import pages.*
+import pages.living_settlor.*
 import play.api.mvc.Call
 import uk.gov.hmrc.http.HttpVerbs.GET
 import utils.Constants.MAX

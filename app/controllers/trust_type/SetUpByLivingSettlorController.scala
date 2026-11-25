@@ -43,7 +43,7 @@ class SetUpByLivingSettlorController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: SetUpByLivingSettlorView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("setUpByLivingSettlorYesNo")
@@ -55,7 +55,7 @@ class SetUpByLivingSettlorController @Inject() (
         case Some(value) => form.fill(value)
       }
 
-      Ok(view(preparedForm, draftId, request.userAnswers.isTaxable, index))
+      Ok(view(preparedForm, draftId, index))
   }
 
   def onSubmit(draftId: String, index: Int = 0): Action[AnyContent] =
@@ -63,8 +63,7 @@ class SetUpByLivingSettlorController @Inject() (
       form
         .bindFromRequest()
         .fold(
-          (formWithErrors: Form[Boolean]) =>
-            Future.successful(BadRequest(view(formWithErrors, draftId, request.userAnswers.isTaxable, index))),
+          (formWithErrors: Form[Boolean]) => Future.successful(BadRequest(view(formWithErrors, draftId, index))),
           value =>
             request.userAnswers.set(SetUpByLivingSettlorYesNoPage, value) match {
               case Success(updatedAnswers) =>

@@ -26,7 +26,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
 
   def sectionKey(index: Int): Option[String] = if (index == 0) Some("answerPage.section.settlors.heading") else None
 
-  def printSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0)(implicit
+  def printSection(userAnswers: UserAnswers, name: String, draftId: String, index: Int = 0)(using
     messages: Messages
   ): AnswerSection =
     answerSection(userAnswers, name, index, draftId)(headingKey, sectionKey(index))
@@ -37,7 +37,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
     draftId: String,
     index: Int = 0,
     prefix: Option[String] = None
-  )(implicit messages: Messages): AnswerSection =
+  )(using messages: Messages): AnswerSection =
     answerSection(userAnswers, name, index, draftId, prefix)(None, None)
 
   private def answerSection(
@@ -46,7 +46,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
     index: Int,
     draftId: String,
     prefix: Option[String] = None
-  )(heading: Option[String], section: Option[String])(implicit messages: Messages): AnswerSection =
+  )(heading: Option[String], section: Option[String])(using messages: Messages): AnswerSection =
     AnswerSection(
       headingKey = heading,
       rows = answerRows(userAnswers, name, index, draftId, prefix),
@@ -55,7 +55,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
     )
 
   private def answerRows(userAnswers: UserAnswers, name: String, index: Int, draftId: String, prefix: Option[String])(
-    implicit messages: Messages
+    using messages: Messages
   ): Seq[AnswerRow] = {
 
     val bound = answerRowConverter.bind(userAnswers, name)
@@ -64,7 +64,7 @@ abstract class SettlorPrintHelper(trustTypePrintHelper: TrustTypePrintHelper, an
       answerRows(index, draftId, prefix)(bound).flatten
   }
 
-  def answerRows(index: Int, draftId: String, prefix: Option[String] = None)(bound: AnswerRowConverter#Bound)(implicit
+  def answerRows(index: Int, draftId: String, prefix: Option[String] = None)(bound: AnswerRowConverter#Bound)(using
     messages: Messages
   ): Seq[Option[AnswerRow]]
 

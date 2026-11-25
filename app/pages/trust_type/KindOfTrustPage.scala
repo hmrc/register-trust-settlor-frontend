@@ -18,7 +18,7 @@ package pages.trust_type
 
 import models.UserAnswers
 import models.pages.KindOfTrust
-import models.pages.KindOfTrust._
+import models.pages.KindOfTrust.*
 import pages.QuestionPage
 import pages.living_settlor.business.{SettlorBusinessTimeYesNoPage, SettlorBusinessTypePage}
 import play.api.libs.json.{JsArray, JsPath, JsSuccess, __}

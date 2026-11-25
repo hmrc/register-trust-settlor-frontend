@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.mld5.routes._
+@import controllers.living_settlor.individual.mld5.routes.*
 @import models.pages.FullName
 @import models.YesNoDontKnow
 @import views.html.components.{SubmitButton, ErrorSummary, InputYesNoDontKnow, Heading}
@@ -28,7 +28,7 @@
     headingI: Heading
 )
 
-@(form: Form[YesNoDontKnow], index: Int, draftId: String, name: FullName)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[YesNoDontKnow], index: Int, draftId: String, name: FullName)(using request: RequestHeader, messages: Messages)
 
 @content = {
     <p>@messages("settlorIndividualMentalCapacityYesNo.p1")</p>

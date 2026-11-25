@@ -18,7 +18,7 @@ package controllers.deceased_settlor
 
 import config.FrontendAppConfig
 import config.annotations.DeceasedSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.deceased_settlor.NameRequiredActionProvider
 import forms.deceased_settlor.SettlorDateOfDeathFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -49,7 +49,7 @@ class SettlorDateOfDeathController @Inject() (
   view: SettlorDateOfDeathView,
   appConfig: FrontendAppConfig,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(maxDate: (LocalDate, String), minDate: (LocalDate, String)): Form[LocalDate] =
@@ -92,7 +92,7 @@ class SettlorDateOfDeathController @Inject() (
       }
     }
 
-  private def minDate(implicit request: SettlorIndividualNameRequest[AnyContent]): (LocalDate, String) =
+  private def minDate(using request: SettlorIndividualNameRequest[AnyContent]): (LocalDate, String) =
     request.userAnswers.get(SettlorsDateOfBirthPage) match {
       case Some(dateOfBirth) =>
         (dateOfBirth, "beforeDateOfBirth")
@@ -102,7 +102,7 @@ class SettlorDateOfDeathController @Inject() (
 
   private def getMaxDate(
     draftId: String
-  )(implicit request: SettlorIndividualNameRequest[AnyContent]): Future[(LocalDate, String)] =
+  )(using request: SettlorIndividualNameRequest[AnyContent]): Future[(LocalDate, String)] =
     registrationsRepository.getTrustSetupDate(draftId).map {
       case Some(startDate) =>
         (startDate, "afterTrustStartDate")

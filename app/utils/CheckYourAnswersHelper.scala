@@ -21,11 +21,11 @@ import play.api.Logging
 import play.api.i18n.Messages
 import sections.{DeceasedSettlor, LivingSettlors}
 import utils.print.PrintHelpers
-import viewmodels._
+import viewmodels.*
 
 import javax.inject.Inject
 
-class CheckYourAnswersHelper @Inject() (printHelpers: PrintHelpers)(userAnswers: UserAnswers, draftId: String)(implicit
+class CheckYourAnswersHelper @Inject() (printHelpers: PrintHelpers)(userAnswers: UserAnswers, draftId: String)(using
   messages: Messages
 ) extends Logging {
 

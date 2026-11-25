@@ -33,7 +33,7 @@ class SettlorAliveYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[SettlorAliveYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index)(using fakeRequest, messages)
 
     behave like normalPage(applyView(form), messageKeyPrefix)
 

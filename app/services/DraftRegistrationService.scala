@@ -32,10 +32,10 @@ class DraftRegistrationService @Inject() (
   config: FrontendAppConfig,
   submissionDraftConnector: SubmissionDraftConnector,
   trustsStoreService: TrustsStoreService
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends Logging {
 
-  def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(implicit hc: HeaderCarrier): Future[Unit] =
+  def amendBeneficiariesState(draftId: String, userAnswers: UserAnswers)(using hc: HeaderCarrier): Future[Unit] =
     if (userAnswers.get(KindOfTrustPage).contains(Employees)) {
 
       logger.info(s"[DraftRegistrationService] trust is Employee related")
@@ -57,16 +57,16 @@ class DraftRegistrationService @Inject() (
       removeBeneficiaryRoleInCompanyAnswers(draftId).map(_ => ())
     }
 
-  def removeBeneficiaryRoleInCompanyAnswers(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  def removeBeneficiaryRoleInCompanyAnswers(draftId: String)(using hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeRoleInCompanyAnswers(draftId)
 
-  def removeDeceasedSettlorMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  def removeDeceasedSettlorMappedPiece(draftId: String)(using hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeDeceasedSettlorMappedPiece(draftId)
 
-  def removeLivingSettlorsMappedPiece(draftId: String)(implicit hc: HeaderCarrier): Future[HttpResponse] =
+  def removeLivingSettlorsMappedPiece(draftId: String)(using hc: HeaderCarrier): Future[HttpResponse] =
     submissionDraftConnector.removeLivingSettlorsMappedPiece(draftId)
 
-  def retrieveTrusteeNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+  def retrieveTrusteeNinos(draftId: String)(using hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
     submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyTrustees).map { response =>
       response.data
         .\("data")
@@ -80,7 +80,7 @@ class DraftRegistrationService @Inject() (
 
     }
 
-  def retrieveBeneficiaryNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+  def retrieveBeneficiaryNinos(draftId: String)(using hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
     submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyBeneficiaries).map { response =>
       response.data
         .\("data")
@@ -94,7 +94,7 @@ class DraftRegistrationService @Inject() (
         .map(_.get)
     }
 
-  def retrieveProtectorNinos(draftId: String)(implicit hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
+  def retrieveProtectorNinos(draftId: String)(using hc: HeaderCarrier): Future[collection.IndexedSeq[String]] =
     submissionDraftConnector.getDraftSection(draftId, config.repositoryKeyProtectors).map { response =>
       response.data
         .\("data")

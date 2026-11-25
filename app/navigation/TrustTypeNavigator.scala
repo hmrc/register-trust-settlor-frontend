@@ -16,14 +16,14 @@
 
 package navigation
 
-import controllers.deceased_settlor.routes._
-import controllers.living_settlor.routes._
-import controllers.routes._
-import controllers.trust_type.routes._
+import controllers.deceased_settlor.routes.*
+import controllers.living_settlor.routes.*
+import controllers.routes.*
+import controllers.trust_type.routes.*
 import models.UserAnswers
-import models.pages.KindOfTrust._
-import pages._
-import pages.trust_type._
+import models.pages.KindOfTrust.*
+import pages.*
+import pages.trust_type.*
 import play.api.mvc.Call
 
 import javax.inject.Singleton

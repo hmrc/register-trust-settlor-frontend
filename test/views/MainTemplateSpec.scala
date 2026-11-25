@@ -19,7 +19,7 @@ package views
 import play.twirl.api.Html
 import views.html.MainTemplate
 
-import scala.jdk.CollectionConverters._
+import scala.jdk.CollectionConverters.*
 
 class MainTemplateSpec extends ViewSpecBase {
 
@@ -27,7 +27,7 @@ class MainTemplateSpec extends ViewSpecBase {
 
   private val mainContent: Html = Html("""<p class="govuk-body">Test content</p>""")
 
-  private def render(): Html = view("Test page")(mainContent)(fakeRequest, messages)
+  private def render(): Html = view("Test page")(mainContent)(using fakeRequest, messages)
 
   "MainTemplate" must {
 

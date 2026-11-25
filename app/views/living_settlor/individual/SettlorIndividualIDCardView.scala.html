@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.living_settlor.individual.routes._
+@import controllers.living_settlor.individual.routes.*
 @import utils.InputOption
 @import models.pages.{FullName, PassportOrIdCardDetails}
 @import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading, InputDate, InputSelect}
@@ -30,7 +30,7 @@
     select: InputSelect
 )
 
-@(form: Form[PassportOrIdCardDetails], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[PassportOrIdCardDetails], countryOptions:Seq[InputOption], draftId: String, index: Int, name: FullName, settlorAliveAtRegistration: Boolean)(using request: RequestHeader, messages: Messages)
 
 @settlorIndividualIDCardPrefix = @{
     if(settlorAliveAtRegistration){

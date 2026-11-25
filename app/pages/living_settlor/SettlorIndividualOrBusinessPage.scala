@@ -19,9 +19,9 @@ package pages.living_settlor
 import models.UserAnswers
 import models.pages.IndividualOrBusiness
 import models.pages.IndividualOrBusiness.{Business, Individual}
+import pages.living_settlor.business.*
+import pages.living_settlor.individual.*
 import pages.{LivingSettlorStatus, QuestionPage}
-import pages.living_settlor.business._
-import pages.living_settlor.individual._
 import play.api.libs.json.JsPath
 import sections.LivingSettlors
 

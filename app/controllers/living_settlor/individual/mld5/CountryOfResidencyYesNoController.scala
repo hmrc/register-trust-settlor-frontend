@@ -17,7 +17,7 @@
 package controllers.living_settlor.individual.mld5
 
 import config.annotations.IndividualSettlor
-import controllers.actions._
+import controllers.actions.*
 import controllers.actions.living_settlor.individual.NameRequiredActionProvider
 import forms.YesNoFormProvider
 import models.requests.SettlorIndividualNameRequest
@@ -46,7 +46,7 @@ class CountryOfResidencyYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: CountryOfResidencyYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private def form(messageKey: String): Form[Boolean] = yesNoFormProvider.withPrefix(messageKey)

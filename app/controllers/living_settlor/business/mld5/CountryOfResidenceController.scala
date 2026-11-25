@@ -47,7 +47,7 @@ class CountryOfResidenceController @Inject() (
   view: CountryOfResidenceView,
   val countryOptions: CountryOptionsNonUK,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[String] = formProvider.withPrefix("settlorBusiness.5mld.countryOfResidence")

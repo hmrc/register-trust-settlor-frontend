@@ -43,7 +43,7 @@ class EmployerFinancedRbsYesNoController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: EmployerFinancedRbsYesNoView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[Boolean] = yesNoFormProvider.withPrefix("employerFinancedRbsYesNo")

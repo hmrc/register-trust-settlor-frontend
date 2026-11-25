@@ -43,8 +43,8 @@ object KindOfTrust extends Enumerable.Implicits {
     RadioOption("kindOfTrust", value.toString)
   }
 
-  implicit val enumerable: Enumerable[KindOfTrust] =
-    Enumerable(values.map(v => v.toString -> v): _*)
+  given enumerable: Enumerable[KindOfTrust] =
+    Enumerable(values.map(v => v.toString -> v)*)
 
   val typeofTrustReads: Reads[TypeOfTrust] = __.read[KindOfTrust].flatMap[TypeOfTrust] {
     case Intervivos              => Reads(_ => JsSuccess(TypeOfTrust.IntervivosSettlementTrust))

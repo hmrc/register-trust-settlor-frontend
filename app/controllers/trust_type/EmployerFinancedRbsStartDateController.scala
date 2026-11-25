@@ -44,7 +44,7 @@ class EmployerFinancedRbsStartDateController @Inject() (
   val controllerComponents: MessagesControllerComponents,
   view: EmployerFinancedRbsStartDateView,
   technicalErrorView: TechnicalErrorView
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends FrontendBaseController with I18nSupport with Logging {
 
   private val form: Form[LocalDate] = formProvider()

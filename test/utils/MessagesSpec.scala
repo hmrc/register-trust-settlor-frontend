@@ -18,20 +18,17 @@ package utils
 
 import base.SpecBase
 import play.api.Application
-import play.api.i18n.{Lang, Messages}
 import play.api.inject.guice.GuiceApplicationBuilder
 
 import scala.util.matching.Regex
 
 class MessagesSpec extends SpecBase {
 
-  override lazy val fakeApplication: Application = new GuiceApplicationBuilder()
+  override def fakeApplication(): Application = new GuiceApplicationBuilder()
     .configure(
       Map("application.langs" -> "en,cy", "features.welsh-language-support" -> true)
     )
     .build()
-
-  implicit override lazy val messages: Messages = messagesApi.preferred(Seq(Lang("en"), Lang("cy")))
 
   val MatchSingleQuoteOnly: Regex   = """\w+'{1}\w+""".r
   val MatchBacktickQuoteOnly: Regex = """`+""".r

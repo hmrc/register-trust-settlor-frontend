@@ -36,7 +36,7 @@ class SettlorIndividualNINOViewSpec extends StringViewBehaviours {
     val view = viewFor[SettlorIndividualNINOView](Some(emptyUserAnswers))
 
     def applyView(form: Form[String]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, name)(using fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import controllers.deceased_settlor.routes._
+@import controllers.deceased_settlor.routes.*
 @import views.html.components.{SubmitButton, ErrorSummary, InputText, Heading}
 @import models.pages.FullName
 
@@ -27,7 +27,7 @@
     heading: Heading
 )
 
-@(form: Form[FullName] , draftId: String)(implicit request: RequestHeader, messages: Messages)
+@(form: Form[FullName] , draftId: String)(using request: RequestHeader, messages: Messages)
 
 @main_template(
     title = s"${errorPrefix(form)}${messages("settlorsName.title")}",

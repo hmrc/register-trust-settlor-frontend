@@ -28,7 +28,7 @@ class FrontendAppConfigSpec extends SpecBase {
       "in Welsh mode" must {
         "return trusts helpline URL" in {
           val messages = MessagesImpl(Lang("cy"), messagesApi)
-          config.helplineUrl(
+          config.helplineUrl(using
             messages
           ) mustBe "https://www.gov.uk/government/organisations/hm-revenue-customs/contact/welsh-language-helplines"
         }

@@ -19,7 +19,7 @@ package services
 import base.SpecBase
 import connectors.TrustsStoreConnector
 import models.TaskStatus.Completed
-import org.mockito.ArgumentMatchers.{any, eq => eqTo}
+import org.mockito.ArgumentMatchers.{any, eq as eqTo}
 import org.mockito.Mockito.{verify, when}
 import play.api.http.Status.OK
 import uk.gov.hmrc.http.{HeaderCarrier, HttpResponse}
@@ -32,19 +32,19 @@ class TrustsStoreServiceSpec extends SpecBase {
 
   val trustsStoreService = new TrustsStoreService(mockConnector)
 
-  implicit val hc: HeaderCarrier = HeaderCarrier()
+  given hc: HeaderCarrier = HeaderCarrier()
 
   ".updateTaskStatus" must {
     "call trusts store connector" in {
 
-      when(mockConnector.updateTaskStatus(any(), any())(any(), any()))
+      when(mockConnector.updateTaskStatus(any(), any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val result = trustsStoreService.updateTaskStatus(draftId, Completed)
 
       whenReady(result) { res =>
         res.status mustBe OK
-        verify(mockConnector).updateTaskStatus(eqTo(draftId), eqTo(Completed))(any(), any())
+        verify(mockConnector).updateTaskStatus(eqTo(draftId), eqTo(Completed))(using any(), any())
       }
     }
   }
@@ -52,14 +52,14 @@ class TrustsStoreServiceSpec extends SpecBase {
   ".updateBeneficiaryTaskStatus" must {
     "call trusts store connector" in {
 
-      when(mockConnector.updateBeneficiaryTaskStatus(any(), any())(any(), any()))
+      when(mockConnector.updateBeneficiaryTaskStatus(any(), any())(using any(), any()))
         .thenReturn(Future.successful(HttpResponse(OK, "")))
 
       val result = trustsStoreService.updateBeneficiaryTaskStatus(draftId, Completed)
 
       whenReady(result) { res =>
         res.status mustBe OK
-        verify(mockConnector).updateBeneficiaryTaskStatus(eqTo(draftId), eqTo(Completed))(any(), any())
+        verify(mockConnector).updateBeneficiaryTaskStatus(eqTo(draftId), eqTo(Completed))(using any(), any())
       }
     }
   }

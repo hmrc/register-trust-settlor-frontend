@@ -17,13 +17,13 @@
 package mapping
 
 import base.SpecBase
-import models.pages.DeedOfVariation._
+import models.pages.DeedOfVariation.*
 import models.pages.{FullName, IndividualOrBusiness, KindOfTrust}
 import models.{TrustDetailsType, UserAnswers}
 import pages.deceased_settlor.SettlorsNamePage
-import pages.living_settlor._
+import pages.living_settlor.*
 import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
-import pages.trust_type._
+import pages.trust_type.*
 
 import java.time.LocalDate
 

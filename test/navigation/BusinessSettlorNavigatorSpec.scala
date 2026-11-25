@@ -17,11 +17,11 @@
 package navigation
 
 import base.SpecBase
-import controllers.living_settlor.business.mld5.{routes => mld5Routes}
+import controllers.living_settlor.business.mld5.routes as mld5Routes
 import controllers.living_settlor.business.routes
 import models.UserAnswers
 import models.pages.KindOfTrust.{Employees, Intervivos}
-import pages.living_settlor.business._
+import pages.living_settlor.business.*
 import pages.living_settlor.business.mld5.{
   CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
 }

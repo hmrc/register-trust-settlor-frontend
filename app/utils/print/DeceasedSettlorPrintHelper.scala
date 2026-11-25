@@ -17,10 +17,10 @@
 package utils.print
 
 import com.google.inject.Inject
-import controllers.deceased_settlor.mld5.routes._
-import controllers.deceased_settlor.routes._
-import pages.deceased_settlor._
-import pages.deceased_settlor.mld5._
+import controllers.deceased_settlor.mld5.routes.*
+import controllers.deceased_settlor.routes.*
+import pages.deceased_settlor.*
+import pages.deceased_settlor.mld5.*
 import play.api.i18n.Messages
 import viewmodels.AnswerRow
 
@@ -30,7 +30,7 @@ class DeceasedSettlorPrintHelper @Inject() (
 ) extends SettlorPrintHelper(trustTypePrintHelper, answerRowConverter) {
 
   override def answerRows(index: Int, draftId: String, prefix: Option[String] = None)(bound: AnswerRowConverter#Bound)(
-    implicit messages: Messages
+    using messages: Messages
   ): Seq[Option[AnswerRow]] = Seq(
     bound.nameQuestion(SettlorsNamePage, "settlorsName", SettlorsNameController.onPageLoad(draftId).url),
     bound.yesNoQuestion(

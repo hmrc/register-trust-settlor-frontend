@@ -35,7 +35,7 @@ class EmployerFinancedRbsStartDateViewSpec extends QuestionViewBehaviours[LocalD
     val view = viewFor[EmployerFinancedRbsStartDateView](Some(emptyUserAnswers))
 
     def applyView(form: Form[LocalDate]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId)(fakeRequest, messages)
+      view.apply(form, fakeDraftId)(using fakeRequest, messages)
 
     val applyViewF = (form: Form[LocalDate]) => applyView(form)
 

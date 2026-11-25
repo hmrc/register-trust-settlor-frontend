@@ -17,14 +17,13 @@
 package base
 
 import config.annotations.{BusinessSettlor, DeceasedSettlor, IndividualSettlor, TrustType}
-import controllers.actions._
+import controllers.actions.*
 import models.UserAnswers
-import models.pages.Status
 import navigation.{FakeNavigator, Navigator}
 import org.scalatest.TryValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play.PlaySpec
-import org.scalatestplus.play.guice._
+import org.scalatestplus.play.guice.*
 import play.api.inject.bind
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.Json
@@ -55,10 +54,7 @@ trait SpecBase
 
   private def fakeDraftIdAction(userAnswers: Option[UserAnswers]): FakeDraftIdRetrievalActionProvider =
     new FakeDraftIdRetrievalActionProvider(
-      draftId,
-      Status.InProgress,
-      userAnswers,
-      registrationsRepository
+      userAnswers
     )
 
   protected def applicationBuilder(

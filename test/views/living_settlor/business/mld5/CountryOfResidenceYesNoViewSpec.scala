@@ -35,7 +35,7 @@ class CountryOfResidenceYesNoViewSpec extends YesNoViewBehaviours {
     val view = viewFor[CountryOfResidenceYesNoView](Some(emptyUserAnswers))
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, index, trustName)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, index, trustName)(using fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), prefix, trustName)
 

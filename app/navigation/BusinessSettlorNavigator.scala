@@ -16,16 +16,16 @@
 
 package navigation
 
-import controllers.living_settlor.business.mld5.{routes => business5mldRoutes}
-import controllers.living_settlor.business.{routes => businessRoutes}
+import controllers.living_settlor.business.mld5.routes as business5mldRoutes
+import controllers.living_settlor.business.routes as businessRoutes
 import models.UserAnswers
-import models.pages.KindOfTrust._
-import pages._
-import pages.living_settlor.business._
+import models.pages.KindOfTrust.*
+import pages.*
+import pages.living_settlor.business.*
 import pages.living_settlor.business.mld5.{
   CountryOfResidenceInTheUkYesNoPage, CountryOfResidencePage, CountryOfResidenceYesNoPage
 }
-import pages.trust_type._
+import pages.trust_type.*
 import play.api.mvc.Call
 
 import javax.inject.Singleton

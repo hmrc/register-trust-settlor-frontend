@@ -17,14 +17,14 @@
 package controllers.living_settlor.individual
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.living_settlor.SettlorIndividualNameFormProvider
 import models.UserAnswers
 import models.pages.FullName
 import pages.living_settlor.individual.{SettlorAliveYesNoPage, SettlorIndividualNamePage}
 import play.api.mvc.Call
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.living_settlor.individual.SettlorIndividualNameView
 
 class SettlorIndividualNameControllerSpec extends SpecBase {
@@ -59,7 +59,10 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
           status(result) mustEqual OK
 
           contentAsString(result) mustEqual
-            view(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDied)(request, messages).toString
+            view(form, fakeDraftId, index, setUpBeforeSettlorDied = setUpBeforeSettlorDied)(using
+              request,
+              messages
+            ).toString
 
           application.stop()
         }
@@ -88,7 +91,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
           fakeDraftId,
           index,
           setUpBeforeSettlorDied = false
-        )(request, messages).toString
+        )(using request, messages).toString
 
       application.stop()
     }
@@ -144,7 +147,7 @@ class SettlorIndividualNameControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, index, setUpBeforeSettlorDied = false)(request, messages).toString
+        view(boundForm, fakeDraftId, index, setUpBeforeSettlorDied = false)(using request, messages).toString
 
       application.stop()
     }

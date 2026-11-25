@@ -23,9 +23,9 @@ import models.pages.{FullName, IndividualOrBusiness, KindOfTrust, UKAddress}
 import org.scalacheck.Arbitrary.arbitrary
 import pages.LivingSettlorStatus
 import pages.behaviours.PageBehaviours
-import pages.living_settlor.business._
-import pages.living_settlor.individual._
-import pages.trust_type._
+import pages.living_settlor.business.*
+import pages.living_settlor.individual.*
+import pages.trust_type.*
 
 class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
 
@@ -39,7 +39,7 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
   }
 
   "remove business related data when changing to individual" in
-    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+    forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial
         .set(SetUpByLivingSettlorYesNoPage, false)
         .success
@@ -90,7 +90,7 @@ class SettlorIndividualOrBusinessPageSpec extends PageBehaviours {
     }
 
   "remove individual related data when changing to business" in
-    forAll(arbitrary[UserAnswers], arbitrary[String]) { (initial, str) =>
+    forAll(arbitrary[UserAnswers]) { initial =>
       val answers: UserAnswers = initial
         .set(SetUpByLivingSettlorYesNoPage, false)
         .success

@@ -18,24 +18,24 @@ package models
 
 import play.api.Logging
 import play.api.http.Status
-import play.api.libs.json._
+import play.api.libs.json.*
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object RolesInCompanies extends Logging {
 
   final case class RoleInCompany(roleInCompany: models.pages.RoleInCompany)
 
-  implicit val formats: Format[RoleInCompany] = Json.format[RoleInCompany]
+  given formats: Format[RoleInCompany] = Json.format[RoleInCompany]
 
-  implicit val readSeq: Reads[Seq[RoleInCompany]] = Reads.seq(formats)
+  given readSeq: Reads[Seq[RoleInCompany]] = Reads.seq(using formats)
 
   sealed trait RolesInCompaniesAnswered
-  final case object AllRolesAnswered extends RolesInCompaniesAnswered
-  final case object NotAllRolesAnswered extends RolesInCompaniesAnswered
-  final case object NoIndividualBeneficiaries extends RolesInCompaniesAnswered
-  final case object CouldNotDetermine extends RolesInCompaniesAnswered
+  case object AllRolesAnswered extends RolesInCompaniesAnswered
+  case object NotAllRolesAnswered extends RolesInCompaniesAnswered
+  case object NoIndividualBeneficiaries extends RolesInCompaniesAnswered
+  case object CouldNotDetermine extends RolesInCompaniesAnswered
 
-  implicit lazy val httpReads: HttpReads[RolesInCompaniesAnswered] =
+  given httpReads: HttpReads[RolesInCompaniesAnswered] =
     (_: String, _: String, response: HttpResponse) =>
       response.status match {
         case Status.OK =>
@@ -44,7 +44,7 @@ object RolesInCompanies extends Logging {
               (__ \\ Symbol("individualBeneficiaries"))
                 .read[Seq[RoleInCompany]]
 
-            response.json.validate[Seq[RoleInCompany]](jsonReads) match {
+            response.json.validate[Seq[RoleInCompany]](using jsonReads) match {
               case JsSuccess(_, _) => AllRolesAnswered
               case JsError(_)      => NotAllRolesAnswered
             }

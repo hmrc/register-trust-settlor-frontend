@@ -18,7 +18,7 @@ package repositories
 
 import base.SpecBase
 import connectors.SubmissionDraftConnector
-import models._
+import models.*
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.matchers.must.Matchers
@@ -33,7 +33,7 @@ import scala.concurrent.{Await, Future}
 
 class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSugar {
 
-  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory];
+  private val unusedSubmissionSetFactory = mock[SubmissionSetFactory]
 
   private def createRepository(connector: SubmissionDraftConnector, submissionSetFactory: SubmissionSetFactory) =
     new DefaultRegistrationsRepository(connector, frontendAppConfig, submissionSetFactory)
@@ -41,7 +41,7 @@ class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSuga
   "RegistrationRepository" when {
     "getting user answers" must {
       "read answers from my section" in {
-        implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+        given hc: HeaderCarrier = HeaderCarrier()
 
         val draftId = "DraftId"
 
@@ -53,19 +53,19 @@ class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSuga
 
         val response = SubmissionDraftResponse(LocalDateTime.now, Json.toJson(userAnswers), None)
 
-        when(mockConnector.getDraftSection(any(), any())(any(), any())).thenReturn(Future.successful(response))
+        when(mockConnector.getDraftSection(any(), any())(using any(), any())).thenReturn(Future.successful(response))
 
         val result = Await.result(repository.get(draftId), Duration.Inf)
 
         result mustBe Some(userAnswers)
-        verify(mockConnector).getDraftSection(draftId, frontendAppConfig.repositoryKey)(hc, executionContext)
+        verify(mockConnector).getDraftSection(draftId, frontendAppConfig.repositoryKey)(using hc, executionContext)
       }
 
     }
 
     "setting user answers" must {
       "write answers to my section" in {
-        implicit lazy val hc: HeaderCarrier = HeaderCarrier()
+        given hc: HeaderCarrier = HeaderCarrier()
 
         val draftId = "DraftId"
 
@@ -80,18 +80,18 @@ class RegistrationRepositorySpec extends SpecBase with Matchers with MockitoSuga
         )
 
         val mockSubmissionSetFactory = mock[SubmissionSetFactory]
-        when(mockSubmissionSetFactory.createFrom(any())(any())).thenReturn(submissionSet)
+        when(mockSubmissionSetFactory.createFrom(any())(using any())).thenReturn(submissionSet)
 
         val repository = createRepository(mockConnector, mockSubmissionSetFactory)
 
-        when(mockConnector.setDraftSection(any(), any(), any())(any(), any()))
+        when(mockConnector.setDraftSection(any(), any(), any())(using any(), any()))
           .thenReturn(Future.successful(HttpResponse(http.Status.OK, "")))
 
         val result = Await.result(repository.set(userAnswers), Duration.Inf)
 
         result mustBe true
         verify(mockConnector)
-          .setDraftSection(draftId, frontendAppConfig.repositoryKey, submissionSet)(hc, executionContext)
+          .setDraftSection(draftId, frontendAppConfig.repositoryKey, submissionSet)(using hc, executionContext)
       }
     }
   }

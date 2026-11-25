@@ -17,12 +17,12 @@
 package controllers.deceased_settlor
 
 import base.SpecBase
-import controllers.routes._
+import controllers.routes.*
 import forms.UKAddressFormProvider
 import models.pages.{FullName, UKAddress}
 import pages.deceased_settlor.{SettlorsNamePage, SettlorsUKAddressPage}
 import play.api.test.FakeRequest
-import play.api.test.Helpers._
+import play.api.test.Helpers.*
 import views.html.deceased_settlor.SettlorsUKAddressView
 
 class SettlorsUKAddressControllerSpec extends SpecBase {
@@ -51,7 +51,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual OK
 
       contentAsString(result) mustEqual
-        view(form, fakeDraftId, name)(request, messages).toString
+        view(form, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }
@@ -77,6 +77,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
 
       contentAsString(result) mustEqual
         view(form.fill(UKAddress("line 1", "line 2", Some("line 3"), Some("line 4"), "line 5")), fakeDraftId, name)(
+          using
           request,
           messages
         ).toString
@@ -123,7 +124,7 @@ class SettlorsUKAddressControllerSpec extends SpecBase {
       status(result) mustEqual BAD_REQUEST
 
       contentAsString(result) mustEqual
-        view(boundForm, fakeDraftId, name)(request, messages).toString
+        view(boundForm, fakeDraftId, name)(using request, messages).toString
 
       application.stop()
     }

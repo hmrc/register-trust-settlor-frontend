@@ -36,7 +36,7 @@ class SettlorDateOfBirthYesNoViewSpec extends YesNoViewBehaviours {
     val name = FullName("First", None, "Last")
 
     def applyView(form: Form[Boolean]): HtmlFormat.Appendable =
-      view.apply(form, fakeDraftId, name)(fakeRequest, messages)
+      view.apply(form, fakeDraftId, name)(using fakeRequest, messages)
 
     behave like dynamicTitlePage(applyView(form), messageKeyPrefix, name.toString)
 
